@@ -44,7 +44,6 @@ namespace UniversalAnimeDownloader.View
             InitializeComponent();
             VM = new AnimeListViewModel(Dispatcher);
             DataContext = VM;
-            cardCount = 0;
 
             VM.IsHaveConnection = Common.InternetAvaible;
 
@@ -108,8 +107,13 @@ namespace UniversalAnimeDownloader.View
 
         private void SearchAnime(string text)
         {
-            FilmListModel searchedFilmList = BaseLibraryClass.SearchFilm(text, 50);
-            AddCard(searchedFilmList);
+            FilmListModel searchedFilmList = null;
+            Thread thd = new Thread(() =>
+            {
+                searchedFilmList = BaseLibraryClass.SearchFilm(text, 50);
+                AddCard(searchedFilmList);
+            }) { IsBackground = true };
+            thd.Start();
         }
         private void LoadMoreAnime(object sender, RoutedEventArgs e)
         {
@@ -141,7 +145,22 @@ namespace UniversalAnimeDownloader.View
             ScrollViewer scroll = sender as ScrollViewer;
 
             if (scroll.VerticalOffset > scroll.ScrollableHeight - 100)
+            {
+                Thread thd = new Thread(() =>
+                {
+                    int cardCount = 0;
+                    string genre = string.Empty;
+                    Dispatcher.Invoke(() => cardCount = animeCardContainer.Children.Count);
+                    Thread.Sleep(10);
+                    Dispatcher.Invoke(() => genre = ((VuigheGenreModel)cbxGenre.SelectedItem).Slug);
+                    FilmListModel list = BaseLibraryClass.GetFilmList(cardCount, 50, genre);
+                    AddCard(list, false);
+                })
+                { IsBackground = true, Name = "Add More Anime Cards" };
                 VM.IsLoading = true;
+                thd.Start();
+                
+            }
         }   
     }
 }
