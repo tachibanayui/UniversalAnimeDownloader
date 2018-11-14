@@ -142,6 +142,9 @@ namespace UniversalAnimeDownloader.View
             if (VM.IsLoading)
                 return;
 
+            if (!string.IsNullOrEmpty(searchText.Text))
+                return;
+
             ScrollViewer scroll = sender as ScrollViewer;
 
             if (scroll.VerticalOffset > scroll.ScrollableHeight - 100)
@@ -159,7 +162,6 @@ namespace UniversalAnimeDownloader.View
                 { IsBackground = true, Name = "Add More Anime Cards" };
                 VM.IsLoading = true;
                 thd.Start();
-                
             }
         }   
     }
