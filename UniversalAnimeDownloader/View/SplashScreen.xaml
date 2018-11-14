@@ -1,0 +1,17 @@
+﻿<Window x:Class="UniversalAnimeDownloader.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:UniversalAnimeDownloader"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800" WindowStyle="None" Opacity="10" Background="Transparent" AllowsTransparency="True"
+        
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Image Source="/UniversalAnimeDownloader;component/Resources/SplashScreen.png" Stretch="Fill"/>
+        <TextBlock x:Name="text" Text="Initizating..." FontSize="18" VerticalAlignment="Bottom" Margin="5" Foreground="White"/>
+        <ProgressBar x:Name="progressAction" Style="{DynamicResource SimplifiedProgressBar}" Height="5" VerticalAlignment="Bottom" Value="5"/>
+    </Grid>
+</Window>

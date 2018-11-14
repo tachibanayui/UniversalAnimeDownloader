@@ -1,0 +1,70 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:UniversalAnimeDownloader.CustomControl"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+
+    >
+    <Style TargetType="{x:Type local:VuigheAnimeCard}">
+        <Setter Property="Width" Value="200"/>
+        <Setter Property="Height" Value="350"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:VuigheAnimeCard}">
+                    <materialDesign:Card>
+                        <Grid Margin="5" Height="300">
+                            <Grid.Resources>
+                                <Style TargetType="ToolTip">
+                                    <Setter Property="Background" Value="Black"/>
+                                    <Setter Property="FontSize" Value="18"/>
+                                </Style>
+                            </Grid.Resources>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition Height="5"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            
+                            <Button HorizontalAlignment="Right" VerticalAlignment="Center"  ToolTip="Watch this anime!" Panel.ZIndex="2"
+                                    Grid.RowSpan="3" Margin="0,0,10,0" Style="{TemplateBinding PlayButtonStyle}">
+                                <materialDesign:PackIcon Kind="Play" Width="{TemplateBinding AnimeFontSize}" Height="auto"/>
+                            </Button>
+
+                            <Image x:Name="img" Stretch="Fill" Source="{TemplateBinding AnimeBG}" Panel.ZIndex="1"/>
+
+                            <StackPanel Grid.Row="2">
+                                <TextBlock Text="{TemplateBinding AnimeName}" 
+                                           TextWrapping="WrapWithOverflow"
+                                           FontWeight="Bold"
+                                           FontSize="{TemplateBinding AnimeFontSize}"
+                                           Foreground="{TemplateBinding AnimeForeground}"/>
+                                <TextBlock Text="{TemplateBinding AnimeTag}"
+                                           TextWrapping="WrapWithOverflow"
+                                           FontSize="{TemplateBinding AnimeFontSize}"
+                                           Foreground="{TemplateBinding AnimeForeground}"/>
+                                
+                            </StackPanel>
+                            
+                            <materialDesign:PopupBox Grid.Row="2" VerticalAlignment="Bottom"
+                                                     HorizontalAlignment="Right" Margin="10"
+                                                     Style="{TemplateBinding PopUpBoxStyle}"
+                                                     PlacementMode="BottomAndAlignCentres"
+                                                     ToolTipService.Placement="Right">
+                                <StackPanel >
+                                    <Button>
+                                        <materialDesign:PackIcon Kind="Download" Width="{TemplateBinding AnimeFontSize}" Height="auto" ToolTip="Download this anime!"/>
+                                    </Button>
+                                    <Button>
+                                        <materialDesign:PackIcon Kind="Play" Width="{TemplateBinding AnimeFontSize}" Height="auto" ToolTip="Watch this anime!"/>
+                                    </Button>
+                                </StackPanel>
+                            </materialDesign:PopupBox>
+
+
+                        </Grid>
+                    </materialDesign:Card>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>
