@@ -35,11 +35,11 @@
                             <StackPanel Grid.Row="2">
                                 <TextBlock Text="{TemplateBinding AnimeName}" 
                                            TextWrapping="WrapWithOverflow"
-                                           FontWeight="Bold"
+                                           FontWeight="Bold" ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}"
                                            FontSize="{TemplateBinding AnimeFontSize}"
                                            Foreground="{TemplateBinding AnimeForeground}"/>
                                 <TextBlock Text="{TemplateBinding AnimeTag}"
-                                           TextWrapping="WrapWithOverflow"
+                                           TextWrapping="WrapWithOverflow" ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}"
                                            FontSize="{TemplateBinding AnimeFontSize}"
                                            Foreground="{TemplateBinding AnimeForeground}"/>
                                 

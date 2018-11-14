@@ -23,7 +23,7 @@
                 <Setter Property="HorizontalAlignment" Value="Center"/>
             </Style>
         </Grid.Resources>
-        
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition x:Name="sideBar" Width="3*" MaxWidth="300"/>
             <ColumnDefinition Width="8*"/>

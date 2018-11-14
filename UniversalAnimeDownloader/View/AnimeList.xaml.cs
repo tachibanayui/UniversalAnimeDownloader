@@ -37,7 +37,7 @@ namespace UniversalAnimeDownloader.View
 
 
         public AnimeListViewModel VM;
-        public int cardCount;
+        private bool isAvaible = true;
 
         public AnimeList()
         {
@@ -49,8 +49,7 @@ namespace UniversalAnimeDownloader.View
 
             //Get the films data collection
             Thread thd = new Thread(() => {
-                FilmListModel filmList = BaseLibraryClass.GetFilmList(cardCount, 50);
-                cardCount += 50;
+                FilmListModel filmList = BaseLibraryClass.GetFilmList(0, 50);
                 AddCard(filmList);
             });
             thd.Name = "GetDataForThe1stTime";
@@ -62,10 +61,13 @@ namespace UniversalAnimeDownloader.View
 
         private void AddCard(FilmListModel filmList, bool removeOldCard = true, string genre = null)
         {
+            if (!isAvaible)
+                return;
 
+            isAvaible = false;
             //Remove the old anime card
             if(removeOldCard)
-                Dispatcher.Invoke(() => animeCardContainer.Children.RemoveRange(0, animeCardContainer.Children.Count - 1));
+                Dispatcher.Invoke(() => animeCardContainer.Children.RemoveRange(0, animeCardContainer.Children.Count));
 
             if (filmList == null)
             {
@@ -90,6 +92,7 @@ namespace UniversalAnimeDownloader.View
                 Thread.Sleep(10);
             }
             VM.IsLoading = false;
+            isAvaible = true;
         }
 
         private void DeleteSearch(object sender, RoutedEventArgs e) => searchText.Text = string.Empty;
@@ -102,7 +105,6 @@ namespace UniversalAnimeDownloader.View
 
             SearchAnime(textBox.Text);
             btnSearch.Focus();
-            cardCount = 0;
         }
 
         private void SearchAnime(string text)
@@ -115,6 +117,7 @@ namespace UniversalAnimeDownloader.View
             }) { IsBackground = true };
             thd.Start();
         }
+
         private void LoadMoreAnime(object sender, RoutedEventArgs e)
         {
             if (searchText.Text != null)
@@ -130,8 +133,7 @@ namespace UniversalAnimeDownloader.View
                 FilmListModel filmList = null;
 
                 filmList = BaseLibraryClass.GetFilmList(0, 50, model.Slug);
-                cardCount += 50;
-                //AddCard(filmList);
+                AddCard(filmList);
             });
             thd.Name = "ChangeGenre";
             thd.Start();

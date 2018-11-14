@@ -96,6 +96,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\OnlineAnimeDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\SplashScreen.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -110,6 +114,7 @@
     <Compile Include="ValueConverter\BoolToVisibilityConverter.cs" />
     <Compile Include="ValueConverter\ScaleFontSizeValueConverter.cs" />
     <Compile Include="ViewModel\AnimeListViewModel.cs" />
+    <Compile Include="ViewModel\OnlineAnimeDetailViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
     <Compile Include="View\AnimeList.xaml.cs">
       <DependentUpon>AnimeList.xaml</DependentUpon>
@@ -119,6 +124,9 @@
     </Compile>
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\OnlineAnimeDetail.xaml.cs">
+      <DependentUpon>OnlineAnimeDetail.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\SplashScreen.xaml.cs">
       <DependentUpon>SplashScreen.xaml</DependentUpon>
