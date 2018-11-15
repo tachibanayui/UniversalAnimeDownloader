@@ -21,13 +21,26 @@ namespace UniversalAnimeDownloader.View
     /// </summary>
     public partial class OnlineAnimeDetail : Page
     {
+
+
+        public Frame HostFrame
+        {
+            get { return (Frame)GetValue(HostFrameProperty); }
+            set { SetValue(HostFrameProperty, value); }
+        }
+        public static readonly DependencyProperty HostFrameProperty =
+            DependencyProperty.Register("HostFrame", typeof(Frame), typeof(OnlineAnimeDetail), new PropertyMetadata());
+
+        
         public OnlineAnimeDetailViewModel VM;
 
         public OnlineAnimeDetail()
         {
-            InitializeComponent();
             VM = new OnlineAnimeDetailViewModel(Dispatcher);
             DataContext = VM;
+
+            InitializeComponent();
+            
         }
     }
 }

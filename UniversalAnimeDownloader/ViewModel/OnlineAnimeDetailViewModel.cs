@@ -1,5 +1,7 @@
-﻿using System;
+﻿using MaterialDesignThemes.Wpf;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,25 +40,15 @@ namespace UniversalAnimeDownloader.ViewModel
             }
         }
 
-        private string animeGenres;
-        public string AnimeGemres
-        {
-            get { return animeGenres; }
-            set
-            {
-                if(animeGenres != value)
-                {
-                    animeGenres = value;
-                    OnPropertyChanged("AnimeGenres");
-                }
-            }
-        }
-
+        public ObservableCollection<OnlineAnimeDetailViewModel> AnimeEpisodes { get; set; }
         private Dispatcher currentDispatcher;
 
         public OnlineAnimeDetailViewModel(Dispatcher currentDispatcher)
         {
             this.currentDispatcher = currentDispatcher;
+            AnimeEpisodes = new ObservableCollection<OnlineAnimeDetailViewModel>();
+            
+            
         }
     }
 }

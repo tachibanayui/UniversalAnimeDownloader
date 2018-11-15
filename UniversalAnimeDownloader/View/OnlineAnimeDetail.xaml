@@ -4,13 +4,20 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:UniversalAnimeDownloader.View"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="4500" d:DesignWidth="800"
       TextElement.Foreground="{DynamicResource MaterialDesignBody}"
       FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
       Title="OnlineAnimeDetail">
 
-    <Grid>
+    <Grid Margin="10">
+        <Grid.Resources>
+            <Style TargetType="materialDesign:Card">
+                <Setter Property="UniformCornerRadius" Value="25"/>
+                <Setter Property="Margin" Value="0 0 0 20"/>
+            </Style>
+        </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="200"/>
             <RowDefinition/>
@@ -34,6 +41,86 @@
                 <TextBlock Text="{Binding AnimeGenres}"/>
             </TextBlock>
         </Grid>
+        <ScrollViewer Grid.Row="1">
+            <VirtualizingStackPanel Grid.Row="1">
+                <materialDesign:Card MinHeight="150">
+                    <Grid Margin="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="75"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="Anime Description: " FontWeight="Bold" 
+                       FontSize="{DynamicResource Heading}" VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding AnimeDescription}" Grid.Row="1" TextWrapping="Wrap"
+                       FontSize="{DynamicResource Heading2}"/>
+                    </Grid>
+                </materialDesign:Card>
+                <materialDesign:Card>
+                    <Grid Margin="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="75"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="Some Picture Related to this anime: " 
+                           FontWeight="Bold" FontSize="{DynamicResource Heading}"/>
+                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Disabled">
+                            <VirtualizingStackPanel Height="210">
+                                <VirtualizingStackPanel.Resources>
+                                    <Style TargetType="Image">
+                                        <Setter Property="Width" Value="200"/>
+                                        <Setter Property="Height" Value="122"/>
+                                        <Setter Property="Stretch" Value="Uniform"/>
+                                    </Style>
+                                </VirtualizingStackPanel.Resources>
+                            </VirtualizingStackPanel>
+                        </ScrollViewer>
+                    </Grid>
+                </materialDesign:Card>
+                <materialDesign:Card MinHeight="300">
+                    <Grid Margin="10" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="50"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="Episodes and Download: " FontWeight="Bold"
+                                   FontSize="{DynamicResource Heading}"/>
+
+                        <materialDesign:PopupBox Grid.Column="2" />
+
+                        <ListView x:Name="episodesContainer" Grid.Row="2" Grid.ColumnSpan="3" ItemsSource="{Binding AnimeEpisodes}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Width="{Binding ElementName=episodesContainer, Path=ActualWidth}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition Width="75"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition Height="5"/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Text="Test" FontSize="{DynamicResource Heading2}"/>
+                                        <TextBlock Text="{Binding Progress}" FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource FileSize}"
+                                                   HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+                                        <ProgressBar Value="75" Grid.Row="1"/>
+
+                                        <Button Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Grid.Column="1">
+                                            <materialDesign:PackIcon Kind="{Binding ButtonKind}" Width="25" Height="auto"/>
+                                        </Button>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Grid>
+                </materialDesign:Card>
+            </VirtualizingStackPanel>
+        </ScrollViewer>
         
     </Grid>
 </Page>

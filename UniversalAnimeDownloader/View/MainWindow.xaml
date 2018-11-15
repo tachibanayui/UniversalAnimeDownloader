@@ -38,7 +38,7 @@
                ContentRendered="PageTransition" 
                NavigationUIVisibility="Hidden">
             <Frame.Content>
-                <view:Explore HostFrame="{x:Reference Name=pageViewer}"/>
+                <view:OnlineAnimeDetail HostFrame="{x:Reference Name=pageViewer}"/>
             </Frame.Content>
         </Frame>
 

@@ -376,10 +376,12 @@
             <sys:Double x:Key="Heading">40</sys:Double>
             <sys:Double x:Key="Heading2">24</sys:Double>
             <sys:Double x:Key="Heading3">18</sys:Double>
+            <sys:Double x:Key="Heading4">15</sys:Double>
             <sys:Double x:Key="WindowWidth">1080</sys:Double>
 
             <SolidColorBrush x:Key="Black">#1E262C</SolidColorBrush>
             <SolidColorBrush x:Key="Primary">DeepSkyBlue</SolidColorBrush>
+            <SolidColorBrush x:Key="FileSize">LightGray</SolidColorBrush>
             
             
             
