@@ -26,7 +26,7 @@
                             </Grid.RowDefinitions>
                             
                             <Button HorizontalAlignment="Right" VerticalAlignment="Center"  ToolTip="Watch this anime!" Panel.ZIndex="2"
-                                    Grid.RowSpan="3" Margin="0,0,10,0" Style="{TemplateBinding PlayButtonStyle}">
+                                    Grid.RowSpan="3" Margin="0,0,10,0" Style="{TemplateBinding PlayButtonStyle}" x:Name="watchAnime">
                                 <materialDesign:PackIcon Kind="Play" Width="{TemplateBinding AnimeFontSize}" Height="auto"/>
                             </Button>
 

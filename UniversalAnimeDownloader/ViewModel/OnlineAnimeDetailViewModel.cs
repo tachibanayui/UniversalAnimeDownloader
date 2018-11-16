@@ -21,6 +21,7 @@ namespace UniversalAnimeDownloader.ViewModel
                 {
                     animeTitle = value;
                     OnPropertyChanged("AnimeTitle");
+                    OnPropertyChanged("IsHeaderLoading");
                 }
             }
 
@@ -36,19 +37,65 @@ namespace UniversalAnimeDownloader.ViewModel
                 {
                     animeDescription = value;
                     OnPropertyChanged("AnimeDescription");
+                    OnPropertyChanged("IsDescriptionLoading");
                 }
             }
         }
 
-        public ObservableCollection<OnlineAnimeDetailViewModel> AnimeEpisodes { get; set; }
+        private string animeGenres;
+        public string AnimeGemres
+        {
+            get { return animeGenres; }
+            set
+            {
+                if (animeGenres != value)
+                {
+                    animeGenres = value;
+                    OnPropertyChanged("AnimeGenres");
+                }
+            }
+        }
+
+        public bool IsHeaderLoading
+        {
+            get { return AnimeTitle == null || AnimeDescription == null; }
+        }   
+
+        public bool IsDescriptionLoading
+        {
+            get { return AnimeDescription == null; }
+        }
+
+        //Not implement yet
+        public bool IsPictureLoading
+        {
+            get { return true; }
+        }
+        //
+
+        private bool isEpisodeLoading;
+        public bool IsEpisodeLoading
+        {
+            get { return isEpisodeLoading; }
+            private set
+            {
+                if (isEpisodeLoading != value)
+                {
+                    isEpisodeLoading = value;
+                    OnPropertyChanged("IsEpisodeLoading");
+                }
+            }
+        }
+
+        public ObservableCollection<OnlineEpisodesListViewModel> AnimeEpisodes { get; set; }
         private Dispatcher currentDispatcher;
 
         public OnlineAnimeDetailViewModel(Dispatcher currentDispatcher)
         {
             this.currentDispatcher = currentDispatcher;
-            AnimeEpisodes = new ObservableCollection<OnlineAnimeDetailViewModel>();
-            
-            
+            AnimeEpisodes = new ObservableCollection<OnlineEpisodesListViewModel>();
+
+            AnimeEpisodes.CollectionChanged += (s, e) => OnPropertyChanged("IsEpisodeLoading");
         }
     }
 }

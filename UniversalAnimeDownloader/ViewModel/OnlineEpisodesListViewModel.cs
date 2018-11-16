@@ -7,22 +7,8 @@ using System.Threading.Tasks;
 
 namespace UniversalAnimeDownloader.ViewModel
 {
-    class OnlineEpisodesListViewModel : ViewModelBase
+    public class OnlineEpisodesListViewModel : ViewModelBase
     {
-        private string animeGenres;
-        public string AnimeGemres
-        {
-            get { return animeGenres; }
-            set
-            {
-                if (animeGenres != value)
-                {
-                    animeGenres = value;
-                    OnPropertyChanged("AnimeGenres");
-                }
-            }
-        }
-
         private string episodeName;
         public string EpisodeName
         {

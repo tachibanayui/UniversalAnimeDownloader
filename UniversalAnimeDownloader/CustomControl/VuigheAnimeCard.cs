@@ -120,7 +120,7 @@ namespace UniversalAnimeDownloader.CustomControl
 
         
 
-        public uadcorelib.VuigheAnimeManager Data
+        public VuigheAnimeManager Data
         {
             get { return (uadcorelib.VuigheAnimeManager)GetValue(DataProperty); }
             set
@@ -135,11 +135,17 @@ namespace UniversalAnimeDownloader.CustomControl
         #endregion
 
         Image myImage;
+        Button btnWatchAnime;
         bool isInit;
+
+        public event EventHandler<RoutedEventArgs> WatchAnimeButtonClicked;
 
         public override void OnApplyTemplate()
         {
             myImage = GetTemplateChild("img") as Image;
+            btnWatchAnime = GetTemplateChild("watchAnime") as Button;
+            btnWatchAnime.Click += (s, e) => WatchAnimeButtonClicked?.Invoke(this, e);
+
             SetDataProperty();
             isInit = true;
             base.OnApplyTemplate();

@@ -41,6 +41,8 @@
                 <TextBlock Text="{Binding AnimeGenres}"/>
             </TextBlock>
         </Grid>
+        <ProgressBar VerticalAlignment="Bottom" Height="5" IsIndeterminate="True" 
+                     Visibility="{Binding IsHeaderLoading, Converter={StaticResource boolToInvisConverter}, ConverterParameter=Normal}"/>
         <ScrollViewer Grid.Row="1">
             <VirtualizingStackPanel Grid.Row="1">
                 <materialDesign:Card MinHeight="150">
@@ -53,6 +55,8 @@
                        FontSize="{DynamicResource Heading}" VerticalAlignment="Center"/>
                         <TextBlock Text="{Binding AnimeDescription}" Grid.Row="1" TextWrapping="Wrap"
                        FontSize="{DynamicResource Heading2}"/>
+                        <ProgressBar VerticalAlignment="Bottom" Height="5" Grid.Row="1" IsIndeterminate="True"
+                                     Visibility="{Binding IsDescriptionLoading, Converter={StaticResource boolToInvisConverter}, ConverterParameter=Normal}"/>
                     </Grid>
                 </materialDesign:Card>
                 <materialDesign:Card>
@@ -74,6 +78,8 @@
                                 </VirtualizingStackPanel.Resources>
                             </VirtualizingStackPanel>
                         </ScrollViewer>
+                        <ProgressBar Grid.Row="1" VerticalAlignment="Bottom" Height="5" IsIndeterminate="True" 
+                                     Visibility="{Binding IsPictureLoading, Converter={StaticResource boolToInvisConverter}, ConverterParameter=Normal}"/>
                     </Grid>
                 </materialDesign:Card>
                 <materialDesign:Card MinHeight="300">
@@ -105,7 +111,7 @@
                                             <RowDefinition/>
                                             <RowDefinition Height="5"/>
                                         </Grid.RowDefinitions>
-                                        <TextBlock Text="Test" FontSize="{DynamicResource Heading2}"/>
+                                        <TextBlock Text="{Binding EpisodeName}" FontSize="{DynamicResource Heading2}"/>
                                         <TextBlock Text="{Binding Progress}" FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource FileSize}"
                                                    HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
                                         <ProgressBar Value="75" Grid.Row="1"/>
@@ -117,6 +123,8 @@
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>
+                        <ProgressBar Grid.Row="2" Grid.ColumnSpan="3" VerticalAlignment="Bottom" Height="5" IsIndeterminate="True"
+                                     Visibility="{Binding IsEpisodeLoading, Converter={StaticResource boolToInvisConverter}, ConverterParameter=Normal}"/>
                     </Grid>
                 </materialDesign:Card>
             </VirtualizingStackPanel>

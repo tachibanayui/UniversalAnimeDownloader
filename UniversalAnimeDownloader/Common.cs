@@ -48,7 +48,4 @@ namespace UniversalAnimeDownloader
         }
 
     }
-
-
-
 }

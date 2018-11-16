@@ -77,7 +77,7 @@ namespace UniversalAnimeDownloader.View
             VuigheAnimeCard[] cards = null;
             Dispatcher.Invoke(() => cards = new VuigheAnimeCard[filmList.data.Length]);
 
-            Thread.Sleep(750);
+            Thread.Sleep(10);
 
             for (int i = 0; i < filmList.data.Length; i++)
             {
@@ -88,6 +88,12 @@ namespace UniversalAnimeDownloader.View
                     cards[i].AnimeBG = new BitmapImage();
                     cards[i].Data = new VuigheAnimeManager(filmList.data[i]);
                     cards[i].BeginAnimation(OpacityProperty, new DoubleAnimation(1, TimeSpan.FromSeconds(.5)));
+                    cards[i].WatchAnimeButtonClicked += (s, e) =>
+                    {
+                        VuigheAnimeCard animeCard = s as VuigheAnimeCard;
+                        OnlineAnimeDetail animeDetail = new OnlineAnimeDetail(animeCard.Data);
+                        FrameHost.Content = animeDetail;
+                    };
                 });
                 Thread.Sleep(10);
             }
