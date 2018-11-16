@@ -65,7 +65,7 @@
                             <RowDefinition Height="75"/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <TextBlock Text="Some Picture Related to this anime: " 
+                        <TextBlock Text="Some pictures related to this anime: " 
                            FontWeight="Bold" FontSize="{DynamicResource Heading}"/>
                         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Disabled">
                             <VirtualizingStackPanel Height="210">

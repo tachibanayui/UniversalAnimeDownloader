@@ -117,7 +117,7 @@
                                 <Rectangle />
                                 <StackPanel Orientation="Horizontal">
                                     <materialDesign:PackIcon Kind="Bell"/>
-                                    <TextBlock Text=" Nofication"/>
+                                    <TextBlock Text=" Nofications"/>
                                 </StackPanel>
                             </Grid>
                         </TreeViewItem.Header>
@@ -128,7 +128,7 @@
                                 <Rectangle />
                                 <StackPanel Orientation="Horizontal">
                                     <materialDesign:PackIcon Kind="Settings"/>
-                                    <TextBlock Text=" Setting"/>
+                                    <TextBlock Text=" Settings"/>
                                 </StackPanel>
                             </Grid>
                         </TreeViewItem.Header>

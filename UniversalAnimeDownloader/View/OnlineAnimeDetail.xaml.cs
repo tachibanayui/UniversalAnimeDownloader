@@ -63,7 +63,7 @@ namespace UniversalAnimeDownloader.View
         {
             //Jus hard code for now, will change later.
             Data.GetDetailData(QualityOption.Qualitym720p);
-
+            
             VM.AnimeTitle = Data.CurrentFilm.Name;
             VM.AnimeDescription = Data.CurrentFilm.Description;
 
