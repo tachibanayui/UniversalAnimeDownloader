@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:UniversalAnimeDownloader.View"
+      xmlns:proj="clr-namespace:UniversalAnimeDownloader"
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       mc:Ignorable="d" 
       d:DesignHeight="4500" d:DesignWidth="800"
@@ -38,7 +39,7 @@
             <TextBlock Text="{Binding AnimeTitle}" FontSize="{DynamicResource Heading}"/>
             <TextBlock Grid.Row="1">
                 <TextBlock Text="Anime Genres: " FontWeight="Normal"/>
-                <TextBlock Text="{Binding AnimeGenres}"/>
+                <TextBlock Text="{Binding AnimeGemres}"/>
             </TextBlock>
         </Grid>
         <ProgressBar VerticalAlignment="Bottom" Height="5" IsIndeterminate="True" 
@@ -91,7 +92,7 @@
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="50"/>
-                            <RowDefinition Height="25"/>
+                            <RowDefinition Height="100"/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
                         <TextBlock Text="Episodes and Download: " FontWeight="Bold"
@@ -99,7 +100,21 @@
 
                         <materialDesign:PopupBox Grid.Column="2" />
 
-                        <ListView x:Name="episodesContainer" Grid.Row="2" Grid.ColumnSpan="3" ItemsSource="{Binding AnimeEpisodes}">
+                        <ComboBox materialDesign:HintAssist.Hint="Quality: "
+                                  MinWidth="72" Grid.Row="1" VerticalAlignment="Top"
+                                  Margin="16 0 0 0" x:Name="cbxQuality"
+                                  ItemsSource="{x:Static proj:Common.GetQualities}"
+                                  SelectedValue="{Binding Quality, Mode=OneWayToSource}"
+                                  Style="{StaticResource MaterialDesignFloatingHintComboBox}">
+                            <ComboBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <VirtualizingStackPanel />
+                                </ItemsPanelTemplate>
+                            </ComboBox.ItemsPanel>
+                        </ComboBox>
+
+                        <ListView ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                  x:Name="episodesContainer" Grid.Row="2" Grid.ColumnSpan="3" ItemsSource="{Binding AnimeEpisodes}">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <Grid Width="{Binding ElementName=episodesContainer, Path=ActualWidth}">

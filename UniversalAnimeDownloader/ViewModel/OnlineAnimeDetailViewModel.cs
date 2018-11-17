@@ -51,11 +51,24 @@ namespace UniversalAnimeDownloader.ViewModel
                 if (animeGenres != value)
                 {
                     animeGenres = value;
-                    OnPropertyChanged("AnimeGenres");
+                    OnPropertyChanged("AnimeGemres");
                 }
             }
         }
 
+        private string quality;
+        public string Quality
+        {
+            get { return quality; }
+            set
+            {
+                if(quality != value)
+                {
+                    quality = value;
+                    OnPropertyChanged("Quality");
+                }
+            }
+        }
         public bool IsHeaderLoading
         {
             get { return AnimeTitle == null || AnimeDescription == null; }

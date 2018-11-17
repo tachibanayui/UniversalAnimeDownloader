@@ -10,7 +10,7 @@ using System.Windows.Media.Animation;
 
 namespace UniversalAnimeDownloader
 {
-    class Common
+    static class Common
     {
         public static bool InternetAvaible = false;
 
@@ -47,5 +47,6 @@ namespace UniversalAnimeDownloader
             target.BeginAnimation(FrameworkElement.MarginProperty, slideUp);
         }
 
+        public static string[] GetQualities = new string[] { "144p", "240p", "360p", "480p", "720p", "1080p" };
     }
 }

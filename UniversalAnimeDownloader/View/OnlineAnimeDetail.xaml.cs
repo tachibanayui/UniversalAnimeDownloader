@@ -43,6 +43,9 @@ namespace UniversalAnimeDownloader.View
             DataContext = VM;
 
             InitializeComponent();
+            cbxQuality.SelectedIndex = 3;
+
+            cbxQuality.SelectionChanged += ChangeQuality;
 
             Data = data;
             Thread thd = new Thread(ReceiveData);
@@ -51,18 +54,25 @@ namespace UniversalAnimeDownloader.View
             thd.Start();
         }
 
+        private void ChangeQuality(object sender, SelectionChangedEventArgs e)
+        {
+            //throw new NotImplementedException();
+        }
+
         public OnlineAnimeDetail()
         {
             VM = new OnlineAnimeDetailViewModel(Dispatcher);
             DataContext = VM;
 
             InitializeComponent();
+            cbxQuality.SelectedIndex = 3;
+
         }
 
         private void ReceiveData()
         {
             //Jus hard code for now, will change later.
-            Data.GetDetailData(QualityOption.Qualitym720p);
+            Data.GetDetailData(QualityOption.Quality480p);
             
             VM.AnimeTitle = Data.CurrentFilm.Name;
             VM.AnimeDescription = Data.CurrentFilm.Description;
@@ -75,7 +85,7 @@ namespace UniversalAnimeDownloader.View
                     VM.AnimeGemres += ", ";
             }
 
-            foreach (VideoSource item in Data.VideoSources)
+            foreach (VideoSource item in Data.GetVideoSourcesAsync(VM.Quality))
             {
                 if (item != null)
                 {
