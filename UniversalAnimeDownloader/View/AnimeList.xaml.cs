@@ -147,7 +147,7 @@ namespace UniversalAnimeDownloader.View
 
         private void LoadMore(object sender, ScrollChangedEventArgs e)
         {
-            if (VM.IsLoading)
+            if (VM.IsLoading || animeCardContainer.Children.Count == 0)
                 return;
 
             if (!string.IsNullOrEmpty(searchText.Text))

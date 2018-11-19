@@ -48,5 +48,7 @@ namespace UniversalAnimeDownloader
         }
 
         public static string[] GetQualities = new string[] { "144p", "240p", "360p", "480p", "720p", "1080p" };
+
+        public static string AnimeLibraryDirectory;
     }
 }
