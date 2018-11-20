@@ -136,9 +136,14 @@
                                             <RowDefinition Height="5"/>
                                         </Grid.RowDefinitions>
                                         <TextBlock Text="{Binding EpisodeName}" FontSize="{DynamicResource Heading2}"/>
-                                        <TextBlock Text="{Binding Progress}" FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource FileSize}"
-                                                   HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
-                                        <ProgressBar Value="75" Grid.Row="1"/>
+                                        <TextBlock FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource FileSize}"
+                                                   HorizontalAlignment="Right" VerticalAlignment="Bottom" Visibility="{Binding DetailVisibility}">
+                                            <TextBlock Text="{Binding ByteReceived, StringFormat='0.00'}"/>
+                                            <TextBlock Text="/"/>
+                                            <TextBlock Text="{Binding ByteToReceive, StringFormat='0.00'}"/>
+                                            <TextBlock Text="MB"/>
+                                        </TextBlock>
+                                        <ProgressBar Value="{Binding Progress}" Grid.Row="1" Visibility="{Binding DetailVisibility}"/>
 
                                         <Button Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Grid.Column="1">
                                             <materialDesign:PackIcon Kind="{Binding ButtonKind}" Width="25" Height="auto"/>

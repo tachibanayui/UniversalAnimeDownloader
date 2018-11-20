@@ -4,11 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace UniversalAnimeDownloader.ViewModel
 {
     public class OnlineEpisodesListViewModel : ViewModelBase
     {
+        
         private string episodeName;
         public string EpisodeName
         {
@@ -23,8 +25,8 @@ namespace UniversalAnimeDownloader.ViewModel
             }
         }
 
-        private string progress;
-        public string Progress
+        private double progress;
+        public double Progress
         {
             get { return progress; }
             set
@@ -32,6 +34,34 @@ namespace UniversalAnimeDownloader.ViewModel
                 if (progress != value)
                     progress = value;
                 OnPropertyChanged("Progress");
+            }
+        }
+
+        private double byteReceived;
+        public double ByteReceived
+        {
+            get { return byteReceived; }
+            set
+            {
+                if(byteReceived != value)
+                {
+                    byteReceived = value;
+                    OnPropertyChanged("ByteReceived");
+                }
+            }
+        }
+
+        private double byteToReceive;
+        public double ByteToReceive
+        {
+            get { return byteToReceive; }
+            set
+            {
+                if (byteToReceive != value)
+                {
+                    byteToReceive = value;
+                    OnPropertyChanged("ByteToReceive");
+                }
             }
         }
 
@@ -47,6 +77,25 @@ namespace UniversalAnimeDownloader.ViewModel
                     OnPropertyChanged("ButtonKind");
                 }
             }
+        }
+
+        private Visibility detailVisibility;
+        public Visibility DetailVisibility
+        {
+            get { return detailVisibility; }
+            set
+            {
+                if (detailVisibility != value)
+                {
+                    detailVisibility = value;
+                    OnPropertyChanged("DetailVisibility");
+                }
+            }
+        }
+
+        public OnlineEpisodesListViewModel()
+        {
+            DetailVisibility = Visibility.Collapsed;
         }
     }
 }

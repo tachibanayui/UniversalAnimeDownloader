@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -123,10 +124,25 @@ namespace UniversalAnimeDownloader.View
 
         private async void DownloadAll(object sender, RoutedEventArgs e)
         {
+            VM.IsDownloadButtonEnabled = false;
             DownloadManager mng = new DownloadManager(Data, @"E:\Desktop\Test\");
+            mng.ComponentProgressChanged += UpdateProgressToViewModel;
             await mng.DownloadAllAnimeAsync();
-
             MessageBox.Show("Completed!");
+        }
+
+        private void UpdateProgressToViewModel(object sender, DownloadProgressChangedEventArgs e)
+        {
+            VideoSourceWithWebClient src = sender as VideoSourceWithWebClient;
+            var find = VM.AnimeEpisodes.Where(query => query.EpisodeName == src.VideoSource.EpisodeName).ToList();
+            if (find.Count == 0)
+                return;
+
+            find[0].DetailVisibility = Visibility.Visible;
+
+            find[0].Progress = e.ProgressPercentage;
+            find[0].ByteReceived = e.BytesReceived / 1048576d;
+            find[0].ByteToReceive = e.TotalBytesToReceive / 1048576d;
         }
     }
 }

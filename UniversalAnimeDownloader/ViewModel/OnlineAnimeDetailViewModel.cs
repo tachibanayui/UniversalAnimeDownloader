@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Threading;
 
 namespace UniversalAnimeDownloader.ViewModel
@@ -69,14 +70,28 @@ namespace UniversalAnimeDownloader.ViewModel
                 }
             }
         }
+
         public bool IsHeaderLoading
         {
             get { return AnimeTitle == null || AnimeDescription == null; }
         }   
-
         public bool IsDescriptionLoading
         {
             get { return AnimeDescription == null; }
+        }
+
+        private bool isDownloadButtonEnabled;
+        public bool IsDownloadButtonEnabled
+        {
+            get { return isDownloadButtonEnabled; }
+            set
+            {
+                if (isDownloadButtonEnabled != value)
+                {
+                    isDownloadButtonEnabled = value;
+                    OnPropertyChanged("IsDownloadButtonEnabled");
+                }
+            }
         }
 
         //Not implement yet
@@ -107,6 +122,7 @@ namespace UniversalAnimeDownloader.ViewModel
         {
             this.currentDispatcher = currentDispatcher;
             AnimeEpisodes = new ObservableCollection<OnlineEpisodesListViewModel>();
+            IsDownloadButtonEnabled = true;
 
             AnimeEpisodes.CollectionChanged += (s, e) => OnPropertyChanged("IsEpisodeLoading");
         }
