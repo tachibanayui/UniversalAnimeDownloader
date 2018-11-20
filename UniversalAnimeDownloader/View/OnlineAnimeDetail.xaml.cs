@@ -120,5 +120,13 @@ namespace UniversalAnimeDownloader.View
                     VM.AnimeGemres += ", ";
             }
         }
+
+        private async void DownloadAll(object sender, RoutedEventArgs e)
+        {
+            DownloadManager mng = new DownloadManager(Data, @"E:\Desktop\Test\");
+            await mng.DownloadAllAnimeAsync();
+
+            MessageBox.Show("Completed!");
+        }
     }
 }

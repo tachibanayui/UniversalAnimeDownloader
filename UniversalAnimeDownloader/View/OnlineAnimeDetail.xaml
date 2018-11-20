@@ -98,6 +98,15 @@
                         <TextBlock Text="Episodes and Download: " FontWeight="Bold"
                                    FontSize="{DynamicResource Heading}"/>
 
+                        <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                Grid.Column="1" Height="auto" Click="DownloadAll">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Download" Foreground="White" Width="{StaticResource Heading2}" Height="auto"/>
+                                <Rectangle Width="10"/>
+                                <TextBlock Text="Download All" FontSize="{StaticResource Heading2}"/>
+                            </StackPanel>
+                        </Button>
+                        
                         <materialDesign:PopupBox Grid.Column="2" />
 
                         <ComboBox materialDesign:HintAssist.Hint="Quality: "
