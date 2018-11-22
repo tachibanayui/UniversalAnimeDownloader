@@ -118,6 +118,7 @@
     <Compile Include="ViewModel\OnlineAnimeDetailViewModel.cs" />
     <Compile Include="ViewModel\OnlineEpisodesListViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
+    <Compile Include="View\AllAnimeTab.cs" />
     <Compile Include="View\AnimeList.xaml.cs">
       <DependentUpon>AnimeList.xaml</DependentUpon>
     </Compile>
