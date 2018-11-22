@@ -67,4 +67,47 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style TargetType="{x:Type local:TaskCompletePopup}">
+        <Setter Property="Width" Value="auto"/>
+        <Setter Property="Height" Value="auto"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:TaskCompletePopup}">
+                    <Grid Background="Transparent" x:Name="container" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}">
+                        <materialDesign:DialogHost IsOpen="{TemplateBinding DialogOpen}" >
+                            <materialDesign:DialogHost.DialogContent>
+                                <materialDesign:Card Width="{TemplateBinding DialogWidth}" Height="{TemplateBinding DialogHeight}" Background="{TemplateBinding CardBackGround}"
+                                                     VerticalAlignment="Center" HorizontalAlignment="Center" UniformCornerRadius="{TemplateBinding DialogUniformRadius}">
+                                    <Grid Background="Transparent">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition Height="35"/>
+                                        </Grid.RowDefinitions>
+
+                                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                            <materialDesign:PackIcon Kind="{TemplateBinding IconKind}" Width="100" Height="auto" Foreground="White"/>
+                                            <TextBlock Text="{TemplateBinding PopupTitle}" FontWeight="Bold" Foreground="{TemplateBinding DialogTitleForeground}"
+                                                       FontSize="{TemplateBinding DialogTitleFontSize}"/>
+                                        </StackPanel>
+
+                                        <TextBlock Margin="15" Grid.Row="1" TextWrapping="Wrap"
+                                                   Text="{TemplateBinding PopupText}" Foreground="{TemplateBinding DialogTitleForeground}"/>
+
+                                        <StackPanel Margin="15,0,15,0" Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right">
+                                            <Button Style="{TemplateBinding ActionButtonStyle}" 
+                                                    materialDesign:RippleAssist.Feedback="{TemplateBinding ButtonRippleColor}" Content="Give Feedback" Margin="5,0,5,0"/>
+                                            <Button Style="{TemplateBinding ActionButtonStyle}"
+                                                    materialDesign:RippleAssist.Feedback="{TemplateBinding ButtonRippleColor}" Content="OK" Margin="5,0,5,0" x:Name="btnOk"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </materialDesign:Card>
+                            </materialDesign:DialogHost.DialogContent>
+                        </materialDesign:DialogHost>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

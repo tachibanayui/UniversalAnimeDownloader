@@ -18,6 +18,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using uadcorelib;
 using uadcorelib.Models;
+using UniversalAnimeDownloader.CustomControl;
 using UniversalAnimeDownloader.ViewModel;
 
 namespace UniversalAnimeDownloader.View
@@ -128,7 +129,16 @@ namespace UniversalAnimeDownloader.View
             DownloadManager mng = new DownloadManager(Data, @"E:\Desktop\Test\");
             mng.ComponentProgressChanged += UpdateProgressToViewModel;
             await mng.DownloadAllAnimeAsync();
-            MessageBox.Show("Completed!");
+
+            TaskCompletePopup popup = new TaskCompletePopup()
+            {
+                PopupTitle = "Download Completed",
+                PopupText = $"{VM.AnimeTitle} has finished downloading! To see your downloaded anime, visit your anime library or Window Explorer",
+                Style = Application.Current.Resources["DarkThemePopup"] as Style,
+            };
+
+            root.Children.Add(popup);
+            popup.DialogOpen = true;
         }
 
         private void UpdateProgressToViewModel(object sender, DownloadProgressChangedEventArgs e)

@@ -12,7 +12,7 @@
       FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
       Title="OnlineAnimeDetail">
 
-    <Grid Margin="10">
+    <Grid x:Name="root" Margin="10">
         <Grid.Resources>
             <Style TargetType="materialDesign:Card">
                 <Setter Property="UniformCornerRadius" Value="25"/>

@@ -7,6 +7,7 @@
              xmlns:controlzEx="clr-namespace:ControlzEx;assembly=MaterialDesignThemes.Wpf"
              xmlns:converters="clr-namespace:MaterialDesignThemes.Wpf.Converters;assembly=MaterialDesignThemes.Wpf"
              xmlns:localConverter="clr-namespace:UniversalAnimeDownloader.ValueConverter"
+             xmlns:customControl="clr-namespace:UniversalAnimeDownloader.CustomControl"
              StartupUri="View\SplashScreen.xaml">
     <Application.Resources>
         <ResourceDictionary>
@@ -26,6 +27,14 @@
             <Style TargetType="TextBlock">
                 <Setter Property="Foreground" Value="White"/>
                 <Setter Property="FontSize" Value="{DynamicResource Heading2}"/>
+            </Style>
+
+            <Style TargetType="customControl:TaskCompletePopup" x:Key="DarkThemePopup">
+                <Setter Property="DialogHeight" Value="350"/>
+                <Setter Property="DialogWidth" Value="500"/>
+                <Setter Property="ActionButtonStyle" Value="{StaticResource MaterialDesignFlatButton}"/>
+                <Setter Property="ButtonRippleColor" Value="#666666"/>
+                <Setter Property="CardBackGround" Value="#494949"/>
             </Style>
 
             <Style TargetType="materialDesign:PopupBox" x:Key="MaterialDesignMultiFloatingActionPopupBox">
@@ -372,6 +381,9 @@
                 </Setter>
             </Style>
 
+            <Style x:Key="FlatButtonForCustomControl" TargetType="Button">
+                <Setter Property="AllowDrop" Value="False"/>
+            </Style>
 
             <sys:Double x:Key="Heading">40</sys:Double>
             <sys:Double x:Key="Heading2">24</sys:Double>

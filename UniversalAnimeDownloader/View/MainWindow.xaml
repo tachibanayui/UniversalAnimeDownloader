@@ -7,6 +7,7 @@
         xmlns:view="clr-namespace:UniversalAnimeDownloader.View"
         xmlns:converter="clr-namespace:UniversalAnimeDownloader.ValueConverter"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:customControl="clr-namespace:UniversalAnimeDownloader.CustomControl"
         mc:Ignorable="d"
         x:Name="rootWindow"
         Title="MainWindow" Height="720" Width="{DynamicResource WindowWidth}"
@@ -14,7 +15,7 @@
         WindowStyle="None" WindowStartupLocation="CenterScreen"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto">
-    <Grid Background="{StaticResource Black}">
+    <Grid Background="{StaticResource Black}" x:Name="root">
         <Grid.Resources>
             <Style TargetType="materialDesign:PackIcon">
                 <Setter Property="Width" Value="{DynamicResource Heading2}"/>
