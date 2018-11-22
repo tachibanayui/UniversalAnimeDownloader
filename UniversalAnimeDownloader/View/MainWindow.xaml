@@ -103,7 +103,7 @@
                     </TreeViewItem>
                     <TreeViewItem>
                         <TreeViewItem.Header>
-                            <Grid MouseLeftButtonDown="NavigateToExplore" Width="240">
+                            <Grid MouseLeftButtonDown="NavigateToMyAnime" Width="240">
                                 <Rectangle />
                                 <StackPanel Orientation="Horizontal">
                                     <materialDesign:PackIcon Kind="Book"/>

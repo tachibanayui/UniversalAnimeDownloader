@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MaterialDesignThemes.Wpf;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -37,6 +38,8 @@ namespace UniversalAnimeDownloader.View
 
             VM.IsHaveConnection = Common.InternetAvaible;
 
+            CreateNoConnectionOverlay();
+
             //Get the films data collection
             Thread thd = new Thread(() => {
                 FilmListModel filmList = BaseLibraryClass.GetFilmList(0, 50);
@@ -49,6 +52,25 @@ namespace UniversalAnimeDownloader.View
             cbxGenre.SelectionChanged += ChangeGenre;
             SearchEvent += (s, ee) => SearchAnime((string)s);
             LoadMoreEvent += (s, ee) => LoadMore(s, ee);
+        }
+
+        private void CreateNoConnectionOverlay()
+        {
+            StackPanel pnl = new StackPanel() { HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center };
+            Binding visibilityBinding = new Binding();
+            visibilityBinding.Source = VM.IsHaveConnection;
+            visibilityBinding.Converter = Application.Current.Resources["boolToInvisConverter"] as IValueConverter;
+            visibilityBinding.ConverterParameter = "Inverted";
+            visibilityBinding.Mode = BindingMode.OneTime;
+            BindingOperations.SetBinding(pnl, VisibilityProperty, visibilityBinding);
+
+            PackIcon packIcon = new PackIcon() { Kind = PackIconKind.WifiOff, Height = 100, Width = double.NaN, Foreground = new SolidColorBrush(Colors.White), HorizontalAlignment = HorizontalAlignment.Center };
+            TextBlock textBlock = new TextBlock() { Text = "No Internet Connection :(" };
+            textBlock.SetResourceReference(FontSizeProperty, "Heading2");
+            pnl.Children.Add(packIcon);
+            pnl.Children.Add(textBlock);
+
+            overlayContainer.Children.Add(pnl);
         }
 
         private void AddCard(FilmListModel filmList, bool removeOldCard = true, string genre = null)

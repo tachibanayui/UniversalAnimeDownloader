@@ -70,16 +70,7 @@
         </ScrollViewer>
 
         <Grid x:Name="overlayContainer" Grid.Row="1" Grid.ColumnSpan="2">
-            <StackPanel x:Name="noConnectionOverlay" HorizontalAlignment="Center"
-                        VerticalAlignment="Center" 
-                        Visibility="{Binding IsHaveConnection, 
-                                             Converter={StaticResource boolToInvisConverter}, 
-                                             ConverterParameter=Inverted, Mode=OneWay}">
-                <materialDesign:PackIcon Kind="WifiOff" Height="100" Width="auto" 
-                                         Foreground="White" HorizontalAlignment="Center"/>
-                <TextBlock Text="No Internet Connection :(" FontSize="{DynamicResource Heading2}"/>
-            </StackPanel>
-            <ProgressBar IsIndeterminate="True" VerticalAlignment="Bottom" 
+            <ProgressBar x:Name="progressIndicator" IsIndeterminate="True" VerticalAlignment="Bottom" 
                          Visibility="{Binding IsLoading, Converter={StaticResource boolToInvisConverter}, ConverterParameter=Normal}"/>
         </Grid>
     </Grid>

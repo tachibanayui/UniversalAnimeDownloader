@@ -119,7 +119,9 @@ namespace UniversalAnimeDownloader.CustomControl
 
 
         
-
+        /// <summary>
+        /// For online use
+        /// </summary>
         public VuigheAnimeManager Data
         {
             get { return (uadcorelib.VuigheAnimeManager)GetValue(DataProperty); }
@@ -132,6 +134,18 @@ namespace UniversalAnimeDownloader.CustomControl
         }
         public static readonly DependencyProperty DataProperty =
             DependencyProperty.Register("Data", typeof(uadcorelib.VuigheAnimeManager), typeof(VuigheAnimeCard), new PropertyMetadata());
+
+
+        /// <summary>
+        /// For offline storage
+        /// </summary>
+        public AnimeInformation OfflineData
+        {
+            get { return (AnimeInformation)GetValue(OfflineDataProperty); }
+            set { SetValue(OfflineDataProperty, value); }
+        }
+        public static readonly DependencyProperty OfflineDataProperty =
+            DependencyProperty.Register("OfflineData", typeof(AnimeInformation), typeof(VuigheAnimeCard), new PropertyMetadata());
         #endregion
 
         Image myImage;

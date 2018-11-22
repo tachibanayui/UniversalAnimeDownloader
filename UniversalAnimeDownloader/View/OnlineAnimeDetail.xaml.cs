@@ -126,7 +126,7 @@ namespace UniversalAnimeDownloader.View
         private async void DownloadAll(object sender, RoutedEventArgs e)
         {
             VM.IsDownloadButtonEnabled = false;
-            DownloadManager mng = new DownloadManager(Data, @"E:\Desktop\Test\");
+            DownloadManager mng = new DownloadManager(Data, "AnimeLibrary");
             mng.ComponentProgressChanged += UpdateProgressToViewModel;
             await mng.DownloadAllAnimeAsync();
 
@@ -136,6 +136,7 @@ namespace UniversalAnimeDownloader.View
                 PopupText = $"{VM.AnimeTitle} has finished downloading! To see your downloaded anime, visit your anime library or Window Explorer",
                 Style = Application.Current.Resources["DarkThemePopup"] as Style,
             };
+            Grid.SetRowSpan(popup, 2);
 
             root.Children.Add(popup);
             popup.DialogOpen = true;

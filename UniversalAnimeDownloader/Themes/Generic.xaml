@@ -86,10 +86,10 @@
                                             <RowDefinition Height="35"/>
                                         </Grid.RowDefinitions>
 
-                                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                                            <materialDesign:PackIcon Kind="{TemplateBinding IconKind}" Width="100" Height="auto" Foreground="White"/>
+                                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Vertical">
+                                            <materialDesign:PackIcon Kind="{TemplateBinding IconKind}" Width="100" Height="auto" Foreground="White" HorizontalAlignment="Center"/>
                                             <TextBlock Text="{TemplateBinding PopupTitle}" FontWeight="Bold" Foreground="{TemplateBinding DialogTitleForeground}"
-                                                       FontSize="{TemplateBinding DialogTitleFontSize}"/>
+                                                       FontSize="{TemplateBinding DialogTitleFontSize}" HorizontalAlignment="Center"/>
                                         </StackPanel>
 
                                         <TextBlock Margin="15" Grid.Row="1" TextWrapping="Wrap"

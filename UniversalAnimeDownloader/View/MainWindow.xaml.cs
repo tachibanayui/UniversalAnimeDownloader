@@ -50,5 +50,7 @@ namespace UniversalAnimeDownloader.View
         }
 
         private void NavigateToAllAnime(object sender, MouseButtonEventArgs e) => pageViewer.Content = new AllAnimeTab { FrameHost = pageViewer };
+
+        private void NavigateToMyAnime(object sender, MouseButtonEventArgs e) => pageViewer.Content = new MyAnimeLib() { FrameHost = pageViewer };
     }
 }

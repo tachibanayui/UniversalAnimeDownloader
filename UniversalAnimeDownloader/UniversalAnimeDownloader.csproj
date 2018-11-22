@@ -128,6 +128,7 @@
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\MyAnimeLib.cs" />
     <Compile Include="View\OnlineAnimeDetail.xaml.cs">
       <DependentUpon>OnlineAnimeDetail.xaml</DependentUpon>
     </Compile>
