@@ -142,8 +142,15 @@ namespace UniversalAnimeDownloader.CustomControl
         public AnimeInformation OfflineData
         {
             get { return (AnimeInformation)GetValue(OfflineDataProperty); }
-            set { SetValue(OfflineDataProperty, value); }
+            set
+            {
+                SetValue(OfflineDataProperty, value);
+                if (isInit)
+                    SetOfflineDataProperty();
+            }
         }
+
+
         public static readonly DependencyProperty OfflineDataProperty =
             DependencyProperty.Register("OfflineData", typeof(AnimeInformation), typeof(VuigheAnimeCard), new PropertyMetadata());
         #endregion
@@ -161,6 +168,7 @@ namespace UniversalAnimeDownloader.CustomControl
             btnWatchAnime.Click += (s, e) => WatchAnimeButtonClicked?.Invoke(this, e);
 
             SetDataProperty();
+            SetOfflineDataProperty();
             isInit = true;
             base.OnApplyTemplate();
         }
@@ -193,7 +201,28 @@ namespace UniversalAnimeDownloader.CustomControl
                 DoubleAnimation fadeIn = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(.5), FillBehavior.Stop);
                 myImage.BeginAnimation(OpacityProperty, fadeIn);
             };
-            AnimeBG = new BitmapImage(new Uri(Data.CurrentFilm.Thumbnail));
+
+            if(Data.CurrentFilm.Thumbnail != null)
+                AnimeBG = new BitmapImage(new Uri(Data.CurrentFilm.Thumbnail));
+        }
+
+
+        private void SetOfflineDataProperty()
+        {
+            if (OfflineData == null)
+                return;
+
+            AnimeName = OfflineData.AnimeName;
+            AnimeTag = OfflineData.AnimeGenres;
+
+            myImage.SourceUpdated += (s, e) =>
+            {
+                DoubleAnimation fadeIn = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(.5), FillBehavior.Stop);
+                myImage.BeginAnimation(OpacityProperty, fadeIn);
+            };
+
+            if(OfflineData.AnimeThumbnail != null)
+                AnimeBG = new BitmapImage(new Uri(OfflineData.AnimeThumbnail));
         }
     }
 }
