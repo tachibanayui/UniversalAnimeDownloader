@@ -115,7 +115,10 @@
     <Compile Include="Models\GenreModel.cs" />
     <Compile Include="ValueConverter\BoolToVisibilityConverter.cs" />
     <Compile Include="ValueConverter\ScaleFontSizeValueConverter.cs" />
+    <Compile Include="ViewModel\AnimeDetailViewModelBase.cs" />
     <Compile Include="ViewModel\AnimeListViewModel.cs" />
+    <Compile Include="ViewModel\OfflineAnimeDetailViewModel.cs" />
+    <Compile Include="ViewModel\OfflineEpisodesListViewModel.cs" />
     <Compile Include="ViewModel\OnlineAnimeDetailViewModel.cs" />
     <Compile Include="ViewModel\OnlineEpisodesListViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
@@ -130,6 +133,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\MyAnimeLib.cs" />
+    <Compile Include="View\OfflineAnimeDetail.cs" />
     <Compile Include="View\OnlineAnimeDetail.cs" />
     <Compile Include="View\AnimeDetailBase.xaml.cs">
       <DependentUpon>AnimeDetailBase.xaml</DependentUpon>

@@ -44,7 +44,7 @@
             </TextBlock>
         </Grid>
         <ProgressBar VerticalAlignment="Bottom" Height="5" IsIndeterminate="True" 
-                     Visibility="{Binding IsHeaderLoading, Converter={StaticResource boolToInvisConverter}, ConverterParameter=Normal}"/>
+                     Visibility="{Binding IsHeaderLoading, Converter={StaticResource boolToInvisConverter}, ConverterParameter=Normal, FallbackValue={x:Static Visibility.Collapsed}}"/>
         <ScrollViewer Grid.Row="1">
             <VirtualizingStackPanel Grid.Row="1">
                 <materialDesign:Card MinHeight="150">
@@ -58,7 +58,7 @@
                         <TextBlock Text="{Binding AnimeDescription}" Grid.Row="1" TextWrapping="Wrap"
                        FontSize="{DynamicResource Heading2}"/>
                         <ProgressBar VerticalAlignment="Bottom" Height="5" Grid.Row="1" IsIndeterminate="True"
-                                     Visibility="{Binding IsDescriptionLoading, Converter={StaticResource boolToInvisConverter}, ConverterParameter=Normal}"/>
+                                     Visibility="{Binding IsDescriptionLoading, Converter={StaticResource boolToInvisConverter}, ConverterParameter=Normal, FallbackValue={x:Static Visibility.Collapsed}}"/>
                     </Grid>
                 </materialDesign:Card>
                 <materialDesign:Card>
@@ -81,19 +81,13 @@
                             </VirtualizingStackPanel>
                         </ScrollViewer>
                         <ProgressBar Grid.Row="1" VerticalAlignment="Bottom" Height="5" IsIndeterminate="True" 
-                                     Visibility="{Binding IsPictureLoading, Converter={StaticResource boolToInvisConverter}, ConverterParameter=Normal}"/>
+                                     Visibility="{Binding IsPictureLoading, Converter={StaticResource boolToInvisConverter}, ConverterParameter=Normal, FallbackValue={x:Static Visibility.Collapsed}}"/>
                     </Grid>
                 </materialDesign:Card>
                 <materialDesign:Card x:Name="animeEpisodes" MinHeight="300">
-                    
+
                 </materialDesign:Card>
             </VirtualizingStackPanel>
         </ScrollViewer>
-
-       
-
-        <!--<customControl:TaskCompletePopup Grid.RowSpan="2" PopupTitle="Test" DialogOpen="True" Style="{StaticResource DarkThemePopup}">
-            
-        </customControl:TaskCompletePopup>-->
     </Grid>
 </Page>

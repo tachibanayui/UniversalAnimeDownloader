@@ -35,7 +35,9 @@ namespace UniversalAnimeDownloader.View
                     card.BeginAnimation(OpacityProperty, new DoubleAnimation(1, TimeSpan.FromSeconds(.5)));
                     card.WatchAnimeButtonClicked += (s, e) =>
                     {
-                        MessageBox.Show("Sorry, not implemented yet :(");
+                        VuigheAnimeCard vuigheCard = s as VuigheAnimeCard;
+                        OfflineAnimeDetail offlineAnime = new OfflineAnimeDetail(vuigheCard.OfflineData) { HostFrame = FrameHost };
+                        FrameHost.Content = offlineAnime;
                     };
                 });
                 await Task.Delay(20);

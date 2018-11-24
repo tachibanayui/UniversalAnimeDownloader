@@ -83,7 +83,6 @@ namespace UniversalAnimeDownloader.View
             Grid.SetColumn(popupBox, 2);
             grdRoot.Children.Add(popupBox);
 
-            //Combobox
             cbxQuality = new ComboBox();
             cbxQuality.Style = Application.Current.FindResource("cbxQualitySelector") as Style;
             grdRoot.Children.Add(cbxQuality);

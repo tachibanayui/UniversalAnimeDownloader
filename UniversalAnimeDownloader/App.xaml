@@ -409,48 +409,19 @@
             <sys:Double x:Key="Heading4">15</sys:Double>
             <sys:Double x:Key="WindowWidth">1080</sys:Double>
 
+
+
+
             <SolidColorBrush x:Key="Black">#1E262C</SolidColorBrush>
             <SolidColorBrush x:Key="Primary">DeepSkyBlue</SolidColorBrush>
             <SolidColorBrush x:Key="FileSize">LightGray</SolidColorBrush>
-            <Style x:Key="listViewDownloadTemplate" TargetType="ListView">
+            <Style x:Key="listViewEpisodeBaseTemplate" TargetType="ListView">
                 <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
                 <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled"/>
                 <Setter Property="Grid.Row" Value="2"/>
                 <Setter Property="Grid.ColumnSpan" Value="3"/>
-                <Setter Property="ItemsSource" Value="{Binding AnimeEpisodes}"/>
                 <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                 <Setter Property="VerticalContentAlignment" Value="Stretch"/>
-                <Setter Property="ItemTemplate" >
-                    <Setter.Value>
-                        <DataTemplate>
-                            <Border>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition/>
-                                        <ColumnDefinition Width="75"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition/>
-                                        <RowDefinition Height="5"/>
-                                    </Grid.RowDefinitions>
-                                    <TextBlock Text="{Binding EpisodeName}" FontSize="{DynamicResource Heading2}"/>
-                                    <TextBlock FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource FileSize}"
-                                                   HorizontalAlignment="Right" VerticalAlignment="Bottom" Visibility="{Binding DetailVisibility}">
-                                            <TextBlock Text="{Binding ByteReceived, StringFormat='0.00'}"/>
-                                            <TextBlock Text="/"/>
-                                            <TextBlock Text="{Binding ByteToReceive, StringFormat='0.00'}"/>
-                                            <TextBlock Text="MB"/>
-                                        </TextBlock>
-                                    <ProgressBar Value="{Binding Progress}" Grid.Row="1" Visibility="{Binding DetailVisibility}"/>
-
-                                    <Button Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Grid.Column="1">
-                                        <materialDesign:PackIcon Kind="{Binding ButtonKind}" Width="25" Height="auto"/>
-                                    </Button>
-                                </Grid>
-                            </Border>
-                        </DataTemplate>
-                    </Setter.Value>
-                </Setter>
                 <Setter Property="ItemContainerStyle">
                     <Setter.Value>
                         <Style TargetType="ListViewItem">
@@ -655,7 +626,67 @@
                 </Setter>
             </Style>
 
+            <Style TargetType="ListView" x:Key="listViewDownloadTemplate" BasedOn="{StaticResource listViewEpisodeBaseTemplate}">
+                <Setter Property="ItemsSource" Value="{Binding AnimeEpisodes}"/>
+                <Setter Property="ItemTemplate" >
+                    <Setter.Value>
+                        <DataTemplate>
+                            <Border>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="75"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition Height="5"/>
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Text="{Binding EpisodeName}" FontSize="{DynamicResource Heading2}"/>
+                                    <TextBlock FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource FileSize}"
+                                                   HorizontalAlignment="Right" VerticalAlignment="Bottom" Visibility="{Binding DetailVisibility}">
+                                            <TextBlock Text="{Binding ByteReceived, StringFormat='0.00'}"/>
+                                            <TextBlock Text="/"/>
+                                            <TextBlock Text="{Binding ByteToReceive, StringFormat='0.00'}"/>
+                                            <TextBlock Text="MB"/>
+                                        </TextBlock>
+                                    <ProgressBar Value="{Binding Progress}" Grid.Row="1" Visibility="{Binding DetailVisibility}"/>
 
+                                    <Button Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Grid.Column="1">
+                                        <materialDesign:PackIcon Kind="{Binding ButtonKind}" Width="25" Height="auto"/>
+                                    </Button>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style TargetType="ListView" x:Key="listViewEpsiodesOfflineTemplate" BasedOn="{StaticResource listViewEpisodeBaseTemplate}">
+                <Setter Property="ItemsSource" Value="{Binding AnimeEpisodes}"/>
+                <Setter Property="ItemTemplate" >
+                    <Setter.Value>
+                        <DataTemplate>
+                            <Border>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="75"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition Height="5"/>
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Text="{Binding EpisodeName}" FontSize="{DynamicResource Heading2}"/>
+                                    <Button Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
+                                            Tag="{Binding MediaLocation}" Grid.Column="1" Click="PlayFilm">
+                                        <materialDesign:PackIcon Kind="{Binding IconKind}" Width="25" Height="auto"/>
+                                    </Button>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
 
 
 

@@ -222,9 +222,7 @@ namespace UniversalAnimeDownloader.CustomControl
             };
 
             if (OfflineData.AnimeThumbnail != null)
-            {
-                
-            }
+                myImage.Source = new BitmapImage(new Uri(OfflineData.AnimeThumbnail));
         }
     }
 }
