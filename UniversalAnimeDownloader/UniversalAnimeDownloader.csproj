@@ -96,7 +96,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\OnlineAnimeDetail.xaml">
+    <Page Include="View\AnimeDetailBase.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -104,6 +104,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="Animations\GridLengthAnimation.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -129,8 +130,9 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\MyAnimeLib.cs" />
-    <Compile Include="View\OnlineAnimeDetail.xaml.cs">
-      <DependentUpon>OnlineAnimeDetail.xaml</DependentUpon>
+    <Compile Include="View\OnlineAnimeDetail.cs" />
+    <Compile Include="View\AnimeDetailBase.xaml.cs">
+      <DependentUpon>AnimeDetailBase.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\SplashScreen.xaml.cs">
       <DependentUpon>SplashScreen.xaml</DependentUpon>

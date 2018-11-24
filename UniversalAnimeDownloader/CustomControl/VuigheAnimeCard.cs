@@ -221,8 +221,10 @@ namespace UniversalAnimeDownloader.CustomControl
                 myImage.BeginAnimation(OpacityProperty, fadeIn);
             };
 
-            if(OfflineData.AnimeThumbnail != null)
-                AnimeBG = new BitmapImage(new Uri(OfflineData.AnimeThumbnail));
+            if (OfflineData.AnimeThumbnail != null)
+            {
+                
+            }
         }
     }
 }

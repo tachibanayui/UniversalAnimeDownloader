@@ -105,7 +105,7 @@ namespace UniversalAnimeDownloader.View
                     cards[i].WatchAnimeButtonClicked += (s, e) =>
                     {
                         VuigheAnimeCard animeCard = s as VuigheAnimeCard;
-                        OnlineAnimeDetail animeDetail = new OnlineAnimeDetail(animeCard.Data);
+                        AnimeDetailBase animeDetail = new OnlineAnimeDetail(animeCard.Data);
                         FrameHost.Content = animeDetail;
                     };
                 });

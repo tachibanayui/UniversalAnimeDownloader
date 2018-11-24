@@ -385,6 +385,24 @@
                 <Setter Property="AllowDrop" Value="False"/>
             </Style>
 
+            <Style x:Key="cbxQualitySelector" TargetType="ComboBox" BasedOn="{StaticResource MaterialDesignFloatingHintComboBox}">
+                <Setter Property="materialDesign:HintAssist.Hint" Value="Quality: "/>
+                <Setter Property="MinWidth" Value="72"/>
+                <Setter Property="Grid.Row" Value="1"/>
+                <Setter Property="VerticalAlignment" Value="Top"/>
+                <Setter Property="Margin" Value="16 0 0 0"/>
+                <Setter Property="ItemsSource" Value="{x:Static local:Common.GetQualities}"/>
+                <Setter Property="SelectedValue" Value="{Binding Quality, Mode=OneWayToSource}"/>
+                <Setter Property="ItemsPanel">
+                    <Setter.Value>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel />
+                        </ItemsPanelTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+
             <sys:Double x:Key="Heading">40</sys:Double>
             <sys:Double x:Key="Heading2">24</sys:Double>
             <sys:Double x:Key="Heading3">18</sys:Double>
@@ -394,10 +412,252 @@
             <SolidColorBrush x:Key="Black">#1E262C</SolidColorBrush>
             <SolidColorBrush x:Key="Primary">DeepSkyBlue</SolidColorBrush>
             <SolidColorBrush x:Key="FileSize">LightGray</SolidColorBrush>
-            
-            
-            
-            
+            <Style x:Key="listViewDownloadTemplate" TargetType="ListView">
+                <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+                <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled"/>
+                <Setter Property="Grid.Row" Value="2"/>
+                <Setter Property="Grid.ColumnSpan" Value="3"/>
+                <Setter Property="ItemsSource" Value="{Binding AnimeEpisodes}"/>
+                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+                <Setter Property="ItemTemplate" >
+                    <Setter.Value>
+                        <DataTemplate>
+                            <Border>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="75"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition Height="5"/>
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Text="{Binding EpisodeName}" FontSize="{DynamicResource Heading2}"/>
+                                    <TextBlock FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource FileSize}"
+                                                   HorizontalAlignment="Right" VerticalAlignment="Bottom" Visibility="{Binding DetailVisibility}">
+                                            <TextBlock Text="{Binding ByteReceived, StringFormat='0.00'}"/>
+                                            <TextBlock Text="/"/>
+                                            <TextBlock Text="{Binding ByteToReceive, StringFormat='0.00'}"/>
+                                            <TextBlock Text="MB"/>
+                                        </TextBlock>
+                                    <ProgressBar Value="{Binding Progress}" Grid.Row="1" Visibility="{Binding DetailVisibility}"/>
+
+                                    <Button Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Grid.Column="1">
+                                        <materialDesign:PackIcon Kind="{Binding ButtonKind}" Width="25" Height="auto"/>
+                                    </Button>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="ItemContainerStyle">
+                    <Setter.Value>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        </Style>
+                    </Setter.Value>
+                </Setter>
+
+                <Setter Property="Background" Value="{DynamicResource MaterialDesignPaper}"/>
+                <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource MaterialDesignTextBoxBorder}"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="FontSize" Value="13"/>
+                <Setter Property="ItemContainerStyle">
+                    <Setter.Value>
+                        <Binding Path="View" RelativeSource="{RelativeSource Self}">
+                            <Binding.Converter>
+                                <converters:ListViewGridViewConverter>
+                                    <converters:ListViewGridViewConverter.DefaultValue>
+                                        <Style TargetType="{x:Type ListBoxItem}">
+                                            <Setter Property="Background" Value="Transparent"/>
+                                            <Setter Property="BorderThickness" Value="0"/>
+                                            <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type ItemsControl}}}"/>
+                                            <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type ItemsControl}}}"/>
+                                            <Setter Property="Padding" Value="8"/>
+                                            <Setter Property="SnapsToDevicePixels" Value="True"/>
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                                        <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" ClipToBounds="{TemplateBinding ClipToBounds}" Margin="{TemplateBinding Margin}">
+                                                            <VisualStateManager.VisualStateGroups>
+                                                                <VisualStateGroup x:Name="CommonStates">
+                                                                    <VisualStateGroup.Transitions>
+                                                                        <VisualTransition From="{x:Null}" GeneratedDuration="0:0:0.3" Storyboard="{x:Null}" To="Normal">
+                                                                            <VisualTransition.GeneratedEasingFunction>
+                                                                                <CircleEase EasingMode="EaseOut"/>
+                                                                            </VisualTransition.GeneratedEasingFunction>
+                                                                        </VisualTransition>
+                                                                    </VisualStateGroup.Transitions>
+                                                                    <VisualState x:Name="Normal"/>
+                                                                    <VisualState x:Name="MouseOver">
+                                                                        <Storyboard>
+                                                                            <DoubleAnimation Duration="0" To="0.1" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="MouseOverBorder"/>
+                                                                        </Storyboard>
+                                                                    </VisualState>
+                                                                    <VisualState x:Name="Disabled"/>
+                                                                </VisualStateGroup>
+                                                                <VisualStateGroup x:Name="SelectionStates">
+                                                                    <VisualStateGroup.Transitions>
+                                                                        <VisualTransition From="{x:Null}" GeneratedDuration="0:0:0.6" GeneratedEasingFunction="{x:Null}" Storyboard="{x:Null}" To="{x:Null}"/>
+                                                                    </VisualStateGroup.Transitions>
+                                                                    <VisualState x:Name="Selected">
+                                                                        <Storyboard>
+                                                                            <DoubleAnimation Duration="0" To="0.18" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="SelectedBorder"/>
+                                                                        </Storyboard>
+                                                                    </VisualState>
+                                                                    <VisualState x:Name="Unselected"/>
+                                                                    <VisualState x:Name="SelectedUnfocused">
+                                                                        <Storyboard>
+                                                                            <DoubleAnimation Duration="0" To="0.03" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="SelectedBorder"/>
+                                                                        </Storyboard>
+                                                                    </VisualState>
+                                                                </VisualStateGroup>
+                                                            </VisualStateManager.VisualStateGroups>
+                                                            <Grid>
+                                                                <Border x:Name="MouseOverBorder" Opacity="0">
+                                                                    <Border.Background>
+                                                                        <TemplateBinding Property="Foreground">
+                                                                            <TemplateBinding.Converter>
+                                                                                <converters:BrushRoundConverter HighValue="White" LowValue="Black"/>
+                                                                            </TemplateBinding.Converter>
+                                                                        </TemplateBinding>
+                                                                    </Border.Background>
+                                                                </Border>
+                                                                <Border x:Name="SelectedBorder" Opacity="0" RenderTransformOrigin="0.5,0.5">
+                                                                    <Border.Background>
+                                                                        <TemplateBinding Property="Foreground">
+                                                                            <TemplateBinding.Converter>
+                                                                                <converters:BrushRoundConverter HighValue="White" LowValue="Black"/>
+                                                                            </TemplateBinding.Converter>
+                                                                        </TemplateBinding>
+                                                                    </Border.Background>
+                                                                    <Border.RenderTransform>
+                                                                        <ScaleTransform ScaleX="1"/>
+                                                                    </Border.RenderTransform>
+                                                                </Border>
+                                                                <materialDesign:Ripple ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" Focusable="False" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}">
+                                                                    <materialDesign:Ripple.Feedback>
+                                                                        <TemplateBinding Property="Foreground">
+                                                                            <TemplateBinding.Converter>
+                                                                                <converters:BrushRoundConverter HighValue="White" LowValue="Black"/>
+                                                                            </TemplateBinding.Converter>
+                                                                        </TemplateBinding>
+                                                                    </materialDesign:Ripple.Feedback>
+                                                                </materialDesign:Ripple>
+                                                            </Grid>
+                                                        </Border>
+                                                        <ControlTemplate.Triggers>
+                                                            <Trigger Property="IsEnabled" Value="False">
+                                                                <Setter Property="Opacity" Value="0.56"/>
+                                                            </Trigger>
+                                                        </ControlTemplate.Triggers>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </converters:ListViewGridViewConverter.DefaultValue>
+                                    <converters:ListViewGridViewConverter.ViewValue>
+                                        <Style TargetType="{x:Type ListViewItem}">
+                                            <Setter Property="SnapsToDevicePixels" Value="True"/>
+                                            <Setter Property="OverridesDefaultStyle" Value="True"/>
+                                            <Setter Property="Background" Value="Transparent"/>
+                                            <Setter Property="BorderBrush" Value="Transparent"/>
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                                        <Border x:Name="Border" BorderBrush="{DynamicResource MaterialDesignDivider}" BorderThickness="0,0,0,1" Background="{TemplateBinding Background}" Padding="{Binding (materialDesign:ListViewAssist.ListViewItemPadding), RelativeSource={RelativeSource Self}}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                                                            <GridViewRowPresenter Columns="{TemplateBinding GridView.ColumnCollection}" Content="{TemplateBinding Content}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Style.Triggers>
+                                                <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                                                    <Setter Property="BorderBrush" Value="{DynamicResource MaterialDesignTextBoxBorder}"/>
+                                                </Trigger>
+                                                <Trigger Property="IsSelected" Value="True">
+                                                    <Setter Property="Background" Value="{DynamicResource MaterialDesignSelection}"/>
+                                                </Trigger>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" Value="{DynamicResource MaterialDesignDivider}"/>
+                                                </Trigger>
+                                                <MultiTrigger>
+                                                    <MultiTrigger.Conditions>
+                                                        <Condition Property="IsSelected" Value="True"/>
+                                                        <Condition Property="Selector.IsSelectionActive" Value="False"/>
+                                                    </MultiTrigger.Conditions>
+                                                    <Setter Property="Background" Value="{DynamicResource MaterialDesignSelection}"/>
+                                                </MultiTrigger>
+                                                <MultiTrigger>
+                                                    <MultiTrigger.Conditions>
+                                                        <Condition Property="IsSelected" Value="True"/>
+                                                        <Condition Property="Selector.IsSelectionActive" Value="True"/>
+                                                    </MultiTrigger.Conditions>
+                                                    <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}"/>
+                                                </MultiTrigger>
+                                                <Trigger Property="IsEnabled" Value="False">
+                                                    <Setter Property="Opacity" Value="0.56"/>
+                                                </Trigger>
+                                                <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                                                    <Setter Property="Background" Value="{DynamicResource MaterialDesignDivider}"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </converters:ListViewGridViewConverter.ViewValue>
+                                </converters:ListViewGridViewConverter>
+                            </Binding.Converter>
+                        </Binding>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="ScrollViewer.PanningMode" Value="Both"/>
+                <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+                <Setter Property="SnapsToDevicePixels" Value="True"/>
+                <Setter Property="OverridesDefaultStyle" Value="False"/>
+                <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
+                <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+                <Setter Property="ScrollViewer.CanContentScroll" Value="True"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <Binding Path="View" RelativeSource="{RelativeSource Self}">
+                            <Binding.Converter>
+                                <converters:ListViewGridViewConverter>
+                                    <converters:ListViewGridViewConverter.DefaultValue>
+                                        <ControlTemplate TargetType="{x:Type ListView}">
+                                            <ScrollViewer>
+                                                <ItemsPresenter/>
+                                            </ScrollViewer>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsGrouping" Value="True">
+                                                    <Setter Property="ScrollViewer.CanContentScroll" Value="False"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </converters:ListViewGridViewConverter.DefaultValue>
+                                    <converters:ListViewGridViewConverter.ViewValue>
+                                        <ControlTemplate TargetType="{x:Type ListView}">
+                                            <ScrollViewer Style="{DynamicResource}">
+                                                <ItemsPresenter/>
+                                            </ScrollViewer>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsGrouping" Value="True">
+                                                    <Setter Property="ScrollViewer.CanContentScroll" Value="False"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </converters:ListViewGridViewConverter.ViewValue>
+                                </converters:ListViewGridViewConverter>
+                            </Binding.Converter>
+                        </Binding>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+
+
+
 
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Dark.xaml" />
