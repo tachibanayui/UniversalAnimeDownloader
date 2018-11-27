@@ -68,9 +68,9 @@ namespace UniversalAnimeDownloader.ViewModel
                 foreach (string item in elementCollection)
                 {
                     VuigheGenreModel vuigheGenre = new VuigheGenreModel();
-                    string hrefElement = BaseLibraryClass.GetElementArrtibute(item, "href");
+                    string hrefElement = new BaseLibrary().GetElementArrtibute(item, "href");
                     vuigheGenre.Slug = hrefElement.Substring(hrefElement.LastIndexOf('/') + 1);
-                    vuigheGenre.Name = BaseLibraryClass.GetElementInline(item);
+                    vuigheGenre.Name = new BaseLibrary().GetElementInline(item);
                     currentDispatcher.Invoke(() => VuigheGenres.Add(vuigheGenre));
                 }
             }

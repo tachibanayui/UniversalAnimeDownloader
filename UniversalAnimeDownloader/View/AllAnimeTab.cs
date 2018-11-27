@@ -42,7 +42,7 @@ namespace UniversalAnimeDownloader.View
 
             //Get the films data collection
             Thread thd = new Thread(() => {
-                FilmListModel filmList = BaseLibraryClass.GetFilmList(0, 50);
+                FilmListModel filmList = new BaseVuigheHost().GetFilmList(0, 50);
                 AddCard(filmList);
             });
             thd.Name = "GetDataForThe1stTime";
@@ -120,7 +120,7 @@ namespace UniversalAnimeDownloader.View
             FilmListModel searchedFilmList = null;
             Thread thd = new Thread(() =>
             {
-                searchedFilmList = BaseLibraryClass.SearchFilm(text, 50);
+                searchedFilmList = new BaseVuigheHost().SearchFilm(text, 50);
                 AddCard(searchedFilmList);
             })
             { IsBackground = true };
@@ -135,7 +135,7 @@ namespace UniversalAnimeDownloader.View
             Thread thd = new Thread(() => {
                 FilmListModel filmList = null;
 
-                filmList = BaseLibraryClass.GetFilmList(0, 50, model.Slug);
+                filmList = new BaseVuigheHost().GetFilmList(0, 50, model.Slug);
                 AddCard(filmList);
             });
             thd.Name = "ChangeGenre";
@@ -161,7 +161,7 @@ namespace UniversalAnimeDownloader.View
                     Dispatcher.Invoke(() => cardCount = animeCardContainer.Children.Count);
                     Thread.Sleep(10);
                     Dispatcher.Invoke(() => genre = ((VuigheGenreModel)cbxGenre.SelectedItem).Slug);
-                    FilmListModel list = BaseLibraryClass.GetFilmList(cardCount, 50, genre);
+                    FilmListModel list = new BaseVuigheHost().GetFilmList(cardCount, 50, genre);
                     AddCard(list, false);
                 })
                 { IsBackground = true, Name = "Add More Anime Cards" };

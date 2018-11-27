@@ -41,7 +41,7 @@
                ContentRendered="PageTransition" 
                NavigationUIVisibility="Hidden">
                 <Frame.Content>
-                    <view:OnlineAnimeDetail  HostFrame="{x:Reference Name=pageViewer}"/>
+                    <view:AllAnimeTab FrameHost="{x:Reference Name=pageViewer}"/>
                 </Frame.Content>
             </Frame>
 
