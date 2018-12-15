@@ -39,14 +39,13 @@ namespace UniversalAnimeDownloader.View
             VM.IsHaveConnection = Common.InternetAvaible;
 
             CreateNoConnectionOverlay();
+            InitializingFilmList();
+        }
 
-            //Get the films data collection
-            Thread thd = new Thread(() => {
-                FilmListModel filmList = new BaseVuigheHost().GetFilmListTaskAsync(0, 50).Result;
-                AddCard(filmList);
-            });
-            thd.Name = "GetDataForThe1stTime";
-            thd.Start();
+        private async void InitializingFilmList()
+        {
+            FilmListModel filmList = await new BaseVuigheHost().GetFilmListTaskAsync(0, 50);
+            AddCard(filmList);
 
             //Event
             cbxGenre.SelectionChanged += ChangeGenre;
@@ -54,6 +53,9 @@ namespace UniversalAnimeDownloader.View
             LoadMoreEvent += (s, ee) => LoadMore(s, ee);
         }
 
+        /// <summary>
+        /// Code behind version for No Connection overlay used to implement in xaml
+        /// </summary>
         private void CreateNoConnectionOverlay()
         {
             StackPanel pnl = new StackPanel() { HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center };
@@ -73,7 +75,7 @@ namespace UniversalAnimeDownloader.View
             overlayContainer.Children.Add(pnl);
         }
 
-        private void AddCard(FilmListModel filmList, bool removeOldCard = true, string genre = null)
+        private async void AddCard(FilmListModel filmList, bool removeOldCard = true, string genre = null)
         {
             if (!isAvaible)
                 return;
@@ -81,7 +83,7 @@ namespace UniversalAnimeDownloader.View
             isAvaible = false;
             //Remove the old anime card
             if (removeOldCard)
-                Dispatcher.Invoke(() => animeCardContainer.Children.RemoveRange(0, animeCardContainer.Children.Count));
+                animeCardContainer.Children.RemoveRange(0, animeCardContainer.Children.Count);
 
             if (filmList == null)
             {
@@ -89,60 +91,49 @@ namespace UniversalAnimeDownloader.View
                 return;
             }
             VuigheAnimeCard[] cards = null;
-            Dispatcher.Invoke(() => cards = new VuigheAnimeCard[filmList.data.Length]);
+            cards = new VuigheAnimeCard[filmList.data.Length];
 
             Thread.Sleep(10);
 
             for (int i = 0; i < filmList.data.Length; i++)
             {
-                Dispatcher.Invoke(() => {
-                    cards[i] = new VuigheAnimeCard();
-                    cards[i].Opacity = 0;
-                    animeCardContainer.Children.Add(cards[i]);
-                    cards[i].AnimeBG = new BitmapImage();
-                    cards[i].Data = new VuigheAnimeManager(filmList.data[i]);
-                    cards[i].BeginAnimation(OpacityProperty, new DoubleAnimation(1, TimeSpan.FromSeconds(.5)));
-                    cards[i].WatchAnimeButtonClicked += (s, e) =>
-                    {
-                        VuigheAnimeCard animeCard = s as VuigheAnimeCard;
-                        AnimeDetailBase animeDetail = new OnlineAnimeDetail(animeCard.Data);
-                        FrameHost.Content = animeDetail;
-                    };
-                });
-                Thread.Sleep(10);
+                cards[i] = new VuigheAnimeCard();
+                cards[i].Opacity = 0;
+                animeCardContainer.Children.Add(cards[i]);
+                cards[i].AnimeBG = new BitmapImage();
+                cards[i].Data = new VuigheAnimeManager(filmList.data[i]);
+                cards[i].BeginAnimation(OpacityProperty, new DoubleAnimation(1, TimeSpan.FromSeconds(.5)));
+                cards[i].WatchAnimeButtonClicked += (s, e) =>
+                {
+                    VuigheAnimeCard animeCard = s as VuigheAnimeCard;
+                    AnimeDetailBase animeDetail = new OnlineAnimeDetail(animeCard.Data);
+                    FrameHost.Content = animeDetail;
+                };
+                await Task.Delay(10);
             }
             VM.IsLoading = false;
             isAvaible = true;
         }
 
-        private void SearchAnime(string text)
+        private async void SearchAnime(string text)
         {
             FilmListModel searchedFilmList = null;
-            Thread thd = new Thread(async() =>
-            {
-                searchedFilmList = await new BaseVuigheHost().SearchFilmTaskAsync(text, 50);
-                AddCard(searchedFilmList);
-            })
-            { IsBackground = true };
-            thd.Start();
+            searchedFilmList = await new BaseVuigheHost().SearchFilmTaskAsync(text, 50);
+            AddCard(searchedFilmList);
         }
 
-        private void ChangeGenre(object sender, SelectionChangedEventArgs e)
+        private async void ChangeGenre(object sender, SelectionChangedEventArgs e)
         {
             ComboBox cbx = sender as ComboBox;
             VuigheGenreModel model = cbx.SelectedValue as VuigheGenreModel;
 
-            Thread thd = new Thread(() => {
-                FilmListModel filmList = null;
+            FilmListModel filmList = null;
 
-                filmList = new BaseVuigheHost().GetFilmListTaskAsync(0, 50, model.Slug).Result;
-                AddCard(filmList);
-            });
-            thd.Name = "ChangeGenre";
-            thd.Start();
+            filmList = await new BaseVuigheHost().GetFilmListTaskAsync(0, 50, model.Slug);
+            AddCard(filmList);
         }
 
-        private void LoadMore(object sender, ScrollChangedEventArgs e)
+        private async void LoadMore(object sender, ScrollChangedEventArgs e)
         {
             if (VM.IsLoading || animeCardContainer.Children.Count == 0)
                 return;
@@ -154,19 +145,14 @@ namespace UniversalAnimeDownloader.View
 
             if (scroll.VerticalOffset > scroll.ScrollableHeight - 100)
             {
-                Thread thd = new Thread(() =>
-                {
-                    int cardCount = 0;
-                    string genre = string.Empty;
-                    Dispatcher.Invoke(() => cardCount = animeCardContainer.Children.Count);
-                    Thread.Sleep(10);
-                    Dispatcher.Invoke(() => genre = ((VuigheGenreModel)cbxGenre.SelectedItem).Slug);
-                    FilmListModel list = new BaseVuigheHost().GetFilmListTaskAsync(cardCount, 50, genre).Result;
-                    AddCard(list, false);
-                })
-                { IsBackground = true, Name = "Add More Anime Cards" };
+                int cardCount = 0;
+                string genre = string.Empty;
+                Dispatcher.Invoke(() => cardCount = animeCardContainer.Children.Count);
+                Thread.Sleep(10);
+                Dispatcher.Invoke(() => genre = ((VuigheGenreModel)cbxGenre.SelectedItem).Slug);
+                FilmListModel list = await new BaseVuigheHost().GetFilmListTaskAsync(cardCount, 50, genre);
+                AddCard(list, false);
                 VM.IsLoading = true;
-                thd.Start();
             }
         }
     }

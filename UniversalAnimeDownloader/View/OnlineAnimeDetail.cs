@@ -1,15 +1,9 @@
 ﻿using MaterialDesignThemes.Wpf;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Media;
 using uadcorelib;
@@ -23,7 +17,6 @@ namespace UniversalAnimeDownloader.View
     {
         public OnlineAnimeDetailViewModel VM;
         public VuigheAnimeManager Data;
-        private Thread LoaderThread;
         private bool hasLoadGeneralData = false;
         private ComboBox cbxQuality;
         ListView episodeContainer;
@@ -37,7 +30,7 @@ namespace UniversalAnimeDownloader.View
             cbxQuality.SelectedIndex = 3;
             cbxQuality.SelectionChanged += ChangeQuality;
             Data = data;
-            LoaderThreadManageer(ReceiveData);
+            ReceiveData();
         }
 
 
@@ -115,23 +108,7 @@ namespace UniversalAnimeDownloader.View
             cbxQuality.SelectedIndex = 3;
         }
 
-        private void ChangeQuality(object sender, SelectionChangedEventArgs e) => LoaderThreadManageer(ReceiveData);
-
-        private void LoaderThreadManageer(Action action)
-        {
-            //Kill the last running thread
-            if (LoaderThread != null)
-                if (LoaderThread.ThreadState == ThreadState.Background)
-                    LoaderThread.Abort();
-
-            LoaderThread = new Thread(new ThreadStart(action))
-            {
-                Name = "Loader Thread",
-                IsBackground = true
-            };
-            LoaderThread.SetApartmentState(ApartmentState.STA);
-            LoaderThread.Start();
-        }
+        private void ChangeQuality(object sender, SelectionChangedEventArgs e) => ReceiveData();
 
         private async void ReceiveData()
         {
@@ -142,11 +119,9 @@ namespace UniversalAnimeDownloader.View
             }
 
             //Delete The Itemsources
-            Dispatcher.Invoke(() => VM.AnimeEpisodes.Clear());
-            Thread.Sleep(10); //Updating UI
+            VM.AnimeEpisodes.Clear();
+            await Task.Delay(10);
 
-            //Anti racing effect
-            while (VM.Quality == null) { }
             EpisodeList epList = await Data.GetEpisodeList();
 
             foreach (EpisodeInfo item in epList.data)
@@ -156,13 +131,14 @@ namespace UniversalAnimeDownloader.View
                     OnlineEpisodesListViewModel model = new OnlineEpisodesListViewModel();
                     model.EpisodeName = item.Full_Name;
                     model.ButtonKind = PackIconKind.Download;
-                    Dispatcher.Invoke(() => VM.AnimeEpisodes.Add(model));
-                    Thread.Sleep(10);
+                    VM.AnimeEpisodes.Add(model);
+                    await Task.Delay(10);
                 }
 
             }
         }
 
+        //This method will receive data such as Description and Name
         private void ReceiveGeneralData()
         {
             VM.AnimeTitle = Data.CurrentFilm.Name;
