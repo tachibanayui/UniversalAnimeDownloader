@@ -68,6 +68,7 @@ namespace UniversalAnimeDownloader.View
                 episode.EpisodeName = item.EpisodeName;
                 episode.IconKind = PackIconKind.Play;
                 episode.MediaLocation = item.VideoSource;
+                episode.CurrentThumbnail = item.DefaultThumbnailSource;
                 VM.AnimeEpisodes.Add(episode);
                 await Task.Delay(10);
             }

@@ -110,4 +110,40 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style TargetType="{x:Type local:OfflineAnimeListviewItem}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:OfflineAnimeListviewItem}">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="150"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="50"/>
+                                <ColumnDefinition Width="50"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition Height="5"/>
+                            </Grid.RowDefinitions>
+
+                            <Image Stretch="UniformToFill"  Source="{TemplateBinding Thumbnail}"/>
+
+                            <TextBlock Grid.Column="1" Text="{TemplateBinding EpisodeName}" FontSize="{TemplateBinding EpisodeNameFontSize}"
+                                       Background="Transparent"/>
+                            <Button x:Name="DeleteButton" Style="{TemplateBinding DeleteButtonStyle}" Grid.Column="2">
+                                <materialDesign:PackIcon Kind="Delete" Width="25" Height="auto"/>
+                            </Button>
+                            <Button x:Name="PlayButton" Style="{TemplateBinding PlayButtonStyle}" Grid.Column="3">
+                                <materialDesign:PackIcon Kind="Play" Width="25" Height="auto"/>
+                            </Button>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

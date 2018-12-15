@@ -666,23 +666,13 @@
                 <Setter Property="ItemTemplate" >
                     <Setter.Value>
                         <DataTemplate>
-                            <Border>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition/>
-                                        <ColumnDefinition Width="75"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition/>
-                                        <RowDefinition Height="5"/>
-                                    </Grid.RowDefinitions>
-                                    <TextBlock Text="{Binding EpisodeName}" FontSize="{DynamicResource Heading2}"/>
-                                    <Button Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
-                                            Tag="{Binding MediaLocation}" Grid.Column="1" Click="PlayFilm">
-                                        <materialDesign:PackIcon Kind="{Binding IconKind}" Width="25" Height="auto"/>
-                                    </Button>
-                                </Grid>
-                            </Border>
+                            <customControl:OfflineAnimeListviewItem EpisodeName="{Binding EpisodeName}" Height="75"
+                                                                    Thumbnail="{Binding CurrentThumbnail}"
+                                                                    MediaLocation="{Binding MediaLocation}"
+                                                                    EpisodeNameFontSize="{DynamicResource Heading2}"
+                                                                    PlayButtonStyle="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
+                                                                    DeleteButtonStyle="{StaticResource MaterialDesignFlatButton}"
+                                                                    PlayButton_Clicked="OfflineAnimeListviewItem_PlayButton_Clicked"/>
                         </DataTemplate>
                     </Setter.Value>
                 </Setter>

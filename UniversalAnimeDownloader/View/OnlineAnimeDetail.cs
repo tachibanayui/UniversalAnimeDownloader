@@ -133,7 +133,7 @@ namespace UniversalAnimeDownloader.View
             LoaderThread.Start();
         }
 
-        private void ReceiveData()
+        private async void ReceiveData()
         {
             if (!hasLoadGeneralData)
             {
@@ -147,13 +147,14 @@ namespace UniversalAnimeDownloader.View
 
             //Anti racing effect
             while (VM.Quality == null) { }
+            EpisodeList epList = await Data.GetEpisodeList();
 
-            foreach (VideoSource item in Data.GetVideoSourcesAsync(VM.Quality))
+            foreach (EpisodeInfo item in epList.data)
             {
                 if (item != null)
                 {
                     OnlineEpisodesListViewModel model = new OnlineEpisodesListViewModel();
-                    model.EpisodeName = item.EpisodeName;
+                    model.EpisodeName = item.Full_Name;
                     model.ButtonKind = PackIconKind.Download;
                     Dispatcher.Invoke(() => VM.AnimeEpisodes.Add(model));
                     Thread.Sleep(10);
@@ -179,7 +180,7 @@ namespace UniversalAnimeDownloader.View
         private async void DownloadAll(object sender, RoutedEventArgs e)
         {
             VM.IsDownloadButtonEnabled = false;
-            DownloadManager mng = new DownloadManager(Data, "AnimeLibrary");
+            MultipleFilesDownloadManager mng = new MultipleFilesDownloadManager(Data, "AnimeLibrary");
             mng.ComponentProgressChanged += UpdateProgressToViewModel;
             await mng.DownloadAllAnimeAsync();
 

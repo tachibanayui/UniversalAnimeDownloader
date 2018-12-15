@@ -37,6 +37,20 @@ namespace UniversalAnimeDownloader.ViewModel
             }
         }
 
+        private string currentThumbnail;
+        public string CurrentThumbnail
+        {
+            get { return currentThumbnail; }
+            set
+            {
+                if(currentThumbnail != value)
+                {
+                    currentThumbnail = value;
+                    OnPropertyChanged("CurrentThumbnail");
+                }
+            }
+        }
+
         private PackIconKind iconKind;
         public PackIconKind IconKind
         {

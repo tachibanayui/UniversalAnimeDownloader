@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using UniversalAnimeDownloader.CustomControl;
 
 namespace UniversalAnimeDownloader
 {
@@ -15,10 +16,10 @@ namespace UniversalAnimeDownloader
     /// </summary>
     public partial class App : Application
     {
-        private void PlayFilm(object sender, RoutedEventArgs e)
+        private void OfflineAnimeListviewItem_PlayButton_Clicked(object sender, RoutedEventArgs e)
         {
-            Button btn = sender as Button;
-            string mediaLocation = btn.Tag as string;
+            OfflineAnimeListviewItem obj = sender as OfflineAnimeListviewItem;
+            string mediaLocation = obj.MediaLocation;
             Process.Start(mediaLocation);
         }
     }

@@ -110,6 +110,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Common.cs" />
+    <Compile Include="CustomControl\OfflineAnimeListviewItem.cs" />
     <Compile Include="CustomControl\TaskCompletePopup.cs" />
     <Compile Include="CustomControl\VuigheAnimeCard.cs" />
     <Compile Include="Models\GenreModel.cs" />
