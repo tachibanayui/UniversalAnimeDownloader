@@ -49,19 +49,15 @@ namespace UniversalAnimeDownloader.ViewModel
             IsLoading = true;
 
             //Get Genre from sources. Do async in case of the internet is slow
-            Thread thd = new Thread(QueryGenres);
-            thd.IsBackground = true;
-            thd.SetApartmentState(ApartmentState.STA);
-            thd.Start();
-
+            QueryGenres();
         }
 
-        private void QueryGenres()
+        private async void QueryGenres()
         {
             HttpRequest request = new HttpRequest();
             try
             {
-                string res = request.Get("https://vuighe.net/anime").ToString();
+                string res = await Task.Run(() => request.Get("https://vuighe.net/anime").ToString());
                 Match match = Regex.Match(res, @"(<div class=""genre"").*?(</div>)", RegexOptions.Singleline);
                 string matchRes = match.ToString();
                 string[] elementCollection = matchRes.Split('\n').Where(query => query.Contains("href")).ToArray();
@@ -76,7 +72,7 @@ namespace UniversalAnimeDownloader.ViewModel
             }
             catch(Exception e)
             {
-                currentDispatcher.Invoke(() => VuigheGenres.Add(new VuigheGenreModel() { Name = "No Internet Connection", Slug = "no-internet" }));
+                VuigheGenres.Add(new VuigheGenreModel() { Name = "No Internet Connection", Slug = "no-internet" });
             }
         }
     }

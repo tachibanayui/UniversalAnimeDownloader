@@ -26,20 +26,18 @@ namespace UniversalAnimeDownloader.View
             //animeCardContainer
             foreach (AnimeInformation item in AnimeInformation.GetAnimeInformationFromLib(AppDomain.CurrentDomain.BaseDirectory + "AnimeLibrary"))
             {
-                Dispatcher.Invoke(() => {
-                    VuigheAnimeCard card = new VuigheAnimeCard();
-                    card.Opacity = 0;
-                    animeCardContainer.Children.Add(card);
-                    card.AnimeBG = new BitmapImage();
-                    card.OfflineData = item;
-                    card.BeginAnimation(OpacityProperty, new DoubleAnimation(1, TimeSpan.FromSeconds(.5)));
-                    card.WatchAnimeButtonClicked += (s, e) =>
-                    {
-                        VuigheAnimeCard vuigheCard = s as VuigheAnimeCard;
-                        OfflineAnimeDetail offlineAnime = new OfflineAnimeDetail(vuigheCard.OfflineData) { HostFrame = FrameHost };
-                        FrameHost.Content = offlineAnime;
-                    };
-                });
+                VuigheAnimeCard card = new VuigheAnimeCard();
+                card.Opacity = 0;
+                animeCardContainer.Children.Add(card);
+                card.AnimeBG = new BitmapImage();
+                card.OfflineData = item;
+                card.BeginAnimation(OpacityProperty, new DoubleAnimation(1, TimeSpan.FromSeconds(.5)));
+                card.WatchAnimeButtonClicked += (s, e) =>
+                {
+                    VuigheAnimeCard vuigheCard = s as VuigheAnimeCard;
+                    OfflineAnimeDetail offlineAnime = new OfflineAnimeDetail(vuigheCard.OfflineData) { HostFrame = FrameHost };
+                    FrameHost.Content = offlineAnime;
+                };
                 await Task.Delay(20);
             }
         }
