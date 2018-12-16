@@ -147,9 +147,9 @@ namespace UniversalAnimeDownloader.View
             {
                 int cardCount = 0;
                 string genre = string.Empty;
-                Dispatcher.Invoke(() => cardCount = animeCardContainer.Children.Count);
-                Thread.Sleep(10);
-                Dispatcher.Invoke(() => genre = ((VuigheGenreModel)cbxGenre.SelectedItem).Slug);
+                cardCount = animeCardContainer.Children.Count;
+                await Task.Delay(10);
+                genre = (VuigheGenreModel)cbxGenre.SelectedItem).Slug;
                 FilmListModel list = await new BaseVuigheHost().GetFilmListTaskAsync(cardCount, 50, genre);
                 AddCard(list, false);
                 VM.IsLoading = true;
