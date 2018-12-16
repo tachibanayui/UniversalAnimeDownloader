@@ -93,7 +93,7 @@ namespace UniversalAnimeDownloader.View
             VuigheAnimeCard[] cards = null;
             cards = new VuigheAnimeCard[filmList.data.Length];
 
-            Thread.Sleep(10);
+            await Task.Delay(10);
 
             for (int i = 0; i < filmList.data.Length; i++)
             {
