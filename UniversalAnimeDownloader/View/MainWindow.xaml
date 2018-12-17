@@ -171,7 +171,10 @@
                     <ColumnDefinition Width="50"/>
                     <ColumnDefinition Width="50"/>
                 </Grid.ColumnDefinitions>
-                <materialDesign:PackIcon Kind="KeyboardBackspace" Foreground="Black" Width="50"/>
+                <Button Style="{StaticResource MaterialDesignFlatButton}" Click="NavigateBack">
+                    <materialDesign:PackIcon Kind="KeyboardBackspace" Foreground="Black" Width="50"/>
+                </Button>
+                
                 <TextBlock Text="Explore" Foreground="Black" FontSize="{DynamicResource Heading}" Grid.Column="2" VerticalAlignment="Center"/>
                 <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
                     Grid.Column="3" Click="MinimizedWindow">
@@ -188,7 +191,8 @@
             </Grid>
         </Grid>
 
-        <Grid x:Name="welcomeScreenRoot" Background="{DynamicResource Primary}"
+        
+        <!--<Grid x:Name="welcomeScreenRoot" Background="{DynamicResource Primary}"
               HorizontalAlignment="Left" Width="{Binding ElementName=rootWindow, Path=ActualWidth}">
             <Grid.Triggers>
                 <EventTrigger RoutedEvent="Loaded">
@@ -225,5 +229,6 @@
                 <TextBlock x:Name="wish" Opacity="0" Text="I wish you have a fun time watching anime!" HorizontalAlignment="Center" Margin="0,110,0,0" FontSize="{DynamicResource Heading2}"/>
             </StackPanel>
         </Grid>
+        -->
     </Grid>
 </Window>

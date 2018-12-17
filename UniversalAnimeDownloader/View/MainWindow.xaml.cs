@@ -26,6 +26,11 @@ namespace UniversalAnimeDownloader.View
 
         private void PageTransition(object sender, EventArgs e)
         {
+            //ClearPageHistory();
+        }
+
+        private void ClearPageHistory()
+        {
             while (pageViewer.CanGoBack)
                 pageViewer.RemoveBackEntry();
             GC.Collect();
@@ -38,7 +43,11 @@ namespace UniversalAnimeDownloader.View
         private void ExitApplication(object sender, RoutedEventArgs e) => Environment.Exit(0);
 
         //Navigation
-        private void NavigateToExplore(object sender, MouseButtonEventArgs e) => pageViewer.Content = new Explore { HostFrame = pageViewer };
+        private void NavigateToExplore(object sender, MouseButtonEventArgs e)
+        {
+            pageViewer.Content = new Explore { HostFrame = pageViewer };
+            ClearPageHistory();
+        }
 
         private void NavigateToFeatured(object sender, MouseButtonEventArgs e)
         {
@@ -49,8 +58,22 @@ namespace UniversalAnimeDownloader.View
 
         }
 
-        private void NavigateToAllAnime(object sender, MouseButtonEventArgs e) => pageViewer.Content = new AllAnimeTab { FrameHost = pageViewer };
+        private void NavigateToAllAnime(object sender, MouseButtonEventArgs e)
+        {
+            pageViewer.Content = new AllAnimeTab { FrameHost = pageViewer };
+            ClearPageHistory();
+        }
 
-        private void NavigateToMyAnime(object sender, MouseButtonEventArgs e) => pageViewer.Content = new MyAnimeLib() { FrameHost = pageViewer };
+        private void NavigateToMyAnime(object sender, MouseButtonEventArgs e)
+        {
+            pageViewer.Content = new MyAnimeLib() { FrameHost = pageViewer };
+            ClearPageHistory();
+        }
+
+        private void NavigateBack(object sender, RoutedEventArgs e)
+        {
+            if(pageViewer.CanGoBack)
+                pageViewer.GoBack();
+        }
     }
 }

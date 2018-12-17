@@ -161,8 +161,7 @@ namespace UniversalAnimeDownloader.View
             //mng.ComponentProgressChanged += UpdateProgressToViewModel;
             //await mng.DownloadAllAnimeAsync();
 
-            SegmentedDownloadManager segmentedDownload = (SegmentedDownloadManager)DownloadManagerBase.Create(Data, "AnimeLibrary", DownloadMethod.Segmented, 2, 8, 50);
-            segmentedDownload.ReportProgressRate = 50;
+            SegmentedDownloadManager segmentedDownload = (SegmentedDownloadManager)DownloadManagerBase.Create(Data, "AnimeLibrary", DownloadMethod.Segmented, 2, 8, 500);
             segmentedDownload.ComponentProgressChanged += ReportProgress;
             await segmentedDownload.DownloadAllAnimeAsync();
 
