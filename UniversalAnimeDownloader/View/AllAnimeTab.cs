@@ -149,7 +149,7 @@ namespace UniversalAnimeDownloader.View
                 string genre = string.Empty;
                 cardCount = animeCardContainer.Children.Count;
                 await Task.Delay(10);
-                genre = (VuigheGenreModel)cbxGenre.SelectedItem).Slug;
+                genre = ((VuigheGenreModel)cbxGenre.SelectedItem).Slug;
                 FilmListModel list = await new BaseVuigheHost().GetFilmListTaskAsync(cardCount, 50, genre);
                 AddCard(list, false);
                 VM.IsLoading = true;

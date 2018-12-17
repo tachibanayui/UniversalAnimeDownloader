@@ -19,12 +19,7 @@
     <Grid>
         <Grid Background="{StaticResource Black}" x:Name="root">
             <Grid.Resources>
-                <Style TargetType="materialDesign:PackIcon">
-                    <Setter Property="Width" Value="{DynamicResource Heading2}"/>
-                    <Setter Property="Height" Value="auto"/>
-                    <Setter Property="VerticalAlignment" Value="Center"/>
-                    <Setter Property="HorizontalAlignment" Value="Center"/>
-                </Style>
+                
             </Grid.Resources>
 
             <Grid.ColumnDefinitions>

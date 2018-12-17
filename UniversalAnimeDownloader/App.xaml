@@ -18,6 +18,13 @@
             <materialDesign:PackIcon x:Shared="False" x:Key="MaterialDesignMultiFloatingActionPopupBoxIcon"
                   Kind="Plus" Width="24" Height="24" Foreground="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=materialDesign:PopupBox}, Path=Foreground}" />
 
+            <Style TargetType="materialDesign:PackIcon">
+                <Setter Property="Width" Value="{DynamicResource Heading2}"/>
+                <Setter Property="Height" Value="auto"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="HorizontalAlignment" Value="Center"/>
+            </Style>
+
             <Style TargetType="ProgressBar" x:Key="SimplifiedProgressBar">
                 <Setter Property="BorderThickness" Value="0"/>
                 <Setter Property="Background" Value="Transparent"/>
@@ -642,13 +649,34 @@
                                         <RowDefinition Height="5"/>
                                     </Grid.RowDefinitions>
                                     <TextBlock Text="{Binding EpisodeName}" FontSize="{DynamicResource Heading2}"/>
-                                    <TextBlock FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource FileSize}"
-                                                   HorizontalAlignment="Right" VerticalAlignment="Bottom" Visibility="{Binding DetailVisibility}">
-                                            <TextBlock Text="{Binding ByteReceived, StringFormat='0.00'}"/>
-                                            <TextBlock Text="/"/>
-                                            <TextBlock Text="{Binding ByteToReceive, StringFormat='0.00'}"/>
+
+                                    <StackPanel Orientation="Horizontal" Visibility="{Binding DetailVisibility}" FlowDirection="RightToLeft"
+                                                HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                                        <StackPanel.Resources>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="FontSize" Value="{DynamicResource Heading4}"/>
+                                                <Setter Property="Foreground" Value="{DynamicResource FileSize}"/>
+                                            </Style>
+                                            <Style TargetType="materialDesign:PackIcon">
+                                                <Setter Property="FontSize" Value="{DynamicResource Heading4}"/>
+                                            </Style>       
+                                        </StackPanel.Resources>
+                                        
+                                        <TextBlock>
                                             <TextBlock Text="MB"/>
+                                            <TextBlock Text="{Binding ByteToReceive, StringFormat='0.00'}"/>
+                                            <TextBlock Text="/"/>
+                                            <TextBlock Text="{Binding ByteReceived, StringFormat='0.00'}"/>
                                         </TextBlock>
+                                        <materialDesign:PackIcon Kind="File" Margin="0,0,10,0"/>
+
+                                        <TextBlock Text="{Binding Eta}"/>
+                                        <materialDesign:PackIcon Kind="Timelapse" Margin="0,0,10,0"/>
+
+                                        <TextBlock Text="{Binding DownloadRate}"/>
+                                        <materialDesign:PackIcon Kind="TrendingUp" Margin="0,0,10,0"/>
+                                    </StackPanel>
+                                    
                                     <ProgressBar Value="{Binding Progress}" Grid.Row="1" Visibility="{Binding DetailVisibility}"/>
 
                                     <Button Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Grid.Column="1">

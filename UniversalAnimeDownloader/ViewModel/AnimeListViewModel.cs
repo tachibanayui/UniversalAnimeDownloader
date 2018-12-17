@@ -57,7 +57,15 @@ namespace UniversalAnimeDownloader.ViewModel
             HttpRequest request = new HttpRequest();
             try
             {
-                string res = await Task.Run(() => request.Get("https://vuighe.net/anime").ToString());
+                string res = string.Empty;
+                await Task.Run(() => 
+                {
+                    try
+                    {
+                        res = request.Get("https://vuighe.net/anime").ToString();
+                    }
+                    catch { }
+                });
                 Match match = Regex.Match(res, @"(<div class=""genre"").*?(</div>)", RegexOptions.Singleline);
                 string matchRes = match.ToString();
                 string[] elementCollection = matchRes.Split('\n').Where(query => query.Contains("href")).ToArray();

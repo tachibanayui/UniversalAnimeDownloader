@@ -1,4 +1,5 @@
 ﻿using MaterialDesignThemes.Wpf;
+using System;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -156,9 +157,14 @@ namespace UniversalAnimeDownloader.View
         private async void DownloadAll(object sender, RoutedEventArgs e)
         {
             VM.IsDownloadButtonEnabled = false;
-            MultipleFilesDownloadManager mng = new MultipleFilesDownloadManager(Data, "AnimeLibrary");
-            mng.ComponentProgressChanged += UpdateProgressToViewModel;
-            await mng.DownloadAllAnimeAsync();
+
+            //mng.ComponentProgressChanged += UpdateProgressToViewModel;
+            //await mng.DownloadAllAnimeAsync();
+
+            SegmentedDownloadManager segmentedDownload = (SegmentedDownloadManager)DownloadManagerBase.Create(Data, "AnimeLibrary", DownloadMethod.Segmented, 2, 8, 50);
+            segmentedDownload.ReportProgressRate = 50;
+            segmentedDownload.ComponentProgressChanged += ReportProgress;
+            await segmentedDownload.DownloadAllAnimeAsync();
 
             TaskCompletePopup popup = new TaskCompletePopup()
             {
@@ -172,18 +178,27 @@ namespace UniversalAnimeDownloader.View
             popup.DialogOpen = true;
         }
 
-        private void UpdateProgressToViewModel(object sender, DownloadProgressChangedEventArgs e)
+        private void ReportProgress(object sender, DownloadManagerProgressChangedEventArgs e)
         {
-            VideoSourceWithWebClient src = sender as VideoSourceWithWebClient;
-            var find = VM.AnimeEpisodes.Where(query => query.EpisodeName == src.VideoSource.EpisodeName).ToList();
-            if (find.Count == 0)
+            var queryResult = VM.AnimeEpisodes.Where(query => e.VideoSource.EpisodeName == query.EpisodeName).ToList();
+            if (queryResult.Count == 0)
                 return;
 
-            find[0].DetailVisibility = Visibility.Visible;
+            var episodeViewModel = queryResult[0];
+            episodeViewModel.DetailVisibility = Visibility.Visible;
+            episodeViewModel.Progress = e.Progress;
+            episodeViewModel.ByteReceived = e.Transfered / 1048576d;
+            episodeViewModel.ByteToReceive = e.FileSize / 1048576d;
 
-            find[0].Progress = e.ProgressPercentage;
-            find[0].ByteReceived = e.BytesReceived / 1048576d;
-            find[0].ByteToReceive = e.TotalBytesToReceive / 1048576d;
+            //Check the eta:
+            //if eta return 0:00:00 so the download is not segmented, the event will end
+            //else the downloader is segmeted, the event will report additional information
+
+            if (e.Eta == TimeSpan.Zero)
+                return;
+
+            episodeViewModel.SetDownloadRate(e.DownloadRate);
+            episodeViewModel.SetEta(e.Eta);
         }
     }
 }

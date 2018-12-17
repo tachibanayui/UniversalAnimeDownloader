@@ -65,6 +65,56 @@ namespace UniversalAnimeDownloader.ViewModel
             }
         }
 
+
+        //These properties and fields only be used for segmented downloader to report data
+        private string downloadRate;
+        public string DownloadRate
+        {
+            get { return downloadRate; }
+            private set
+            {
+                if (value != downloadRate)
+                {
+                    downloadRate = value;
+                    OnPropertyChanged("DownloadRate");
+                }
+            }
+        }
+        public void SetDownloadRate(double byteRate)
+        {
+            double convertedValue = byteRate;
+            string unitType = "Byte/s";
+
+            
+            if(byteRate < Math.Pow(2,20))
+            {
+                convertedValue /= Math.Pow(2, 10);
+                unitType = "KB/s";
+            }
+            else if (byteRate < Math.Pow(2, 30))
+            {
+                convertedValue /= Math.Pow(2, 20);
+                unitType = "MB/s";
+            }
+
+            DownloadRate = string.Format("{0:N2}", convertedValue) + unitType;
+        }
+
+        private string eta;
+        public string Eta
+        {
+            get { return eta; }
+            private set
+            {
+                if (value != eta)
+                {
+                    eta = value;
+                    OnPropertyChanged("Eta");
+                }
+            }
+        }
+        public void SetEta(TimeSpan eta) => Eta = eta.ToString("h'h 'm'm 's's'");
+
         private PackIconKind buttonKind;
         public PackIconKind ButtonKind
         {
@@ -96,6 +146,8 @@ namespace UniversalAnimeDownloader.ViewModel
         public OnlineEpisodesListViewModel()
         {
             DetailVisibility = Visibility.Collapsed;
+            DownloadRate = "N/A";
+            Eta = "N/A";
         }
     }
 }
