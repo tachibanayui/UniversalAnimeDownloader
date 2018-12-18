@@ -54,7 +54,7 @@
                             </Setter>
                         </Style>
                     </StackPanel.Resources>
-                    <Rectangle Height="2" Fill="White"/>
+                    <Rectangle Height="2" Fill="{DynamicResource ForeGroundColor}"/>
                     <TreeView>
                         <TreeViewItem >
                             <TreeViewItem.Header>
@@ -135,7 +135,7 @@
                         </TreeViewItem>
                     </TreeView>
 
-                    <Rectangle Height="2" Fill="White"/>
+                    <Rectangle Height="2" Fill="{DynamicResource ForeGroundColor}"/>
                     <TextBlock Margin="0,15,0,0" FontSize="{DynamicResource Heading3}" HorizontalAlignment="Center">
                     <Hyperlink>Download</Hyperlink>
                     <TextBlock> - </TextBlock>
@@ -162,7 +162,7 @@
 
             </Grid>
 
-            <Grid x:Name="customNavBar" Grid.Column="1" Background="White">
+            <Grid x:Name="customNavBar" Grid.Column="1" Background="{DynamicResource ForeGroundColor}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="100"/>
                     <ColumnDefinition Width="25"/>

@@ -32,7 +32,7 @@
             </Style>
 
             <Style TargetType="TextBlock">
-                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="Foreground" Value="{DynamicResource ForeGroundColor}"/>
                 <Setter Property="FontSize" Value="{DynamicResource Heading2}"/>
             </Style>
 
@@ -409,19 +409,17 @@
                 </Setter>
             </Style>
 
-
             <sys:Double x:Key="Heading">40</sys:Double>
             <sys:Double x:Key="Heading2">24</sys:Double>
             <sys:Double x:Key="Heading3">18</sys:Double>
             <sys:Double x:Key="Heading4">15</sys:Double>
             <sys:Double x:Key="WindowWidth">1080</sys:Double>
 
-
-
-
             <SolidColorBrush x:Key="Black">#1E262C</SolidColorBrush>
+            <SolidColorBrush x:Key="ForeGroundColor">White</SolidColorBrush>
             <SolidColorBrush x:Key="Primary">DeepSkyBlue</SolidColorBrush>
             <SolidColorBrush x:Key="FileSize">LightGray</SolidColorBrush>
+            
             <Style x:Key="listViewEpisodeBaseTemplate" TargetType="ListView">
                 <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
                 <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled"/>
@@ -705,7 +703,6 @@
                     </Setter.Value>
                 </Setter>
             </Style>
-
 
 
             <ResourceDictionary.MergedDictionaries>

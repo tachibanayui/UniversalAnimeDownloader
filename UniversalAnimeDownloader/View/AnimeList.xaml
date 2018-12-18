@@ -19,7 +19,7 @@
             <RowDefinition Height="100"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <ComboBox materialDesign:HintAssist.Hint="Genre: " Width="250" Margin="16"
+        <ComboBox materialDesign:HintAssist.Hint="Genre: " Width="250" Margin="16" Foreground="{DynamicResource ForeGroundColor}"
                   ItemsSource="{Binding VuigheGenres}" SelectedIndex="0" VerticalAlignment="Top" HorizontalAlignment="Left"
                   Style="{StaticResource MaterialDesignFloatingHintComboBox}" x:Name="cbxGenre">
             <ComboBox.ItemsPanel>
@@ -42,15 +42,15 @@
 
             <Button x:Name="btnSearch" Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
                     Background="Transparent" BorderBrush="Transparent" VerticalAlignment="Bottom" HorizontalAlignment="Center"> 
-                <materialDesign:PackIcon Kind="Magnify" Width="{StaticResource Heading2}" Height="auto" Foreground="White"/>
+                <materialDesign:PackIcon Kind="Magnify" Width="{StaticResource Heading2}" Height="auto" Foreground="{DynamicResource ForeGroundColor}"/>
             </Button>
 
-            <TextBox materialDesign:HintAssist.Hint="Search Anime" materialDesign:HintAssist.IsFloating="True" Foreground="White"
+            <TextBox materialDesign:HintAssist.Hint="Search Anime" materialDesign:HintAssist.IsFloating="True" Foreground="{DynamicResource ForeGroundColor}"
                      Grid.Column="1" VerticalAlignment="Center" FontSize="{StaticResource Heading2}" x:Name="searchText" KeyDown="DetectReturn"/>
 
             <Button Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Grid.Column="2" Click="DeleteSearch"
                     Background="Transparent" BorderBrush="Transparent" VerticalAlignment="Bottom" HorizontalAlignment="Center">
-                <materialDesign:PackIcon Kind="Close" Width="{StaticResource Heading2}" Height="auto" Foreground="White"/>
+                <materialDesign:PackIcon Kind="Close" Width="{StaticResource Heading2}" Height="auto" Foreground="{DynamicResource ForeGroundColor}"/>
             </Button>
         </Grid>
             
