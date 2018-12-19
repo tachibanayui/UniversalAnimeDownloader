@@ -12,17 +12,21 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using UniversalAnimeDownloader.ViewModel;
 
-namespace UniversalAnimeDownloader.View
+namespace UniversalAnimeDownloader.Settings
 {
     /// <summary>
-    /// Interaction logic for Settings.xaml
+    /// Interaction logic for SettingsGeneral.xaml
     /// </summary>
-    public partial class Settings : Page
+    public partial class SettingsGeneral : Page
     {
-        public Settings()
+        public SettingsGeneralViewModel VM;
+        public SettingsGeneral()
         {
             InitializeComponent();
+            VM = new SettingsGeneralViewModel();
+            DataContext = VM;
         }
     }
 }

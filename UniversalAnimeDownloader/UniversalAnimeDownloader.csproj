@@ -88,6 +88,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Settings\SettingsAccount.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Settings\SettingsGeneral.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -108,10 +116,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Settings.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="View\SplashScreen.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -126,14 +130,23 @@
     <Compile Include="CustomControl\TaskCompletePopup.cs" />
     <Compile Include="CustomControl\VuigheAnimeCard.cs" />
     <Compile Include="Models\GenreModel.cs" />
+    <Compile Include="Settings\SettingsAccount.xaml.cs">
+      <DependentUpon>SettingsAccount.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\SettingsGeneral.xaml.cs">
+      <DependentUpon>SettingsGeneral.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ValueConverter\BoolToVisibilityConverter.cs" />
     <Compile Include="ValueConverter\ScaleFontSizeValueConverter.cs" />
     <Compile Include="ViewModel\AnimeDetailViewModelBase.cs" />
     <Compile Include="ViewModel\AnimeListViewModel.cs" />
+    <Compile Include="ViewModel\FriendListViewModel.cs" />
     <Compile Include="ViewModel\OfflineAnimeDetailViewModel.cs" />
     <Compile Include="ViewModel\OfflineEpisodesListViewModel.cs" />
     <Compile Include="ViewModel\OnlineAnimeDetailViewModel.cs" />
     <Compile Include="ViewModel\OnlineEpisodesListViewModel.cs" />
+    <Compile Include="ViewModel\SettingsAccountViewModel.cs" />
+    <Compile Include="ViewModel\SettingsGeneralViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
     <Compile Include="View\AllAnimeTab.cs" />
     <Compile Include="View\AnimeList.xaml.cs">
@@ -150,9 +163,6 @@
     <Compile Include="View\OnlineAnimeDetail.cs" />
     <Compile Include="View\AnimeDetailBase.xaml.cs">
       <DependentUpon>AnimeDetailBase.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Settings.xaml.cs">
-      <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\SplashScreen.xaml.cs">
       <DependentUpon>SplashScreen.xaml</DependentUpon>

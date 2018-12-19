@@ -704,6 +704,40 @@
                 </Setter>
             </Style>
 
+            <Style TargetType="ListView" x:Key="listViewFriendListTemplate" BasedOn="{StaticResource listViewEpisodeBaseTemplate}">
+                <Setter Property="ItemTemplate">
+                    <Setter.Value>
+                        <DataTemplate>
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition Width="50"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Grid>
+                                    <Ellipse Width="50" Fill="OrangeRed"/>
+                                </Grid>
+
+                                <TextBlock VerticalAlignment="Center" FontSize="{DynamicResource Heading2}" Grid.Column="2">
+                                    <TextBlock Text="{Binding Username}" Foreground="{DynamicResource ForeGroundColor}"/>
+                                    <TextBlock Text="#" Foreground="{DynamicResource FileSize}"/>
+                                    <TextBlock Text="{Binding UserID}" Foreground="{DynamicResource FileSize}"/>
+                                </TextBlock>
+                                <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}" Grid.Column="3">
+                                    <materialDesign:PackIcon Kind="AccountRemove" Foreground="{DynamicResource ForeGroundColor}"/>
+                                </Button>
+                                <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}" Grid.Column="4">
+                                    <materialDesign:PackIcon Kind="Wechat" Foreground="{DynamicResource ForeGroundColor}"/>
+                                </Button>
+
+                            </Grid>
+                        </DataTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
 
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Dark.xaml" />

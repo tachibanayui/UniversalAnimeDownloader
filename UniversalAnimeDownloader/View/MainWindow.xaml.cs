@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using UniversalAnimeDownloader.Settings;
 
 namespace UniversalAnimeDownloader.View
 {
@@ -74,6 +75,12 @@ namespace UniversalAnimeDownloader.View
         {
             if(pageViewer.CanGoBack)
                 pageViewer.GoBack();
+        }
+
+        private void NavigateToGeneralSetting(object sender, MouseButtonEventArgs e)
+        {
+            pageViewer.Content = new SettingsAccount();
+            ClearPageHistory();
         }
     }
 }

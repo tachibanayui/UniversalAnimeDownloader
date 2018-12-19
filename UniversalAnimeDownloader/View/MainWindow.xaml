@@ -124,7 +124,7 @@
                         </TreeViewItem>
                         <TreeViewItem>
                             <TreeViewItem.Header>
-                                <Grid MouseLeftButtonDown="NavigateToExplore" Width="240">
+                                <Grid MouseLeftButtonDown="NavigateToGeneralSetting" Width="240">
                                     <Rectangle />
                                     <StackPanel Orientation="Horizontal">
                                         <materialDesign:PackIcon Kind="Settings"/>
