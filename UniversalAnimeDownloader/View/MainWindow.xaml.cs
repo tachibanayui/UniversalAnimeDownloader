@@ -79,7 +79,7 @@ namespace UniversalAnimeDownloader.View
 
         private void NavigateToGeneralSetting(object sender, MouseButtonEventArgs e)
         {
-            pageViewer.Content = new SettingsAccount();
+            pageViewer.Content = new SettingsDownload();
             ClearPageHistory();
         }
     }

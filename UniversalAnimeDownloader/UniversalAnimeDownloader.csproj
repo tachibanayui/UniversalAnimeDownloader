@@ -92,6 +92,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Settings\SettingsDownload.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Settings\SettingsGeneral.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -126,6 +130,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Common.cs" />
+    <Compile Include="CustomControl\BalloonDecorator.cs" />
     <Compile Include="CustomControl\OfflineAnimeListviewItem.cs" />
     <Compile Include="CustomControl\TaskCompletePopup.cs" />
     <Compile Include="CustomControl\VuigheAnimeCard.cs" />
@@ -133,9 +138,13 @@
     <Compile Include="Settings\SettingsAccount.xaml.cs">
       <DependentUpon>SettingsAccount.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Settings\SettingsDownload.xaml.cs">
+      <DependentUpon>SettingsDownload.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Settings\SettingsGeneral.xaml.cs">
       <DependentUpon>SettingsGeneral.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Validation\IntergerValidation.cs" />
     <Compile Include="ValueConverter\BoolToVisibilityConverter.cs" />
     <Compile Include="ValueConverter\ScaleFontSizeValueConverter.cs" />
     <Compile Include="ViewModel\AnimeDetailViewModelBase.cs" />
@@ -146,6 +155,7 @@
     <Compile Include="ViewModel\OnlineAnimeDetailViewModel.cs" />
     <Compile Include="ViewModel\OnlineEpisodesListViewModel.cs" />
     <Compile Include="ViewModel\SettingsAccountViewModel.cs" />
+    <Compile Include="ViewModel\SettingsDownloadViewModel.cs" />
     <Compile Include="ViewModel\SettingsGeneralViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
     <Compile Include="View\AllAnimeTab.cs" />

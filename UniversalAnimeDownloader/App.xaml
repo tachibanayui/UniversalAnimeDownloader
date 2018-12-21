@@ -419,6 +419,7 @@
             <SolidColorBrush x:Key="ForeGroundColor">White</SolidColorBrush>
             <SolidColorBrush x:Key="Primary">DeepSkyBlue</SolidColorBrush>
             <SolidColorBrush x:Key="FileSize">LightGray</SolidColorBrush>
+
             
             <Style x:Key="listViewEpisodeBaseTemplate" TargetType="ListView">
                 <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>

@@ -17,7 +17,7 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <StackPanel x:Name="settingHeader" HorizontalAlignment="Right">
-            <TextBlock Text="General " Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading}" FontWeight="Bold" TextAlignment="Right"/>
+            <TextBlock Text="Account " Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading}" FontWeight="Bold" TextAlignment="Right"/>
             <TextBlock Text="Manage your account such as add/remove interests, friends and more!" Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}" FontStyle="Italic"/>
         </StackPanel>
 
