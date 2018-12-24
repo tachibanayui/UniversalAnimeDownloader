@@ -23,30 +23,44 @@ namespace UniversalAnimeDownloader.Settings
     public partial class SettingsDownload : Page
     {
         public SettingsDownloadViewModel VM;
-        public Thickness defaultFilePerDownloadThickness;
+        public Thickness defaultFpdThickness;
+        public Thickness defaultSpdThickness;
 
         public SettingsDownload()
         {
             VM = new SettingsDownloadViewModel();
             Resources.Add("VM", VM);
             InitializeComponent();
+            spdTextBox.TextChanged += IntergerValidate;
+            fpdTextBox.TextChanged += IntergerValidate;
             DataContext = VM;
-            defaultFilePerDownloadThickness = fpd.Margin;
+            defaultFpdThickness = fpdTextBox.Margin;
+            defaultSpdThickness = spdTextBox.Margin;
         }
 
         private void IntergerValidate(object sender, TextChangedEventArgs e)
         {
             TextBox txb = sender as TextBox;
+            TextBlock ErrMessagetxbl = txb.Name == "fpdTextBox" ? fpdErrMessage : spdErrMessage;
+            Thickness txbDefaultThickness = txb.Name == "fpdTextBox" ? defaultFpdThickness : defaultSpdThickness;
+            IntergerValidation(txb, ErrMessagetxbl, txbDefaultThickness, 1, 64);
+        }
+
+        private void IntergerValidation(TextBox txb, TextBlock messageControl, Thickness defaultThickness, int min, int max)
+        {
             if (txb.Text.Length == 0)
+            {
+                ValidationFailed(txb, messageControl, "You must specify a value!", defaultThickness, TimeSpan.FromSeconds(0.25), 5);
                 return;
+            }
 
             bool parseResult = int.TryParse(txb.Text, out int result);
             if (!parseResult)
-                ValidationFailed(txb, filePerDownloadErrorMessage, "Invail character!", defaultFilePerDownloadThickness, TimeSpan.FromSeconds(0.25), 5);
-            else if (result < 1 || result > 32)
-                ValidationFailed(txb, filePerDownloadErrorMessage, $"Please type in a number that from {1} to {32}!", defaultFilePerDownloadThickness, TimeSpan.FromSeconds(0.25), 5);
+                ValidationFailed(txb, messageControl, "Invail character!", defaultThickness, TimeSpan.FromSeconds(0.25), 5);
+            else if (result < min || result > max)
+                ValidationFailed(txb, messageControl, $"Please type in a number that from {min} to {max}!", defaultThickness, TimeSpan.FromSeconds(0.25), 5);
             else
-                ValidationPassed(txb, filePerDownloadErrorMessage, defaultFilePerDownloadThickness);
+                ValidationPassed(txb, messageControl, defaultThickness);
         }
 
         private void ValidationPassed(Control ctrl, TextBlock messageControl, Thickness defaultFilePerDownloadThickness)

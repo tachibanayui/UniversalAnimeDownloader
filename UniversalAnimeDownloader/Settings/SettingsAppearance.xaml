@@ -1,0 +1,93 @@
+﻿<Page x:Class="UniversalAnimeDownloader.Settings.SettingsAppearance"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:extk="http://schemas.xceed.com/wpf/xaml/toolkit"
+      xmlns:local="clr-namespace:UniversalAnimeDownloader.Settings"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+      FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
+      Title="SettingsAppearance">
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="{Binding ElementName=settingHeader, Path=Height}"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <StackPanel x:Name="settingHeader" HorizontalAlignment="Right">
+            <TextBlock Text="Apperance " Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading}" FontWeight="Bold" TextAlignment="Right"/>
+            <TextBlock Text="Change the apperance  of UAD such as Color and Font Size..." Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}" FontStyle="Italic"/>
+        </StackPanel>
+
+        <ScrollViewer ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                      Grid.Row="1">
+            <StackPanel x:Name="settingContent" Margin="10">
+                <StackPanel.Resources>
+                    <Style x:Key="downloadSection" TargetType="StackPanel">
+                        <Setter Property="Margin" Value="0,0,0,50"/>
+                    </Style>
+                </StackPanel.Resources>
+
+                <StackPanel Style="{StaticResource downloadSection}">
+                    <TextBlock Text="Directory Setting: " FontSize="{DynamicResource Heading2}"/>
+                    <StackPanel Margin="25,0,0,0">
+                        <TextBlock Text="Color Setting" Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}"/>
+                        <TextBlock Text="This setting will change colors in your application to fit your look" FontStyle="Italic"
+                                   Foreground="{DynamicResource FileSize}" FontSize="{DynamicResource Heading3}" Margin="25,0,0,0"/>
+                        <StackPanel  Margin="50,0,0,0">
+                            <StackPanel Orientation="Horizontal" >
+                                <Button Style="{StaticResource MaterialDesignFlatButton}" 
+                                        Width="100" Height="50">
+                                    <Rectangle Fill="{DynamicResource ForeGroundColor}"
+                                               Width="100" Height="50"/>
+                                </Button>
+                                <TextBlock Text="Text Color" Foreground="{DynamicResource ForeGroundColor}"
+                                           VerticalAlignment="Center" Margin="25,0,0,0"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" >
+                                <Button Style="{StaticResource MaterialDesignFlatButton}" 
+                                        Width="100" Height="50">
+                                    <Rectangle Fill="{DynamicResource FileSize}"
+                                               Width="100" Height="50"/>
+                                </Button>
+                                <TextBlock Text="Description Color" Foreground="{DynamicResource ForeGroundColor}"
+                                           VerticalAlignment="Center" Margin="25,0,0,0"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" >
+                                <Button Style="{StaticResource MaterialDesignFlatButton}" 
+                                        Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}"
+                                        CommandTarget="{Binding ElementName=TestDialogHost}"
+                                        Width="100" Height="50">
+                                    <Rectangle Fill="{DynamicResource Primary}"
+                                               Width="100" Height="50"/>
+
+                                </Button>
+                                <TextBlock Text="Menubar Color" Foreground="{DynamicResource ForeGroundColor}"
+                                           VerticalAlignment="Center" Margin="25,0,0,0"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+
+        <Grid Grid.RowSpan="2">
+            <materialDesign:DialogHost IsOpen="True" CloseOnClickAway="True" DialogTheme="Dark">
+                <materialDesign:DialogHost.DialogContent>
+                    <Grid Width="500" Height="325">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <extk:ColorCanvas Background="{DynamicResource Black}" Foreground="{DynamicResource ForeGroundColor}">
+                            
+                        </extk:ColorCanvas>
+                    </Grid>
+                </materialDesign:DialogHost.DialogContent>
+            </materialDesign:DialogHost>
+        </Grid>
+    </Grid>
+</Page>

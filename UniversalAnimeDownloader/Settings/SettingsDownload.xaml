@@ -8,7 +8,7 @@
       xmlns:local="clr-namespace:UniversalAnimeDownloader.Settings"
       xmlns:vm="clr-namespace:UniversalAnimeDownloader.ViewModel"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="4500" d:DesignWidth="800"
       TextElement.Foreground="{DynamicResource MaterialDesignBody}"
       FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
       Title="SettingsDownload">
@@ -36,11 +36,53 @@
                     <TextBlock Text="Common Setting: " FontSize="{DynamicResource Heading2}"/>
                     <StackPanel Margin="25,0,0,0" Orientation="Horizontal">
                         <TextBox Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}"
-                                 materialDesign:HintAssist.Hint="File per dowmload" TextChanged="IntergerValidate"
-                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}" x:Name="fpd">
+                                 materialDesign:HintAssist.Hint="File per dowmload" x:Name="fpdTextBox"
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}" Text="2">
                         </TextBox>
-                        <TextBlock x:Name="filePerDownloadErrorMessage" Foreground="Red" FontSize="{DynamicResource Heading3}"
+                        <TextBlock x:Name="fpdErrMessage" Foreground="Red" FontSize="{DynamicResource Heading3}"
                                    VerticalAlignment="Bottom" Margin="25,0,0,0"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel Style="{StaticResource downloadSection}">
+                    <StackPanel.Resources>
+                        <Style TargetType="RadioButton" BasedOn="{StaticResource MaterialDesignRadioButton}">
+
+                        </Style>
+                    </StackPanel.Resources>
+                    <TextBlock Text="Download Method: " FontSize="{DynamicResource Heading2}"/>
+                    <StackPanel Margin="25,0,0,0">
+                        <RadioButton x:Name="rdbtnStdMode">
+                            <StackPanel>
+                                <TextBlock Text="Standrand " FontSize="{StaticResource Heading3}"/>
+                                <TextBlock x:Name="stdDlMethodDes" Text="Download multiple file with regular speed. Don't support speed and eta report"
+                                       TextWrapping="WrapWithOverflow" FontSize="{DynamicResource Heading3}" FontStyle="Italic"
+                                       Foreground="{DynamicResource FileSize}" Margin="25,0,0,0" IsEnabled="{Binding Path=IsChecked, ElementName=rdbtnStdMode}"/>
+                            </StackPanel>
+
+                        </RadioButton>
+                        <RadioButton x:Name="rdbtnSegMode" Style="{StaticResource MaterialDesignRadioButton}" Margin="0,25,0,0" IsChecked="True">
+                            <StackPanel IsEnabled="{Binding Path=IsChecked, ElementName=rdbtnSegMode}">
+                                <TextBlock Text="Segmented (Recommended) " FontSize="{StaticResource Heading3}"/>
+                                <TextBlock Text="Download multiple file with multiple segmented which help improve download speed by far the best option avaible. Also support speed and eta report"
+                                       TextWrapping="WrapWithOverflow" FontSize="{DynamicResource Heading3}" FontStyle="Italic"
+                                       Foreground="{DynamicResource FileSize}" Margin="25,0,0,0"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBox x:Name="spdTextBox" materialDesign:HintAssist.Hint="Segment per download:" FontSize="{DynamicResource Heading3}" Text="8"
+                                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="{DynamicResource ForeGroundColor}"
+                                         Margin="25,25,0,0" Width="300" HorizontalAlignment="Left"/>
+                                    <TextBlock x:Name="spdErrMessage" Foreground="Red" FontSize="{DynamicResource Heading3}" VerticalAlignment="Bottom"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </RadioButton>
+                        <RadioButton x:Name="rdbtnCompaMode" Style="{StaticResource MaterialDesignRadioButton}"  Margin="0,25,0,0">
+                            <StackPanel IsEnabled="{Binding Path=IsChecked, ElementName=rdbtnCompaMode}">
+                                <TextBlock Text="Compatibility Mode " FontSize="{StaticResource Heading3}"/>
+                                <TextBlock Text="Download single file per download. Slowest downloader but can be able to download resource with custom request headers. Use this when other download methods are not working"
+                                       TextWrapping="WrapWithOverflow" FontSize="{DynamicResource Heading3}" FontStyle="Italic"
+                                       Foreground="{DynamicResource FileSize}" Margin="25,0,0,0"/>
+                            </StackPanel>
+                        </RadioButton>
                     </StackPanel>
                 </StackPanel>
             </StackPanel>
