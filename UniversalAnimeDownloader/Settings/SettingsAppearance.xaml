@@ -7,7 +7,7 @@
       xmlns:extk="http://schemas.xceed.com/wpf/xaml/toolkit"
       xmlns:local="clr-namespace:UniversalAnimeDownloader.Settings"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="4500" d:DesignWidth="800"
       TextElement.Foreground="{DynamicResource MaterialDesignBody}"
       FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
       Title="SettingsAppearance">
@@ -19,7 +19,7 @@
         </Grid.RowDefinitions>
         <StackPanel x:Name="settingHeader" HorizontalAlignment="Right">
             <TextBlock Text="Apperance " Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading}" FontWeight="Bold" TextAlignment="Right"/>
-            <TextBlock Text="Change the apperance  of UAD such as Color and Font Size..." Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}" FontStyle="Italic"/>
+            <TextBlock Text="Change the apperance of UAD such as Color and Font Size..." Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}" FontStyle="Italic"/>
         </StackPanel>
 
         <ScrollViewer ScrollViewer.HorizontalScrollBarVisibility="Disabled"
@@ -32,42 +32,184 @@
                 </StackPanel.Resources>
 
                 <StackPanel Style="{StaticResource downloadSection}">
-                    <TextBlock Text="Directory Setting: " FontSize="{DynamicResource Heading2}"/>
-                    <StackPanel Margin="25,0,0,0">
-                        <TextBlock Text="Color Setting" Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}"/>
+                    <TextBlock Text="Color Setting: " FontSize="{DynamicResource Heading2}"/>
+                    <StackPanel>
                         <TextBlock Text="This setting will change colors in your application to fit your look" FontStyle="Italic"
                                    Foreground="{DynamicResource FileSize}" FontSize="{DynamicResource Heading3}" Margin="25,0,0,0"/>
                         <StackPanel  Margin="50,0,0,0">
                             <StackPanel Orientation="Horizontal" >
-                                <Button Style="{StaticResource MaterialDesignFlatButton}" 
-                                        Width="100" Height="50">
+                                <Button x:Name="textColor" Style="{StaticResource MaterialDesignFlatButton}" 
+                                        Width="100" Height="50" Click="ChooseColor">
                                     <Rectangle Fill="{DynamicResource ForeGroundColor}"
                                                Width="100" Height="50"/>
                                 </Button>
+
                                 <TextBlock Text="Text Color" Foreground="{DynamicResource ForeGroundColor}"
                                            VerticalAlignment="Center" Margin="25,0,0,0"/>
+                                <Button Style="{StaticResource MaterialDesignFlatButton}" ToolTip="Reset">
+                                    <materialDesign:PackIcon Kind="BackupRestore" Foreground="{DynamicResource ForeGroundColor}"/>
+                                </Button>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" >
-                                <Button Style="{StaticResource MaterialDesignFlatButton}" 
-                                        Width="100" Height="50">
+                                <Button x:Name="desColor" Style="{StaticResource MaterialDesignFlatButton}" 
+                                        Width="100" Height="50" Click="ChooseColor">
                                     <Rectangle Fill="{DynamicResource FileSize}"
                                                Width="100" Height="50"/>
                                 </Button>
                                 <TextBlock Text="Description Color" Foreground="{DynamicResource ForeGroundColor}"
                                            VerticalAlignment="Center" Margin="25,0,0,0"/>
+                                <Button Style="{StaticResource MaterialDesignFlatButton}" ToolTip="Reset">
+                                    <materialDesign:PackIcon Kind="BackupRestore" Foreground="{DynamicResource ForeGroundColor}"/>
+                                </Button>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" >
-                                <Button Style="{StaticResource MaterialDesignFlatButton}" 
-                                        Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}"
-                                        CommandTarget="{Binding ElementName=TestDialogHost}"
-                                        Width="100" Height="50">
+                                <Button x:Name="menubarColor"  Style="{StaticResource MaterialDesignFlatButton}" 
+                                        Width="100" Height="50" Click="ChooseColor">
                                     <Rectangle Fill="{DynamicResource Primary}"
                                                Width="100" Height="50"/>
 
                                 </Button>
                                 <TextBlock Text="Menubar Color" Foreground="{DynamicResource ForeGroundColor}"
                                            VerticalAlignment="Center" Margin="25,0,0,0"/>
+                                <Button Style="{StaticResource MaterialDesignFlatButton}"  ToolTip="Reset">
+                                    <materialDesign:PackIcon Kind="BackupRestore" Foreground="{DynamicResource ForeGroundColor}"/>
+                                </Button>
                             </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+                
+                <StackPanel Style="{StaticResource downloadSection}">
+                    <TextBlock Text="Text Size Setting: " FontSize="{DynamicResource Heading2}"/>
+                    <StackPanel>
+                        <TextBlock Text="This setting will change the size in your application to fit your look" FontStyle="Italic"
+                                   Foreground="{DynamicResource FileSize}" FontSize="{DynamicResource Heading3}" Margin="25,0,0,0"/>
+                        <StackPanel Margin="25,0,0,0">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="50"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Heading" FontSize="{DynamicResource Heading}" VerticalAlignment="Bottom"
+                                           Foreground="{DynamicResource ForeGroundColor}"/>
+                                <Slider Grid.Column="1" VerticalAlignment="Bottom" Style="{StaticResource MaterialDesignDiscreteSlider}"
+                                        x:Name="headingSlider" Minimum="2" Maximum="72" Value="{DynamicResource Heading}"/>
+                                <Button Style="{StaticResource MaterialDesignFlatButton}" Grid.Column="2" ToolTip="Reset">
+                                    <materialDesign:PackIcon Kind="BackupRestore" Foreground="{DynamicResource ForeGroundColor}"/>
+                                </Button>
+                            </Grid>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="50"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Heading2" FontSize="{DynamicResource Heading2}" VerticalAlignment="Bottom"
+                                           Foreground="{DynamicResource ForeGroundColor}"/>
+                                <Slider Grid.Column="1" VerticalAlignment="Bottom" Style="{StaticResource MaterialDesignDiscreteSlider}"
+                                        x:Name="heading2Slider" Minimum="2" Maximum="72" Value="{DynamicResource Heading2}"/>
+                                <Button Style="{StaticResource MaterialDesignFlatButton}" Grid.Column="2" ToolTip="Reset">
+                                    <materialDesign:PackIcon Kind="BackupRestore" Foreground="{DynamicResource ForeGroundColor}"/>
+                                </Button>
+                            </Grid>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="50"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Heading3" FontSize="{DynamicResource Heading3}" VerticalAlignment="Bottom"
+                                           Foreground="{DynamicResource ForeGroundColor}"/>
+                                <Slider Grid.Column="1" VerticalAlignment="Bottom" Style="{StaticResource MaterialDesignDiscreteSlider}"
+                                        x:Name="heading3Slider" Minimum="2" Maximum="72" Value="{DynamicResource Heading3}"/>
+                                <Button Style="{StaticResource MaterialDesignFlatButton}" Grid.Column="2" ToolTip="Reset">
+                                    <materialDesign:PackIcon Kind="BackupRestore" Foreground="{DynamicResource ForeGroundColor}"/>
+                                </Button>
+                            </Grid>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="50"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Heading4" FontSize="{DynamicResource Heading4}" VerticalAlignment="Bottom"
+                                           Foreground="{DynamicResource ForeGroundColor}"/>
+                                <Slider Grid.Column="1" VerticalAlignment="Bottom" Style="{StaticResource MaterialDesignDiscreteSlider}"
+                                        x:Name="heading4Slider" Minimum="2" Maximum="72" Value="{DynamicResource Heading4}"/>
+                                <Button Style="{StaticResource MaterialDesignFlatButton}" Grid.Column="2" ToolTip="Reset">
+                                    <materialDesign:PackIcon Kind="BackupRestore" Foreground="{DynamicResource ForeGroundColor}"/>
+                                </Button>
+                            </Grid>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel Style="{StaticResource downloadSection}">
+                    <TextBlock Text="Background Image Setting: " FontSize="{DynamicResource Heading2}"/>
+                    <StackPanel>
+                        <TextBlock Text="Set image background" FontStyle="Italic"
+                                   Foreground="{DynamicResource FileSize}" FontSize="{DynamicResource Heading3}" Margin="25,0,0,0"/>
+                        <StackPanel Margin="25,0,0,0">
+                            <CheckBox x:Name="useMenubar" Foreground="{DynamicResource ForeGroundColor}" HorizontalContentAlignment="Stretch"
+                                      VerticalAlignment="Top" Content="Use menu bar background" FontSize="{DynamicResource Heading3}"/>
+                            <StackPanel IsEnabled="{Binding ElementName=useMenubar, Path=IsChecked}">
+                                <Border Grid.Row="1" Height="200" Width="360" HorizontalAlignment="Left"
+                                            BorderThickness="1" BorderBrush="{DynamicResource ForeGroundColor}">
+                                    <Image Stretch="Fill"/>
+                                </Border>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="60"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="{DynamicResource ForeGroundColor}"
+                                         materialDesign:HintAssist.Hint="Image Location:" FontSize="{DynamicResource Heading3}"/>
+                                    <Button Width="50" Grid.Column="1">
+                                        <materialDesign:PackIcon Kind="File" />
+                                    </Button>
+                                </Grid>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Opacity: " FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource ForeGroundColor}"
+                                               VerticalAlignment="Bottom"/>
+                                    <Slider Grid.Column="1" VerticalAlignment="Bottom" Style="{StaticResource MaterialDesignDiscreteSlider}"
+                                            Minimum="2" Maximum="72" Value="100"/>
+                                </Grid>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <CheckBox x:Name="useBackground" Foreground="{DynamicResource ForeGroundColor}" HorizontalContentAlignment="Stretch"
+                                  Margin="25,50,0,0" VerticalAlignment="Top" Content="Use content viewer background" FontSize="{DynamicResource Heading3}"/>
+                        <StackPanel IsEnabled="{Binding ElementName=useBackground, Path=IsChecked}" Margin="25,0,0,0">
+                            <Border Grid.Row="1" Height="200" Width="360" HorizontalAlignment="Left"
+                                            BorderThickness="1" BorderBrush="{DynamicResource ForeGroundColor}">
+                                <Image Stretch="Fill"/>
+                            </Border>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="60"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBox Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="{DynamicResource ForeGroundColor}"
+                                         materialDesign:HintAssist.Hint="Image Location:" FontSize="{DynamicResource Heading3}"/>
+                                <Button Width="50" Grid.Column="1">
+                                    <materialDesign:PackIcon Kind="File" />
+                                </Button>
+                            </Grid>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Opacity: " FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource ForeGroundColor}"
+                                               VerticalAlignment="Bottom"/>
+                                <Slider Grid.Column="1" VerticalAlignment="Bottom" Style="{StaticResource MaterialDesignDiscreteSlider}"
+                                            Minimum="2" Maximum="72" Value="100"/>
+                            </Grid>
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>
@@ -75,16 +217,20 @@
         </ScrollViewer>
 
         <Grid Grid.RowSpan="2">
-            <materialDesign:DialogHost IsOpen="True" CloseOnClickAway="True" DialogTheme="Dark">
+            <materialDesign:DialogHost x:Name="colorPickerHost" IsOpen="False" CloseOnClickAway="True" DialogTheme="Dark">
                 <materialDesign:DialogHost.DialogContent>
                     <Grid Width="500" Height="325">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <extk:ColorCanvas Background="{DynamicResource Black}" Foreground="{DynamicResource ForeGroundColor}">
-                            
-                        </extk:ColorCanvas>
+                        <extk:ColorCanvas x:Name="colorPicker" Background="Transparent" Foreground="{DynamicResource ForeGroundColor}"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="1" Margin="0,0,10,0">
+                            <Button Content="Cancel" Foreground="{DynamicResource ForeGroundColor}" 
+                                    Style="{StaticResource MaterialDesignFlatButton}" Click="CloseDialogHost"/>
+                            <Button Content="OK" Foreground="{DynamicResource ForeGroundColor}" 
+                                    Style="{StaticResource MaterialDesignRaisedButton}" Click="AssignColor"/>
+                        </StackPanel>
                     </Grid>
                 </materialDesign:DialogHost.DialogContent>
             </materialDesign:DialogHost>
