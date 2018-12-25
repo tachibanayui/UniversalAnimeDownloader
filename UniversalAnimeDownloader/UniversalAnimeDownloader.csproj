@@ -122,6 +122,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Settings\SettingsPlayback.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -169,6 +173,9 @@
     <Compile Include="Settings\SettingsGeneral.xaml.cs">
       <DependentUpon>SettingsGeneral.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Settings\SettingsPlayback.xaml.cs">
+      <DependentUpon>SettingsPlayback.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Validation\IntergerValidation.cs" />
     <Compile Include="ValueConverter\BoolToVisibilityConverter.cs" />
     <Compile Include="ValueConverter\ScaleFontSizeValueConverter.cs" />
@@ -183,6 +190,7 @@
     <Compile Include="ViewModel\SettingsAppearanceViewModel.cs" />
     <Compile Include="ViewModel\SettingsDownloadViewModel.cs" />
     <Compile Include="ViewModel\SettingsGeneralViewModel.cs" />
+    <Compile Include="ViewModel\SettingsPlaybackViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
     <Compile Include="View\AllAnimeTab.cs" />
     <Compile Include="View\AnimeList.xaml.cs">

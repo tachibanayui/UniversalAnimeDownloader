@@ -12,7 +12,6 @@
       TextElement.Foreground="{DynamicResource MaterialDesignBody}"
       FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
       Title="SettingsDownload">
-
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="{Binding ElementName=settingHeader, Path=Height}"/>
