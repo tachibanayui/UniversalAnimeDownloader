@@ -23,6 +23,7 @@ namespace UniversalAnimeDownloader.View
         public MainWindow()
         {
             InitializeComponent();
+            a.VideoUri = new Uri("F:\\Test.mp4");
         }
 
         private void PageTransition(object sender, EventArgs e)
@@ -41,7 +42,7 @@ namespace UniversalAnimeDownloader.View
         //Handle the Custom Window Action
         private void MinimizedWindow(object sender, RoutedEventArgs e) => WindowState = WindowState.Minimized;
         private void MaximizeWindow(object sender, RoutedEventArgs e) => WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
-        private void ExitApplication(object sender, RoutedEventArgs e) => Environment.Exit(0);
+        private void ExitApplication(object sender, RoutedEventArgs e) => Application.Current.Shutdown(0);
 
         //Navigation
         private void NavigateToExplore(object sender, MouseButtonEventArgs e)

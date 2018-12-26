@@ -8,6 +8,7 @@
         xmlns:converter="clr-namespace:UniversalAnimeDownloader.ValueConverter"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:customControl="clr-namespace:UniversalAnimeDownloader.CustomControl"
+        xmlns:userControl="clr-namespace:UniversalAnimeDownloader.UserControls"
         xmlns:animation="clr-namespace:UniversalAnimeDownloader.Animations"
         mc:Ignorable="d"
         x:Name="rootWindow"
@@ -248,7 +249,13 @@
             </Grid>
         </Grid>
 
+        <Grid>
+            <!--<MediaElement Source="F:\Test.mp4"/>-->
+            <userControl:UADPlayer x:Name="a"/>
+        </Grid>
         
+
+
         <!--<Grid x:Name="welcomeScreenRoot" Background="{DynamicResource Primary}"
               HorizontalAlignment="Left" Width="{Binding ElementName=rootWindow, Path=ActualWidth}">
             <Grid.Triggers>

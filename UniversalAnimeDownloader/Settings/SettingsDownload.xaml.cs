@@ -97,23 +97,12 @@ namespace UniversalAnimeDownloader.Settings
             int stepMultiplier = 0;
             for (int i = 0; i < repeatAnimation; i++)
             {
-                animation.Children.Add(new ThicknessAnimation(defaultThickness, MulitplyThinkness(PlusThickness(defaultThickness, new Thickness(10, 0, -10, 0)), amplitude), TimeSpan.FromSeconds(step)) { BeginTime = TimeSpan.FromSeconds(step * stepMultiplier++) });
-                animation.Children.Add(new ThicknessAnimation(MulitplyThinkness(PlusThickness(defaultThickness, new Thickness(10, 0, -10, 0)), amplitude), defaultThickness, TimeSpan.FromSeconds(step)) { BeginTime = TimeSpan.FromSeconds(step * stepMultiplier++) });
-                animation.Children.Add(new ThicknessAnimation(defaultThickness, MulitplyThinkness(PlusThickness(defaultThickness, new Thickness(-10, 0, 10, 0)), amplitude), TimeSpan.FromSeconds(step)) { BeginTime = TimeSpan.FromSeconds(step * stepMultiplier++) });
-                animation.Children.Add(new ThicknessAnimation(MulitplyThinkness(PlusThickness(defaultThickness, new Thickness(-10, 0, 10, 0)), amplitude), defaultThickness, TimeSpan.FromSeconds(step)) { BeginTime = TimeSpan.FromSeconds(step * stepMultiplier++) });
-
+                animation.Children.Add(new ThicknessAnimation(defaultThickness, Common.MulitplyThinkness(Common.PlusThickness(defaultThickness, new Thickness(10, 0, -10, 0)), amplitude), TimeSpan.FromSeconds(step)) { BeginTime = TimeSpan.FromSeconds(step * stepMultiplier++) });
+                animation.Children.Add(new ThicknessAnimation(Common.MulitplyThinkness(Common.PlusThickness(defaultThickness, new Thickness(10, 0, -10, 0)), amplitude), defaultThickness, TimeSpan.FromSeconds(step)) { BeginTime = TimeSpan.FromSeconds(step * stepMultiplier++) });
+                animation.Children.Add(new ThicknessAnimation(defaultThickness, Common.MulitplyThinkness(Common.PlusThickness(defaultThickness, new Thickness(-10, 0, 10, 0)), amplitude), TimeSpan.FromSeconds(step)) { BeginTime = TimeSpan.FromSeconds(step * stepMultiplier++) });
+                animation.Children.Add(new ThicknessAnimation(Common.MulitplyThinkness(Common.PlusThickness(defaultThickness, new Thickness(-10, 0, 10, 0)), amplitude), defaultThickness, TimeSpan.FromSeconds(step)) { BeginTime = TimeSpan.FromSeconds(step * stepMultiplier++) });
             }
             ctrl.BeginStoryboard(animation);
-        }
-
-        private Thickness PlusThickness (Thickness a, Thickness b)
-        {
-            return new Thickness(a.Left + b.Left, a.Top + b.Top, right: a.Right + b.Right, bottom: a.Bottom + b.Bottom);
-        }
-
-        private Thickness MulitplyThinkness(Thickness a, double b)
-        {
-            return new Thickness(a.Left * b, a.Top * b, a.Right * b, a.Bottom * b);
         }
     }
 

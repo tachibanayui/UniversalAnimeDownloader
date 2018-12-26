@@ -50,5 +50,23 @@ namespace UniversalAnimeDownloader
         public static string[] GetQualities = new string[] { "144p", "240p", "360p", "480p", "720p", "1080p" };
 
         public static string AnimeLibraryDirectory;
+
+        public static Thickness PlusThickness(Thickness a, Thickness b)
+        {
+            return new Thickness(a.Left + b.Left, a.Top + b.Top, right: a.Right + b.Right, bottom: a.Bottom + b.Bottom);
+        }
+
+        public static Thickness MulitplyThinkness(Thickness a, double b)
+        {
+            return new Thickness(a.Left * b, a.Top * b, a.Right * b, a.Bottom * b);
+        }
+
+        public static double GetTimeSpanRatio(TimeSpan a, TimeSpan b) => a.TotalMilliseconds / b.TotalMilliseconds;
+
+        public static TimeSpan MutiplyTimeSpan(TimeSpan a, double b)
+        {
+            double milli = a.TotalMilliseconds * b;
+            return TimeSpan.FromMilliseconds(milli);
+        }
     }
 }
