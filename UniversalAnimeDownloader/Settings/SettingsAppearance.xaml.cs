@@ -24,6 +24,14 @@ namespace UniversalAnimeDownloader.Settings
         public SettingsAppearanceViewModel VM;
         private Button lastColorPicker;
 
+        public Frame FrameHost
+        {
+            get { return (Frame)GetValue(FrameHostProperty); }
+            set { SetValue(FrameHostProperty, value); }
+        }
+        public static readonly DependencyProperty FrameHostProperty =
+            DependencyProperty.Register("FrameHost", typeof(Frame), typeof(SettingsAppearance), new PropertyMetadata());
+
         public SettingsAppearance()
         {
             VM = new SettingsAppearanceViewModel();

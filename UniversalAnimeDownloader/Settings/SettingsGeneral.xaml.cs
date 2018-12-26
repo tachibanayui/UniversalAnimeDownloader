@@ -22,6 +22,15 @@ namespace UniversalAnimeDownloader.Settings
     public partial class SettingsGeneral : Page
     {
         public SettingsGeneralViewModel VM;
+
+        public Frame FrameHost
+        {
+            get { return (Frame)GetValue(FrameHostProperty); }
+            set { SetValue(FrameHostProperty, value); }
+        }
+        public static readonly DependencyProperty FrameHostProperty =
+            DependencyProperty.Register("FrameHost", typeof(Frame), typeof(SettingsGeneral), new PropertyMetadata());
+
         public SettingsGeneral()
         {
             InitializeComponent();

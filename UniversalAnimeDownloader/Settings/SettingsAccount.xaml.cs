@@ -23,6 +23,14 @@ namespace UniversalAnimeDownloader.Settings
     {
         public SettingsAccountViewModel VM;
 
+        public Frame FrameHost
+        {
+            get { return (Frame)GetValue(FrameHostProperty); }
+            set { SetValue(FrameHostProperty, value); }
+        }
+        public static readonly DependencyProperty FrameHostProperty =
+            DependencyProperty.Register("FrameHost", typeof(Frame), typeof(SettingsAccount), new PropertyMetadata());
+
         public SettingsAccount()
         {
             InitializeComponent();

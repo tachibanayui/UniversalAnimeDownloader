@@ -77,9 +77,34 @@ namespace UniversalAnimeDownloader.View
                 pageViewer.GoBack();
         }
 
-        private void NavigateToGeneralSetting(object sender, MouseButtonEventArgs e)
+
+        private void NavigateToSetting(object sender, MouseButtonEventArgs e)
         {
-            pageViewer.Content = new SettingsPlayback();
+            Grid grid = sender as Grid;
+            string settingName = ((grid.Children[1] as StackPanel).Children[1] as TextBlock).Text.Trim();
+            switch (settingName)
+            {
+                case "Settings":
+                    pageViewer.Content = new SettingsIndex() { FrameHost = pageViewer };
+                    break;
+                case "General":
+                    pageViewer.Content = new SettingsGeneral() { FrameHost = pageViewer };
+                    break;
+                case "Account":
+                    pageViewer.Content = new SettingsAccount() { FrameHost = pageViewer };
+                    break;
+                case "Appearance":
+                    pageViewer.Content = new SettingsAppearance() { FrameHost = pageViewer };
+                    break;
+                case "Download":
+                    pageViewer.Content = new SettingsDownload() { FrameHost = pageViewer };
+                    break;
+                case "Playback":
+                    pageViewer.Content = new SettingsPlayback() { FrameHost = pageViewer };
+                    break;
+                default:
+                    break;
+            }
             ClearPageHistory();
         }
     }

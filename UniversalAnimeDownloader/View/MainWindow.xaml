@@ -125,7 +125,7 @@
                             </TreeViewItem>
                             <TreeViewItem>
                                 <TreeViewItem.Header>
-                                    <Grid MouseLeftButtonDown="NavigateToGeneralSetting" Width="240">
+                                    <Grid MouseLeftButtonDown="NavigateToSetting" Width="240">
                                         <Rectangle />
                                         <StackPanel Orientation="Horizontal">
                                             <materialDesign:PackIcon Kind="Settings"/>
@@ -135,7 +135,7 @@
                                 </TreeViewItem.Header>
                                 <TreeViewItem>
                                     <TreeViewItem.Header>
-                                        <Grid MouseLeftButtonDown="NavigateToGeneralSetting" Width="240">
+                                        <Grid MouseLeftButtonDown="NavigateToSetting" Width="240">
                                             <Rectangle />
                                             <StackPanel Orientation="Horizontal">
                                                 <materialDesign:PackIcon Kind="DipSwitch"/>
@@ -146,7 +146,7 @@
                                 </TreeViewItem>
                                 <TreeViewItem>
                                     <TreeViewItem.Header>
-                                        <Grid MouseLeftButtonDown="NavigateToGeneralSetting" Width="240">
+                                        <Grid MouseLeftButtonDown="NavigateToSetting" Width="240">
                                             <Rectangle />
                                             <StackPanel Orientation="Horizontal">
                                                 <materialDesign:PackIcon Kind="AccountSettings"/>
@@ -157,7 +157,7 @@
                                 </TreeViewItem>
                                 <TreeViewItem>
                                     <TreeViewItem.Header>
-                                        <Grid MouseLeftButtonDown="NavigateToGeneralSetting" Width="240">
+                                        <Grid MouseLeftButtonDown="NavigateToSetting" Width="240">
                                             <Rectangle />
                                             <StackPanel Orientation="Horizontal">
                                                 <materialDesign:PackIcon Kind="WindowRestore" />
@@ -168,7 +168,7 @@
                                 </TreeViewItem>
                                 <TreeViewItem>
                                     <TreeViewItem.Header>
-                                        <Grid MouseLeftButtonDown="NavigateToGeneralSetting" Width="240">
+                                        <Grid MouseLeftButtonDown="NavigateToSetting" Width="240">
                                             <Rectangle />
                                             <StackPanel Orientation="Horizontal">
                                                 <materialDesign:PackIcon Kind="Download"/>
@@ -179,7 +179,7 @@
                                 </TreeViewItem>
                                 <TreeViewItem>
                                     <TreeViewItem.Header>
-                                        <Grid MouseLeftButtonDown="NavigateToGeneralSetting" Width="240">
+                                        <Grid MouseLeftButtonDown="NavigateToSetting" Width="240">
                                             <Rectangle />
                                             <StackPanel Orientation="Horizontal">
                                                 <materialDesign:PackIcon Kind="PlayBoxOutline" />

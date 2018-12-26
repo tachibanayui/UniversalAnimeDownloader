@@ -106,10 +106,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Settings\Settings.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Settings\SettingsAccount.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -123,6 +119,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Settings\SettingsGeneral.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Settings\SettingsIndex.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -165,9 +165,6 @@
     <Compile Include="CustomControl\TaskCompletePopup.cs" />
     <Compile Include="CustomControl\VuigheAnimeCard.cs" />
     <Compile Include="Models\GenreModel.cs" />
-    <Compile Include="Settings\Settings.xaml.cs">
-      <DependentUpon>Settings.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Settings\SettingsAccount.xaml.cs">
       <DependentUpon>SettingsAccount.xaml</DependentUpon>
     </Compile>
@@ -179,6 +176,9 @@
     </Compile>
     <Compile Include="Settings\SettingsGeneral.xaml.cs">
       <DependentUpon>SettingsGeneral.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\SettingsIndex.xaml.cs">
+      <DependentUpon>SettingsIndex.xaml</DependentUpon>
     </Compile>
     <Compile Include="Settings\SettingsPlayback.xaml.cs">
       <DependentUpon>SettingsPlayback.xaml</DependentUpon>

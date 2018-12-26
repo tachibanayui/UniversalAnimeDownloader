@@ -22,7 +22,15 @@ namespace UniversalAnimeDownloader.Settings
     public partial class SettingsPlayback : Page
     {
         public SettingsPlaybackViewModel VM;
-        
+
+        public Frame FrameHost
+        {
+            get { return (Frame)GetValue(FrameHostProperty); }
+            set { SetValue(FrameHostProperty, value); }
+        }
+        public static readonly DependencyProperty FrameHostProperty =
+            DependencyProperty.Register("FrameHost", typeof(Frame), typeof(SettingsPlayback), new PropertyMetadata());
+
         public SettingsPlayback()
         {
             VM = new SettingsPlaybackViewModel();

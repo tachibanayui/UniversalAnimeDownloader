@@ -26,6 +26,14 @@ namespace UniversalAnimeDownloader.Settings
         public Thickness defaultFpdThickness;
         public Thickness defaultSpdThickness;
 
+        public Frame FrameHost
+        {
+            get { return (Frame)GetValue(FrameHostProperty); }
+            set { SetValue(FrameHostProperty, value); }
+        }
+        public static readonly DependencyProperty FrameHostProperty =
+            DependencyProperty.Register("FrameHost", typeof(Frame), typeof(SettingsDownload), new PropertyMetadata());
+
         public SettingsDownload()
         {
             VM = new SettingsDownloadViewModel();
