@@ -23,8 +23,11 @@ namespace UniversalAnimeDownloader.View
         public MainWindow()
         {
             InitializeComponent();
-            a.VideoUri = new Uri("F:\\Test.mp4");
+            uadEmbededPlayer.VideoUri = new Uri("F:\\Test.mp4");
+            uadEmbededPlayer.RequestWindowState += HandlePlayerWindowStateRequest;
         }
+
+       
 
         private void PageTransition(object sender, EventArgs e)
         {
@@ -107,6 +110,21 @@ namespace UniversalAnimeDownloader.View
                     break;
             }
             ClearPageHistory();
+        }
+
+        private void HandlePlayerWindowStateRequest(object sender, RequestingWindowStateEventArgs e)
+        {
+            WindowState = e.RequestState;
+
+            if (e.RequestState == WindowState.Maximized)
+                Grid.SetRow(uadEmbededPlayer, 0);
+            else
+                Grid.SetRow(uadEmbededPlayer, 1);
+        }
+
+        private void ExitUADPlayer(object sender, RoutedEventArgs e)
+        {
+            UADEmbededPlayerContainer.Visibility = Visibility.Collapsed;
         }
     }
 }

@@ -21,5 +21,38 @@ namespace UniversalAnimeDownloader.ViewModel
                 }
             }
         }
+
+        public double PlayerVolume
+        {
+            get { return SettingsValues.PlaybackVolume; }
+            set
+            {
+                if(SettingsValues.PlaybackVolume != value)
+                {
+                    SettingsValues.PlaybackVolume = value;
+                    MediaElementVolume = SettingsValues.PlaybackVolume / 100;
+                    OnPropertyChanged("PlayerVolume");
+                }
+            }
+        }
+
+        private double mediaElementVolume;
+        public double MediaElementVolume
+        {
+            get { return mediaElementVolume; }
+            set
+            {
+                if(mediaElementVolume != value)
+                {
+                    mediaElementVolume = value;
+                    OnPropertyChanged("MediaElementVolume");
+                }
+            }
+        }
+
+        public UADPlayerViewModel()
+        {
+            MediaElementVolume = SettingsValues.PlaybackVolume / 100;
+        }
     }
 }

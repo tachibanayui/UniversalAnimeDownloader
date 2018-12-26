@@ -249,11 +249,37 @@
             </Grid>
         </Grid>
 
-        <Grid>
-            <!--<MediaElement Source="F:\Test.mp4"/>-->
-            <userControl:UADPlayer x:Name="a"/>
+        <Grid x:Name="UADEmbededPlayerContainer">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Rectangle Grid.RowSpan="2" Fill="Black"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,10,0">
+                <StackPanel.Resources>
+                    <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatButton}">
+                        <Setter Property="Width" Value="50"/>
+                        <Setter Property="Height" Value="50"/>
+                    </Style>
+                    <Style TargetType="materialDesign:PackIcon">
+                        <Setter Property="Width" Value="20"/>
+                        <Setter Property="Height" Value="20"/>
+                        <Setter Property="Foreground" Value="{DynamicResource ForeGroundColor}"/>
+                    </Style>
+                </StackPanel.Resources>
+                <Button Click="MinimizedWindow">
+                    <materialDesign:PackIcon Kind="WindowMinimize"/>
+                </Button>
+                <Button Click="MaximizeWindow">
+                    <materialDesign:PackIcon Kind="WindowMaximize"/>
+                </Button>
+                <Button Click="ExitUADPlayer">
+                    <materialDesign:PackIcon Kind="WindowClose"/>
+                </Button>
+                
+            </StackPanel>
+            <userControl:UADPlayer x:Name="uadEmbededPlayer" Grid.Row="1" Grid.RowSpan="2"/>
         </Grid>
-        
 
 
         <!--<Grid x:Name="welcomeScreenRoot" Background="{DynamicResource Primary}"

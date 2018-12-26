@@ -168,7 +168,9 @@
     <Compile Include="CustomControl\OfflineAnimeListviewItem.cs" />
     <Compile Include="CustomControl\TaskCompletePopup.cs" />
     <Compile Include="CustomControl\VuigheAnimeCard.cs" />
+    <Compile Include="EventArgsCollection.cs" />
     <Compile Include="Models\GenreModel.cs" />
+    <Compile Include="SettingsValues.cs" />
     <Compile Include="Settings\SettingsAccount.xaml.cs">
       <DependentUpon>SettingsAccount.xaml</DependentUpon>
     </Compile>

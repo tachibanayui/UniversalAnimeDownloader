@@ -44,6 +44,7 @@ namespace UniversalAnimeDownloader.UserControls
         {
             InitializeComponent();
             VM = new UADPlayerViewModel();
+            DataContext = VM;
             mediaPlayer.Source = VideoUri;
             mediaPlayer.Play();
         }
@@ -85,10 +86,10 @@ namespace UniversalAnimeDownloader.UserControls
 
         private async void UpdatePosition()
         {
-            while(true)
+            while (true)
             {
                 txblMediaPos.Text = mediaPlayer.Position.ToString(@"hh\:mm\:ss");
-                if(!isSeekSliderLocked)
+                if (!isSeekSliderLocked)
                     seekSlider.Value = Common.GetTimeSpanRatio(mediaPlayer.Position, MediaDuration);
                 await Task.Delay(500);
             }
@@ -102,5 +103,29 @@ namespace UniversalAnimeDownloader.UserControls
         }
 
         private void LockSeekSlider(object sender, MouseButtonEventArgs e) => isSeekSliderLocked = true;
+
+        private void VolumnChange(object sender, RoutedEventArgs e) => VolumeChanger.IsOpen = true;
+
+        private void CloseVolumePopup(object sender, MouseEventArgs e) => VolumeChanger.IsOpen = false;
+
+        private void ChangeWindowState(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+            PackIcon icon = btn.Content as PackIcon;
+            if (icon.Kind == PackIconKind.ArrowExpand)
+            {
+                OnRequestWindowState(WindowState.Maximized);
+                icon.Kind = PackIconKind.ArrowCollapse;
+            }
+            else
+            {
+                OnRequestWindowState(WindowState.Normal);
+                icon.Kind = PackIconKind.ArrowExpand;
+            }
+        }
+
+        public event EventHandler<RequestingWindowStateEventArgs> RequestWindowState;
+        protected virtual void OnRequestWindowState(WindowState state) => RequestWindowState?.Invoke(this, new RequestingWindowStateEventArgs() { RequestState = state });
+
     }
 }
