@@ -12,201 +12,116 @@
       TextElement.Foreground="{DynamicResource MaterialDesignBody}"
       FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
       Title="SettingsPlayback">
-    <Grid>
-        <Grid Margin="10">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="{Binding ElementName=settingHeader, Path=Height}"/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <StackPanel x:Name="settingHeader" HorizontalAlignment="Right">
-                <TextBlock Text="Playback " Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading}" FontWeight="Bold" TextAlignment="Right"/>
-                <TextBlock Text="Change playback setting such as your prefered player, protection feature..." Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}" FontStyle="Italic"/>
-            </StackPanel>
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="{Binding ElementName=settingHeader, Path=Height}"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <StackPanel x:Name="settingHeader" HorizontalAlignment="Right">
+            <TextBlock Text="Playback " Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading}" FontWeight="Bold" TextAlignment="Right"/>
+            <TextBlock Text="Change playback setting such as your prefered player, protection feature..." Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}" FontStyle="Italic"/>
+        </StackPanel>
 
-            <ScrollViewer ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                      Grid.Row="1">
-                <StackPanel x:Name="settingContent" Margin="10">
-                    <StackPanel.Resources>
-                        <Style x:Key="downloadSection" TargetType="StackPanel">
-                            <Setter Property="Margin" Value="0,0,0,50"/>
-                        </Style>
-                    </StackPanel.Resources>
+        <ScrollViewer ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                    Grid.Row="1">
+            <StackPanel x:Name="settingContent" Margin="10">
+                <StackPanel.Resources>
+                    <Style x:Key="downloadSection" TargetType="StackPanel">
+                        <Setter Property="Margin" Value="0,0,0,50"/>
+                    </Style>
+                </StackPanel.Resources>
 
-                    <StackPanel Style="{StaticResource downloadSection}">
-                        <TextBlock Text="Common Setting: " FontSize="{DynamicResource Heading2}"/>
-                        <TextBlock Text="Prefered Player:" FontSize="{DynamicResource Heading3}" Margin="25,0,0,0"/>
-                        <StackPanel Margin="50,0,0,0">
-                            <TextBlock Text="Change your player to play animes, you can choose from built-in player shipped in UAD or your exthernal program such as VLC, WMP, Movie and TV,..."
-                                       FontSize="{DynamicResource Heading3}" TextWrapping="WrapWithOverflow" FontStyle="Italic"
-                                       Foreground="{DynamicResource FileSize}"/>
+                <StackPanel Style="{StaticResource downloadSection}">
+                    <TextBlock Text="Common Setting: " FontSize="{DynamicResource Heading2}"/>
+                    <TextBlock Text="Prefered Player:" FontSize="{DynamicResource Heading3}" Margin="25,0,0,0"/>
+                    <StackPanel Margin="50,0,0,0">
+                        <TextBlock Text="Change your player to play animes, you can choose from built-in player shipped in UAD or your exthernal program such as VLC, WMP, Movie and TV,..."
+                                    FontSize="{DynamicResource Heading3}" TextWrapping="WrapWithOverflow" FontStyle="Italic"
+                                    Foreground="{DynamicResource FileSize}"/>
 
-                            <ComboBox materialDesign:HintAssist.Hint="Player: " Margin="16 0 0 0" Foreground="{DynamicResource ForeGroundColor}" SelectedIndex="0"
-                                      ItemsSource="{Binding Players}" Style="{StaticResource MaterialDesignFloatingHintComboBox}" FontSize="{DynamicResource Heading3}"
-                                      SelectionChanged="ChangeDescription">
-                                <ComboBox.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <VirtualizingStackPanel />
-                                    </ItemsPanelTemplate>
-                                </ComboBox.ItemsPanel>
-                            </ComboBox>
-                            <TextBlock x:Name="playerDescription" Text="Use your default exthernal playback program such as Window Media Player or VLC to play anime. Does not support unique feature like sneaky watcher,..."
-                                       FontSize="{DynamicResource Heading3}" TextWrapping="WrapWithOverflow" FontStyle="Italic"
-                                       Foreground="{DynamicResource FileSize}" Margin="25,25,0,0">
-                            </TextBlock>
-                        </StackPanel>
-                        <CheckBox Style="{StaticResource MaterialDesignCheckBox}" VerticalContentAlignment="Center" Margin="25,25,0,0"
-                                  Content="Always play videos in full screen" FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource ForeGroundColor}"/>
-                        <Grid Margin="25,25,0,0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="auto"/>
-                                <ColumnDefinition Width="25"/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="Playback volume:" Foreground="{DynamicResource ForeGroundColor}" 
-                                       FontSize="{DynamicResource Heading3}" VerticalAlignment="Bottom"/>
-                            <Slider Style="{StaticResource MaterialDesignDiscreteSlider}" Grid.Column="2" 
-                                    Minimum="0" Maximum="100"/>
-                        </Grid>
+                        <ComboBox materialDesign:HintAssist.Hint="Player: " Margin="16 0 0 0" Foreground="{DynamicResource ForeGroundColor}" SelectedIndex="0"
+                                    ItemsSource="{Binding Players}" Style="{StaticResource MaterialDesignFloatingHintComboBox}" FontSize="{DynamicResource Heading3}"
+                                    SelectionChanged="ChangeDescription">
+                            <ComboBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <VirtualizingStackPanel />
+                                </ItemsPanelTemplate>
+                            </ComboBox.ItemsPanel>
+                        </ComboBox>
+                        <TextBlock x:Name="playerDescription" Text="Use your default exthernal playback program such as Window Media Player or VLC to play anime. Does not support unique feature like sneaky watcher,..."
+                                    FontSize="{DynamicResource Heading3}" TextWrapping="WrapWithOverflow" FontStyle="Italic"
+                                    Foreground="{DynamicResource FileSize}" Margin="25,25,0,0">
+                        </TextBlock>
                     </StackPanel>
+                    <CheckBox Style="{StaticResource MaterialDesignCheckBox}" VerticalContentAlignment="Center" Margin="25,25,0,0"
+                                Content="Always play videos in full screen" FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource ForeGroundColor}"/>
+                    <Grid Margin="25,25,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="25"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Playback volume:" Foreground="{DynamicResource ForeGroundColor}" 
+                                    FontSize="{DynamicResource Heading3}" VerticalAlignment="Bottom"/>
+                        <Slider Style="{StaticResource MaterialDesignDiscreteSlider}" Grid.Column="2" 
+                                Minimum="0" Maximum="100"/>
+                    </Grid>
+                </StackPanel>
 
-                    <StackPanel Style="{StaticResource downloadSection}">
-                        <TextBlock Text="On-screen drawing: " FontSize="{DynamicResource Heading2}"/>
-                        <TextBlock Text="On-screen drawing make your drawing over playback video"
-                                       FontSize="{DynamicResource Heading3}" TextWrapping="WrapWithOverflow" FontStyle="Italic"
-                                       Foreground="{DynamicResource FileSize}" Margin="25,0,0,0"/>
-                        <StackPanel Margin="25,0,0,0">
-                            <CheckBox Content="Enable on-screen drawing" Foreground="{DynamicResource ForeGroundColor}"
-                                      x:Name="onscrDraw" FontSize="{DynamicResource Heading3}" Margin="0,25,0,0"/>
-                            <StackPanel IsEnabled="{Binding ElementName=onscrDraw, Path=IsChecked}">
-                                <StackPanel Orientation="Horizontal" >
-                                    <Button x:Name="textColor" Style="{StaticResource MaterialDesignFlatButton}" 
-                                        Width="100" Height="50">
-                                        <Rectangle Fill="{DynamicResource ForeGroundColor}"
-                                               Width="100" Height="50"/>
-                                    </Button>
+                <StackPanel Style="{StaticResource downloadSection}">
+                    <TextBlock Text="On-screen drawing: " FontSize="{DynamicResource Heading2}"/>
+                    <TextBlock Text="On-screen drawing make your drawing over playback video"
+                                    FontSize="{DynamicResource Heading3}" TextWrapping="WrapWithOverflow" FontStyle="Italic"
+                                    Foreground="{DynamicResource FileSize}" Margin="25,0,0,0"/>
+                    <StackPanel Margin="25,0,0,0">
+                        <CheckBox Content="Enable on-screen drawing" Foreground="{DynamicResource ForeGroundColor}"
+                                    x:Name="onscrDraw" FontSize="{DynamicResource Heading3}" Margin="0,25,0,0"/>
+                        <StackPanel IsEnabled="{Binding ElementName=onscrDraw, Path=IsChecked}">
+                            <StackPanel Orientation="Horizontal" >
+                                <Button x:Name="textColor" Style="{StaticResource MaterialDesignFlatButton}" 
+                                    Width="100" Height="50">
+                                    <Rectangle Fill="{DynamicResource ForeGroundColor}"
+                                            Width="100" Height="50"/>
+                                </Button>
 
-                                    <TextBlock Text="Pen Brush" Foreground="{DynamicResource ForeGroundColor}"
-                                           VerticalAlignment="Center" Margin="25,0,0,0"/>
-                                    <Button Style="{StaticResource MaterialDesignFlatButton}" ToolTip="Reset">
-                                        <materialDesign:PackIcon Kind="BackupRestore" Foreground="{DynamicResource ForeGroundColor}"/>
-                                    </Button>
-                                </StackPanel>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="auto"/>
-                                        <ColumnDefinition Width="25"/>
-                                        <ColumnDefinition/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Text="Brush Thickness: " Foreground="{DynamicResource ForeGroundColor}"
-                                               FontSize="{DynamicResource Heading3}" VerticalAlignment="Bottom"/>
-                                    <Slider Style="{StaticResource MaterialDesignDiscreteSlider}" Grid.Column="2"/>
-                                </Grid>
+                                <TextBlock Text="Pen Brush" Foreground="{DynamicResource ForeGroundColor}"
+                                        VerticalAlignment="Center" Margin="25,0,0,0"/>
+                                <Button Style="{StaticResource MaterialDesignFlatButton}" ToolTip="Reset">
+                                    <materialDesign:PackIcon Kind="BackupRestore" Foreground="{DynamicResource ForeGroundColor}"/>
+                                </Button>
                             </StackPanel>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="25"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Brush Thickness: " Foreground="{DynamicResource ForeGroundColor}"
+                                            FontSize="{DynamicResource Heading3}" VerticalAlignment="Bottom"/>
+                                <Slider Style="{StaticResource MaterialDesignDiscreteSlider}" Grid.Column="2"/>
+                            </Grid>
                         </StackPanel>
                     </StackPanel>
+                </StackPanel>
 
-                    <StackPanel Style="{StaticResource downloadSection}">
-                        <TextBlock Text="Sneaky Watcher: " FontSize="{DynamicResource Heading2}"/>
-                        <TextBlock Text="Sneaky Watcher is a UAD add-on to hide and disguide the playback to trick your boss, parent and teacher "
-                                   Foreground="{DynamicResource FileSize}" FontSize="{DynamicResource Heading3}" TextWrapping="WrapWithOverflow"/>
+                <StackPanel Style="{StaticResource downloadSection}">
+                    <TextBlock Text="Sneaky Watcher: " FontSize="{DynamicResource Heading2}"/>
+                    <TextBlock Text="Sneaky Watcher is a UAD add-on to hide and disguide the playback to trick your boss, parent and teacher "
+                                Foreground="{DynamicResource FileSize}" FontSize="{DynamicResource Heading3}" TextWrapping="WrapWithOverflow"/>
+                    <StackPanel Margin="25,25,0,0">
+                        <CheckBox Content="Enable Sneaky Watcher" FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource ForeGroundColor}"/>
+                        <CheckBox Content="Toggle Orange border to indicate Sneaky Watcher" FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource ForeGroundColor}"/>
+                        <PasswordBox materialDesign:HintAssist.Hint="Master Password:" FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource ForeGroundColor}"
+                                        Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" />
+                        <TextBlock Text="Password is required when you tried to unactivate the sneaky watcher feature"
+                                    FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource FileSize}"/>
+                        <CheckBox Content="Change app icon when Sneaky Watcher feature activate" FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource ForeGroundColor}"/>
+                        <CheckBox Content="Pause video when Sneaky Watcher active" FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource ForeGroundColor}" IsChecked="True"/>
+
+                        <TextBlock Text="Screen blocker" Margin="0,25,0,0" Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}"/>
+                        <TextBlock Text="Make your video block by an Image or a solid color when you press a special key"
+                                    Foreground="{DynamicResource FileSize}" FontSize="{DynamicResource Heading3}"/>
                         <StackPanel Margin="25,25,0,0">
-                            <CheckBox Content="Enable Sneaky Watcher" FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource ForeGroundColor}"/>
-                            <CheckBox Content="Toggle Orange border to indicate Sneaky Watcher" FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource ForeGroundColor}"/>
-                            <PasswordBox materialDesign:HintAssist.Hint="Master Password:" FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource ForeGroundColor}"
-                                         Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" />
-                            <TextBlock Text="Password is required when you tried to unactivate the sneaky watcher feature"
-                                       FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource FileSize}"/>
-                            <CheckBox Content="Change app icon when Sneaky Watcher feature activate" FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource ForeGroundColor}"/>
-                            <CheckBox Content="Pause video when Sneaky Watcher active" FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource ForeGroundColor}" IsChecked="True"/>
-
-                            <TextBlock Text="Screen blocker" Margin="0,25,0,0" Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}"/>
-                            <TextBlock Text="Make your video block by an Image or a solid color when you press a special key"
-                                       Foreground="{DynamicResource FileSize}" FontSize="{DynamicResource Heading3}"/>
-                            <StackPanel Margin="25,25,0,0">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="auto"/>
-                                        <ColumnDefinition/>
-                                        <ColumnDefinition Width="100"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Text="Toggle Key: " FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource ForeGroundColor}"/>
-                                    <Border Grid.Column="2" BorderThickness="1" BorderBrush="{DynamicResource ForeGroundColor}"
-                                            Background="Black">
-                                        <TextBlock Text="B" Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}"
-                                                   VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                    </Border>
-                                </Grid>
-
-                                <TextBlock Text="Blocker Content: " Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}" Margin="0,25,0,0"/>
-                                <StackPanel Margin="25,25,0,0">
-                                    <RadioButton Content="Solid Color" Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}"/>
-                                    <StackPanel Orientation="Horizontal" >
-                                        <Button x:Name="blockerColor" Style="{StaticResource MaterialDesignFlatButton}" 
-                                        Width="100" Height="50">
-                                            <Rectangle Fill="{DynamicResource ForeGroundColor}"
-                                               Width="100" Height="50"/>
-                                        </Button>
-
-                                        <TextBlock Text="Blocker Color" Foreground="{DynamicResource ForeGroundColor}"
-                                           VerticalAlignment="Center" Margin="25,0,0,0"/>
-                                        <Button Style="{StaticResource MaterialDesignFlatButton}" ToolTip="Reset">
-                                            <materialDesign:PackIcon Kind="BackupRestore" Foreground="{DynamicResource ForeGroundColor}"/>
-                                        </Button>
-                                    </StackPanel>
-
-                                    <RadioButton Content="Image" Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}" Margin="0,25,0,0"/>
-                                    <StackPanel>
-                                        <Border Height="200" Width="360" BorderBrush="{DynamicResource ForeGroundColor}" BorderThickness="1" HorizontalAlignment="Left"/>
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition/>
-                                                <ColumnDefinition Width="60"/>
-                                            </Grid.ColumnDefinitions>
-                                            <TextBox Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="{DynamicResource ForeGroundColor}"
-                                                     materialDesign:HintAssist.Hint="Image Location:" FontSize="{DynamicResource Heading3}"/>
-                                            <Button Width="50" Grid.Column="1">
-                                                <materialDesign:PackIcon Kind="File" />
-                                            </Button>
-                                        </Grid>
-                                        <ComboBox x:Name="stretchMode" materialDesign:HintAssist.Hint="Stretch Mode: " Style="{StaticResource MaterialDesignFloatingHintComboBox}"
-                                                  Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}">
-                                            <ComboBox.ItemsPanel>
-                                                <ItemsPanelTemplate>
-                                                    <VirtualizingStackPanel />
-                                                </ItemsPanelTemplate>
-                                            </ComboBox.ItemsPanel>
-                                        </ComboBox>
-                                    </StackPanel>
-                                </StackPanel>
-                            </StackPanel>
-                            <TextBlock Text="Fake App-Crash" Margin="0,25,0,0"
-                                           Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}"/>
-                            <TextBlock Text="This feature will make a fake crash dialog message and add a white overlay screen. If user click close the program, a fake window error report will pop up and user can't close the fake dialog unless user press the unique key"
-                                       TextWrapping="WrapWithOverflow" FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource FileSize}"/>
-                            <StackPanel Margin="25,25,0,0">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="auto"/>
-                                        <ColumnDefinition/>
-                                        <ColumnDefinition Width="100"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Text="Toggle Key: " FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource ForeGroundColor}"/>
-                                    <Border Grid.Column="2" BorderThickness="1" BorderBrush="{DynamicResource ForeGroundColor}"
-                                            Background="Black">
-                                        <TextBlock Text="C" Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}"
-                                                   VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                    </Border>
-                                </Grid>
-
-                                <CheckBox Content="Make user can't swich app when fake app crash is activate"
-                                          Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}"/>
-                                <CheckBox Content="Disable Alt+F4"
-                                          Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}"/>
-                            </StackPanel>
-                            <TextBlock Text="Background Player" Margin="0,25,0,0"
-                                           Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}"/>
-                            <TextBlock Text="Make window that play the video disapear to the taskbar icon"
-                                       Foreground="{DynamicResource FileSize}" FontSize="{DynamicResource Heading3}"/>
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="auto"/>
@@ -215,15 +130,98 @@
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="Toggle Key: " FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource ForeGroundColor}"/>
                                 <Border Grid.Column="2" BorderThickness="1" BorderBrush="{DynamicResource ForeGroundColor}"
-                                            Background="Black">
-                                    <TextBlock Text="V" Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}"
-                                                   VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                        Background="Black">
+                                    <TextBlock Text="B" Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}"
+                                                VerticalAlignment="Center" HorizontalAlignment="Center"/>
                                 </Border>
                             </Grid>
+
+                            <TextBlock Text="Blocker Content: " Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}" Margin="0,25,0,0"/>
+                            <StackPanel Margin="25,25,0,0">
+                                <RadioButton Content="Solid Color" Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}"/>
+                                <StackPanel Orientation="Horizontal" >
+                                    <Button x:Name="blockerColor" Style="{StaticResource MaterialDesignFlatButton}" 
+                                    Width="100" Height="50">
+                                        <Rectangle Fill="{DynamicResource ForeGroundColor}"
+                                            Width="100" Height="50"/>
+                                    </Button>
+
+                                    <TextBlock Text="Blocker Color" Foreground="{DynamicResource ForeGroundColor}"
+                                        VerticalAlignment="Center" Margin="25,0,0,0"/>
+                                    <Button Style="{StaticResource MaterialDesignFlatButton}" ToolTip="Reset">
+                                        <materialDesign:PackIcon Kind="BackupRestore" Foreground="{DynamicResource ForeGroundColor}"/>
+                                    </Button>
+                                </StackPanel>
+
+                                <RadioButton Content="Image" Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}" Margin="0,25,0,0"/>
+                                <StackPanel>
+                                    <Border Height="200" Width="360" BorderBrush="{DynamicResource ForeGroundColor}" BorderThickness="1" HorizontalAlignment="Left"/>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition Width="60"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBox Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="{DynamicResource ForeGroundColor}"
+                                                    materialDesign:HintAssist.Hint="Image Location:" FontSize="{DynamicResource Heading3}"/>
+                                        <Button Width="50" Grid.Column="1">
+                                            <materialDesign:PackIcon Kind="File" />
+                                        </Button>
+                                    </Grid>
+                                    <ComboBox x:Name="stretchMode" materialDesign:HintAssist.Hint="Stretch Mode: " Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                                                Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}">
+                                        <ComboBox.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <VirtualizingStackPanel />
+                                            </ItemsPanelTemplate>
+                                        </ComboBox.ItemsPanel>
+                                    </ComboBox>
+                                </StackPanel>
+                            </StackPanel>
                         </StackPanel>
+                        <TextBlock Text="Fake App-Crash" Margin="0,25,0,0"
+                                        Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}"/>
+                        <TextBlock Text="This feature will make a fake crash dialog message and add a white overlay screen. If user click close the program, a fake window error report will pop up and user can't close the fake dialog unless user press the unique key"
+                                    TextWrapping="WrapWithOverflow" FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource FileSize}"/>
+                        <StackPanel Margin="25,25,0,0">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="100"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Toggle Key: " FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource ForeGroundColor}"/>
+                                <Border Grid.Column="2" BorderThickness="1" BorderBrush="{DynamicResource ForeGroundColor}"
+                                        Background="Black">
+                                    <TextBlock Text="C" Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}"
+                                                VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                </Border>
+                            </Grid>
+
+                            <CheckBox Content="Make user can't swich app when fake app crash is activate"
+                                        Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}"/>
+                            <CheckBox Content="Disable Alt+F4"
+                                        Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}"/>
+                        </StackPanel>
+                        <TextBlock Text="Background Player" Margin="0,25,0,0"
+                                        Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}"/>
+                        <TextBlock Text="Make window that play the video disapear to the taskbar icon"
+                                    Foreground="{DynamicResource FileSize}" FontSize="{DynamicResource Heading3}"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="100"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Toggle Key: " FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource ForeGroundColor}"/>
+                            <Border Grid.Column="2" BorderThickness="1" BorderBrush="{DynamicResource ForeGroundColor}"
+                                        Background="Black">
+                                <TextBlock Text="V" Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}"
+                                                VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            </Border>
+                        </Grid>
                     </StackPanel>
                 </StackPanel>
-            </ScrollViewer>
-        </Grid>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Page>

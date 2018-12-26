@@ -55,85 +55,142 @@
                         </Style>
                     </StackPanel.Resources>
                     <Rectangle Height="2" Fill="{DynamicResource ForeGroundColor}"/>
-                    <TreeView>
-                        <TreeViewItem >
-                            <TreeViewItem.Header>
-                                <Grid MouseLeftButtonDown="NavigateToExplore" Width="240">
-                                    <Rectangle />
-                                    <StackPanel Orientation="Horizontal">
-                                        <materialDesign:PackIcon Kind="Earth"/>
-                                        <TextBlock Text=" Explore"/>
-                                    </StackPanel>
-                                </Grid>
-                            </TreeViewItem.Header>
-                            <TreeViewItem>
+                    <ScrollViewer Height="300">
+                        <TreeView>
+                            <TreeViewItem >
                                 <TreeViewItem.Header>
-                                    <Grid MouseLeftButtonDown="NavigateToExplore" Width="220">
+                                    <Grid MouseLeftButtonDown="NavigateToExplore" Width="240">
                                         <Rectangle />
                                         <StackPanel Orientation="Horizontal">
-                                            <materialDesign:PackIcon Kind="Star"/>
-                                            <TextBlock Text=" Featured"/>
+                                            <materialDesign:PackIcon Kind="Earth"/>
+                                            <TextBlock Text=" Explore"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </TreeViewItem.Header>
+                                <TreeViewItem>
+                                    <TreeViewItem.Header>
+                                        <Grid MouseLeftButtonDown="NavigateToExplore" Width="220">
+                                            <Rectangle />
+                                            <StackPanel Orientation="Horizontal">
+                                                <materialDesign:PackIcon Kind="Star"/>
+                                                <TextBlock Text=" Featured"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </TreeViewItem.Header>
+                                </TreeViewItem>
+                                <TreeViewItem>
+                                    <TreeViewItem.Header>
+                                        <Grid MouseLeftButtonDown="NavigateToExplore" Width="220">
+                                            <Rectangle />
+                                            <StackPanel Orientation="Horizontal">
+                                                <materialDesign:PackIcon Kind="Account"/>
+                                                <TextBlock Text=" You May Like"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </TreeViewItem.Header>
+                                </TreeViewItem>
+                                <TreeViewItem>
+                                    <TreeViewItem.Header>
+                                        <Grid MouseLeftButtonDown="NavigateToAllAnime" Width="220">
+                                            <Rectangle />
+                                            <StackPanel Orientation="Horizontal">
+                                                <materialDesign:PackIcon Kind="FormatListBulleted"/>
+                                                <TextBlock Text=" All Anime"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </TreeViewItem.Header>
+                                </TreeViewItem>
+                            </TreeViewItem>
+                            <TreeViewItem>
+                                <TreeViewItem.Header>
+                                    <Grid MouseLeftButtonDown="NavigateToMyAnime" Width="240">
+                                        <Rectangle />
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="Book"/>
+                                            <TextBlock Text=" My Anime Library"/>
                                         </StackPanel>
                                     </Grid>
                                 </TreeViewItem.Header>
                             </TreeViewItem>
                             <TreeViewItem>
                                 <TreeViewItem.Header>
-                                    <Grid MouseLeftButtonDown="NavigateToExplore" Width="220">
+                                    <Grid MouseLeftButtonDown="NavigateToExplore" Width="240">
                                         <Rectangle />
                                         <StackPanel Orientation="Horizontal">
-                                            <materialDesign:PackIcon Kind="Account"/>
-                                            <TextBlock Text=" You May Like"/>
+                                            <materialDesign:PackIcon Kind="Bell"/>
+                                            <TextBlock Text=" Nofications"/>
                                         </StackPanel>
                                     </Grid>
                                 </TreeViewItem.Header>
                             </TreeViewItem>
                             <TreeViewItem>
                                 <TreeViewItem.Header>
-                                    <Grid MouseLeftButtonDown="NavigateToAllAnime" Width="220">
+                                    <Grid MouseLeftButtonDown="NavigateToGeneralSetting" Width="240">
                                         <Rectangle />
                                         <StackPanel Orientation="Horizontal">
-                                            <materialDesign:PackIcon Kind="FormatListBulleted"/>
-                                            <TextBlock Text=" All Anime"/>
+                                            <materialDesign:PackIcon Kind="Settings"/>
+                                            <TextBlock Text=" Settings"/>
                                         </StackPanel>
                                     </Grid>
                                 </TreeViewItem.Header>
+                                <TreeViewItem>
+                                    <TreeViewItem.Header>
+                                        <Grid MouseLeftButtonDown="NavigateToGeneralSetting" Width="240">
+                                            <Rectangle />
+                                            <StackPanel Orientation="Horizontal">
+                                                <materialDesign:PackIcon Kind="DipSwitch"/>
+                                                <TextBlock Text=" General"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </TreeViewItem.Header>
+                                </TreeViewItem>
+                                <TreeViewItem>
+                                    <TreeViewItem.Header>
+                                        <Grid MouseLeftButtonDown="NavigateToGeneralSetting" Width="240">
+                                            <Rectangle />
+                                            <StackPanel Orientation="Horizontal">
+                                                <materialDesign:PackIcon Kind="AccountSettings"/>
+                                                <TextBlock Text=" Account"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </TreeViewItem.Header>
+                                </TreeViewItem>
+                                <TreeViewItem>
+                                    <TreeViewItem.Header>
+                                        <Grid MouseLeftButtonDown="NavigateToGeneralSetting" Width="240">
+                                            <Rectangle />
+                                            <StackPanel Orientation="Horizontal">
+                                                <materialDesign:PackIcon Kind="WindowRestore" />
+                                                <TextBlock Text=" Appearance"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </TreeViewItem.Header>
+                                </TreeViewItem>
+                                <TreeViewItem>
+                                    <TreeViewItem.Header>
+                                        <Grid MouseLeftButtonDown="NavigateToGeneralSetting" Width="240">
+                                            <Rectangle />
+                                            <StackPanel Orientation="Horizontal">
+                                                <materialDesign:PackIcon Kind="Download"/>
+                                                <TextBlock Text=" Download"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </TreeViewItem.Header>
+                                </TreeViewItem>
+                                <TreeViewItem>
+                                    <TreeViewItem.Header>
+                                        <Grid MouseLeftButtonDown="NavigateToGeneralSetting" Width="240">
+                                            <Rectangle />
+                                            <StackPanel Orientation="Horizontal">
+                                                <materialDesign:PackIcon Kind="PlayBoxOutline" />
+                                                <TextBlock Text=" Playback"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </TreeViewItem.Header>
+                                </TreeViewItem>
                             </TreeViewItem>
-                        </TreeViewItem>
-                        <TreeViewItem>
-                            <TreeViewItem.Header>
-                                <Grid MouseLeftButtonDown="NavigateToMyAnime" Width="240">
-                                    <Rectangle />
-                                    <StackPanel Orientation="Horizontal">
-                                        <materialDesign:PackIcon Kind="Book"/>
-                                        <TextBlock Text=" My Anime Library"/>
-                                    </StackPanel>
-                                </Grid>
-                            </TreeViewItem.Header>
-                        </TreeViewItem>
-                        <TreeViewItem>
-                            <TreeViewItem.Header>
-                                <Grid MouseLeftButtonDown="NavigateToExplore" Width="240">
-                                    <Rectangle />
-                                    <StackPanel Orientation="Horizontal">
-                                        <materialDesign:PackIcon Kind="Bell"/>
-                                        <TextBlock Text=" Nofications"/>
-                                    </StackPanel>
-                                </Grid>
-                            </TreeViewItem.Header>
-                        </TreeViewItem>
-                        <TreeViewItem>
-                            <TreeViewItem.Header>
-                                <Grid MouseLeftButtonDown="NavigateToGeneralSetting" Width="240">
-                                    <Rectangle />
-                                    <StackPanel Orientation="Horizontal">
-                                        <materialDesign:PackIcon Kind="Settings"/>
-                                        <TextBlock Text=" Settings"/>
-                                    </StackPanel>
-                                </Grid>
-                            </TreeViewItem.Header>
-                        </TreeViewItem>
-                    </TreeView>
+                        </TreeView>
+                    </ScrollViewer>
 
                     <Rectangle Height="2" Fill="{DynamicResource ForeGroundColor}"/>
                     <TextBlock Margin="0,15,0,0" FontSize="{DynamicResource Heading3}" HorizontalAlignment="Center">

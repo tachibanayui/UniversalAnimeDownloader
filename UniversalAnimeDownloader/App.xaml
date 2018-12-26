@@ -739,6 +739,8 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+            
+           
 
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Dark.xaml" />
