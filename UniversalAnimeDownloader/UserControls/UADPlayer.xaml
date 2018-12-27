@@ -3,8 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:extk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:UniversalAnimeDownloader.UserControls"
+             xmlns:proj="clr-namespace:UniversalAnimeDownloader"
              TextElement.Foreground="{DynamicResource MaterialDesignBody}"
              FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
              mc:Ignorable="d" 
@@ -43,7 +45,7 @@
                     <Button Style="{StaticResource FlatControlBtn}" Click="VolumnChange" >
                         <materialDesign:PackIcon Kind="VolumeHigh" Foreground="{DynamicResource ForeGroundColor}"/>
                     </Button>
-                    <Button Style="{StaticResource FlatControlBtn}">
+                    <Button Style="{StaticResource FlatControlBtn}" IsEnabled="{Binding IsDrawingEnabled}" Click="ToggleDrawing">
                         <materialDesign:PackIcon Kind="Pencil" Foreground="{DynamicResource ForeGroundColor}"/>
                     </Button>
                 </StackPanel>
@@ -93,5 +95,121 @@
                 </Border>
             </Popup>
         </Grid>
+        <Canvas x:Name="drawingContainer" Visibility="{Binding InkCanvasVisibility}" Grid.RowSpan="2" MouseMove="HandleDrag" MouseUp="HandleFinishDrag">
+            <Canvas.Resources>
+                <Style TargetType="Grid">
+                    <Style.Triggers>
+                        <EventTrigger RoutedEvent="MouseEnter">
+                            <BeginStoryboard>
+                                <Storyboard Storyboard.TargetProperty="Opacity">
+                                    <DoubleAnimation To="1" Duration="0:0:0.25"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="MouseLeave">
+                            <BeginStoryboard>
+                                <Storyboard Storyboard.TargetProperty="Opacity">
+                                    <DoubleAnimation To="0.5" Duration="0:0:0.25"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Style.Triggers>
+                </Style>
+                <Style TargetType="materialDesign:PackIcon">
+                    <Setter Property="Width" Value="25"/>
+                    <Setter Property="Height" Value="25"/>
+                    <Setter Property="Margin" Value="5"/>
+                    <Style.Triggers>
+                        <Trigger Property="UIElement.IsMouseOver" Value="true">
+                            <Setter Property="BorderBrush" Value="{DynamicResource ForeGroundColor}"/>
+                            <Setter Property="BorderThickness" Value="1"/>
+                            <Setter Property="Background" Value="#5FFFFFFF"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+                <Style TargetType="Border" x:Key="ButtonRemake">
+                    <Style.Triggers>
+                        <Trigger Property="UIElement.IsMouseOver" Value="true">
+                            <Setter Property="BorderBrush" Value="{DynamicResource ForeGroundColor}"/>
+                            <Setter Property="BorderThickness" Value="1"/>
+                            <Setter Property="Background" Value="#5FFFFFFF"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+                <Style TargetType="ToolTip" >
+                    <Setter Property="Background" Value="{DynamicResource Black}"/>
+                    <Setter Property="Foreground" Value="{DynamicResource ForeGroundColor}"/>
+                </Style>
+            </Canvas.Resources>
+            <InkCanvas x:Name="inkCanvas" Background="Transparent" Height="{Binding ElementName=drawingContainer, Path=ActualHeight}"
+                       Width="{Binding ElementName=drawingContainer, Path=ActualWidth}" DefaultDrawingAttributes="{Binding CurrentPen}"/>
+
+            <Grid x:Name="drawingToolbox" Height="200" Width="75" Canvas.Top="25" Canvas.Left="10" Opacity="0.5">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Border Background="{DynamicResource Black}" BorderBrush="{DynamicResource ForeGroundColor}" x:Name="toolBoxBar"
+                        BorderThickness="1" MouseDown="Border_MouseDown">
+                    <materialDesign:PackIcon Kind="Toolbox" Style="{x:Null}" Height="25" Width="25" Margin="5"/>
+                </Border>
+                <Border Grid.Row="1" Background="{DynamicResource Black}" BorderBrush="{DynamicResource ForeGroundColor}" BorderThickness="1">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition Height="50"/>
+                        </Grid.RowDefinitions>
+                        <WrapPanel>
+                            <materialDesign:PackIcon Kind="Select" ToolTip="Select" MouseDown="ToggleSelect"/>
+                            <materialDesign:PackIcon Kind="Pencil" ToolTip="Primary Pen" MouseDown="ChangePen"/>
+                            <materialDesign:PackIcon Kind="Pen" ToolTip="Secondary Pen" MouseDown="ChangePen"/>
+                            <materialDesign:PackIcon Kind="GreasePencil" ToolTip="Highlighter" MouseDown="ChangePen"/>
+                            <materialDesign:PackIcon Kind="Eraser" ToolTip="Eraser" MouseDown="ToggleEraser"/>
+                            <materialDesign:PackIcon Kind="EraserVariant" ToolTip="Erase Stroke" MouseDown="ToggleEraser"/>
+                        </WrapPanel>
+
+                        <Border Grid.Row="1" VerticalAlignment="Bottom" Style="{StaticResource ButtonRemake}" 
+                                ToolTip="Close On-Screen Drawing" MouseDown="CloseDrawing">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="PencilOff" VerticalAlignment="Bottom"
+                                                     Height="{DynamicResource Heading4}" Width="{DynamicResource Heading4}"/>
+                                <TextBlock Text="Close" FontSize="{DynamicResource Heading4}" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <Grid x:Name="colorSelector" Width="235" Height="353" Canvas.Top="25" Canvas.Right="10" Opacity=".5">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Border Background="{DynamicResource Black}" BorderBrush="{DynamicResource ForeGroundColor}" 
+                        BorderThickness="1" MouseDown="ColorSelectorBar_MouseDown">
+                    <Grid>
+                        <materialDesign:PackIcon Kind="FormatColorFill" Style="{x:Null}" Height="25" Width="25" Margin="5"/>
+                        <TextBlock Text="Colors" Margin="40,0,0,0"/>
+                    </Grid>
+                </Border>
+                <Border Grid.Row="1" Background="{DynamicResource Black}" BorderBrush="{DynamicResource ForeGroundColor}" BorderThickness="1">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <extk:ColorCanvas x:Name="colorCanvas" Background="Transparent" SelectedColorChanged="ChangeColor"/>
+                        <StackPanel Orientation="Vertical" Grid.Row="1" Margin="5">
+                            <TextBlock Text="Stroke Thickness:" FontSize="18"/>
+                            <Slider x:Name="strokeThicknessSlider" Maximum="100" ValueChanged="ChangePenBrushThickness"
+                                    Value="{x:Static proj:SettingsValues.PrimaryBurshThickness}"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+            </Grid>
+            
+        </Canvas>
+
     </Grid>
 </UserControl>
