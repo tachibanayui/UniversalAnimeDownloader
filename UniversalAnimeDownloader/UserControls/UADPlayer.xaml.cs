@@ -1,6 +1,8 @@
 ﻿using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +12,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Ink;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
@@ -30,6 +33,7 @@ namespace UniversalAnimeDownloader.UserControls
         private bool isToolboxBarHold = false;
         private bool isColorBarHold = false;
         private Point mouseOffsetToBar = new Point();
+        private string lastCapImgLocation;
 
         public Uri VideoUri
         {
@@ -42,6 +46,31 @@ namespace UniversalAnimeDownloader.UserControls
         }
         public static readonly DependencyProperty VideoUriProperty =
             DependencyProperty.Register("VideoUri", typeof(Uri), typeof(UADPlayer), new PropertyMetadata());
+
+        public Thickness CaptureOffset
+        {
+            get { return (Thickness)GetValue(CaptureOffsetProperty); }
+            set { SetValue(CaptureOffsetProperty, value); }
+        }
+        public static readonly DependencyProperty CaptureOffsetProperty =
+            DependencyProperty.Register("CaptureOffset", typeof(Thickness), typeof(UADPlayer), new PropertyMetadata(new Thickness(10, 70, 20, 90)));
+
+        public bool ShowWatermask
+        {
+            get { return (bool)GetValue(ShowWatermaskProperty); }
+            set { SetValue(ShowWatermaskProperty, value); }
+        }
+        public static readonly DependencyProperty ShowWatermaskProperty =
+            DependencyProperty.Register("ShowWatermask", typeof(bool), typeof(UADPlayer), new PropertyMetadata(true));
+
+        public string ImageLibraryLocation
+        {
+            get { return (string)GetValue(ImageLibraryLocationProperty); }
+            set { SetValue(ImageLibraryLocationProperty, value); }
+        }
+        public static readonly DependencyProperty ImageLibraryLocationProperty =
+            DependencyProperty.Register("ImageLibraryLocation", typeof(string), typeof(UADPlayer), new PropertyMetadata(string.Empty));
+
 
 
         private bool isPlaying = true;
@@ -195,6 +224,7 @@ namespace UniversalAnimeDownloader.UserControls
 
         private void ChangePenBrushThickness(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
+
             DrawingAttributes tempAttib = null;
 
             if (inkCanvas.DefaultDrawingAttributes == VM.PrimaryPen)
@@ -271,5 +301,50 @@ namespace UniversalAnimeDownloader.UserControls
 
         public event EventHandler<RequestingWindowStateEventArgs> RequestWindowState;
         protected virtual void OnRequestWindowState(WindowState state) => RequestWindowState?.Invoke(this, new RequestingWindowStateEventArgs() { RequestState = state });
+
+        private async void TakePicture(object sender, MouseButtonEventArgs e)
+        {
+            colorSelector.Visibility = Visibility.Collapsed;
+            drawingToolbox.Visibility = Visibility.Collapsed;
+            if(ShowWatermask)
+                uadWatermark.Visibility =  Visibility.Visible;
+            await Task.Delay(10);
+            await CaptureWindow();
+            colorSelector.Visibility = Visibility.Visible;
+            drawingToolbox.Visibility = Visibility.Visible;
+            if(ShowWatermask)
+                uadWatermark.Visibility = Visibility.Collapsed;
+            snackBar.IsActive = true;
+        }
+        private async Task CaptureWindow()
+        {
+            //Capture
+            var screenBound = System.Windows.Forms.Screen.PrimaryScreen.Bounds;
+            var windowHost = Window.GetWindow(this);
+            Point winLoc = new Point(windowHost.Left + CaptureOffset.Left, windowHost.Top + CaptureOffset.Top);
+            Point winFin = new Point(windowHost.Width - CaptureOffset.Right, windowHost.Height - CaptureOffset.Bottom);
+            await Task.Delay(50);
+            var picture = Common.CopyScreen(new System.Drawing.Rectangle((int)winLoc.X, (int)winLoc.Y, (int)winFin.X, (int)winFin.Y));
+
+            capturedImg.Source = picture;
+            showCapturedImg.Visibility = Visibility.Visible;
+            //Save img
+            string fileName = "Captured Image " + DateTime.Now.ToLongDateString() + ", " + DateTime.Now.ToLongTimeString().Replace(':', '-') + ".png";
+            string fileLocation = System.IO.Path.Combine(ImageLibraryLocation, fileName);
+
+            if (!Directory.Exists(ImageLibraryLocation))
+                Directory.CreateDirectory(ImageLibraryLocation);
+            FileStream fs = new FileStream(fileLocation, FileMode.Create);
+            PngBitmapEncoder encoder = new PngBitmapEncoder();
+            encoder.Frames.Add(BitmapFrame.Create(picture));
+            encoder.Save(fs);
+            fs.Close();
+
+            lastCapImgLocation = fileLocation;
+        }
+
+        private void ShowImageExthernal(object sender, RoutedEventArgs e) => Process.Start(lastCapImgLocation);
+
+        private void CloseImagePreview(object sender, MouseButtonEventArgs e) => showCapturedImg.Visibility = Visibility.Collapsed;
     }
 }

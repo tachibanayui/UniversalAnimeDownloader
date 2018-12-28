@@ -278,7 +278,8 @@
                 </Button>
                 
             </StackPanel>
-            <userControl:UADPlayer x:Name="uadEmbededPlayer" Grid.Row="1" Grid.RowSpan="2"/>
+            <userControl:UADPlayer x:Name="uadEmbededPlayer" Grid.Row="1" Grid.RowSpan="2" 
+                                   ImageLibraryLocation="E:\Testlib\"/>
         </Grid>
 
 

@@ -144,7 +144,7 @@
             <InkCanvas x:Name="inkCanvas" Background="Transparent" Height="{Binding ElementName=drawingContainer, Path=ActualHeight}"
                        Width="{Binding ElementName=drawingContainer, Path=ActualWidth}" DefaultDrawingAttributes="{Binding CurrentPen}"/>
 
-            <Grid x:Name="drawingToolbox" Height="200" Width="75" Canvas.Top="25" Canvas.Left="10" Opacity="0.5">
+            <Grid x:Name="drawingToolbox" Height="250" Width="75" Canvas.Top="25" Canvas.Left="10" Opacity="0.5">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30"/>
                     <RowDefinition/>
@@ -166,6 +166,7 @@
                             <materialDesign:PackIcon Kind="GreasePencil" ToolTip="Highlighter" MouseDown="ChangePen"/>
                             <materialDesign:PackIcon Kind="Eraser" ToolTip="Eraser" MouseDown="ToggleEraser"/>
                             <materialDesign:PackIcon Kind="EraserVariant" ToolTip="Erase Stroke" MouseDown="ToggleEraser"/>
+                            <materialDesign:PackIcon Kind="Export" ToolTip="Take Picture" MouseDown="TakePicture"/>
                         </WrapPanel>
 
                         <Border Grid.Row="1" VerticalAlignment="Bottom" Style="{StaticResource ButtonRemake}" 
@@ -201,15 +202,33 @@
                         <extk:ColorCanvas x:Name="colorCanvas" Background="Transparent" SelectedColorChanged="ChangeColor"/>
                         <StackPanel Orientation="Vertical" Grid.Row="1" Margin="5">
                             <TextBlock Text="Stroke Thickness:" FontSize="18"/>
-                            <Slider x:Name="strokeThicknessSlider" Maximum="100" ValueChanged="ChangePenBrushThickness"
+                            <Slider x:Name="strokeThicknessSlider" Minimum="2" Maximum="100" ValueChanged="ChangePenBrushThickness"
                                     Value="{x:Static proj:SettingsValues.PrimaryBurshThickness}"/>
                         </StackPanel>
                     </Grid>
                 </Border>
 
             </Grid>
-            
-        </Canvas>
 
+            <StackPanel x:Name="uadWatermark" Canvas.Bottom="25" Canvas.Right="25" Height="75" Width="520" Visibility="Collapsed">
+                <TextBlock Text="Capture with:" Foreground="{DynamicResource ForeGroundColor}" Opacity="0.5" HorizontalAlignment="Right"/>
+                <TextBlock Text="Universal Anime Downloader" Foreground="{DynamicResource ForeGroundColor}" Opacity="0.5"
+                           FontSize="{DynamicResource Heading}"/>
+            </StackPanel>
+
+
+        </Canvas>
+        <Grid x:Name="showCapturedImg" Grid.RowSpan="2" Visibility="Collapsed">
+            <Image x:Name="capturedImg" MouseDown="CloseImagePreview"/>
+            <materialDesign:Snackbar x:Name="snackBar" VerticalAlignment="Bottom" Height="50" MessageQueue="{materialDesign:MessageQueue}"
+                                     IsActive="False" Background="{DynamicResource Black}">
+                <materialDesign:SnackbarMessage Content="Image Saved! Click the image to close preview" ActionClick="ShowImageExthernal"
+                                                Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}">
+                    <materialDesign:SnackbarMessage.ActionContent>
+                        <TextBlock Text="View Image Exthernal" Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}"/>
+                    </materialDesign:SnackbarMessage.ActionContent>
+                </materialDesign:SnackbarMessage>
+            </materialDesign:Snackbar>
+        </Grid>
     </Grid>
 </UserControl>

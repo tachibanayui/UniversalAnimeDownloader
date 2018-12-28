@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Interop;
 using System.Windows.Media.Animation;
+using System.Windows.Media.Imaging;
 
 namespace UniversalAnimeDownloader
 {
@@ -67,6 +71,35 @@ namespace UniversalAnimeDownloader
         {
             double milli = a.TotalMilliseconds * b;
             return TimeSpan.FromMilliseconds(milli);
+        }
+
+
+        public static BitmapSource CopyScreen(Rectangle cropRect)
+        {
+            using (var screenBmp = new Bitmap(
+                (int)SystemParameters.PrimaryScreenWidth,
+                (int)SystemParameters.PrimaryScreenHeight,
+                PixelFormat.Format32bppArgb))
+            {
+                using (var bmpGraphics = Graphics.FromImage(screenBmp))
+                {
+                    bmpGraphics.CopyFromScreen(0, 0, 0, 0, screenBmp.Size);
+
+                    Bitmap target = new Bitmap(cropRect.Width, cropRect.Height);
+
+                    using (Graphics g = Graphics.FromImage(target))
+                    {
+                        g.DrawImage(screenBmp, new Rectangle(0, 0, target.Width, target.Height),
+                                         cropRect,
+                                         GraphicsUnit.Pixel);
+                    }
+                    return Imaging.CreateBitmapSourceFromHBitmap(
+                        target.GetHbitmap(),
+                        IntPtr.Zero,
+                        Int32Rect.Empty,
+                        BitmapSizeOptions.FromEmptyOptions());
+                }
+            }
         }
     }
 }
