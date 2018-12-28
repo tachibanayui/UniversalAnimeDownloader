@@ -20,18 +20,45 @@
         </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition/>
-            <RowDefinition Height="200"/>
+            <RowDefinition Height="300"/>
         </Grid.RowDefinitions>
         <MediaElement x:Name="mediaPlayer" Grid.RowSpan="2" Volume="{Binding MediaElementVolume}"
-                      LoadedBehavior="Manual" MediaOpened="mediaPlayer_MediaOpened"/>
+                      LoadedBehavior="Manual" MediaOpened="mediaPlayer_MediaOpened" MouseDown="ToggleCotrollerBar"/>
 
         <Grid x:Name="controller" Grid.Row="1">
             <Grid.RowDefinitions>
-                <RowDefinition/>
+                <RowDefinition Height="2*"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <Rectangle x:Name="gradientBG" Grid.RowSpan="2"/>
+            <Rectangle x:Name="gradientBG" Grid.RowSpan="2" RenderTransformOrigin="0.5,0.5" IsHitTestVisible="False">
+                <Rectangle.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="180"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Rectangle.RenderTransform>
+                <Rectangle.Fill>
+                    <LinearGradientBrush x:Name="controllerBackgroundGradient" EndPoint="0,.5">
+                        <GradientStop Color="#00000000" Offset="1"/>
+                        <GradientStop Color="Black" Offset="0"/>
+                    </LinearGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+            <Grid Margin="5" x:Name="grdFilmProperty" Opacity="0"
+                  VerticalAlignment="Bottom" MouseDown="ToggleCotrollerBar">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Image x:Name="imgAnimeThumbnail" Stretch="Uniform" IsHitTestVisible="False"/>
+                <StackPanel Grid.Column="1" IsHitTestVisible="False">
+                    <TextBlock x:Name="txblTitle" Text="Test Title" FontSize="{DynamicResource Heading}" FontWeight="SemiBold" />
+                    <TextBlock x:Name="txblDes" Text="Test Description" FontSize="{DynamicResource Heading3}" TextWrapping="WrapWithOverflow" Height="44"/>
+                </StackPanel>
+            </Grid>
             <Grid Grid.Row="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="2*"/>
@@ -56,7 +83,7 @@
                     <Button Style="{StaticResource FlatControlBtn}" Click="Back10Sec">
                         <materialDesign:PackIcon Kind="StepBackward" Foreground="{DynamicResource ForeGroundColor}"/>
                     </Button>
-                    <Button Style="{StaticResource FlatControlBtn}" Click="PlayPauseButton_Click">
+                    <Button x:Name="btnPlayPause" Style="{StaticResource FlatControlBtn}" Click="PlayPauseButton_Click">
                         <materialDesign:PackIcon Kind="Pause" Foreground="{DynamicResource ForeGroundColor}"/>
                     </Button>
                     <Button Style="{StaticResource FlatControlBtn}" Click="Forward30Sec">
@@ -215,9 +242,8 @@
                 <TextBlock Text="Universal Anime Downloader" Foreground="{DynamicResource ForeGroundColor}" Opacity="0.5"
                            FontSize="{DynamicResource Heading}"/>
             </StackPanel>
-
-
         </Canvas>
+
         <Grid x:Name="showCapturedImg" Grid.RowSpan="2" Visibility="Collapsed">
             <Image x:Name="capturedImg" MouseDown="CloseImagePreview"/>
             <materialDesign:Snackbar x:Name="snackBar" VerticalAlignment="Bottom" Height="50" MessageQueue="{materialDesign:MessageQueue}"

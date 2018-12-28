@@ -73,7 +73,6 @@ namespace UniversalAnimeDownloader
             return TimeSpan.FromMilliseconds(milli);
         }
 
-
         public static BitmapSource CopyScreen(Rectangle cropRect)
         {
             using (var screenBmp = new Bitmap(
@@ -101,5 +100,22 @@ namespace UniversalAnimeDownloader
                 }
             }
         }
+
+        public static void FadeInAnimation(UIElement target, Duration duration, bool removePreviousAnimation = true)
+        {
+            DoubleAnimation animation = new DoubleAnimation(1, duration);
+            if(removePreviousAnimation)
+                target.BeginAnimation(UIElement.OpacityProperty, null);
+            target.BeginAnimation(UIElement.OpacityProperty, animation);
+        }
+
+        public static void FadeOutAnimation(UIElement target, Duration duration, bool removePreviousAnimation = true)
+        {
+            DoubleAnimation animation = new DoubleAnimation(0, duration);
+            if(removePreviousAnimation)
+                target.BeginAnimation(UIElement.OpacityProperty, null);
+            target.BeginAnimation(UIElement.OpacityProperty, animation);
+        }
+
     }
 }

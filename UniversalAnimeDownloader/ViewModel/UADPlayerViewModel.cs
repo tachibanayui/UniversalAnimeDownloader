@@ -71,7 +71,6 @@ namespace UniversalAnimeDownloader.ViewModel
             }
         }
 
-        
         public DrawingAttributes PrimaryPen
         {
             get { return new DrawingAttributes() { Color = SettingsValues.PrimaryPenColor, Width = SettingsValues.PrimaryBurshThickness, Height = SettingsValues.PrimaryBurshThickness }; }

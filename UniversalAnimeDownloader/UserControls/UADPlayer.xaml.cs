@@ -14,6 +14,7 @@ using System.Windows.Ink;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -26,19 +27,39 @@ namespace UniversalAnimeDownloader.UserControls
     /// </summary>
     public partial class UADPlayer : UserControl
     {
+        #region Fields and Properties
         public UADPlayerViewModel VM;
         public TimeSpan MediaDuration;
         private bool isSeekSliderLocked = false;
 
+        private Random rand = new Random();
         private bool isToolboxBarHold = false;
         private bool isColorBarHold = false;
         private Point mouseOffsetToBar = new Point();
         private string lastCapImgLocation;
+        private int currentHideControllerTimeOutID;
 
+        private bool isControllerVisible;
+        private bool IsControllerVisible
+        {
+            get { return isControllerVisible; }
+            set
+            {
+                if(isControllerVisible != value)
+                {
+                    isControllerVisible = value;
+                    HideControllerTimeout(rand.Next(1, 100));
+                }
+            }
+        }
+        #endregion
+
+        #region Dependency Properties
         public Uri VideoUri
         {
             get { return (Uri)GetValue(VideoUriProperty); }
-            set {
+            set
+            {
                 SetValue(VideoUriProperty, value);
                 mediaPlayer.Source = value;
                 mediaPlayer.Play();
@@ -71,7 +92,42 @@ namespace UniversalAnimeDownloader.UserControls
         public static readonly DependencyProperty ImageLibraryLocationProperty =
             DependencyProperty.Register("ImageLibraryLocation", typeof(string), typeof(UADPlayer), new PropertyMetadata(string.Empty));
 
+        public ImageSource AnimeThumbnail
+        {
+            get { return (ImageSource)GetValue(AnimeThumbnailProperty); }
+            set
+            {
+                SetValue(AnimeThumbnailProperty, value);
+                imgAnimeThumbnail.Source = value;
+            }
+        }
+        public static readonly DependencyProperty AnimeThumbnailProperty =
+            DependencyProperty.Register("AnimeThumbnail", typeof(ImageSource), typeof(UADPlayer), new PropertyMetadata());
 
+        public string Title
+        {
+            get { return (string)GetValue(TitleProperty); }
+            set
+            {
+                SetValue(TitleProperty, value);
+                txblTitle.Text = value;
+            }
+        }
+        public static readonly DependencyProperty TitleProperty =
+            DependencyProperty.Register("Title", typeof(string), typeof(UADPlayer), new PropertyMetadata("Title"));
+
+        public string SubbedTitle
+        {
+            get { return (string)GetValue(SubbedTitleProperty); }
+            set
+            {
+                SetValue(SubbedTitleProperty, value);
+                txblDes.Text = value;
+            }
+        }
+        public static readonly DependencyProperty SubbedTitleProperty =
+            DependencyProperty.Register("SubbedTitle", typeof(string), typeof(UADPlayer), new PropertyMetadata("Description")); 
+        #endregion
 
         private bool isPlaying = true;
         public UADPlayer()
@@ -81,6 +137,37 @@ namespace UniversalAnimeDownloader.UserControls
             DataContext = VM;
             mediaPlayer.Source = VideoUri;
             mediaPlayer.Play();
+            Loaded += (s, e) => AssignProperty();
+            isControllerVisible = true;
+        }
+
+        private async void HideControllerTimeout(int timeoutID)
+        {
+            currentHideControllerTimeOutID = timeoutID;
+            int timeoutLeft = 5000;
+
+            while (true)
+            {
+                await Task.Delay(100);
+                if (timeoutID != currentHideControllerTimeOutID || controller.Opacity < 0.01)
+                    return;
+                else
+                    timeoutLeft -= 100;
+
+                if(timeoutLeft == 0)
+                {
+                    Common.FadeOutAnimation(controller, TimeSpan.FromSeconds(.5), false);
+                    return;
+                }
+            }
+        }
+
+        #region PlayerGeneralControler
+        private void AssignProperty()
+        {
+            imgAnimeThumbnail.Source = AnimeThumbnail;
+            txblTitle.Text = Title;
+            txblDes.Text = SubbedTitle;
         }
 
         private void PlayPauseButton_Click(object sender, RoutedEventArgs e)
@@ -92,11 +179,17 @@ namespace UniversalAnimeDownloader.UserControls
             {
                 mediaPlayer.Pause();
                 pkIcon.Kind = PackIconKind.Play;
+                Common.FadeInAnimation(grdFilmProperty, TimeSpan.FromSeconds(0.25), false);
+                PointAnimation animation = new PointAnimation(new Point(0, 1), TimeSpan.FromSeconds(0.25));
+                controllerBackgroundGradient.BeginAnimation(LinearGradientBrush.EndPointProperty, animation);
             }
             else
             {
                 mediaPlayer.Play();
                 pkIcon.Kind = PackIconKind.Pause;
+                Common.FadeOutAnimation(grdFilmProperty, TimeSpan.FromSeconds(0.25), false);
+                PointAnimation animation = new PointAnimation(new Point(0, .5), TimeSpan.FromSeconds(0.25));
+                controllerBackgroundGradient.BeginAnimation(LinearGradientBrush.EndPointProperty, animation);
             }
             isPlaying = !isPlaying;
         }
@@ -158,8 +251,8 @@ namespace UniversalAnimeDownloader.UserControls
 
             VM.InkCanvasVisibility = Visibility.Visible;
             inkCanvas.DefaultDrawingAttributes = VM.PrimaryPen;
-        }
-
+        } 
+        #endregion
 
         #region On-screen Drawing
 
@@ -295,27 +388,22 @@ namespace UniversalAnimeDownloader.UserControls
             Canvas.SetRight(colorSelector, 0);
             colorCanvas.IsHitTestVisible = false;
         }
-        #endregion
-
-
-
-        public event EventHandler<RequestingWindowStateEventArgs> RequestWindowState;
-        protected virtual void OnRequestWindowState(WindowState state) => RequestWindowState?.Invoke(this, new RequestingWindowStateEventArgs() { RequestState = state });
 
         private async void TakePicture(object sender, MouseButtonEventArgs e)
         {
             colorSelector.Visibility = Visibility.Collapsed;
             drawingToolbox.Visibility = Visibility.Collapsed;
-            if(ShowWatermask)
-                uadWatermark.Visibility =  Visibility.Visible;
+            if (ShowWatermask)
+                uadWatermark.Visibility = Visibility.Visible;
             await Task.Delay(10);
             await CaptureWindow();
             colorSelector.Visibility = Visibility.Visible;
             drawingToolbox.Visibility = Visibility.Visible;
-            if(ShowWatermask)
+            if (ShowWatermask)
                 uadWatermark.Visibility = Visibility.Collapsed;
             snackBar.IsActive = true;
         }
+
         private async Task CaptureWindow()
         {
             //Capture
@@ -346,5 +434,19 @@ namespace UniversalAnimeDownloader.UserControls
         private void ShowImageExthernal(object sender, RoutedEventArgs e) => Process.Start(lastCapImgLocation);
 
         private void CloseImagePreview(object sender, MouseButtonEventArgs e) => showCapturedImg.Visibility = Visibility.Collapsed;
+        #endregion
+
+        public event EventHandler<RequestingWindowStateEventArgs> RequestWindowState;
+        protected virtual void OnRequestWindowState(WindowState state) => RequestWindowState?.Invoke(this, new RequestingWindowStateEventArgs() { RequestState = state });
+
+        private void ToggleCotrollerBar(object sender, MouseButtonEventArgs e)
+        {
+            if (IsControllerVisible)
+                Common.FadeOutAnimation(controller, TimeSpan.FromSeconds(.5), false);
+            else
+                Common.FadeInAnimation(controller, TimeSpan.FromSeconds(.5), false);
+
+            IsControllerVisible = !IsControllerVisible;
+        }
     }
 }

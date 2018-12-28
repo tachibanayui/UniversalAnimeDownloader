@@ -279,7 +279,8 @@
                 
             </StackPanel>
             <userControl:UADPlayer x:Name="uadEmbededPlayer" Grid.Row="1" Grid.RowSpan="2" 
-                                   ImageLibraryLocation="E:\Testlib\"/>
+                                   ImageLibraryLocation="E:\Testlib\" Title="Kunoichi Demo Koi ga Shitai"
+                                   SubbedTitle="Off vocal version"/>
         </Grid>
 
 
