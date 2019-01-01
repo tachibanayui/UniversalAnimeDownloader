@@ -9,7 +9,6 @@ namespace UniversalAnimeDownloader
 {
     static class SettingsValues
     {
-
         #region PlayblackSetting
         private static double playbackVolume = 100;
         public static double PlaybackVolume
@@ -34,6 +33,35 @@ namespace UniversalAnimeDownloader
                 if(isDrawingEnabled != value)
                 {
                     isDrawingEnabled = value;
+                    UpdateSetting();
+                }
+            }
+        }
+
+        private static bool isSneakyWatherEnabled = true;
+        public static bool IsSneakyWatcherEnabled
+        {
+            get { return isSneakyWatherEnabled; }
+            set
+            {
+                if(isDrawingEnabled != value)
+                {
+                    isDrawingEnabled = value;
+                    UpdateSetting();
+                }
+            }
+        }
+
+        private static bool isSneakyWatcherBorderEnabled = true;
+        public static bool IsSneakyWatcherBorderEnabled
+        {
+            get { return isSneakyWatcherBorderEnabled; }
+
+            set
+            {
+                if (isSneakyWatcherBorderEnabled != value)
+                {
+                    isSneakyWatcherBorderEnabled = value;
                     UpdateSetting();
                 }
             }
@@ -126,7 +154,25 @@ namespace UniversalAnimeDownloader
         }
         #endregion
 
+        #region Sneaky Watcher Settings
+        private static Color blockerColor = Colors.Black;
+        public static Color BlockerColor
+        {
+            get { return blockerColor; }
+            set
+            {
+                if(blockerColor != value)
+                {
+                    blockerColor = value;
+                    UpdateSetting();
+                }
+            }
+        }
         #endregion
+
+        #endregion
+
+
 
         private static void UpdateSetting()
         {

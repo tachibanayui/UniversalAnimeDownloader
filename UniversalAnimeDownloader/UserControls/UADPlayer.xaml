@@ -9,252 +9,338 @@
              xmlns:proj="clr-namespace:UniversalAnimeDownloader"
              TextElement.Foreground="{DynamicResource MaterialDesignBody}"
              FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
-             mc:Ignorable="d" 
+             mc:Ignorable="d" Focusable="True"
+             MouseDown="FocusToThis"
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Margin="5">
-        <Grid.Resources>
-            <Style x:Key="FlatControlBtn" TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatButton}">
-                <Setter Property="Width" Value="50"/>
-                <Setter Property="Height" Value="50"/>
-            </Style>
-        </Grid.Resources>
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition Height="300"/>
-        </Grid.RowDefinitions>
-        <MediaElement x:Name="mediaPlayer" Grid.RowSpan="2" Volume="{Binding MediaElementVolume}"
+    <UserControl.CommandBindings>
+        <CommandBinding Command="proj:CustomCommands.ScreenBlockerHotkey"
+                        CanExecute="CheckAvaibility"
+                        Executed="AcivateScreenBlocker"/>
+        
+        <CommandBinding Command="proj:CustomCommands.FakeAppCrashHotkey"
+                        CanExecute="CheckAvaibility"
+                        Executed="AcivateFakeAppCrash"/>
+        <CommandBinding Command="proj:CustomCommands.BackgroundPlayerHotkey"
+                        CanExecute="CheckAvaibility"
+                        Executed="AcivateBackgroundPlayer"/>
+    </UserControl.CommandBindings>
+    <Border BorderThickness="{Binding PlayerBorderThickness}" BorderBrush="OrangeRed">
+        <Grid Margin="5">
+            <Grid.Resources>
+                <Style x:Key="FlatControlBtn" TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatButton}">
+                    <Setter Property="Width" Value="50"/>
+                    <Setter Property="Height" Value="50"/>
+                </Style>
+            </Grid.Resources>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="300"/>
+            </Grid.RowDefinitions>
+            <MediaElement x:Name="mediaPlayer" Grid.RowSpan="2" Volume="{Binding MediaElementVolume}"
                       LoadedBehavior="Manual" MediaOpened="mediaPlayer_MediaOpened" MouseDown="ToggleCotrollerBar"/>
 
-        <Grid x:Name="controller" Grid.Row="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="2*"/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-
-            <Rectangle x:Name="gradientBG" Grid.RowSpan="2" RenderTransformOrigin="0.5,0.5" IsHitTestVisible="False">
-                <Rectangle.RenderTransform>
-                    <TransformGroup>
-                        <ScaleTransform/>
-                        <SkewTransform/>
-                        <RotateTransform Angle="180"/>
-                        <TranslateTransform/>
-                    </TransformGroup>
-                </Rectangle.RenderTransform>
-                <Rectangle.Fill>
-                    <LinearGradientBrush x:Name="controllerBackgroundGradient" EndPoint="0,.5">
-                        <GradientStop Color="#00000000" Offset="1"/>
-                        <GradientStop Color="Black" Offset="0"/>
-                    </LinearGradientBrush>
-                </Rectangle.Fill>
-            </Rectangle>
-            <Grid Margin="5" x:Name="grdFilmProperty" Opacity="0"
-                  VerticalAlignment="Bottom" MouseDown="ToggleCotrollerBar">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="150"/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <Image x:Name="imgAnimeThumbnail" Stretch="Uniform" IsHitTestVisible="False"/>
-                <StackPanel Grid.Column="1" IsHitTestVisible="False">
-                    <TextBlock x:Name="txblTitle" Text="Test Title" FontSize="{DynamicResource Heading}" FontWeight="SemiBold" />
-                    <TextBlock x:Name="txblDes" Text="Test Description" FontSize="{DynamicResource Heading3}" TextWrapping="WrapWithOverflow" Height="44"/>
-                </StackPanel>
-            </Grid>
-            <Grid Grid.Row="1">
+            <Grid x:Name="controller" Grid.Row="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="2*"/>
-                    <RowDefinition Height="3*"/>
+                    <RowDefinition/>
                 </Grid.RowDefinitions>
-                <Slider Maximum="1" Value="{Binding SeekLocation}" x:Name="seekSlider" PreviewMouseLeftButtonUp="ChangePosition" LargeChange="0"
-                        PreviewMouseLeftButtonDown="LockSeekSlider"/>
-                <TextBlock x:Name="txblMediaPos" Text="0:00:00" FontSize="14" VerticalAlignment="Bottom"/>
-                <TextBlock x:Name="txblMediaLength" Text="0:24:00" FontSize="14" VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
-                <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="25,0,0,0">
-                    <Button Style="{StaticResource FlatControlBtn}" Click="VolumnChange" >
-                        <materialDesign:PackIcon Kind="VolumeHigh" Foreground="{DynamicResource ForeGroundColor}"/>
-                    </Button>
-                    <Button Style="{StaticResource FlatControlBtn}" IsEnabled="{Binding IsDrawingEnabled}" Click="ToggleDrawing">
-                        <materialDesign:PackIcon Kind="Pencil" Foreground="{DynamicResource ForeGroundColor}"/>
-                    </Button>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1">
-                    <Button Style="{StaticResource FlatControlBtn}">
-                        <materialDesign:PackIcon Kind="SkipBackward" Foreground="{DynamicResource ForeGroundColor}"/>
-                    </Button>
-                    <Button Style="{StaticResource FlatControlBtn}" Click="Back10Sec">
-                        <materialDesign:PackIcon Kind="StepBackward" Foreground="{DynamicResource ForeGroundColor}"/>
-                    </Button>
-                    <Button x:Name="btnPlayPause" Style="{StaticResource FlatControlBtn}" Click="PlayPauseButton_Click">
-                        <materialDesign:PackIcon Kind="Pause" Foreground="{DynamicResource ForeGroundColor}"/>
-                    </Button>
-                    <Button Style="{StaticResource FlatControlBtn}" Click="Forward30Sec">
-                        <materialDesign:PackIcon Kind="StepForward" Foreground="{DynamicResource ForeGroundColor}"/>
-                    </Button>
-                    <Button Style="{StaticResource FlatControlBtn}">
-                        <materialDesign:PackIcon Kind="SkipForward" Foreground="{DynamicResource ForeGroundColor}"/>
-                    </Button>
-                </StackPanel>
 
-                <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right" Margin="0,0,25,0">
-                    <Button Style="{StaticResource FlatControlBtn}" Click="ChangeWindowState">
-                        <materialDesign:PackIcon Kind="ArrowExpand" Foreground="{DynamicResource ForeGroundColor}"/>
-                    </Button>
-                    <Button Style="{StaticResource FlatControlBtn}">
-                        <materialDesign:PackIcon Kind="LockOutline" Foreground="{DynamicResource ForeGroundColor}"/>
-                    </Button>
-                    <Button Style="{StaticResource FlatControlBtn}">
-                        <materialDesign:PackIcon Kind="DotsHorizontal" Foreground="{DynamicResource ForeGroundColor}"/>
-                    </Button>
-                </StackPanel>
-            </Grid>
-            <Popup x:Name="VolumeChanger" Grid.RowSpan="2" HorizontalAlignment="Left" 
-                   Width="260" Height="60" Placement="Mouse" MouseLeave="CloseVolumePopup">
-                <Border BorderBrush="{DynamicResource ForeGroundColor}" BorderThickness="1">
-                    <Grid Background="{DynamicResource Black}">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Button Style="{StaticResource FlatControlBtn}" Click="VolumnChange" Margin="5,0,0,0">
+                <Rectangle x:Name="gradientBG" Grid.RowSpan="2" RenderTransformOrigin="0.5,0.5" IsHitTestVisible="False">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="180"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush x:Name="controllerBackgroundGradient" EndPoint="0,.5">
+                            <GradientStop Color="#00000000" Offset="1"/>
+                            <GradientStop Color="Black" Offset="0"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+                <Grid Margin="5" x:Name="grdFilmProperty" Opacity="0"
+                  VerticalAlignment="Bottom" MouseDown="ToggleCotrollerBar">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Image x:Name="imgAnimeThumbnail" Stretch="Uniform" IsHitTestVisible="False"/>
+                    <StackPanel Grid.Column="1" IsHitTestVisible="False">
+                        <TextBlock x:Name="txblTitle" Text="Test Title" FontSize="{DynamicResource Heading}" FontWeight="SemiBold" />
+                        <TextBlock x:Name="txblDes" Text="Test Description" FontSize="{DynamicResource Heading3}" TextWrapping="WrapWithOverflow" Height="44"/>
+                    </StackPanel>
+                </Grid>
+                <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="2*"/>
+                        <RowDefinition Height="3*"/>
+                    </Grid.RowDefinitions>
+                    <Slider Maximum="1" Value="{Binding SeekLocation}" x:Name="seekSlider" PreviewMouseLeftButtonUp="ChangePosition" LargeChange="0"
+                        PreviewMouseLeftButtonDown="LockSeekSlider"/>
+                    <TextBlock x:Name="txblMediaPos" Text="0:00:00" FontSize="14" VerticalAlignment="Bottom"/>
+                    <TextBlock x:Name="txblMediaLength" Text="0:24:00" FontSize="14" VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
+                    <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="25,0,0,0">
+                        <Button Style="{StaticResource FlatControlBtn}" Click="VolumnChange" >
                             <materialDesign:PackIcon Kind="VolumeHigh" Foreground="{DynamicResource ForeGroundColor}"/>
                         </Button>
-                        <Slider x:Name="newTest" Value="{Binding PlayerVolume}"  VerticalAlignment="Center" Maximum="100" Grid.Column="1" Margin="0,0,10,0"/>
-                    </Grid>
-                </Border>
-            </Popup>
-        </Grid>
-        <Canvas x:Name="drawingContainer" Visibility="{Binding InkCanvasVisibility}" Grid.RowSpan="2" MouseMove="HandleDrag" MouseUp="HandleFinishDrag">
-            <Canvas.Resources>
-                <Style TargetType="Grid">
-                    <Style.Triggers>
-                        <EventTrigger RoutedEvent="MouseEnter">
-                            <BeginStoryboard>
-                                <Storyboard Storyboard.TargetProperty="Opacity">
-                                    <DoubleAnimation To="1" Duration="0:0:0.25"/>
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </EventTrigger>
-                        <EventTrigger RoutedEvent="MouseLeave">
-                            <BeginStoryboard>
-                                <Storyboard Storyboard.TargetProperty="Opacity">
-                                    <DoubleAnimation To="0.5" Duration="0:0:0.25"/>
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </EventTrigger>
-                    </Style.Triggers>
-                </Style>
-                <Style TargetType="materialDesign:PackIcon">
-                    <Setter Property="Width" Value="25"/>
-                    <Setter Property="Height" Value="25"/>
-                    <Setter Property="Margin" Value="5"/>
-                    <Style.Triggers>
-                        <Trigger Property="UIElement.IsMouseOver" Value="true">
-                            <Setter Property="BorderBrush" Value="{DynamicResource ForeGroundColor}"/>
-                            <Setter Property="BorderThickness" Value="1"/>
-                            <Setter Property="Background" Value="#5FFFFFFF"/>
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-                <Style TargetType="Border" x:Key="ButtonRemake">
-                    <Style.Triggers>
-                        <Trigger Property="UIElement.IsMouseOver" Value="true">
-                            <Setter Property="BorderBrush" Value="{DynamicResource ForeGroundColor}"/>
-                            <Setter Property="BorderThickness" Value="1"/>
-                            <Setter Property="Background" Value="#5FFFFFFF"/>
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-                <Style TargetType="ToolTip" >
-                    <Setter Property="Background" Value="{DynamicResource Black}"/>
-                    <Setter Property="Foreground" Value="{DynamicResource ForeGroundColor}"/>
-                </Style>
-            </Canvas.Resources>
-            <InkCanvas x:Name="inkCanvas" Background="Transparent" Height="{Binding ElementName=drawingContainer, Path=ActualHeight}"
+                        <Button Style="{StaticResource FlatControlBtn}" IsEnabled="{Binding IsDrawingEnabled}" Click="ToggleDrawing">
+                            <materialDesign:PackIcon Kind="Pencil" Foreground="{DynamicResource ForeGroundColor}"/>
+                        </Button>
+                        <Button Style="{StaticResource FlatControlBtn}" IsEnabled="{Binding IsDrawingEnabled}" Click="VideoSpeedChange_Popup">
+                            <materialDesign:PackIcon Kind="Timelapse" Foreground="{DynamicResource ForeGroundColor}"/>
+                        </Button>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1">
+                        <Button Style="{StaticResource FlatControlBtn}">
+                            <materialDesign:PackIcon Kind="SkipBackward" Foreground="{DynamicResource ForeGroundColor}"/>
+                        </Button>
+                        <Button Style="{StaticResource FlatControlBtn}" Click="Back10Sec">
+                            <materialDesign:PackIcon Kind="StepBackward" Foreground="{DynamicResource ForeGroundColor}"/>
+                        </Button>
+                        <Button x:Name="btnPlayPause" Style="{StaticResource FlatControlBtn}" Click="PlayPauseButton_Click">
+                            <materialDesign:PackIcon Kind="Pause" Foreground="{DynamicResource ForeGroundColor}"/>
+                        </Button>
+                        <Button Style="{StaticResource FlatControlBtn}" Click="Forward30Sec">
+                            <materialDesign:PackIcon Kind="StepForward" Foreground="{DynamicResource ForeGroundColor}"/>
+                        </Button>
+                        <Button Style="{StaticResource FlatControlBtn}">
+                            <materialDesign:PackIcon Kind="SkipForward" Foreground="{DynamicResource ForeGroundColor}"/>
+                        </Button>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right" Margin="0,0,25,0">
+                        <Button Style="{StaticResource FlatControlBtn}" Click="ChangeWindowState">
+                            <materialDesign:PackIcon Kind="ArrowExpand" Foreground="{DynamicResource ForeGroundColor}"/>
+                        </Button>
+                        <materialDesign:PopupBox Width="50" IsEnabled="{Binding IsSneakyWatcherEnabled}" x:Name="popupBoxSneakyWatcher">
+                            <materialDesign:PopupBox.ToggleContent>
+                                <materialDesign:PackIcon Kind="LockOutline" Foreground="{DynamicResource ForeGroundColor}"/>
+                            </materialDesign:PopupBox.ToggleContent>
+                            <StackPanel>
+                                <Button Click="ScreenBlocker_Click">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto"/>
+                                            <ColumnDefinition Width="10"/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <materialDesign:PackIcon Kind="BlockHelper" FontSize="{DynamicResource Heading3}"
+                                               Foreground="{DynamicResource ForeGroundColor}" VerticalAlignment="Center"/>
+                                        <TextBlock Text="Activate Screen Blocker" FontSize="{DynamicResource Heading3}"
+                                               Foreground="{DynamicResource ForeGroundColor}" Grid.Column="2" VerticalAlignment="Center"/>
+                                    </Grid>
+                                </Button>
+                                <Button Click="FakeAppCrash_Click">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto"/>
+                                            <ColumnDefinition Width="10"/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <materialDesign:PackIcon Kind="ImageBrokenVariant" FontSize="{DynamicResource Heading3}"
+                                               Foreground="{DynamicResource ForeGroundColor}" VerticalAlignment="Center"/>
+                                        <TextBlock Text="Fake App Crash" FontSize="{DynamicResource Heading3}"
+                                               Foreground="{DynamicResource ForeGroundColor}" Grid.Column="2" VerticalAlignment="Center"/>
+                                    </Grid>
+                                </Button>
+                                <Button Click="BackgroundPlayer_Click">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto"/>
+                                            <ColumnDefinition Width="10"/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <materialDesign:PackIcon Kind="Incognito" FontSize="{DynamicResource Heading3}"
+                                               Foreground="{DynamicResource ForeGroundColor}" VerticalAlignment="Center"/>
+                                        <TextBlock Text="Activate BackgroundPlayer" FontSize="{DynamicResource Heading3}"
+                                               Foreground="{DynamicResource ForeGroundColor}" Grid.Column="2" VerticalAlignment="Center"/>
+                                    </Grid>
+                                </Button>
+                            </StackPanel>
+                        </materialDesign:PopupBox>
+                        <Button Style="{StaticResource FlatControlBtn}">
+                            <materialDesign:PackIcon Kind="DotsHorizontal" Foreground="{DynamicResource ForeGroundColor}"/>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+                <Popup x:Name="VolumeChanger" Grid.RowSpan="2" HorizontalAlignment="Left" 
+                   Width="260" Height="60" Placement="Mouse" MouseLeave="CloseVolumePopup">
+                    <Border BorderBrush="{DynamicResource ForeGroundColor}" BorderThickness="1">
+                        <Grid Background="{DynamicResource Black}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Button Style="{StaticResource FlatControlBtn}" Click="VolumnChange" Margin="5,0,0,0">
+                                <materialDesign:PackIcon Kind="VolumeHigh" Foreground="{DynamicResource ForeGroundColor}"/>
+                            </Button>
+                            <Slider x:Name="newTest" Value="{Binding PlayerVolume}"  VerticalAlignment="Center" Maximum="100" Grid.Column="1" Margin="0,0,10,0"/>
+                        </Grid>
+                    </Border>
+                </Popup>
+
+                <Popup x:Name="VideoSpeedChanger" Grid.RowSpan="2" HorizontalAlignment="Left" 
+                   Width="260" Height="60" Placement="Mouse" MouseLeave="CloseVideoSpeedPopup">
+                    <Border BorderBrush="{DynamicResource ForeGroundColor}" BorderThickness="1">
+                        <Grid Background="{DynamicResource Black}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="60"/>
+                            </Grid.ColumnDefinitions>
+                            <Button Style="{StaticResource FlatControlBtn}" Click="VolumnChange" Margin="5,0,0,0">
+                                <materialDesign:PackIcon Kind="Timelapse" Foreground="{DynamicResource ForeGroundColor}"/>
+                            </Button>
+                            <Slider x:Name="speedSlider" Value="1" VerticalAlignment="Center" Minimum="0.25" Maximum="2"
+                                Grid.Column="1" Margin="0,0,10,0" Thumb.DragCompleted="ChangePlaySpeedSlider" />
+                            <TextBlock Text="{Binding ElementName=speedSlider, Path=Value, StringFormat='0.00'}"
+                                   Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" 
+                                   Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}"/>
+                        </Grid>
+                    </Border>
+                </Popup>
+            </Grid>
+            <Canvas x:Name="drawingContainer" Visibility="{Binding InkCanvasVisibility}" Grid.RowSpan="2" MouseMove="HandleDrag" MouseUp="HandleFinishDrag">
+                <Canvas.Resources>
+                    <Style TargetType="Grid">
+                        <Style.Triggers>
+                            <EventTrigger RoutedEvent="MouseEnter">
+                                <BeginStoryboard>
+                                    <Storyboard Storyboard.TargetProperty="Opacity">
+                                        <DoubleAnimation To="1" Duration="0:0:0.25"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                            <EventTrigger RoutedEvent="MouseLeave">
+                                <BeginStoryboard>
+                                    <Storyboard Storyboard.TargetProperty="Opacity">
+                                        <DoubleAnimation To="0.5" Duration="0:0:0.25"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </Style.Triggers>
+                    </Style>
+                    <Style TargetType="materialDesign:PackIcon">
+                        <Setter Property="Width" Value="25"/>
+                        <Setter Property="Height" Value="25"/>
+                        <Setter Property="Margin" Value="5"/>
+                        <Style.Triggers>
+                            <Trigger Property="UIElement.IsMouseOver" Value="true">
+                                <Setter Property="BorderBrush" Value="{DynamicResource ForeGroundColor}"/>
+                                <Setter Property="BorderThickness" Value="1"/>
+                                <Setter Property="Background" Value="#5FFFFFFF"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                    <Style TargetType="Border" x:Key="ButtonRemake">
+                        <Style.Triggers>
+                            <Trigger Property="UIElement.IsMouseOver" Value="true">
+                                <Setter Property="BorderBrush" Value="{DynamicResource ForeGroundColor}"/>
+                                <Setter Property="BorderThickness" Value="1"/>
+                                <Setter Property="Background" Value="#5FFFFFFF"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                    <Style TargetType="ToolTip" >
+                        <Setter Property="Background" Value="{DynamicResource Black}"/>
+                        <Setter Property="Foreground" Value="{DynamicResource ForeGroundColor}"/>
+                    </Style>
+                </Canvas.Resources>
+                <InkCanvas x:Name="inkCanvas" Background="Transparent" Height="{Binding ElementName=drawingContainer, Path=ActualHeight}"
                        Width="{Binding ElementName=drawingContainer, Path=ActualWidth}" DefaultDrawingAttributes="{Binding CurrentPen}"/>
 
-            <Grid x:Name="drawingToolbox" Height="250" Width="75" Canvas.Top="25" Canvas.Left="10" Opacity="0.5">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <Border Background="{DynamicResource Black}" BorderBrush="{DynamicResource ForeGroundColor}" x:Name="toolBoxBar"
+                <Grid x:Name="drawingToolbox" Height="250" Width="75" Canvas.Top="25" Canvas.Left="10" Opacity="0.5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Border Background="{DynamicResource Black}" BorderBrush="{DynamicResource ForeGroundColor}" x:Name="toolBoxBar"
                         BorderThickness="1" MouseDown="Border_MouseDown">
-                    <materialDesign:PackIcon Kind="Toolbox" Style="{x:Null}" Height="25" Width="25" Margin="5"/>
-                </Border>
-                <Border Grid.Row="1" Background="{DynamicResource Black}" BorderBrush="{DynamicResource ForeGroundColor}" BorderThickness="1">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition Height="50"/>
-                        </Grid.RowDefinitions>
-                        <WrapPanel>
-                            <materialDesign:PackIcon Kind="Select" ToolTip="Select" MouseDown="ToggleSelect"/>
-                            <materialDesign:PackIcon Kind="Pencil" ToolTip="Primary Pen" MouseDown="ChangePen"/>
-                            <materialDesign:PackIcon Kind="Pen" ToolTip="Secondary Pen" MouseDown="ChangePen"/>
-                            <materialDesign:PackIcon Kind="GreasePencil" ToolTip="Highlighter" MouseDown="ChangePen"/>
-                            <materialDesign:PackIcon Kind="Eraser" ToolTip="Eraser" MouseDown="ToggleEraser"/>
-                            <materialDesign:PackIcon Kind="EraserVariant" ToolTip="Erase Stroke" MouseDown="ToggleEraser"/>
-                            <materialDesign:PackIcon Kind="Export" ToolTip="Take Picture" MouseDown="TakePicture"/>
-                        </WrapPanel>
+                        <materialDesign:PackIcon Kind="Toolbox" Style="{x:Null}" Height="25" Width="25" Margin="5"/>
+                    </Border>
+                    <Border Grid.Row="1" Background="{DynamicResource Black}" BorderBrush="{DynamicResource ForeGroundColor}" BorderThickness="1">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition Height="50"/>
+                            </Grid.RowDefinitions>
+                            <WrapPanel>
+                                <materialDesign:PackIcon Kind="Select" ToolTip="Select" MouseDown="ToggleSelect"/>
+                                <materialDesign:PackIcon Kind="Pencil" ToolTip="Primary Pen" MouseDown="ChangePen"/>
+                                <materialDesign:PackIcon Kind="Pen" ToolTip="Secondary Pen" MouseDown="ChangePen"/>
+                                <materialDesign:PackIcon Kind="GreasePencil" ToolTip="Highlighter" MouseDown="ChangePen"/>
+                                <materialDesign:PackIcon Kind="Eraser" ToolTip="Eraser" MouseDown="ToggleEraser"/>
+                                <materialDesign:PackIcon Kind="EraserVariant" ToolTip="Erase Stroke" MouseDown="ToggleEraser"/>
+                                <materialDesign:PackIcon Kind="Export" ToolTip="Take Picture" MouseDown="TakePicture"/>
+                            </WrapPanel>
 
-                        <Border Grid.Row="1" VerticalAlignment="Bottom" Style="{StaticResource ButtonRemake}" 
+                            <Border Grid.Row="1" VerticalAlignment="Bottom" Style="{StaticResource ButtonRemake}" 
                                 ToolTip="Close On-Screen Drawing" MouseDown="CloseDrawing">
-                            <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Kind="PencilOff" VerticalAlignment="Bottom"
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="PencilOff" VerticalAlignment="Bottom"
                                                      Height="{DynamicResource Heading4}" Width="{DynamicResource Heading4}"/>
-                                <TextBlock Text="Close" FontSize="{DynamicResource Heading4}" VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </Border>
-                    </Grid>
-                </Border>
-            </Grid>
+                                    <TextBlock Text="Close" FontSize="{DynamicResource Heading4}" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </Border>
+                </Grid>
 
-            <Grid x:Name="colorSelector" Width="235" Height="353" Canvas.Top="25" Canvas.Right="10" Opacity=".5">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <Border Background="{DynamicResource Black}" BorderBrush="{DynamicResource ForeGroundColor}" 
+                <Grid x:Name="colorSelector" Width="235" Height="353" Canvas.Top="25" Canvas.Right="10" Opacity=".5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Border Background="{DynamicResource Black}" BorderBrush="{DynamicResource ForeGroundColor}" 
                         BorderThickness="1" MouseDown="ColorSelectorBar_MouseDown">
-                    <Grid>
-                        <materialDesign:PackIcon Kind="FormatColorFill" Style="{x:Null}" Height="25" Width="25" Margin="5"/>
-                        <TextBlock Text="Colors" Margin="40,0,0,0"/>
-                    </Grid>
-                </Border>
-                <Border Grid.Row="1" Background="{DynamicResource Black}" BorderBrush="{DynamicResource ForeGroundColor}" BorderThickness="1">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <extk:ColorCanvas x:Name="colorCanvas" Background="Transparent" SelectedColorChanged="ChangeColor"/>
-                        <StackPanel Orientation="Vertical" Grid.Row="1" Margin="5">
-                            <TextBlock Text="Stroke Thickness:" FontSize="18"/>
-                            <Slider x:Name="strokeThicknessSlider" Minimum="2" Maximum="100" ValueChanged="ChangePenBrushThickness"
+                        <Grid>
+                            <materialDesign:PackIcon Kind="FormatColorFill" Style="{x:Null}" Height="25" Width="25" Margin="5"/>
+                            <TextBlock Text="Colors" Margin="40,0,0,0"/>
+                        </Grid>
+                    </Border>
+                    <Border Grid.Row="1" Background="{DynamicResource Black}" BorderBrush="{DynamicResource ForeGroundColor}" BorderThickness="1">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <extk:ColorCanvas x:Name="colorCanvas" Background="Transparent" SelectedColorChanged="ChangeColor"/>
+                            <StackPanel Orientation="Vertical" Grid.Row="1" Margin="5">
+                                <TextBlock Text="Stroke Thickness:" FontSize="18"/>
+                                <Slider x:Name="strokeThicknessSlider" Minimum="2" Maximum="100" ValueChanged="ChangePenBrushThickness"
                                     Value="{x:Static proj:SettingsValues.PrimaryBurshThickness}"/>
-                        </StackPanel>
-                    </Grid>
-                </Border>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
 
-            </Grid>
+                </Grid>
 
-            <StackPanel x:Name="uadWatermark" Canvas.Bottom="25" Canvas.Right="25" Height="75" Width="520" Visibility="Collapsed">
-                <TextBlock Text="Capture with:" Foreground="{DynamicResource ForeGroundColor}" Opacity="0.5" HorizontalAlignment="Right"/>
-                <TextBlock Text="Universal Anime Downloader" Foreground="{DynamicResource ForeGroundColor}" Opacity="0.5"
+                <StackPanel x:Name="uadWatermark" Canvas.Bottom="25" Canvas.Right="25" Height="75" Width="520" Visibility="Collapsed">
+                    <TextBlock Text="Capture with:" Foreground="{DynamicResource ForeGroundColor}" Opacity="0.5" HorizontalAlignment="Right"/>
+                    <TextBlock Text="Universal Anime Downloader" Foreground="{DynamicResource ForeGroundColor}" Opacity="0.5"
                            FontSize="{DynamicResource Heading}"/>
-            </StackPanel>
-        </Canvas>
-
-        <Grid x:Name="showCapturedImg" Grid.RowSpan="2" Visibility="Collapsed">
-            <Image x:Name="capturedImg" MouseDown="CloseImagePreview"/>
-            <materialDesign:Snackbar x:Name="snackBar" VerticalAlignment="Bottom" Height="50" MessageQueue="{materialDesign:MessageQueue}"
+                </StackPanel>
+            </Canvas>
+            <Grid x:Name="showCapturedImg" Grid.RowSpan="2" Visibility="Collapsed">
+                <Image x:Name="capturedImg" MouseDown="CloseImagePreview"/>
+                <materialDesign:Snackbar x:Name="snackBar" VerticalAlignment="Bottom" Height="50" MessageQueue="{materialDesign:MessageQueue}"
                                      IsActive="False" Background="{DynamicResource Black}">
-                <materialDesign:SnackbarMessage Content="Image Saved! Click the image to close preview" ActionClick="ShowImageExthernal"
+                    <materialDesign:SnackbarMessage Content="Image Saved! Click the image to close preview" ActionClick="ShowImageExthernal"
                                                 Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}">
-                    <materialDesign:SnackbarMessage.ActionContent>
-                        <TextBlock Text="View Image Exthernal" Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}"/>
-                    </materialDesign:SnackbarMessage.ActionContent>
-                </materialDesign:SnackbarMessage>
-            </materialDesign:Snackbar>
+                        <materialDesign:SnackbarMessage.ActionContent>
+                            <TextBlock Text="View Image Exthernal" Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}"/>
+                        </materialDesign:SnackbarMessage.ActionContent>
+                    </materialDesign:SnackbarMessage>
+                </materialDesign:Snackbar>
+            </Grid>
+            <Grid x:Name="grdSneakyWatcher" Grid.RowSpan="2">
+                <Rectangle x:Name="screenBlockerSolidColorFill" Fill="{Binding ScreenBlockerColor}" Visibility="{Binding IsBlockerActive, Converter={StaticResource boolToInvisConverter}, ConverterParameter=Normal}"/>
+                <Image Source="{Binding ScreenBlockerImage}" Visibility="Collapsed"/>
+                
+            </Grid>
         </Grid>
-    </Grid>
+    </Border>
 </UserControl>

@@ -19,6 +19,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using UniversalAnimeDownloader.ViewModel;
+using Hardcodet.Wpf.TaskbarNotification;
 
 namespace UniversalAnimeDownloader.UserControls
 {
@@ -38,6 +39,9 @@ namespace UniversalAnimeDownloader.UserControls
         private Point mouseOffsetToBar = new Point();
         private string lastCapImgLocation;
         private int currentHideControllerTimeOutID;
+
+        public bool IsBackgroundPlayerActive { get; set; }
+        public bool IsFakeCrashActive { get; set; }
 
         private bool isControllerVisible;
         private bool IsControllerVisible
@@ -139,6 +143,11 @@ namespace UniversalAnimeDownloader.UserControls
             mediaPlayer.Play();
             Loaded += (s, e) => AssignProperty();
             isControllerVisible = true;
+            var t = App.Current.Resources["applicationTaskbarPopup"] as TaskbarIcon;
+            string tt = AppDomain.CurrentDomain.BaseDirectory + "unnamed.ico";
+            //t.Icon = new System.Drawing.Icon(tt);
+            t.Visibility = Visibility.Visible;
+            
         }
 
         private async void HideControllerTimeout(int timeoutID)
@@ -251,7 +260,30 @@ namespace UniversalAnimeDownloader.UserControls
 
             VM.InkCanvasVisibility = Visibility.Visible;
             inkCanvas.DefaultDrawingAttributes = VM.PrimaryPen;
-        } 
+        }
+
+        private void ToggleCotrollerBar(object sender, MouseButtonEventArgs e)
+        {
+            if (IsControllerVisible)
+                Common.FadeOutAnimation(controller, TimeSpan.FromSeconds(.5), false);
+            else
+                Common.FadeInAnimation(controller, TimeSpan.FromSeconds(.5), false);
+
+            controller.IsHitTestVisible = controller.IsHitTestVisible == true ? false : true;
+            IsControllerVisible = !IsControllerVisible;
+        }
+
+        private void VideoSpeedChange_Popup(object sender, RoutedEventArgs e) => VideoSpeedChanger.IsOpen = true;
+
+        private void CloseVideoSpeedPopup(object sender, MouseEventArgs e) => VideoSpeedChanger.IsOpen = false;
+
+        private void ChangePlaySpeedSlider(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
+        {
+            mediaPlayer.SpeedRatio = speedSlider.Value;
+            mediaPlayer.Position -= TimeSpan.FromMilliseconds(0.001);
+        }
+
+        private void FocusToThis(object sender, MouseButtonEventArgs e) => Focus();
         #endregion
 
         #region On-screen Drawing
@@ -439,14 +471,57 @@ namespace UniversalAnimeDownloader.UserControls
         public event EventHandler<RequestingWindowStateEventArgs> RequestWindowState;
         protected virtual void OnRequestWindowState(WindowState state) => RequestWindowState?.Invoke(this, new RequestingWindowStateEventArgs() { RequestState = state });
 
-        private void ToggleCotrollerBar(object sender, MouseButtonEventArgs e)
-        {
-            if (IsControllerVisible)
-                Common.FadeOutAnimation(controller, TimeSpan.FromSeconds(.5), false);
-            else
-                Common.FadeInAnimation(controller, TimeSpan.FromSeconds(.5), false);
+        private void CheckAvaibility(object sender, CanExecuteRoutedEventArgs e) => e.CanExecute = VM.IsSneakyWatcherEnabled;
 
-            IsControllerVisible = !IsControllerVisible;
+        private void AcivateScreenBlocker(object sender, ExecutedRoutedEventArgs e) => ActivateBlocker();
+
+        private void AcivateFakeAppCrash(object sender, ExecutedRoutedEventArgs e) => ActivateFakeCrash();
+
+        private void AcivateBackgroundPlayer(object sender, ExecutedRoutedEventArgs e) => ActivateBGPlayer();
+
+        private void ScreenBlocker_Click(object sender, RoutedEventArgs e)
+        {
+            if (!VM.IsSneakyWatcherEnabled)
+                return;
+
+            ActivateBlocker();
         }
+
+        private void FakeAppCrash_Click(object sender, RoutedEventArgs e)
+        {
+            if (!VM.IsSneakyWatcherEnabled)
+                return;
+
+            ActivateFakeCrash();
+        }
+
+        private void BackgroundPlayer_Click(object sender, RoutedEventArgs e)
+        {
+            if (!VM.IsSneakyWatcherEnabled)
+                return;
+
+            ActivateBGPlayer();
+        }
+
+
+        private void ActivateBlocker()
+        {
+            Focus();
+            VM.IsBlockerActive = !VM.IsBlockerActive;
+        }
+
+        private void ActivateFakeCrash()
+        {
+            Focus();
+        }
+
+        private void ActivateBGPlayer()
+        {
+            Focus();
+            Window wdHost = Window.GetWindow(this);
+            wdHost.Hide();
+            IsBackgroundPlayerActive = true;
+        }
+
     }
 }

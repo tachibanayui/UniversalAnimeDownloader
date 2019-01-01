@@ -71,6 +71,20 @@ namespace UniversalAnimeDownloader.ViewModel
             }
         }
 
+        private bool isBlockerActive;
+        public bool IsBlockerActive
+        {
+            get { return isBlockerActive; }
+            set
+            {
+                if(isBlockerActive != value)
+                {
+                    isBlockerActive = value;
+                    OnPropertyChanged("IsBlockerActive");
+                }
+            }
+        }
+
         public DrawingAttributes PrimaryPen
         {
             get { return new DrawingAttributes() { Color = SettingsValues.PrimaryPenColor, Width = SettingsValues.PrimaryBurshThickness, Height = SettingsValues.PrimaryBurshThickness }; }
@@ -100,6 +114,30 @@ namespace UniversalAnimeDownloader.ViewModel
                 SettingsValues.HighlighterPenColor = value.Color;
             }
         }
+
+        public double PlayerBorderThickness
+        {
+            get
+            {
+                if (SettingsValues.IsSneakyWatcherEnabled && SettingsValues.IsSneakyWatcherBorderEnabled)
+                    return 2;
+                else
+                    return 0;
+            }
+        }
+
+        public bool IsSneakyWatcherEnabled
+        {
+            get
+            {
+                if (SettingsValues.IsSneakyWatcherEnabled)
+                    return true;
+                else
+                    return false;
+            }
+        }
+
+        public SolidColorBrush ScreenBlockerColor => new SolidColorBrush(SettingsValues.BlockerColor);
 
         public UADPlayerViewModel()
         {

@@ -8,6 +8,8 @@
              xmlns:converters="clr-namespace:MaterialDesignThemes.Wpf.Converters;assembly=MaterialDesignThemes.Wpf"
              xmlns:localConverter="clr-namespace:UniversalAnimeDownloader.ValueConverter"
              xmlns:customControl="clr-namespace:UniversalAnimeDownloader.CustomControl"
+             xmlns:userControl="clr-namespace:UniversalAnimeDownloader.UserControls"
+             xmlns:tb="http://www.hardcodet.net/taskbar"
              StartupUri="View\SplashScreen.xaml">
     <Application.Resources>
         <ResourceDictionary>
@@ -42,250 +44,6 @@
                 <Setter Property="ActionButtonStyle" Value="{StaticResource MaterialDesignFlatButton}"/>
                 <Setter Property="ButtonRippleColor" Value="#666666"/>
                 <Setter Property="CardBackGround" Value="#494949"/>
-            </Style>
-
-            <Style TargetType="materialDesign:PopupBox" x:Key="MaterialDesignMultiFloatingActionPopupBox">
-                <Setter Property="Background" Value="{DynamicResource PrimaryHueMidBrush}"/>
-                <Setter Property="BorderBrush" Value="{DynamicResource PrimaryHueMidBrush}"/>
-                <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidForegroundBrush}"/>
-                <Setter Property="materialDesign:RippleAssist.Feedback" Value="White" />
-                <Setter Property="PlacementMode" Value="TopAndAlignCentres" />
-                <Setter Property="PopupMode" Value="MouseOverEager" />
-                <Setter Property="ToolTipService.Placement" Value="Left" />
-                <Setter Property="ToolTipService.IsEnabled" Value="False" />
-                <Setter Property="HorizontalAlignment" Value="Left" />
-                <Setter Property="BorderThickness" Value="1"/>
-                <Setter Property="Cursor" Value="Hand"/>
-                <Setter Property="materialDesign:ShadowAssist.ShadowDepth" Value="Depth2" />
-                <Setter Property="Width" Value="56" />
-                <Setter Property="Height" Value="56" />
-                <Setter Property="Focusable" Value="False" />
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="materialDesign:PopupBox">
-                            <ControlTemplate.Resources>
-                                <Style TargetType="{x:Type ToolTip}" BasedOn="{StaticResource MaterialDesignToolTip}">
-                                    <Style.Setters>
-                                        <Setter Property="Margin" Value="8 10 8 10" />
-                                    </Style.Setters>
-                                </Style>
-                                <Style TargetType="ToggleButton" x:Key="ToggleButtonStyle">
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate TargetType="ToggleButton">
-                                                <Grid x:Name="RootGrid" Background="{x:Null}">
-                                                    <VisualStateManager.VisualStateGroups>
-                                                        <VisualStateGroup Name="CheckedStates">
-                                                            <VisualStateGroup.Transitions>
-                                                                <VisualTransition From="*" To="Checked">
-                                                                    <Storyboard>
-                                                                        <DoubleAnimation Storyboard.TargetName="ContentRotateTransform"
-                                                                                 Storyboard.TargetProperty="Angle"
-                                                                                 To="45"
-                                                                                 Duration="0:0:0.1">
-                                                                            <DoubleAnimation.EasingFunction>
-                                                                                <QuadraticEase EasingMode="EaseInOut" />
-                                                                            </DoubleAnimation.EasingFunction>
-                                                                        </DoubleAnimation>
-                                                                    </Storyboard>
-                                                                </VisualTransition>
-                                                                <VisualTransition From="Checked" To="Unchecked">
-                                                                    <Storyboard>
-                                                                        <DoubleAnimation Storyboard.TargetName="ContentRotateTransform"
-                                                                                 Storyboard.TargetProperty="Angle"
-                                                                                 To="0"
-                                                                                 Duration="0:0:0.1">
-                                                                            <DoubleAnimation.EasingFunction>
-                                                                                <QuadraticEase EasingMode="EaseInOut" />
-                                                                            </DoubleAnimation.EasingFunction>
-                                                                        </DoubleAnimation>
-                                                                    </Storyboard>
-                                                                </VisualTransition>
-                                                            </VisualStateGroup.Transitions>
-                                                            <VisualState x:Name="Checked">
-                                                                <Storyboard>
-                                                                    <DoubleAnimation Storyboard.TargetName="ContentRotateTransform"
-                                                                             Storyboard.TargetProperty="Angle"
-                                                                             To="45"
-                                                                             Duration="0" />
-                                                                </Storyboard>
-                                                            </VisualState>
-                                                            <VisualState x:Name="Unchecked">
-                                                                <Storyboard>
-                                                                    <DoubleAnimation Storyboard.TargetName="ContentRotateTransform"
-                                                                             Storyboard.TargetProperty="Angle"
-                                                                             To="0"
-                                                                             Duration="0" />
-                                                                </Storyboard>
-                                                            </VisualState>
-                                                        </VisualStateGroup>
-                                                    </VisualStateManager.VisualStateGroups>
-                                                    <AdornerDecorator CacheMode="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:ShadowAssist.CacheMode)}">
-                                                        <Ellipse Fill="{TemplateBinding Background}" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="{TemplateBinding BorderThickness}" 
-                                                         Effect="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=materialDesign:PopupBox}, Path=(materialDesign:ShadowAssist.ShadowDepth), Converter={x:Static converters:ShadowConverter.Instance}}"
-                                                         x:Name="border">
-                                                        </Ellipse>
-                                                    </AdornerDecorator>
-                                                    <materialDesign:Ripple Focusable="False"  
-                                                        Clip="{Binding ElementName=GeometryEllipse, Path=RenderedGeometry}" ClipToBounds="True"
-                                                        materialDesign:RippleAssist.IsCentered="True"
-                                                        HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" 
-                                                        VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                                                        Padding="{TemplateBinding Padding}" 
-                                                        SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
-                                                        <!-- additional layer so we don't rotate the ripple directly which can cause jumpyness under certain layouts -->
-                                                        <ContentControl Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}"
-                                                                RenderTransformOrigin=".5,.5" Focusable="False">
-                                                            <ContentControl.RenderTransform>
-                                                                <RotateTransform x:Name="ContentRotateTransform" Angle="0" />
-                                                            </ContentControl.RenderTransform>
-                                                        </ContentControl>
-                                                    </materialDesign:Ripple>
-                                                    <Ellipse x:Name="GeometryEllipse" Fill="Transparent" IsHitTestVisible="False" Focusable="False" />
-                                                </Grid>
-                                                <ControlTemplate.Triggers>
-                                                    <Trigger Property="IsEnabled" Value="false">
-                                                        <Setter Property="Opacity" Value="0.23"/>
-                                                    </Trigger>
-                                                    <Trigger Property="IsMouseOver" Value="True">
-                                                        <Setter TargetName="border" Property="materialDesign:ShadowAssist.Darken" Value="True" />
-                                                    </Trigger>
-                                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=materialDesign:PopupBox}, Path=PopupMode}"
-                                                         Value="{x:Static materialDesign:PopupBoxPopupMode.MouseOver}">
-                                                        <Setter TargetName="RootGrid" Property="Background" Value="Transparent" />
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=materialDesign:PopupBox}, Path=PopupMode}"
-                                                         Value="{x:Static materialDesign:PopupBoxPopupMode.MouseOverEager}">
-                                                        <Setter TargetName="RootGrid" Property="Background" Value="Transparent" />
-                                                    </DataTrigger>
-                                                </ControlTemplate.Triggers>
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Style>
-                                <Storyboard x:Key="Open">
-                                    <DoubleAnimation Storyboard.TargetName="PART_PopupContentControl" Storyboard.TargetProperty="Opacity"
-                                             To="1" Duration="0:0:0.1">
-                                        <DoubleAnimation.EasingFunction>
-                                            <SineEase EasingMode="EaseInOut" />
-                                        </DoubleAnimation.EasingFunction>
-                                    </DoubleAnimation>
-                                    <DoubleAnimation Storyboard.TargetName="ExplicitToggleContent" Storyboard.TargetProperty="Opacity"
-                                             To="0" Duration="0:0:0.1">
-                                        <DoubleAnimation.EasingFunction>
-                                            <SineEase EasingMode="EaseInOut" />
-                                        </DoubleAnimation.EasingFunction>
-                                    </DoubleAnimation>
-                                    <DoubleAnimation Storyboard.TargetName="ExplicitToggleCheckedContent" Storyboard.TargetProperty="Opacity"
-                                             To="1" Duration="0:0:0.1">
-                                        <DoubleAnimation.EasingFunction>
-                                            <SineEase EasingMode="EaseInOut" />
-                                        </DoubleAnimation.EasingFunction>
-                                    </DoubleAnimation>
-                                </Storyboard>
-                                <Storyboard x:Key="Close">
-                                    <DoubleAnimation Storyboard.TargetName="PART_PopupContentControl" Storyboard.TargetProperty="Opacity"
-                                             Duration="0:0:0.8">
-                                        <DoubleAnimation.EasingFunction>
-                                            <SineEase EasingMode="EaseInOut" />
-                                        </DoubleAnimation.EasingFunction>
-                                    </DoubleAnimation>
-                                    <DoubleAnimation Storyboard.TargetName="ExplicitToggleContent" Storyboard.TargetProperty="Opacity"
-                                             To="1" Duration="0:0:0.1">
-                                        <DoubleAnimation.EasingFunction>
-                                            <SineEase EasingMode="EaseInOut" />
-                                        </DoubleAnimation.EasingFunction>
-                                    </DoubleAnimation>
-                                    <DoubleAnimation Storyboard.TargetName="ExplicitToggleCheckedContent" Storyboard.TargetProperty="Opacity"
-                                             To="0" Duration="0:0:0.1">
-                                        <DoubleAnimation.EasingFunction>
-                                            <SineEase EasingMode="EaseInOut" />
-                                        </DoubleAnimation.EasingFunction>
-                                    </DoubleAnimation>
-                                </Storyboard>
-                            </ControlTemplate.Resources>
-                            <Grid>
-                                <ToggleButton x:Name="PART_Toggle" Style="{StaticResource ToggleButtonStyle}" IsChecked="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsPopupOpen, Mode=TwoWay}"                                      
-                                      Cursor="Hand"
-                                      Background="{TemplateBinding Background}"
-                                      BorderBrush="{TemplateBinding BorderBrush}"
-                                      Foreground="{TemplateBinding Foreground}"
-                                      VerticalAlignment="Stretch"
-                                      HorizontalAlignment="Stretch"                                      
-                                      ToolTip="{TemplateBinding ToolTip}"
-                                      ToolTipService.Placement="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=materialDesign:PopupBox}, Path=(ToolTipService.Placement)}">
-                                    <Grid>
-                                        <ContentControl x:Name="StandardToggleContent" Content="{TemplateBinding ToggleContent}" ContentTemplate="{TemplateBinding ToggleContentTemplate}"
-                                                Visibility="{TemplateBinding ToggleCheckedContent, Converter={StaticResource InvertedNullVisibilityConverter}}" Focusable="False"/>
-                                        <ContentControl x:Name="ExplicitToggleContent" Content="{TemplateBinding ToggleContent}" ContentTemplate="{TemplateBinding ToggleContentTemplate}"
-                                                Visibility="{TemplateBinding ToggleCheckedContent, Converter={StaticResource NullVisibilityConverter}}" Focusable="False"/>
-                                        <ContentControl x:Name="ExplicitToggleCheckedContent" Content="{TemplateBinding ToggleCheckedContent}" ContentTemplate="{TemplateBinding ToggleCheckedContentTemplate}"
-                                                Visibility="{TemplateBinding ToggleCheckedContent, Converter={StaticResource NullVisibilityConverter}}"
-                                                Opacity="0"
-                                                RenderTransformOrigin=".5,.5"
-                                                Focusable="False">
-                                            <ContentControl.RenderTransform>
-                                                <RotateTransform Angle="-45" />
-                                            </ContentControl.RenderTransform>
-                                        </ContentControl>
-                                    </Grid>
-                                </ToggleButton>
-                                <controlzEx:PopupEx x:Name="PART_Popup" 
-                                          IsOpen="False"
-                                                                          
-                                          PlacementTarget="{Binding ElementName=PART_Toggle}"
-                                          Placement="Custom"
-                                          PopupAnimation="None"                                          
-                                          AllowsTransparency="True">
-                                    <Grid>
-                                        <Border Background="White" Opacity="0.002" />
-                                        <ContentControl Content="{TemplateBinding PopupContent}" ContentTemplate="{TemplateBinding PopupContentTemplate}"      
-                                                Visibility="{TemplateBinding IsEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                Margin="5" Padding="8"
-                                                Opacity="0" x:Name="PART_PopupContentControl">
-                                            <ContentControl.Resources>
-                                                <ResourceDictionary>
-                                                    <Style TargetType="{x:Type ToolTip}" BasedOn="{StaticResource MaterialDesignToolTip}">
-                                                        <Style.Setters>
-                                                            <Setter Property="Margin" Value="16 4 16 4" />
-                                                        </Style.Setters>
-                                                    </Style>
-                                                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignFloatingActionMiniLightButton}">
-                                                        <Style.Setters>
-                                                            <Setter Property="ToolTipService.Placement" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=materialDesign:PopupBox}, Path=(ToolTipService.Placement)}"/>
-                                                            <Setter Property="ToolTipService.InitialShowDelay" Value="0" />
-                                                            <Setter Property="Margin" Value="4" />
-                                                        </Style.Setters>
-                                                    </Style>
-                                                </ResourceDictionary>
-                                            </ContentControl.Resources>
-                                        </ContentControl>
-                                    </Grid>
-                                </controlzEx:PopupEx>
-                            </Grid>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsPopupOpen" Value="True">
-                                    <Setter TargetName="PART_Popup" Property="IsOpen" Value="True" />
-                                    <Trigger.EnterActions>
-                                        <BeginStoryboard Storyboard="{StaticResource Open}" />
-                                    </Trigger.EnterActions>
-                                    <Trigger.ExitActions>
-                                        <BeginStoryboard Storyboard="{StaticResource Close}" />
-                                    </Trigger.ExitActions>
-                                </Trigger>
-                                <Trigger Property="PopupMode" Value="MouseOverEager">
-                                    <Setter TargetName="PART_Popup" Property="IsOpen" Value="True" />
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-                <Setter Property="ToggleContent" Value="{StaticResource MaterialDesignMultiFloatingActionPopupBoxIcon}" />
-                <Style.Triggers>
-                    <Trigger Property="UnfurlOrientation" Value="Horizontal">
-                        <Setter Property="ToolTipService.Placement" Value="Custom" />
-                    </Trigger>
-                </Style.Triggers>
             </Style>
 
             <Style x:Key="MaterialDesignFloatingActionButton" TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignFloatingActionMiniButton}">
@@ -739,8 +497,128 @@
                     </Setter.Value>
                 </Setter>
             </Style>
-            
-           
+
+            <tb:TaskbarIcon x:Key="applicationTaskbarPopup" ToolTipText="HelloWorld" PopupActivation="RightClick"
+                            IconSource="pack://application:,,,/Resources/UADIcon.ico" Mouse.PreviewMouseUp="FocusOnMainWindow">
+                <tb:TaskbarIcon.TrayToolTip>
+                    <Border BorderBrush="{DynamicResource ForeGroundColor}" BorderThickness="1">
+                        <Grid Background="Black" >
+                            <Grid Height="85" Width="500" Margin="10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="2*"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Image Source="pack://application:,,,/Resources/UADIcon.png" Height="75" Width="75" Stretch="Uniform"
+                                   Margin="5" Grid.RowSpan="2"/>
+                                <TextBlock Text="Universal Anime Downloader (Idle)" FontWeight="Bold" Grid.Column="1"
+                                       Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading2}"
+                                       HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                <TextBlock Text="Right-click for further options" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Right"
+                                       Foreground="{DynamicResource FileSize}" FontSize="{DynamicResource Heading3}" FontStyle="Italic"/>
+                            </Grid>
+                        </Grid>
+                    </Border>
+                </tb:TaskbarIcon.TrayToolTip>
+                <tb:TaskbarIcon.TrayPopup>
+                    <Border BorderBrush="{DynamicResource ForeGroundColor}" BorderThickness="1">
+                        <Grid Background="Black">
+                            <Grid Height="500" Width="650" Margin="10">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Image Source="pack://application:,,,/Resources/UADIcon.png" Height="75" Width="75" Stretch="Uniform"
+                                           Margin="5"/>
+                                    <StackPanel Grid.Column="1">
+                                        <TextBlock Text="Tachbana Yui's Solution" FontSize="{DynamicResource Heading2}"
+                                                   Foreground="{DynamicResource FileSize}" FontStyle="Italic"
+                                                   HorizontalAlignment="Right"/>
+                                        <TextBlock Text="Universal Anime Downloader" FontWeight="Bold" 
+                                                   Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading}"
+                                                   HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Grid>
+                                <StackPanel Grid.Row="1">
+                                    <Border BorderBrush="{DynamicResource ForeGroundColor}" BorderThickness="1" Margin="0,5,0,5">
+                                        <Grid Height="200">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="auto"/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+                                            <TextBlock Text="Current operation: " Foreground="{DynamicResource ForeGroundColor}"
+                                                       FontSize="{DynamicResource Heading2}"/>
+                                            <TextBlock Text="Nothing to show here!" Foreground="{DynamicResource FileSize}"
+                                                       FontSize="{DynamicResource Heading3}" Grid.Row="1"
+                                                       VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                            <ListBox/>
+                                        </Grid>
+                                    </Border>
+                                    <TextBlock Text="Screen Blocker Option:" Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading2}"/>
+                                    <StackPanel>
+                                        <StackPanel.Resources>
+                                            <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatButton}">
+                                                <Setter Property="Height" Value="50"/>
+                                            </Style>
+                                        </StackPanel.Resources>
+                                        <Button Click="ScreenBlocker_Click">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="auto"/>
+                                                    <ColumnDefinition Width="10"/>
+                                                    <ColumnDefinition/>
+                                                </Grid.ColumnDefinitions>
+                                                <materialDesign:PackIcon Kind="BlockHelper" FontSize="{DynamicResource Heading3}"
+                                               Foreground="{DynamicResource ForeGroundColor}" VerticalAlignment="Center"/>
+                                                <TextBlock Text="Activate Screen Blocker" FontSize="{DynamicResource Heading3}"
+                                               Foreground="{DynamicResource ForeGroundColor}" Grid.Column="2" VerticalAlignment="Center"/>
+                                            </Grid>
+                                        </Button>
+                                        <Button Click="FakeAppCrash_Click">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="auto"/>
+                                                    <ColumnDefinition Width="10"/>
+                                                    <ColumnDefinition/>
+                                                </Grid.ColumnDefinitions>
+                                                <materialDesign:PackIcon Kind="ImageBrokenVariant" FontSize="{DynamicResource Heading3}"
+                                               Foreground="{DynamicResource ForeGroundColor}" VerticalAlignment="Center"/>
+                                                <TextBlock Text="Fake App Crash" FontSize="{DynamicResource Heading3}"
+                                               Foreground="{DynamicResource ForeGroundColor}" Grid.Column="2" VerticalAlignment="Center"/>
+                                            </Grid>
+                                        </Button>
+                                        <Button Click="BackgroundPlayer_Click">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="auto"/>
+                                                    <ColumnDefinition Width="10"/>
+                                                    <ColumnDefinition/>
+                                                </Grid.ColumnDefinitions>
+                                                <materialDesign:PackIcon Kind="Incognito" FontSize="{DynamicResource Heading3}"
+                                               Foreground="{DynamicResource ForeGroundColor}" VerticalAlignment="Center"/>
+                                                <TextBlock Text="Toggle BackgroundPlayer" FontSize="{DynamicResource Heading3}"
+                                               Foreground="{DynamicResource ForeGroundColor}" Grid.Column="2" VerticalAlignment="Center"/>
+                                            </Grid>
+                                        </Button>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Grid>
+                        </Grid>
+                    </Border>
+                </tb:TaskbarIcon.TrayPopup>
+            </tb:TaskbarIcon>
+
+            <userControl:UADPlayer x:Key="uadEmbededPlayer" Grid.Row="1" Grid.RowSpan="2" 
+                                   ImageLibraryLocation="E:\Testlib\" Title="Kunoichi Demo Koi ga Shitai"
+                                   SubbedTitle="Off vocal version"/>
 
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Dark.xaml" />

@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using UniversalAnimeDownloader.Settings;
+using UniversalAnimeDownloader.UserControls;
 
 namespace UniversalAnimeDownloader.View
 {
@@ -20,11 +21,15 @@ namespace UniversalAnimeDownloader.View
     /// </summary>
     public partial class MainWindow : Window
     {
+        UADPlayer uadEmbededPlayer = null;
+
         public MainWindow()
         {
+            uadEmbededPlayer = Application.Current.FindResource("uadEmbededPlayer") as UADPlayer;
             InitializeComponent();
             uadEmbededPlayer.VideoUri = new Uri("F:\\Test.mp4");
             uadEmbededPlayer.RequestWindowState += HandlePlayerWindowStateRequest;
+            UADEmbededPlayerContainer.Children.Add(uadEmbededPlayer);
         }
 
        

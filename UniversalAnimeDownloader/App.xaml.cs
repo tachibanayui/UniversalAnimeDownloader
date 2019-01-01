@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using UniversalAnimeDownloader.CustomControl;
+using UniversalAnimeDownloader.UserControls;
 
 namespace UniversalAnimeDownloader
 {
@@ -22,5 +23,33 @@ namespace UniversalAnimeDownloader
             string mediaLocation = obj.MediaLocation;
             Process.Start(mediaLocation);
         }
+
+        private void ScreenBlocker_Click(object sender, RoutedEventArgs e)
+        {
+            UADPlayer player = Current.FindResource("uadEmbededPlayer") as UADPlayer;
+            player.VM.IsBlockerActive = !player.VM.IsBlockerActive;
+        }
+
+        private void FakeAppCrash_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void BackgroundPlayer_Click(object sender, RoutedEventArgs e)
+        {
+            UADPlayer player = Current.FindResource("uadEmbededPlayer") as UADPlayer;
+            if(player.IsBackgroundPlayerActive)
+            {
+                Common.MainWin.Show();
+                Common.MainWin.Focus();
+            }
+            else
+            {
+                Common.MainWin.Hide();
+            }
+            player.IsBackgroundPlayerActive = !player.IsBackgroundPlayerActive;
+        }
+
+        private void FocusOnMainWindow(object sender, System.Windows.Input.MouseButtonEventArgs e) => MainWindow.Focus();
     }
 }

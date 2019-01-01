@@ -53,8 +53,9 @@ namespace UniversalAnimeDownloader
 
         private void FinishInit(object sender, EventArgs e)
         {
-            Hide();
-            new View.MainWindow().Show();
+            Common.MainWin = new View.MainWindow();
+            Common.MainWin.Show();
+            Close();
         }
 
         private DoubleAnimation FadeInEffect(Control target, double interval)

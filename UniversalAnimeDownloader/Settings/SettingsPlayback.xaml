@@ -126,10 +126,12 @@
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="auto"/>
                                     <ColumnDefinition/>
+                                    <ColumnDefinition Width="auto"/>
                                     <ColumnDefinition Width="100"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="Toggle Key: " FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource ForeGroundColor}"/>
-                                <Border Grid.Column="2" BorderThickness="1" BorderBrush="{DynamicResource ForeGroundColor}"
+                                <TextBlock Text="Ctrl + " Grid.Column="2" Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading2}"/>
+                                <Border Grid.Column="3" BorderThickness="1" BorderBrush="{DynamicResource ForeGroundColor}"
                                         Background="Black">
                                     <TextBlock Text="B" Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}"
                                                 VerticalAlignment="Center" HorizontalAlignment="Center"/>
@@ -138,7 +140,7 @@
 
                             <TextBlock Text="Blocker Content: " Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}" Margin="0,25,0,0"/>
                             <StackPanel Margin="25,25,0,0">
-                                <RadioButton Content="Solid Color" Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}"/>
+                                <RadioButton Content="Solid Color" Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}" IsChecked="True"/>
                                 <StackPanel Orientation="Horizontal" >
                                     <Button x:Name="blockerColor" Style="{StaticResource MaterialDesignFlatButton}" 
                                     Width="100" Height="50">
@@ -187,10 +189,12 @@
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="auto"/>
                                     <ColumnDefinition/>
+                                    <ColumnDefinition Width="auto"/>
                                     <ColumnDefinition Width="100"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="Toggle Key: " FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource ForeGroundColor}"/>
-                                <Border Grid.Column="2" BorderThickness="1" BorderBrush="{DynamicResource ForeGroundColor}"
+                                <TextBlock Text="Ctrl + " Grid.Column="2" Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading2}"/>
+                                <Border Grid.Column="3" BorderThickness="1" BorderBrush="{DynamicResource ForeGroundColor}"
                                         Background="Black">
                                     <TextBlock Text="C" Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}"
                                                 VerticalAlignment="Center" HorizontalAlignment="Center"/>
@@ -210,12 +214,14 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="auto"/>
                                 <ColumnDefinition/>
+                                <ColumnDefinition Width="auto"/>
                                 <ColumnDefinition Width="100"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="Toggle Key: " FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource ForeGroundColor}"/>
-                            <Border Grid.Column="2" BorderThickness="1" BorderBrush="{DynamicResource ForeGroundColor}"
+                            <TextBlock Text="Ctrl + " Grid.Column="2" Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading2}"/>
+                            <Border Grid.Column="3" BorderThickness="1" BorderBrush="{DynamicResource ForeGroundColor}"
                                         Background="Black">
-                                <TextBlock Text="V" Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}"
+                                <TextBlock Text="N" Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}"
                                                 VerticalAlignment="Center" HorizontalAlignment="Center"/>
                             </Border>
                         </Grid>

@@ -12,8 +12,8 @@
         xmlns:animation="clr-namespace:UniversalAnimeDownloader.Animations"
         mc:Ignorable="d"
         x:Name="rootWindow"
-        Title="MainWindow" Height="720" Width="{DynamicResource WindowWidth}"
-        MinHeight="720" MinWidth="1080"
+        Title="Universal Anime Downloader" Height="720" Width="{DynamicResource WindowWidth}"
+        MinHeight="720" MinWidth="1080" Icon="pack://application:,,,/Resources/UADIcon.ico"
         WindowStyle="None" WindowStartupLocation="CenterScreen"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto">
@@ -278,9 +278,6 @@
                 </Button>
                 
             </StackPanel>
-            <userControl:UADPlayer x:Name="uadEmbededPlayer" Grid.Row="1" Grid.RowSpan="2" 
-                                   ImageLibraryLocation="E:\Testlib\" Title="Kunoichi Demo Koi ga Shitai"
-                                   SubbedTitle="Off vocal version"/>
         </Grid>
 
 

@@ -117,5 +117,8 @@ namespace UniversalAnimeDownloader
             target.BeginAnimation(UIElement.OpacityProperty, animation);
         }
 
+        public static View.MainWindow MainWin;
+
+        
     }
 }
