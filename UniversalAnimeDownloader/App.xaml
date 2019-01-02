@@ -578,7 +578,7 @@
                                                 </Grid.ColumnDefinitions>
                                                 <materialDesign:PackIcon Kind="BlockHelper" FontSize="{DynamicResource Heading3}"
                                                Foreground="{DynamicResource ForeGroundColor}" VerticalAlignment="Center"/>
-                                                <TextBlock Text="Activate Screen Blocker" FontSize="{DynamicResource Heading3}"
+                                                <TextBlock Text="Toggle Screen Blocker" FontSize="{DynamicResource Heading3}"
                                                Foreground="{DynamicResource ForeGroundColor}" Grid.Column="2" VerticalAlignment="Center"/>
                                             </Grid>
                                         </Button>
@@ -591,7 +591,7 @@
                                                 </Grid.ColumnDefinitions>
                                                 <materialDesign:PackIcon Kind="ImageBrokenVariant" FontSize="{DynamicResource Heading3}"
                                                Foreground="{DynamicResource ForeGroundColor}" VerticalAlignment="Center"/>
-                                                <TextBlock Text="Fake App Crash" FontSize="{DynamicResource Heading3}"
+                                                <TextBlock Text="Toggle Fake App Crash" FontSize="{DynamicResource Heading3}"
                                                Foreground="{DynamicResource ForeGroundColor}" Grid.Column="2" VerticalAlignment="Center"/>
                                             </Grid>
                                         </Button>
