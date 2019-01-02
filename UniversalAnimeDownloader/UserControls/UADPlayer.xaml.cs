@@ -56,6 +56,8 @@ namespace UniversalAnimeDownloader.UserControls
                 }
             }
         }
+
+        public FakeNotRespondingDialog FakeHost { get; set; }
         #endregion
 
         #region Dependency Properties
@@ -147,7 +149,6 @@ namespace UniversalAnimeDownloader.UserControls
             string tt = AppDomain.CurrentDomain.BaseDirectory + "unnamed.ico";
             //t.Icon = new System.Drawing.Icon(tt);
             t.Visibility = Visibility.Visible;
-            
         }
 
         private async void HideControllerTimeout(int timeoutID)
@@ -513,6 +514,19 @@ namespace UniversalAnimeDownloader.UserControls
         private void ActivateFakeCrash()
         {
             Focus();
+            if (IsFakeCrashActive)
+            {
+                FakeHost.Close();
+                FakeAppCrashFill.Visibility = Visibility.Collapsed;
+                IsFakeCrashActive = false;
+            }
+            else
+            {
+                FakeAppCrashFill.Visibility = Visibility.Visible;
+                FakeHost = new FakeNotRespondingDialog();
+                IsFakeCrashActive = true;
+                FakeHost.ShowDialog();
+            }
         }
 
         private void ActivateBGPlayer()
@@ -523,5 +537,9 @@ namespace UniversalAnimeDownloader.UserControls
             IsBackgroundPlayerActive = true;
         }
 
+        private void ReopenCrashDialog(object sender, MouseButtonEventArgs e)
+        {
+            FakeHost.ShowDialog();
+        }
     }
 }

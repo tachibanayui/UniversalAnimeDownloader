@@ -32,7 +32,20 @@ namespace UniversalAnimeDownloader
 
         private void FakeAppCrash_Click(object sender, RoutedEventArgs e)
         {
-
+            UADPlayer player = Current.FindResource("uadEmbededPlayer") as UADPlayer;
+            if(player.IsFakeCrashActive)
+            {
+                player.FakeHost.Close();
+                player.FakeAppCrashFill.Visibility = Visibility.Collapsed;
+                player.IsFakeCrashActive = false;
+            }
+            else
+            {
+                player.FakeAppCrashFill.Visibility = Visibility.Visible;
+                player.FakeHost = new FakeNotRespondingDialog();
+                player.FakeHost.ShowDialog();
+                player.IsFakeCrashActive = true;
+            }
         }
 
         private void BackgroundPlayer_Click(object sender, RoutedEventArgs e)

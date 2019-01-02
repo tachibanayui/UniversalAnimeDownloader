@@ -138,6 +138,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="UserControls\FakeNotRespondingDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\FakeWindowProblemReporting.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\UADPlayer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -193,6 +201,12 @@
     </Compile>
     <Compile Include="Settings\SettingsPlayback.xaml.cs">
       <DependentUpon>SettingsPlayback.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\FakeNotRespondingDialog.xaml.cs">
+      <DependentUpon>FakeNotRespondingDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\FakeWindowProblemReporting.xaml.cs">
+      <DependentUpon>FakeWindowProblemReporting.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\UADPlayer.xaml.cs">
       <DependentUpon>UADPlayer.xaml</DependentUpon>
@@ -298,6 +312,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\UADIcon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\WinArrow.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Controls.Primitives;
 using System.Net;
+using System.Threading;
 
 namespace UniversalAnimeDownloader
 {
