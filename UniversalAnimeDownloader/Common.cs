@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
@@ -119,6 +120,7 @@ namespace UniversalAnimeDownloader
 
         public static View.MainWindow MainWin;
 
-        
+        public static void CancelCloseWindow(object sender, CancelEventArgs e) => e.Cancel = true;
+
     }
 }

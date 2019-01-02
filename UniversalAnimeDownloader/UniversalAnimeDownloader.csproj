@@ -146,6 +146,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UserControls\SneakyWatcherPasswordBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\UADPlayer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -207,6 +211,9 @@
     </Compile>
     <Compile Include="UserControls\FakeWindowProblemReporting.xaml.cs">
       <DependentUpon>FakeWindowProblemReporting.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\SneakyWatcherPasswordBox.xaml.cs">
+      <DependentUpon>SneakyWatcherPasswordBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\UADPlayer.xaml.cs">
       <DependentUpon>UADPlayer.xaml</DependentUpon>

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Ink;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace UniversalAnimeDownloader.ViewModel
 {
@@ -81,6 +82,7 @@ namespace UniversalAnimeDownloader.ViewModel
                 {
                     isBlockerActive = value;
                     OnPropertyChanged("IsBlockerActive");
+                    OnPropertyChanged("ShowBlockerImage");
                 }
             }
         }
@@ -138,6 +140,21 @@ namespace UniversalAnimeDownloader.ViewModel
         }
 
         public SolidColorBrush ScreenBlockerColor => new SolidColorBrush(SettingsValues.BlockerColor);
+
+        public bool ShowBlockerImage => IsBlockerActive && SettingsValues.IsBlockerImageEnabled;
+
+        public ImageSource BlockerImageSource
+        {
+            get
+            {
+                if(!string.IsNullOrEmpty(SettingsValues.BlockerImageLocation))
+                    return new BitmapImage(new Uri(SettingsValues.BlockerImageLocation));
+                else
+                    return new BitmapImage();
+            }
+        }
+
+        public Stretch BlockerStretchMode => SettingsValues.BlockerStretchMode;
 
         public UADPlayerViewModel()
         {

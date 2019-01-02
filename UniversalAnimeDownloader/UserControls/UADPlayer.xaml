@@ -338,7 +338,8 @@
             </Grid>
             <Grid x:Name="grdSneakyWatcher" Grid.RowSpan="2">
                 <Rectangle x:Name="screenBlockerSolidColorFill" Fill="{Binding ScreenBlockerColor}" Visibility="{Binding IsBlockerActive, Converter={StaticResource boolToInvisConverter}, ConverterParameter=Normal}"/>
-                <Image Source="{Binding ScreenBlockerImage}" Visibility="Collapsed"/>
+                <Image Source="{Binding BlockerImageSource}" Stretch="{Binding BlockerStretchMode}"
+                       Visibility="{Binding ShowBlockerImage, Converter={StaticResource boolToInvisConverter}, ConverterParameter=Normal, FallbackValue=Collapsed}"/>
                 <Rectangle x:Name="FakeAppCrashFill" Fill="#9B9B9B" Visibility="Collapsed" MouseDown="ReopenCrashDialog"/>
             </Grid>
         </Grid>

@@ -52,7 +52,7 @@ namespace UniversalAnimeDownloader
             }
         }
 
-        private static bool isSneakyWatcherBorderEnabled = true;
+        private static bool isSneakyWatcherBorderEnabled;
         public static bool IsSneakyWatcherBorderEnabled
         {
             get { return isSneakyWatcherBorderEnabled; }
@@ -155,6 +155,20 @@ namespace UniversalAnimeDownloader
         #endregion
 
         #region Sneaky Watcher Settings
+        private static bool isPauseWhenSneakyWatcherActive = true;
+        public static bool IsPauseWhenSneakyWactherActive
+        {
+            get { return isPauseWhenSneakyWatcherActive; }
+            set
+            {
+                if (isPauseWhenSneakyWatcherActive != value)
+                {
+                    isPauseWhenSneakyWatcherActive = value;
+                    UpdateSetting();
+                }
+            }
+        }
+
         private static Color blockerColor = Colors.Black;
         public static Color BlockerColor
         {
@@ -168,11 +182,135 @@ namespace UniversalAnimeDownloader
                 }
             }
         }
+
+        private static bool isBlockerImageEnabled = false;
+        public static bool IsBlockerImageEnabled
+        {
+            get { return isBlockerImageEnabled; }
+            set
+            {
+                if(isBlockerImageEnabled != value)
+                {
+                    isBlockerImageEnabled = value;
+                    UpdateSetting();
+                }
+            }
+        }
+
+        private static string blockerImageLocation;
+        public static string BlockerImageLocation
+        {
+            get { return blockerImageLocation; }
+            set
+            {
+                if(blockerImageLocation != value)
+                {
+                    blockerImageLocation = value;
+                    UpdateSetting();
+                }
+            }
+        }
+
+        private static Stretch blockerStretchMode = Stretch.Fill;
+        public static Stretch BlockerStretchMode
+        {
+            get { return blockerStretchMode; }
+            set
+            {
+                if(blockerStretchMode != value)
+                {
+                    blockerStretchMode = value;
+                    UpdateSetting();
+                }
+            }
+        }
+
+        private static bool makeWindowTopMost = false;
+        public static bool MakeWindowTopMost
+        {
+            get { return makeWindowTopMost; }
+            set
+            {
+                if(makeWindowTopMost != value)
+                {
+                    makeWindowTopMost = value;
+                    UpdateSetting();
+                }
+            }
+        }
+
+        private static bool disableAltF4 = false;
+        public static bool DisableAltF4
+        {
+            get { return disableAltF4; }
+            set
+            {
+                if(disableAltF4 != value)
+                {
+                    disableAltF4 = value;
+                    UpdateSetting();
+                }
+            }
+        }
+
+        private static bool isEnableMasterPassword = true;
+        public static bool IsEnableMasterPassword
+        {
+            get { return isEnableMasterPassword; }
+            set
+            {
+                if(isEnableMasterPassword != value)
+                {
+                    isEnableMasterPassword = value;
+                    UpdateSetting();
+                }
+            }
+        }
+
+        private static string sneakyWatcherMasterPassword = "12345";
+        public static string SneakyWatcherMasterPassword
+        {
+            get { return sneakyWatcherMasterPassword; }
+            set
+            {
+                if(sneakyWatcherMasterPassword != value)
+                {
+                    sneakyWatcherMasterPassword = value;
+                    UpdateSetting();
+                }
+            }
+        }
+
+        private static bool isRandomizePasswordBox = true;
+        public static bool IsRandomizePasswordBox
+        {
+            get { return isRandomizePasswordBox; }
+            set
+            {
+                if (isRandomizePasswordBox != value)
+                {
+                    isRandomizePasswordBox = value;
+                    UpdateSetting();
+                }
+            }
+        }
+
+        private static bool changeAppIconWhenSneakyWatcherActive;
+        public static bool ChangeAppIconWhenSneakyWatcherActive
+        {
+            get { return changeAppIconWhenSneakyWatcherActive; }
+            set
+            {
+                if(changeAppIconWhenSneakyWatcherActive != value)
+                {
+                    changeAppIconWhenSneakyWatcherActive = value;
+                    UpdateSetting();
+                }
+            }
+        }
         #endregion
 
         #endregion
-
-
 
         private static void UpdateSetting()
         {

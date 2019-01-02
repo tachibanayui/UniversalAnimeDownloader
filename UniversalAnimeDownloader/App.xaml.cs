@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MaterialDesignThemes.Wpf;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -27,20 +28,53 @@ namespace UniversalAnimeDownloader
         private void ScreenBlocker_Click(object sender, RoutedEventArgs e)
         {
             UADPlayer player = Current.FindResource("uadEmbededPlayer") as UADPlayer;
-            player.VM.IsBlockerActive = !player.VM.IsBlockerActive;
+
+            if (SettingsValues.IsPauseWhenSneakyWactherActive)
+            {
+                player.mediaPlayer.Pause();
+                player.isPlaying = false;
+                (player.btnPlayPause.Content as PackIcon).Kind = PackIconKind.Play;
+            }
+
+            if (player.VM.IsBlockerActive)
+                if (SettingsValues.IsEnableMasterPassword)
+                    if (new SneakyWatcherPasswordBox().ValidatePassword(SettingsValues.SneakyWatcherMasterPassword, SettingsValues.IsRandomizePasswordBox))
+                        player.VM.IsBlockerActive = false;
+                    else
+                        return;
+                else
+                    player.VM.IsBlockerActive = false;
+            else
+                player.VM.IsBlockerActive = true;
         }
 
         private void FakeAppCrash_Click(object sender, RoutedEventArgs e)
         {
             UADPlayer player = Current.FindResource("uadEmbededPlayer") as UADPlayer;
-            if(player.IsFakeCrashActive)
+            if (SettingsValues.IsPauseWhenSneakyWactherActive)
             {
-                player.FakeHost.Close();
-                player.FakeAppCrashFill.Visibility = Visibility.Collapsed;
-                player.IsFakeCrashActive = false;
+                player.mediaPlayer.Pause();
+                player.isPlaying = false;
+                (player.btnPlayPause.Content as PackIcon).Kind = PackIconKind.Play;
+            }
+
+            if (player.IsFakeCrashActive)
+            {
+                if (player.IsFakeCrashActive)
+                    if (SettingsValues.IsEnableMasterPassword)
+                        if (new SneakyWatcherPasswordBox().ValidatePassword(SettingsValues.SneakyWatcherMasterPassword, SettingsValues.IsRandomizePasswordBox))
+                            UnActivateFakeAppCrash(player);
+                        else
+                            return;
+                    else
+                        UnActivateFakeAppCrash(player);
             }
             else
             {
+                if (SettingsValues.MakeWindowTopMost)
+                    Common.MainWin.Topmost = true;
+                if (SettingsValues.DisableAltF4)
+                    Common.MainWin.Closing += Common.CancelCloseWindow;
                 player.FakeAppCrashFill.Visibility = Visibility.Visible;
                 player.FakeHost = new FakeNotRespondingDialog();
                 player.FakeHost.ShowDialog();
@@ -48,19 +82,50 @@ namespace UniversalAnimeDownloader
             }
         }
 
+        private static void UnActivateFakeAppCrash(UADPlayer player)
+        {
+            player.FakeHost.Close();
+            player.FakeAppCrashFill.Visibility = Visibility.Collapsed;
+            player.IsFakeCrashActive = false;
+            if (SettingsValues.MakeWindowTopMost)
+                Common.MainWin.Topmost = false;
+            if (SettingsValues.DisableAltF4)
+                Common.MainWin.Closing -= Common.CancelCloseWindow;
+        }
+
         private void BackgroundPlayer_Click(object sender, RoutedEventArgs e)
         {
             UADPlayer player = Current.FindResource("uadEmbededPlayer") as UADPlayer;
-            if(player.IsBackgroundPlayerActive)
+            if (SettingsValues.IsPauseWhenSneakyWactherActive)
             {
-                Common.MainWin.Show();
-                Common.MainWin.Focus();
+                player.mediaPlayer.Pause();
+                player.isPlaying = false;
+                (player.btnPlayPause.Content as PackIcon).Kind = PackIconKind.Play;
+            }
+
+            if (player.IsBackgroundPlayerActive)
+            {
+                if (SettingsValues.IsEnableMasterPassword)
+                    if (new SneakyWatcherPasswordBox().ValidatePassword(SettingsValues.SneakyWatcherMasterPassword, SettingsValues.IsRandomizePasswordBox))
+                    {
+                        Common.MainWin.Show();
+                        Common.MainWin.Focus();
+                        player.IsBackgroundPlayerActive = false;
+                    }
+                    else
+                        return;
+                else
+                {
+                    Common.MainWin.Show();
+                    Common.MainWin.Focus();
+                    player.IsBackgroundPlayerActive = false;
+                }
             }
             else
             {
                 Common.MainWin.Hide();
+                player.IsBackgroundPlayerActive = true;
             }
-            player.IsBackgroundPlayerActive = !player.IsBackgroundPlayerActive;
         }
 
         private void FocusOnMainWindow(object sender, System.Windows.Input.MouseButtonEventArgs e) => MainWindow.Focus();

@@ -112,9 +112,11 @@
                         <CheckBox Content="Enable Sneaky Watcher" FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource ForeGroundColor}"/>
                         <CheckBox Content="Toggle Orange border to indicate Sneaky Watcher" FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource ForeGroundColor}"/>
                         <PasswordBox materialDesign:HintAssist.Hint="Master Password:" FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource ForeGroundColor}"
-                                        Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" />
+                                     Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" />
                         <TextBlock Text="Password is required when you tried to unactivate the sneaky watcher feature"
                                     FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource FileSize}"/>
+                        <CheckBox Content="Enable Master Password" FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource ForeGroundColor}"/>
+                        <CheckBox Content="Randomize text in password textbox" FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource ForeGroundColor}" IsChecked="True"/>
                         <CheckBox Content="Change app icon when Sneaky Watcher feature activate" FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource ForeGroundColor}"/>
                         <CheckBox Content="Pause video when Sneaky Watcher active" FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource ForeGroundColor}" IsChecked="True"/>
 
@@ -201,7 +203,7 @@
                                 </Border>
                             </Grid>
 
-                            <CheckBox Content="Make user can't swich app when fake app crash is activate"
+                            <CheckBox Content="Make Window Top Most"
                                         Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}"/>
                             <CheckBox Content="Disable Alt+F4"
                                         Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}"/>

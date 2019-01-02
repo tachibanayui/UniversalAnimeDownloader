@@ -20,6 +20,7 @@ namespace UniversalAnimeDownloader.UserControls
     public partial class FakeNotRespondingDialog : Window
     {
         public FakeWindowProblemReporting Fake { get; set; }
+        public bool CloseLock = true;
 
         public FakeNotRespondingDialog()
         {
@@ -33,5 +34,11 @@ namespace UniversalAnimeDownloader.UserControls
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e) => Hide();
+
+        private void CancelClose(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Hide();
+            e.Cancel = CloseLock;
+        }
     }
 }

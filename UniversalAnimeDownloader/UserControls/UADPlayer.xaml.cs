@@ -20,6 +20,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using UniversalAnimeDownloader.ViewModel;
 using Hardcodet.Wpf.TaskbarNotification;
+using System.ComponentModel;
 
 namespace UniversalAnimeDownloader.UserControls
 {
@@ -135,7 +136,7 @@ namespace UniversalAnimeDownloader.UserControls
             DependencyProperty.Register("SubbedTitle", typeof(string), typeof(UADPlayer), new PropertyMetadata("Description")); 
         #endregion
 
-        private bool isPlaying = true;
+        public bool isPlaying = true;
         public UADPlayer()
         {
             VM = new UADPlayerViewModel();
@@ -469,8 +470,7 @@ namespace UniversalAnimeDownloader.UserControls
         private void CloseImagePreview(object sender, MouseButtonEventArgs e) => showCapturedImg.Visibility = Visibility.Collapsed;
         #endregion
 
-        public event EventHandler<RequestingWindowStateEventArgs> RequestWindowState;
-        protected virtual void OnRequestWindowState(WindowState state) => RequestWindowState?.Invoke(this, new RequestingWindowStateEventArgs() { RequestState = state });
+        #region Sneaky Watcher
 
         private void CheckAvaibility(object sender, CanExecuteRoutedEventArgs e) => e.CanExecute = VM.IsSneakyWatcherEnabled;
 
@@ -504,24 +504,53 @@ namespace UniversalAnimeDownloader.UserControls
             ActivateBGPlayer();
         }
 
-
         private void ActivateBlocker()
         {
+            if (SettingsValues.IsPauseWhenSneakyWactherActive)
+            {
+                mediaPlayer.Pause();
+                isPlaying = false;
+                (btnPlayPause.Content as PackIcon).Kind = PackIconKind.Play;
+            }
+
             Focus();
-            VM.IsBlockerActive = !VM.IsBlockerActive;
+            if (VM.IsBlockerActive)
+                if(SettingsValues.IsEnableMasterPassword)
+                    if (new SneakyWatcherPasswordBox().ValidatePassword(SettingsValues.SneakyWatcherMasterPassword, SettingsValues.IsRandomizePasswordBox))
+                        VM.IsBlockerActive = false;
+                    else
+                        return;
+                else
+                    VM.IsBlockerActive = false;
+            else
+                VM.IsBlockerActive = true;
         }
 
         private void ActivateFakeCrash()
         {
-            Focus();
-            if (IsFakeCrashActive)
+            if (SettingsValues.IsPauseWhenSneakyWactherActive)
             {
-                FakeHost.Close();
-                FakeAppCrashFill.Visibility = Visibility.Collapsed;
-                IsFakeCrashActive = false;
+                mediaPlayer.Pause();
+                isPlaying = false;
+                (btnPlayPause.Content as PackIcon).Kind = PackIconKind.Play;
             }
+              
+            var WinHost = Window.GetWindow(this);
+            
+            if (IsFakeCrashActive)
+                if(SettingsValues.IsEnableMasterPassword)
+                    if (new SneakyWatcherPasswordBox().ValidatePassword(SettingsValues.SneakyWatcherMasterPassword, SettingsValues.IsRandomizePasswordBox))
+                        UnActivateFakeCrash(WinHost);
+                    else
+                        return;
+                else
+                    UnActivateFakeCrash(WinHost);
             else
             {
+                if(SettingsValues.MakeWindowTopMost)
+                    WinHost.Topmost = true;
+                if(SettingsValues.DisableAltF4)
+                    WinHost.Closing += Common.CancelCloseWindow;
                 FakeAppCrashFill.Visibility = Visibility.Visible;
                 FakeHost = new FakeNotRespondingDialog();
                 IsFakeCrashActive = true;
@@ -531,15 +560,35 @@ namespace UniversalAnimeDownloader.UserControls
 
         private void ActivateBGPlayer()
         {
+            if (SettingsValues.IsPauseWhenSneakyWactherActive)
+            {
+                mediaPlayer.Pause();
+                isPlaying = false;
+                (btnPlayPause.Content as PackIcon).Kind = PackIconKind.Play;
+            }
+
             Focus();
             Window wdHost = Window.GetWindow(this);
             wdHost.Hide();
             IsBackgroundPlayerActive = true;
         }
 
-        private void ReopenCrashDialog(object sender, MouseButtonEventArgs e)
+        private void ReopenCrashDialog(object sender, MouseButtonEventArgs e) => FakeHost.ShowDialog();
+
+        private void UnActivateFakeCrash(Window WinHost)
         {
-            FakeHost.ShowDialog();
+            FakeHost.Close();
+            FakeAppCrashFill.Visibility = Visibility.Collapsed;
+            IsFakeCrashActive = false;
+            if (SettingsValues.MakeWindowTopMost)
+                WinHost.Topmost = false;
+            if (SettingsValues.DisableAltF4)
+                WinHost.Closing -= Common.CancelCloseWindow;
         }
+        #endregion
+
+
+        public event EventHandler<RequestingWindowStateEventArgs> RequestWindowState;
+        protected virtual void OnRequestWindowState(WindowState state) => RequestWindowState?.Invoke(this, new RequestingWindowStateEventArgs() { RequestState = state });
     }
 }
