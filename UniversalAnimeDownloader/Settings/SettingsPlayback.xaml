@@ -35,7 +35,7 @@
                     <TextBlock Text="Common Setting: " FontSize="{DynamicResource Heading2}"/>
                     <TextBlock Text="Prefered Player:" FontSize="{DynamicResource Heading3}" Margin="25,0,0,0"/>
                     <StackPanel Margin="50,0,0,0">
-                        <TextBlock Text="Change your player to play animes, you can choose from built-in player shipped in UAD or your exthernal program such as VLC, WMP, Movie and TV,..."
+                        <TextBlock Text="Change your player to play animes, you can choose from built-in player shipped in UAD or your external program such as VLC, WMP, Movie and TV,..."
                                     FontSize="{DynamicResource Heading3}" TextWrapping="WrapWithOverflow" FontStyle="Italic"
                                     Foreground="{DynamicResource FileSize}"/>
 
@@ -48,7 +48,7 @@
                                 </ItemsPanelTemplate>
                             </ComboBox.ItemsPanel>
                         </ComboBox>
-                        <TextBlock x:Name="playerDescription" Text="Use your default exthernal playback program such as Window Media Player or VLC to play anime. Does not support unique feature like sneaky watcher,..."
+                        <TextBlock x:Name="playerDescription" Text="Use your default external playback program such as Window Media Player or VLC to play anime. Does not support unique feature like sneaky watcher,..."
                                     FontSize="{DynamicResource Heading3}" TextWrapping="WrapWithOverflow" FontStyle="Italic"
                                     Foreground="{DynamicResource FileSize}" Margin="25,25,0,0">
                         </TextBlock>

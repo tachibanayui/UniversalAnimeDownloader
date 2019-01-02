@@ -22,7 +22,15 @@ namespace UniversalAnimeDownloader
         {
             OfflineAnimeListviewItem obj = sender as OfflineAnimeListviewItem;
             string mediaLocation = obj.MediaLocation;
-            Process.Start(mediaLocation);
+            if(SettingsValues.PreferedPlayer == PlayerType.Embeded)
+            {
+                Common.MainWin.UADEmbededPlayerContainer.Visibility = Visibility.Visible;
+                var player = Common.MainWin.UADEmbededPlayerContainer.Children[2] as UADPlayer;
+                player.VideoUri = new Uri(mediaLocation);
+                Common.FadeInAnimation(Common.MainWin.UADEmbededPlayerContainer, TimeSpan.FromSeconds(1), false, (s, ee) => player.mediaPlayer.Play());
+            }
+            else
+                Process.Start(mediaLocation);
         }
 
         private void ScreenBlocker_Click(object sender, RoutedEventArgs e)

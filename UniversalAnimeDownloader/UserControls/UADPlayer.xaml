@@ -328,10 +328,10 @@
                 <Image x:Name="capturedImg" MouseDown="CloseImagePreview"/>
                 <materialDesign:Snackbar x:Name="snackBar" VerticalAlignment="Bottom" Height="50" MessageQueue="{materialDesign:MessageQueue}"
                                      IsActive="False" Background="{DynamicResource Black}">
-                    <materialDesign:SnackbarMessage Content="Image Saved! Click the image to close preview" ActionClick="ShowImageExthernal"
+                    <materialDesign:SnackbarMessage Content="Image Saved! Click the image to close preview" ActionClick="ShowImageExternal"
                                                 Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}">
                         <materialDesign:SnackbarMessage.ActionContent>
-                            <TextBlock Text="View Image Exthernal" Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}"/>
+                            <TextBlock Text="View Image External" Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}"/>
                         </materialDesign:SnackbarMessage.ActionContent>
                     </materialDesign:SnackbarMessage>
                 </materialDesign:Snackbar>

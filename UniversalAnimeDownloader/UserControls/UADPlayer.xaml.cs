@@ -150,6 +150,7 @@ namespace UniversalAnimeDownloader.UserControls
             string tt = AppDomain.CurrentDomain.BaseDirectory + "unnamed.ico";
             //t.Icon = new System.Drawing.Icon(tt);
             t.Visibility = Visibility.Visible;
+            mediaPlayer.Pause();
         }
 
         private async void HideControllerTimeout(int timeoutID)
@@ -465,7 +466,7 @@ namespace UniversalAnimeDownloader.UserControls
             lastCapImgLocation = fileLocation;
         }
 
-        private void ShowImageExthernal(object sender, RoutedEventArgs e) => Process.Start(lastCapImgLocation);
+        private void ShowImageExternal(object sender, RoutedEventArgs e) => Process.Start(lastCapImgLocation);
 
         private void CloseImagePreview(object sender, MouseButtonEventArgs e) => showCapturedImg.Visibility = Visibility.Collapsed;
         #endregion

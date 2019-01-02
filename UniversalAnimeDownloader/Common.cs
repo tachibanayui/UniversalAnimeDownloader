@@ -102,9 +102,11 @@ namespace UniversalAnimeDownloader
             }
         }
 
-        public static void FadeInAnimation(UIElement target, Duration duration, bool removePreviousAnimation = true)
+        public static void FadeInAnimation(UIElement target, Duration duration, bool removePreviousAnimation = true, EventHandler completedCallback = null)
         {
             DoubleAnimation animation = new DoubleAnimation(1, duration);
+            if(completedCallback != null)
+                animation.Completed += completedCallback;
             if(removePreviousAnimation)
                 target.BeginAnimation(UIElement.OpacityProperty, null);
             target.BeginAnimation(UIElement.OpacityProperty, animation);

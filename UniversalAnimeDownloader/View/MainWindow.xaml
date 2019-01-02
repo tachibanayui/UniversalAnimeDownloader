@@ -249,7 +249,7 @@
             </Grid>
         </Grid>
 
-        <Grid x:Name="UADEmbededPlayerContainer">
+        <Grid x:Name="UADEmbededPlayerContainer" Visibility="Collapsed" Opacity="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="60"/>
                 <RowDefinition/>
@@ -276,7 +276,6 @@
                 <Button Click="ExitUADPlayer">
                     <materialDesign:PackIcon Kind="WindowClose"/>
                 </Button>
-                
             </StackPanel>
         </Grid>
 

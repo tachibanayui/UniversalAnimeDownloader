@@ -50,8 +50,8 @@ namespace UniversalAnimeDownloader.Settings
                 case "UAD Player":
                     playerDescription.Text = "Use our build-in playback to help you get a better watching experience and support unique feature such as sneaky watcher";
                     break;
-                case "Exthernal Player":
-                    playerDescription.Text = "Use your default exthernal playback program such as Window Media Player or VLC to play anime.Does not support unique feature like sneaky watcher,...";
+                case "External Player":
+                    playerDescription.Text = "Use your default external playback program such as Window Media Player or VLC to play anime.Does not support unique feature like sneaky watcher,...";
                     break;
                 default:
                     break;

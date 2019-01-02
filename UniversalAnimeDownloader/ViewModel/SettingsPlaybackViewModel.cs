@@ -15,7 +15,7 @@ namespace UniversalAnimeDownloader.ViewModel
         {
             Players = new ObservableCollection<string>();
             Players.Add("UAD Player");
-            Players.Add("Exthernal Player");
+            Players.Add("External Player");
         }
     }
 }

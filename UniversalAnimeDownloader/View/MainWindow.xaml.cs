@@ -26,8 +26,8 @@ namespace UniversalAnimeDownloader.View
         public MainWindow()
         {
             uadEmbededPlayer = Application.Current.FindResource("uadEmbededPlayer") as UADPlayer;
+            uadEmbededPlayer.isPlaying = false;
             InitializeComponent();
-            uadEmbededPlayer.VideoUri = new Uri("F:\\Test.mp4");
             uadEmbededPlayer.RequestWindowState += HandlePlayerWindowStateRequest;
             UADEmbededPlayerContainer.Children.Add(uadEmbededPlayer);
         }
@@ -130,6 +130,7 @@ namespace UniversalAnimeDownloader.View
         private void ExitUADPlayer(object sender, RoutedEventArgs e)
         {
             UADEmbededPlayerContainer.Visibility = Visibility.Collapsed;
+            UADEmbededPlayerContainer.Opacity = 0;
         }
     }
 }

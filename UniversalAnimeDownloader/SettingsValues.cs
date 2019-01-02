@@ -10,6 +10,20 @@ namespace UniversalAnimeDownloader
     static class SettingsValues
     {
         #region PlayblackSetting
+        private static PlayerType preferedPlayer = PlayerType.Embeded;
+        public static PlayerType PreferedPlayer
+        {
+            get { return preferedPlayer; }
+            set
+            {
+                if(preferedPlayer != value)
+                {
+                    preferedPlayer = value;
+                    UpdateSetting();
+                }
+            }
+        }
+
         private static double playbackVolume = 100;
         public static double PlaybackVolume
         {
@@ -52,7 +66,7 @@ namespace UniversalAnimeDownloader
             }
         }
 
-        private static bool isSneakyWatcherBorderEnabled;
+        private static bool isSneakyWatcherBorderEnabled = false;
         public static bool IsSneakyWatcherBorderEnabled
         {
             get { return isSneakyWatcherBorderEnabled; }
@@ -316,5 +330,10 @@ namespace UniversalAnimeDownloader
         {
             
         }
+    }
+
+    public enum PlayerType
+    {
+        External, Embeded
     }
 }
