@@ -8,8 +8,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using uadcorelib.Models;
 using UniversalAnimeDownloader.CustomControl;
 using UniversalAnimeDownloader.UserControls;
+using Newtonsoft.Json;
+using System.IO;
+using System.Windows.Media.Imaging;
 
 namespace UniversalAnimeDownloader
 {
@@ -26,6 +30,13 @@ namespace UniversalAnimeDownloader
             {
                 Common.MainWin.UADEmbededPlayerContainer.Visibility = Visibility.Visible;
                 var player = Common.MainWin.UADEmbededPlayerContainer.Children[2] as UADPlayer;
+                string managerFileLocation = mediaLocation.Substring(0, mediaLocation.LastIndexOf("\\")) + "\\Manager.json";
+                string managerFileContent = File.ReadAllText(managerFileLocation);
+                AnimeInformation info = JsonConvert.DeserializeObject<AnimeInformation>(managerFileContent);
+                player.Title = info.AnimeName;
+                var episode = info.Episodes.Where(query => query.VideoSource == mediaLocation).ToList()[0];
+                player.AnimeThumbnail = new BitmapImage(new Uri(info.AnimeThumbnail));
+                player.SubbedTitle = episode.EpisodeName;
                 player.VideoUri = new Uri(mediaLocation);
                 Common.FadeInAnimation(Common.MainWin.UADEmbededPlayerContainer, TimeSpan.FromSeconds(1), false, AnimationFinish);
             }

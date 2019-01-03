@@ -16,7 +16,7 @@
         <CommandBinding Command="proj:CustomCommands.ScreenBlockerHotkey"
                         CanExecute="CheckAvaibility"
                         Executed="AcivateScreenBlocker"/>
-        
+
         <CommandBinding Command="proj:CustomCommands.FakeAppCrashHotkey"
                         CanExecute="CheckAvaibility"
                         Executed="AcivateFakeAppCrash"/>
@@ -65,10 +65,11 @@
                   VerticalAlignment="Bottom" MouseDown="ToggleCotrollerBar">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="150"/>
-                        <ColumnDefinition/>
+                        <ColumnDefinition Width="25"/>
+                        <ColumnDefinition Width="197*"/>
                     </Grid.ColumnDefinitions>
                     <Image x:Name="imgAnimeThumbnail" Stretch="Uniform" IsHitTestVisible="False"/>
-                    <StackPanel Grid.Column="1" IsHitTestVisible="False">
+                    <StackPanel IsHitTestVisible="False" Grid.Column="2">
                         <TextBlock x:Name="txblTitle" Text="Test Title" FontSize="{DynamicResource Heading}" FontWeight="SemiBold" />
                         <TextBlock x:Name="txblDes" Text="Test Description" FontSize="{DynamicResource Heading3}" TextWrapping="WrapWithOverflow" Height="44"/>
                     </StackPanel>
