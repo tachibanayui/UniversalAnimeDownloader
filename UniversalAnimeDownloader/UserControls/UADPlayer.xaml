@@ -112,7 +112,7 @@
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right" Margin="0,0,25,0">
-                        <Button Style="{StaticResource FlatControlBtn}" Click="ChangeWindowState">
+                        <Button x:Name="btnFullScreenToggle" Style="{StaticResource FlatControlBtn}" Click="ChangeWindowState">
                             <materialDesign:PackIcon Kind="ArrowExpand" Foreground="{DynamicResource ForeGroundColor}"/>
                         </Button>
                         <materialDesign:PopupBox Width="50" IsEnabled="{Binding IsSneakyWatcherEnabled}" x:Name="popupBoxSneakyWatcher">

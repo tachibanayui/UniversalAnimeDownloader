@@ -24,6 +24,20 @@ namespace UniversalAnimeDownloader
             }
         }
 
+        private static bool playMediaFullScreen = true;
+        public static bool PlayMediaFullScreen
+        {
+            get { return playMediaFullScreen; }
+            set
+            {
+                if(playMediaFullScreen != value)
+                {
+                    playMediaFullScreen = value;
+                    UpdateSetting();
+                }
+            }
+        }
+
         private static double playbackVolume = 100;
         public static double PlaybackVolume
         {
@@ -309,7 +323,7 @@ namespace UniversalAnimeDownloader
             }
         }
 
-        private static bool changeAppIconWhenSneakyWatcherActive;
+        private static bool changeAppIconWhenSneakyWatcherActive = true;
         public static bool ChangeAppIconWhenSneakyWatcherActive
         {
             get { return changeAppIconWhenSneakyWatcherActive; }

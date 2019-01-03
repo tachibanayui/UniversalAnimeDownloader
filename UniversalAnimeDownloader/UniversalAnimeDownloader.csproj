@@ -323,5 +323,8 @@
   <ItemGroup>
     <Resource Include="Resources\WinArrow.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\WinDefaultIcon.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

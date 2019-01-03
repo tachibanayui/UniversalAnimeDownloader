@@ -151,6 +151,12 @@ namespace UniversalAnimeDownloader.UserControls
             //t.Icon = new System.Drawing.Icon(tt);
             t.Visibility = Visibility.Visible;
             mediaPlayer.Pause();
+
+            if(SettingsValues.PlayMediaFullScreen)
+            {
+                OnRequestWindowState(WindowState.Maximized);
+                (btnFullScreenToggle.Content as PackIcon).Kind = PackIconKind.ArrowCollapse;
+            }
         }
 
         private async void HideControllerTimeout(int timeoutID)
@@ -507,22 +513,25 @@ namespace UniversalAnimeDownloader.UserControls
 
         private void ActivateBlocker()
         {
-            if (SettingsValues.IsPauseWhenSneakyWactherActive)
-            {
-                mediaPlayer.Pause();
-                isPlaying = false;
-                (btnPlayPause.Content as PackIcon).Kind = PackIconKind.Play;
-            }
-
-            Focus();
+            InitSneakyWatcher();
             if (VM.IsBlockerActive)
-                if(SettingsValues.IsEnableMasterPassword)
+                if (SettingsValues.IsEnableMasterPassword)
                     if (new SneakyWatcherPasswordBox().ValidatePassword(SettingsValues.SneakyWatcherMasterPassword, SettingsValues.IsRandomizePasswordBox))
+                    {
                         VM.IsBlockerActive = false;
+
+                        if (SettingsValues.ChangeAppIconWhenSneakyWatcherActive)
+                            OnRequestIconChange(new Uri("pack://application:,,,/Resources/UADIcon.ico"));
+                    }
                     else
                         return;
                 else
+                {
                     VM.IsBlockerActive = false;
+
+                    if (SettingsValues.ChangeAppIconWhenSneakyWatcherActive)
+                        OnRequestIconChange(new Uri("pack://application:,,,/Resources/UADIcon.ico"));
+                }
             else
                 VM.IsBlockerActive = true;
         }
@@ -585,11 +594,32 @@ namespace UniversalAnimeDownloader.UserControls
                 WinHost.Topmost = false;
             if (SettingsValues.DisableAltF4)
                 WinHost.Closing -= Common.CancelCloseWindow;
+
+            if (SettingsValues.ChangeAppIconWhenSneakyWatcherActive)
+                OnRequestIconChange(new Uri("pack://application:,,,/Resources/UADIcon.ico"));
+        }
+
+        private void InitSneakyWatcher()
+        {
+            if (SettingsValues.IsPauseWhenSneakyWactherActive)
+            {
+                mediaPlayer.Pause();
+                isPlaying = false;
+                (btnPlayPause.Content as PackIcon).Kind = PackIconKind.Play;
+            }
+
+            if (SettingsValues.ChangeAppIconWhenSneakyWatcherActive)
+                OnRequestIconChange(new Uri("pack://application:,,,/Resources/WinDefaultIcon.png"));
+
+            Focus();
         }
         #endregion
 
 
         public event EventHandler<RequestingWindowStateEventArgs> RequestWindowState;
-        protected virtual void OnRequestWindowState(WindowState state) => RequestWindowState?.Invoke(this, new RequestingWindowStateEventArgs() { RequestState = state });
+        public event EventHandler<RequestWindowIconChangeEventArgs> RequestIconChange;
+
+        public void OnRequestWindowState(WindowState state) => RequestWindowState?.Invoke(this, new RequestingWindowStateEventArgs() { RequestState = state });
+        public void OnRequestIconChange(Uri iconLocation) => RequestIconChange?.Invoke(this, new RequestWindowIconChangeEventArgs() { IconLocation = iconLocation });
     }
 }

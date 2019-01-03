@@ -29,10 +29,14 @@ namespace UniversalAnimeDownloader.View
             uadEmbededPlayer.isPlaying = false;
             InitializeComponent();
             uadEmbededPlayer.RequestWindowState += HandlePlayerWindowStateRequest;
+            uadEmbededPlayer.RequestIconChange += IconChange;
             UADEmbededPlayerContainer.Children.Add(uadEmbededPlayer);
         }
 
-       
+        private void IconChange(object sender, RequestWindowIconChangeEventArgs e)
+        {
+            Icon = new BitmapImage(e.IconLocation);
+        }
 
         private void PageTransition(object sender, EventArgs e)
         {

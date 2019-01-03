@@ -12,4 +12,9 @@ namespace UniversalAnimeDownloader
         public WindowState RequestState { get; set; }
     }
 
+    public class RequestWindowIconChangeEventArgs : EventArgs
+    {
+        public Uri IconLocation { get; set; }
+    }
+
 }
