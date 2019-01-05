@@ -20,9 +20,34 @@
         <CommandBinding Command="proj:CustomCommands.FakeAppCrashHotkey"
                         CanExecute="CheckAvaibility"
                         Executed="AcivateFakeAppCrash"/>
+        
         <CommandBinding Command="proj:CustomCommands.BackgroundPlayerHotkey"
                         CanExecute="CheckAvaibility"
                         Executed="AcivateBackgroundPlayer"/>
+
+        <CommandBinding Command="proj:CustomCommands.PlayerPauseHotkey"
+                        CanExecute="AlwaysCanExecute"
+                        Executed="Command_PlayPauseMedia"/>
+
+        <CommandBinding Command="proj:CustomCommands.Forward30SecHotkey"
+                        CanExecute="AlwaysCanExecute"
+                        Executed="Command_Forward30Sec"/>
+
+        <CommandBinding Command="proj:CustomCommands.Previous10SecHotkey"
+                        CanExecute="AlwaysCanExecute"
+                        Executed="Command_Previous10Sec"/>
+        
+        <CommandBinding Command="proj:CustomCommands.VolumeUpHotkey"
+                        CanExecute="AlwaysCanExecute"
+                        Executed="Command_VolumeUp"/>
+
+        <CommandBinding Command="proj:CustomCommands.VolumeDownHotkey"
+                        CanExecute="AlwaysCanExecute"
+                        Executed="Command_VolumeDown"/>
+
+        <CommandBinding Command="proj:CustomCommands.QuitFullScreenHotkey"
+                        CanExecute="AlwaysCanExecute"
+                        Executed="Command_QuitFullScreen"/>
     </UserControl.CommandBindings>
     <Border BorderThickness="{Binding PlayerBorderThickness}" BorderBrush="OrangeRed">
         <Grid Margin="5">
@@ -36,9 +61,8 @@
                 <RowDefinition/>
                 <RowDefinition Height="300"/>
             </Grid.RowDefinitions>
-            <MediaElement x:Name="mediaPlayer" Grid.RowSpan="2" Volume="{Binding MediaElementVolume}"
-                      LoadedBehavior="Manual" MediaOpened="mediaPlayer_MediaOpened" MouseDown="ToggleCotrollerBar"/>
-
+                <MediaElement x:Name="mediaPlayer" Grid.RowSpan="2" Volume="{Binding MediaElementVolume}" 
+                          LoadedBehavior="Manual" MediaOpened="mediaPlayer_MediaOpened" MouseDown="ToggleCotrollerBar"/>
             <Grid x:Name="controller" Grid.Row="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="2*"/>

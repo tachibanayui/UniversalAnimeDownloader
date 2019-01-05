@@ -42,8 +42,6 @@
             </Frame>
 
             <Grid Background="{DynamicResource Primary}" Grid.RowSpan="2">
-                
-
                 <TextBlock Text="Universal Anime Downloader" FontSize="36" Margin="5" TextWrapping="WrapWithOverflow" HorizontalAlignment="Center"/>
                 <StackPanel  Margin="0,150,0,100">
                     <StackPanel.Resources>

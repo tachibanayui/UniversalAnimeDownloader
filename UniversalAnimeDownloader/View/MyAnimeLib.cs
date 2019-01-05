@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,9 +23,14 @@ namespace UniversalAnimeDownloader.View
 
         private async void AddAnimeCardAsync()
         {
+            string animeLibDir = AppDomain.CurrentDomain.BaseDirectory + "AnimeLibrary";
+            
+            //Check if the animeLibDir exist
+            if (!Directory.Exists(animeLibDir))
+                Directory.CreateDirectory(animeLibDir);
 
             //animeCardContainer
-            foreach (AnimeInformation item in AnimeInformation.GetAnimeInformationFromLib(AppDomain.CurrentDomain.BaseDirectory + "AnimeLibrary"))
+            foreach (AnimeInformation item in AnimeInformation.GetAnimeInformationFromLib(animeLibDir))
             {
                 VuigheAnimeCard card = new VuigheAnimeCard();
                 card.Opacity = 0;

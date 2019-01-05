@@ -132,6 +132,7 @@ namespace UniversalAnimeDownloader.View
 
         private void ExitUADPlayer(object sender, RoutedEventArgs e)
         {
+            uadEmbededPlayer.mediaPlayer.Pause();
             UADEmbededPlayerContainer.Visibility = Visibility.Collapsed;
             UADEmbededPlayerContainer.Opacity = 0;
         }

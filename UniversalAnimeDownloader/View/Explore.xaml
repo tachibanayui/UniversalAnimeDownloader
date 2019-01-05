@@ -28,24 +28,6 @@
             </ScrollViewer>
             <TextBlock Text="You May Like: "/>
             <ScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Visible">
-                <StackPanel Orientation="Horizontal">
-                    <customControl:VuigheAnimeCard AnimeBG="/UniversalAnimeDownloader;component/Resources/SplashScreen.png"
-                                       PopUpBoxStyle="{StaticResource MaterialDesignMultiFloatingActionPopupBox}"/>
-                    <customControl:VuigheAnimeCard AnimeBG="/UniversalAnimeDownloader;component/Resources/SplashScreen.png"
-                                       PopUpBoxStyle="{StaticResource MaterialDesignMultiFloatingActionPopupBox}"/>
-                    <customControl:VuigheAnimeCard AnimeBG="/UniversalAnimeDownloader;component/Resources/SplashScreen.png"
-                                       PopUpBoxStyle="{StaticResource MaterialDesignMultiFloatingActionPopupBox}"/>
-                    <customControl:VuigheAnimeCard AnimeBG="/UniversalAnimeDownloader;component/Resources/SplashScreen.png"
-                                       PopUpBoxStyle="{StaticResource MaterialDesignMultiFloatingActionPopupBox}"/>
-                    <customControl:VuigheAnimeCard AnimeBG="/UniversalAnimeDownloader;component/Resources/SplashScreen.png"
-                                       PopUpBoxStyle="{StaticResource MaterialDesignMultiFloatingActionPopupBox}"/>
-                    <customControl:VuigheAnimeCard AnimeBG="/UniversalAnimeDownloader;component/Resources/SplashScreen.png"
-                                       PopUpBoxStyle="{StaticResource MaterialDesignMultiFloatingActionPopupBox}"/>
-                    <customControl:VuigheAnimeCard AnimeBG="/UniversalAnimeDownloader;component/Resources/SplashScreen.png"
-                                       PopUpBoxStyle="{StaticResource MaterialDesignMultiFloatingActionPopupBox}"/>
-                    <customControl:VuigheAnimeCard AnimeBG="/UniversalAnimeDownloader;component/Resources/SplashScreen.png"
-                                       PopUpBoxStyle="{StaticResource MaterialDesignMultiFloatingActionPopupBox}"/>
-                </StackPanel>
             </ScrollViewer>
 
             <Button Content="Not interested? Browse all anime!"

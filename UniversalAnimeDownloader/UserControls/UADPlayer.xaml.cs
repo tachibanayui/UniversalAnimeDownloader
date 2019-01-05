@@ -40,6 +40,7 @@ namespace UniversalAnimeDownloader.UserControls
         private Point mouseOffsetToBar = new Point();
         private string lastCapImgLocation;
         private int currentHideControllerTimeOutID;
+        private DateTime LastClick;
 
         public bool IsBackgroundPlayerActive { get; set; }
         public bool IsFakeCrashActive { get; set; }
@@ -70,6 +71,7 @@ namespace UniversalAnimeDownloader.UserControls
                 SetValue(VideoUriProperty, value);
                 mediaPlayer.Source = value;
                 mediaPlayer.Play();
+                Focus();
             }
         }
         public static readonly DependencyProperty VideoUriProperty =
@@ -174,7 +176,7 @@ namespace UniversalAnimeDownloader.UserControls
 
                 if(timeoutLeft == 0)
                 {
-                    Common.FadeOutAnimation(controller, TimeSpan.FromSeconds(.5), false);
+                    Common.FadeOutAnimation(controller, TimeSpan.FromSeconds(.25), false);
                     return;
                 }
             }
@@ -188,10 +190,19 @@ namespace UniversalAnimeDownloader.UserControls
             txblDes.Text = SubbedTitle;
         }
 
-        private void PlayPauseButton_Click(object sender, RoutedEventArgs e)
+        private void PlayPauseButton_Click(object sender, RoutedEventArgs e) => PlayPauseMedia();
+
+        private void Command_PlayPauseMedia(object sender, ExecutedRoutedEventArgs e)
         {
-            Button btn = sender as Button;
-            PackIcon pkIcon = btn.Content as PackIcon;
+            PlayPauseMedia();
+            Common.FadeInAnimation(controller, TimeSpan.FromSeconds(.5), false);
+            controller.IsHitTestVisible = true;
+            IsControllerVisible = true;
+        }
+
+        private void PlayPauseMedia()
+        {
+            PackIcon pkIcon = btnPlayPause.Content as PackIcon;
 
             if (isPlaying)
             {
@@ -246,10 +257,11 @@ namespace UniversalAnimeDownloader.UserControls
 
         private void CloseVolumePopup(object sender, MouseEventArgs e) => VolumeChanger.IsOpen = false;
 
-        private void ChangeWindowState(object sender, RoutedEventArgs e)
+        private void ChangeWindowState(object sender, RoutedEventArgs e) => ChangeWindowState();
+
+        private void ChangeWindowState()
         {
-            Button btn = sender as Button;
-            PackIcon icon = btn.Content as PackIcon;
+            PackIcon icon = btnFullScreenToggle.Content as PackIcon;
             if (icon.Kind == PackIconKind.ArrowExpand)
             {
                 OnRequestWindowState(WindowState.Maximized);
@@ -272,6 +284,28 @@ namespace UniversalAnimeDownloader.UserControls
         }
 
         private void ToggleCotrollerBar(object sender, MouseButtonEventArgs e)
+        {
+            ToggleControllerBar();
+            CalculateDoubleClick();
+        }
+
+        private void CalculateDoubleClick()
+        {
+            if(LastClick == null)
+            {
+                LastClick = DateTime.Now;
+                return;
+            }
+
+            if(DateTime.Now - LastClick < TimeSpan.FromSeconds(0.5))
+                DoubleClickTriggered();
+            else
+                LastClick = DateTime.Now;
+    }
+
+        private void DoubleClickTriggered() => ChangeWindowState();
+
+        private void ToggleControllerBar()
         {
             if (IsControllerVisible)
                 Common.FadeOutAnimation(controller, TimeSpan.FromSeconds(.5), false);
@@ -621,5 +655,21 @@ namespace UniversalAnimeDownloader.UserControls
 
         public void OnRequestWindowState(WindowState state) => RequestWindowState?.Invoke(this, new RequestingWindowStateEventArgs() { RequestState = state });
         public void OnRequestIconChange(Uri iconLocation) => RequestIconChange?.Invoke(this, new RequestWindowIconChangeEventArgs() { IconLocation = iconLocation });
+
+        private void AlwaysCanExecute(object sender, CanExecuteRoutedEventArgs e) => e.CanExecute = true;
+
+        private void Command_Forward30Sec(object sender, ExecutedRoutedEventArgs e) => mediaPlayer.Position += TimeSpan.FromSeconds(30);
+
+        private void Command_Previous10Sec(object sender, ExecutedRoutedEventArgs e) => mediaPlayer.Position -= TimeSpan.FromSeconds(10);
+
+        private void Command_VolumeDown(object sender, ExecutedRoutedEventArgs e) => VM.PlayerVolume -= 5;
+
+        private void Command_VolumeUp(object sender, ExecutedRoutedEventArgs e) => VM.PlayerVolume += 5;
+
+        private void Command_QuitFullScreen(object sender, ExecutedRoutedEventArgs e)
+        {
+            OnRequestWindowState(WindowState.Normal);
+            (btnFullScreenToggle.Content as PackIcon).Kind = PackIconKind.ArrowExpand;
+        }
     }
 }

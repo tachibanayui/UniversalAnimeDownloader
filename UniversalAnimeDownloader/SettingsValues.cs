@@ -253,7 +253,7 @@ namespace UniversalAnimeDownloader
             }
         }
 
-        private static bool makeWindowTopMost = false;
+        private static bool makeWindowTopMost = true;
         public static bool MakeWindowTopMost
         {
             get { return makeWindowTopMost; }
