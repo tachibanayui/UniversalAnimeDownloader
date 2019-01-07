@@ -25,6 +25,7 @@ namespace UniversalAnimeDownloader.View
 
         public MainWindow()
         {
+            new SettingsManager();
             uadEmbededPlayer = Application.Current.FindResource("uadEmbededPlayer") as UADPlayer;
             InitializeComponent();
             uadEmbededPlayer.RequestWindowState += HandlePlayerWindowStateRequest;

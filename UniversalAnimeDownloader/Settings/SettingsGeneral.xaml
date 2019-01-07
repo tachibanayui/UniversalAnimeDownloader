@@ -55,22 +55,6 @@
                             <ColumnDefinition Width="60"/>
                         </Grid.ColumnDefinitions>
                         <TextBox Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}"
-                                 materialDesign:HintAssist.Hint="Setting Profile Directory: "
-                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
-                        <Button Width="50" Grid.Column="1">
-                            <materialDesign:PackIcon Kind="File" />
-                        </Button>
-                        <Button Width="50" Grid.Column="2">
-                            <materialDesign:PackIcon Kind="BackupRestore" />
-                        </Button>
-                    </Grid>
-                    <Grid Margin="25,0,0,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="60"/>
-                            <ColumnDefinition Width="60"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBox Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}"
                                  materialDesign:HintAssist.Hint="Music Playback Directory: "
                                  Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
                         <Button Width="50" Grid.Column="1">

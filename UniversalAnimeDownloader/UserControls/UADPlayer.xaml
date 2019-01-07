@@ -7,6 +7,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:UniversalAnimeDownloader.UserControls"
              xmlns:proj="clr-namespace:UniversalAnimeDownloader"
+             xmlns:settings="clr-namespace:UniversalAnimeDownloader.Settings"
              TextElement.Foreground="{DynamicResource MaterialDesignBody}"
              FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
              mc:Ignorable="d" Focusable="True"
@@ -20,7 +21,7 @@
         <CommandBinding Command="proj:CustomCommands.FakeAppCrashHotkey"
                         CanExecute="CheckAvaibility"
                         Executed="AcivateFakeAppCrash"/>
-        
+
         <CommandBinding Command="proj:CustomCommands.BackgroundPlayerHotkey"
                         CanExecute="CheckAvaibility"
                         Executed="AcivateBackgroundPlayer"/>
@@ -36,7 +37,7 @@
         <CommandBinding Command="proj:CustomCommands.Previous10SecHotkey"
                         CanExecute="AlwaysCanExecute"
                         Executed="Command_Previous10Sec"/>
-        
+
         <CommandBinding Command="proj:CustomCommands.VolumeUpHotkey"
                         CanExecute="AlwaysCanExecute"
                         Executed="Command_VolumeUp"/>
@@ -61,7 +62,7 @@
                 <RowDefinition/>
                 <RowDefinition Height="300"/>
             </Grid.RowDefinitions>
-                <MediaElement x:Name="mediaPlayer" Grid.RowSpan="2" Volume="{Binding MediaElementVolume}" 
+            <MediaElement x:Name="mediaPlayer" Grid.RowSpan="2" Volume="{Binding MediaElementVolume}" 
                           LoadedBehavior="Manual" MediaOpened="mediaPlayer_MediaOpened" MouseDown="ToggleCotrollerBar"/>
             <Grid x:Name="controller" Grid.Row="1">
                 <Grid.RowDefinitions>
@@ -335,8 +336,7 @@
                             <extk:ColorCanvas x:Name="colorCanvas" Background="Transparent" SelectedColorChanged="ChangeColor"/>
                             <StackPanel Orientation="Vertical" Grid.Row="1" Margin="5">
                                 <TextBlock Text="Stroke Thickness:" FontSize="18"/>
-                                <Slider x:Name="strokeThicknessSlider" Minimum="2" Maximum="100" ValueChanged="ChangePenBrushThickness"
-                                    Value="{x:Static proj:SettingsValues.PrimaryBurshThickness}"/>
+                                <Slider x:Name="strokeThicknessSlider" Minimum="2" Maximum="100" ValueChanged="ChangePenBrushThickness"/>
                             </StackPanel>
                         </Grid>
                     </Border>
@@ -370,3 +370,4 @@
         </Grid>
     </Border>
 </UserControl>
+    

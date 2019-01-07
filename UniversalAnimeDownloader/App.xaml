@@ -10,6 +10,7 @@
              xmlns:customControl="clr-namespace:UniversalAnimeDownloader.CustomControl"
              xmlns:userControl="clr-namespace:UniversalAnimeDownloader.UserControls"
              xmlns:tb="http://www.hardcodet.net/taskbar"
+             xmlns:setting="clr-namespace:UniversalAnimeDownloader.Settings"
              StartupUri="View\SplashScreen.xaml">
     <Application.Resources>
         <ResourceDictionary>
@@ -619,6 +620,8 @@
             <userControl:UADPlayer x:Key="uadEmbededPlayer" Grid.Row="1" Grid.RowSpan="2" 
                                    ImageLibraryLocation="E:\Testlib\" Title="Kunoichi Demo Koi ga Shitai"
                                    SubbedTitle="Off vocal version"/>
+
+            <setting:SettingsManager x:Key="AppSetting"/>
 
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Dark.xaml" />

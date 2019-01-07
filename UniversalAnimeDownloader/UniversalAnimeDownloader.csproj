@@ -193,7 +193,6 @@
     <Compile Include="CustomControl\VuigheAnimeCard.cs" />
     <Compile Include="EventArgsCollection.cs" />
     <Compile Include="Models\GenreModel.cs" />
-    <Compile Include="SettingsValues.cs" />
     <Compile Include="Settings\SettingsAccount.xaml.cs">
       <DependentUpon>SettingsAccount.xaml</DependentUpon>
     </Compile>
@@ -209,9 +208,11 @@
     <Compile Include="Settings\SettingsIndex.xaml.cs">
       <DependentUpon>SettingsIndex.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Settings\SettingsManager.cs" />
     <Compile Include="Settings\SettingsPlayback.xaml.cs">
       <DependentUpon>SettingsPlayback.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Settings\SettingValues.cs" />
     <Compile Include="UserControls\FakeNotRespondingDialog.xaml.cs">
       <DependentUpon>FakeNotRespondingDialog.xaml</DependentUpon>
     </Compile>

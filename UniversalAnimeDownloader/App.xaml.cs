@@ -14,6 +14,7 @@ using UniversalAnimeDownloader.UserControls;
 using Newtonsoft.Json;
 using System.IO;
 using System.Windows.Media.Imaging;
+using UniversalAnimeDownloader.Settings;
 
 namespace UniversalAnimeDownloader
 {
@@ -26,7 +27,7 @@ namespace UniversalAnimeDownloader
         {
             OfflineAnimeListviewItem obj = sender as OfflineAnimeListviewItem;
             string mediaLocation = obj.MediaLocation;
-            if(SettingsValues.PreferedPlayer == PlayerType.Embeded)
+            if(SettingsManager.Current.PreferedPlayer == PlayerType.Embeded)
             {
                 Common.MainWin.UADEmbededPlayerContainer.Visibility = Visibility.Visible;
                 var player = Common.MainWin.UADEmbededPlayerContainer.Children[2] as UADPlayer;
@@ -48,7 +49,7 @@ namespace UniversalAnimeDownloader
         {
             var player = Common.MainWin.UADEmbededPlayerContainer.Children[2] as UADPlayer;
 
-            if (SettingsValues.PlayMediaFullScreen)
+            if (SettingsManager.Current.PlayMediaFullScreen)
             {
                 player.OnRequestWindowState(WindowState.Maximized);
                 (player.btnFullScreenToggle.Content as PackIcon).Kind = PackIconKind.ArrowCollapse;
@@ -60,22 +61,22 @@ namespace UniversalAnimeDownloader
         {
             UADPlayer player = Current.FindResource("uadEmbededPlayer") as UADPlayer;
 
-            if (SettingsValues.IsPauseWhenSneakyWactherActive)
+            if (SettingsManager.Current.IsPauseWhenSneakyWactherActive)
             {
                 player.mediaPlayer.Pause();
                 player.isPlaying = false;
                 (player.btnPlayPause.Content as PackIcon).Kind = PackIconKind.Play;
             }
 
-            if(SettingsValues.ChangeAppIconWhenSneakyWatcherActive)
+            if(SettingsManager.Current.ChangeAppIconWhenSneakyWatcherActive)
                 player.OnRequestIconChange(new Uri("pack://application:,,,/Resources/WinDefaultIcon.png"));
 
             if (player.VM.IsBlockerActive)
-                if (SettingsValues.IsEnableMasterPassword)
-                    if (new SneakyWatcherPasswordBox().ValidatePassword(SettingsValues.SneakyWatcherMasterPassword, SettingsValues.IsRandomizePasswordBox))
+                if (SettingsManager.Current.IsEnableMasterPassword)
+                    if (new SneakyWatcherPasswordBox().ValidatePassword(SettingsManager.Current.SneakyWatcherMasterPassword, SettingsManager.Current.IsRandomizePasswordBox))
                     {
                         player.VM.IsBlockerActive = false;
-                        if (SettingsValues.ChangeAppIconWhenSneakyWatcherActive)
+                        if (SettingsManager.Current.ChangeAppIconWhenSneakyWatcherActive)
                             player.OnRequestIconChange(new Uri("pack://application:,,,/Resources/UADIcon.ico"));
                     }
                     else
@@ -83,7 +84,7 @@ namespace UniversalAnimeDownloader
                 else
                 {
                     player.VM.IsBlockerActive = false;
-                    if (SettingsValues.ChangeAppIconWhenSneakyWatcherActive)
+                    if (SettingsManager.Current.ChangeAppIconWhenSneakyWatcherActive)
                         player.OnRequestIconChange(new Uri("pack://application:,,,/Resources/UADIcon.ico"));
                 }
             else
@@ -93,21 +94,21 @@ namespace UniversalAnimeDownloader
         private void FakeAppCrash_Click(object sender, RoutedEventArgs e)
         {
             UADPlayer player = Current.FindResource("uadEmbededPlayer") as UADPlayer;
-            if (SettingsValues.IsPauseWhenSneakyWactherActive)
+            if (SettingsManager.Current.IsPauseWhenSneakyWactherActive)
             {
                 player.mediaPlayer.Pause();
                 player.isPlaying = false;
                 (player.btnPlayPause.Content as PackIcon).Kind = PackIconKind.Play;
             }
 
-            if (SettingsValues.ChangeAppIconWhenSneakyWatcherActive)
+            if (SettingsManager.Current.ChangeAppIconWhenSneakyWatcherActive)
                 player.OnRequestIconChange(new Uri("pack://application:,,,/Resources/WinDefaultIcon.png"));
 
             if (player.IsFakeCrashActive)
             {
                 if (player.IsFakeCrashActive)
-                    if (SettingsValues.IsEnableMasterPassword)
-                        if (new SneakyWatcherPasswordBox().ValidatePassword(SettingsValues.SneakyWatcherMasterPassword, SettingsValues.IsRandomizePasswordBox))
+                    if (SettingsManager.Current.IsEnableMasterPassword)
+                        if (new SneakyWatcherPasswordBox().ValidatePassword(SettingsManager.Current.SneakyWatcherMasterPassword, SettingsManager.Current.IsRandomizePasswordBox))
                             UnActivateFakeAppCrash(player);
                         else
                             return;
@@ -116,9 +117,9 @@ namespace UniversalAnimeDownloader
             }
             else
             {
-                if (SettingsValues.MakeWindowTopMost)
+                if (SettingsManager.Current.MakeWindowTopMost)
                     Common.MainWin.Topmost = true;
-                if (SettingsValues.DisableAltF4)
+                if (SettingsManager.Current.DisableAltF4)
                     Common.MainWin.Closing += Common.CancelCloseWindow;
                 player.FakeAppCrashFill.Visibility = Visibility.Visible;
                 player.FakeHost = new FakeNotRespondingDialog();
@@ -132,37 +133,37 @@ namespace UniversalAnimeDownloader
             player.FakeHost.Close();
             player.FakeAppCrashFill.Visibility = Visibility.Collapsed;
             player.IsFakeCrashActive = false;
-            if (SettingsValues.MakeWindowTopMost)
+            if (SettingsManager.Current.MakeWindowTopMost)
                 Common.MainWin.Topmost = false;
-            if (SettingsValues.DisableAltF4)
+            if (SettingsManager.Current.DisableAltF4)
                 Common.MainWin.Closing -= Common.CancelCloseWindow;
 
-            if (SettingsValues.ChangeAppIconWhenSneakyWatcherActive)
+            if (SettingsManager.Current.ChangeAppIconWhenSneakyWatcherActive)
                 player.OnRequestIconChange(new Uri("pack://application:,,,/Resources/UADIcon.ico"));
         }
 
         private void BackgroundPlayer_Click(object sender, RoutedEventArgs e)
         {
             UADPlayer player = Current.FindResource("uadEmbededPlayer") as UADPlayer;
-            if (SettingsValues.IsPauseWhenSneakyWactherActive)
+            if (SettingsManager.Current.IsPauseWhenSneakyWactherActive)
             {
                 player.mediaPlayer.Pause();
                 player.isPlaying = false;
                 (player.btnPlayPause.Content as PackIcon).Kind = PackIconKind.Play;
             }
 
-            if (SettingsValues.ChangeAppIconWhenSneakyWatcherActive)
+            if (SettingsManager.Current.ChangeAppIconWhenSneakyWatcherActive)
                 player.OnRequestIconChange(new Uri("pack://application:,,,/Resources/WinDefaultIcon.png"));
 
             if (player.IsBackgroundPlayerActive)
             {
-                if (SettingsValues.IsEnableMasterPassword)
-                    if (new SneakyWatcherPasswordBox().ValidatePassword(SettingsValues.SneakyWatcherMasterPassword, SettingsValues.IsRandomizePasswordBox))
+                if (SettingsManager.Current.IsEnableMasterPassword)
+                    if (new SneakyWatcherPasswordBox().ValidatePassword(SettingsManager.Current.SneakyWatcherMasterPassword, SettingsManager.Current.IsRandomizePasswordBox))
                     {
                         Common.MainWin.Show();
                         Common.MainWin.Focus();
                         player.IsBackgroundPlayerActive = false;
-                        if (SettingsValues.ChangeAppIconWhenSneakyWatcherActive)
+                        if (SettingsManager.Current.ChangeAppIconWhenSneakyWatcherActive)
                             player.OnRequestIconChange(new Uri("pack://application:,,,/Resources/UADIcon.ico"));
                     }
                     else
@@ -172,7 +173,7 @@ namespace UniversalAnimeDownloader
                     Common.MainWin.Show();
                     Common.MainWin.Focus();
                     player.IsBackgroundPlayerActive = false;
-                    if (SettingsValues.ChangeAppIconWhenSneakyWatcherActive)
+                    if (SettingsManager.Current.ChangeAppIconWhenSneakyWatcherActive)
                         player.OnRequestIconChange(new Uri("pack://application:,,,/Resources/UADIcon.ico"));
                 }
             }

@@ -7,11 +7,14 @@ using System.Windows;
 using System.Windows.Ink;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using UniversalAnimeDownloader.Settings;
 
 namespace UniversalAnimeDownloader.ViewModel
 {
     public class UADPlayerViewModel : ViewModelBase
     {
+        private SettingValues AppSettings = SettingsManager.Current;
+
         private double seekLocation;
         public double SeekLocation
         {
@@ -28,20 +31,20 @@ namespace UniversalAnimeDownloader.ViewModel
 
         public double PlayerVolume
         {
-            get { return SettingsValues.PlaybackVolume; }
+            get { return AppSettings.PlaybackVolume; }
             set
             {
-                if (SettingsValues.PlaybackVolume != value)
+                if (AppSettings.PlaybackVolume != value)
                 {
-                    SettingsValues.PlaybackVolume = value;
-                    MediaElementVolume = SettingsValues.PlaybackVolume / 100;
+                    AppSettings.PlaybackVolume = value;
+                    MediaElementVolume = AppSettings.PlaybackVolume / 100;
                     OnPropertyChanged("PlayerVolume");
                 }
             }
         }
         public bool IsDrawingEnabled
         {
-            get { return SettingsValues.IsDrawingEnabled; }
+            get { return AppSettings.IsDrawingEnabled; }
         }
 
         private double mediaElementVolume;
@@ -89,31 +92,31 @@ namespace UniversalAnimeDownloader.ViewModel
 
         public DrawingAttributes PrimaryPen
         {
-            get { return new DrawingAttributes() { Color = SettingsValues.PrimaryPenColor, Width = SettingsValues.PrimaryBurshThickness, Height = SettingsValues.PrimaryBurshThickness }; }
+            get { return new DrawingAttributes() { Color = AppSettings.PrimaryPenColor, Width = AppSettings.PrimaryBurshThickness, Height = AppSettings.PrimaryBurshThickness }; }
             set
             {
-                SettingsValues.PrimaryBurshThickness = value.Height;
-                SettingsValues.PrimaryPenColor = value.Color;
+                AppSettings.PrimaryBurshThickness = value.Height;
+                AppSettings.PrimaryPenColor = value.Color;
             }
         }
 
         public DrawingAttributes SecondaryPen
         {
-            get { return new DrawingAttributes() { Color = SettingsValues.SecondaryPenColor, Width = SettingsValues.SecondaryBurshThickness, Height = SettingsValues.SecondaryBurshThickness }; }
+            get { return new DrawingAttributes() { Color = AppSettings.SecondaryPenColor, Width = AppSettings.SecondaryBurshThickness, Height = AppSettings.SecondaryBurshThickness }; }
             set
             {
-                SettingsValues.SecondaryBurshThickness = value.Height;
-                SettingsValues.SecondaryPenColor = value.Color;
+                AppSettings.SecondaryBurshThickness = value.Height;
+                AppSettings.SecondaryPenColor = value.Color;
             }
         }
 
         public DrawingAttributes HighlighterPen
         {
-            get { return new DrawingAttributes() { IsHighlighter = true, Color = SettingsValues.HighlighterPenColor, Width = SettingsValues.HighlighterBurshThickness, Height = SettingsValues.HighlighterBurshThickness }; }
+            get { return new DrawingAttributes() { IsHighlighter = true, Color = AppSettings.HighlighterPenColor, Width = AppSettings.HighlighterBurshThickness, Height = AppSettings.HighlighterBurshThickness }; }
             set
             {
-                SettingsValues.HighlighterBurshThickness = value.Height;
-                SettingsValues.HighlighterPenColor = value.Color;
+                AppSettings.HighlighterBurshThickness = value.Height;
+                AppSettings.HighlighterPenColor = value.Color;
             }
         }
 
@@ -121,7 +124,7 @@ namespace UniversalAnimeDownloader.ViewModel
         {
             get
             {
-                if (SettingsValues.IsSneakyWatcherEnabled && SettingsValues.IsSneakyWatcherBorderEnabled)
+                if (AppSettings.IsSneakyWatcherEnabled && AppSettings.IsSneakyWatcherBorderEnabled)
                     return 2;
                 else
                     return 0;
@@ -132,33 +135,33 @@ namespace UniversalAnimeDownloader.ViewModel
         {
             get
             {
-                if (SettingsValues.IsSneakyWatcherEnabled)
+                if (AppSettings.IsSneakyWatcherEnabled)
                     return true;
                 else
                     return false;
             }
         }
 
-        public SolidColorBrush ScreenBlockerColor => new SolidColorBrush(SettingsValues.BlockerColor);
+        public SolidColorBrush ScreenBlockerColor => new SolidColorBrush(AppSettings.BlockerColor);
 
-        public bool ShowBlockerImage => IsBlockerActive && SettingsValues.IsBlockerImageEnabled;
+        public bool ShowBlockerImage => IsBlockerActive && AppSettings.IsBlockerImageEnabled;
 
         public ImageSource BlockerImageSource
         {
             get
             {
-                if(!string.IsNullOrEmpty(SettingsValues.BlockerImageLocation))
-                    return new BitmapImage(new Uri(SettingsValues.BlockerImageLocation));
+                if(!string.IsNullOrEmpty(AppSettings.BlockerImageLocation))
+                    return new BitmapImage(new Uri(AppSettings.BlockerImageLocation));
                 else
                     return new BitmapImage();
             }
         }
 
-        public Stretch BlockerStretchMode => SettingsValues.BlockerStretchMode;
+        public Stretch BlockerStretchMode => AppSettings.BlockerStretchMode;
 
         public UADPlayerViewModel()
         {
-            MediaElementVolume = SettingsValues.PlaybackVolume / 100;
+            MediaElementVolume = AppSettings.PlaybackVolume / 100;
             InkCanvasVisibility = Visibility.Collapsed;
         }
     }

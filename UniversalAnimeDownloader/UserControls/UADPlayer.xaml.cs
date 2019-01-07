@@ -21,6 +21,7 @@ using System.Windows.Shapes;
 using UniversalAnimeDownloader.ViewModel;
 using Hardcodet.Wpf.TaskbarNotification;
 using System.ComponentModel;
+using UniversalAnimeDownloader.Settings;
 
 namespace UniversalAnimeDownloader.UserControls
 {
@@ -41,6 +42,7 @@ namespace UniversalAnimeDownloader.UserControls
         private string lastCapImgLocation;
         private int currentHideControllerTimeOutID;
         private DateTime LastClick;
+        private SettingValues AppSettings;
 
         public bool IsBackgroundPlayerActive { get; set; }
         public bool IsFakeCrashActive { get; set; }
@@ -141,6 +143,7 @@ namespace UniversalAnimeDownloader.UserControls
         public bool isPlaying = true;
         public UADPlayer()
         {
+            AppSettings = SettingsManager.Current;
             VM = new UADPlayerViewModel();
             InitializeComponent();
             DataContext = VM;
@@ -154,11 +157,12 @@ namespace UniversalAnimeDownloader.UserControls
             t.Visibility = Visibility.Visible;
             mediaPlayer.Pause();
 
-            if(SettingsValues.PlayMediaFullScreen)
+            if(AppSettings.PlayMediaFullScreen)
             {
                 OnRequestWindowState(WindowState.Maximized);
                 (btnFullScreenToggle.Content as PackIcon).Kind = PackIconKind.ArrowCollapse;
             }
+            strokeThicknessSlider.Value = SettingsManager.Current.PrimaryBurshThickness;
         }
 
         private async void HideControllerTimeout(int timeoutID)
@@ -188,6 +192,22 @@ namespace UniversalAnimeDownloader.UserControls
             imgAnimeThumbnail.Source = AnimeThumbnail;
             txblTitle.Text = Title;
             txblDes.Text = SubbedTitle;
+        }
+
+        private void AlwaysCanExecute(object sender, CanExecuteRoutedEventArgs e) => e.CanExecute = true;
+
+        private void Command_Forward30Sec(object sender, ExecutedRoutedEventArgs e) => mediaPlayer.Position += TimeSpan.FromSeconds(30);
+
+        private void Command_Previous10Sec(object sender, ExecutedRoutedEventArgs e) => mediaPlayer.Position -= TimeSpan.FromSeconds(10);
+
+        private void Command_VolumeDown(object sender, ExecutedRoutedEventArgs e) => VM.PlayerVolume -= 5;
+
+        private void Command_VolumeUp(object sender, ExecutedRoutedEventArgs e) => VM.PlayerVolume += 5;
+
+        private void Command_QuitFullScreen(object sender, ExecutedRoutedEventArgs e)
+        {
+            OnRequestWindowState(WindowState.Normal);
+            (btnFullScreenToggle.Content as PackIcon).Kind = PackIconKind.ArrowExpand;
         }
 
         private void PlayPauseButton_Click(object sender, RoutedEventArgs e) => PlayPauseMedia();
@@ -549,12 +569,12 @@ namespace UniversalAnimeDownloader.UserControls
         {
             InitSneakyWatcher();
             if (VM.IsBlockerActive)
-                if (SettingsValues.IsEnableMasterPassword)
-                    if (new SneakyWatcherPasswordBox().ValidatePassword(SettingsValues.SneakyWatcherMasterPassword, SettingsValues.IsRandomizePasswordBox))
+                if (AppSettings.IsEnableMasterPassword)
+                    if (new SneakyWatcherPasswordBox().ValidatePassword(AppSettings.SneakyWatcherMasterPassword, AppSettings.IsRandomizePasswordBox))
                     {
                         VM.IsBlockerActive = false;
 
-                        if (SettingsValues.ChangeAppIconWhenSneakyWatcherActive)
+                        if (AppSettings.ChangeAppIconWhenSneakyWatcherActive)
                             OnRequestIconChange(new Uri("pack://application:,,,/Resources/UADIcon.ico"));
                     }
                     else
@@ -563,7 +583,7 @@ namespace UniversalAnimeDownloader.UserControls
                 {
                     VM.IsBlockerActive = false;
 
-                    if (SettingsValues.ChangeAppIconWhenSneakyWatcherActive)
+                    if (AppSettings.ChangeAppIconWhenSneakyWatcherActive)
                         OnRequestIconChange(new Uri("pack://application:,,,/Resources/UADIcon.ico"));
                 }
             else
@@ -572,7 +592,7 @@ namespace UniversalAnimeDownloader.UserControls
 
         private void ActivateFakeCrash()
         {
-            if (SettingsValues.IsPauseWhenSneakyWactherActive)
+            if (AppSettings.IsPauseWhenSneakyWactherActive)
             {
                 mediaPlayer.Pause();
                 isPlaying = false;
@@ -582,8 +602,8 @@ namespace UniversalAnimeDownloader.UserControls
             var WinHost = Window.GetWindow(this);
             
             if (IsFakeCrashActive)
-                if(SettingsValues.IsEnableMasterPassword)
-                    if (new SneakyWatcherPasswordBox().ValidatePassword(SettingsValues.SneakyWatcherMasterPassword, SettingsValues.IsRandomizePasswordBox))
+                if(AppSettings.IsEnableMasterPassword)
+                    if (new SneakyWatcherPasswordBox().ValidatePassword(AppSettings.SneakyWatcherMasterPassword, AppSettings.IsRandomizePasswordBox))
                         UnActivateFakeCrash(WinHost);
                     else
                         return;
@@ -591,9 +611,9 @@ namespace UniversalAnimeDownloader.UserControls
                     UnActivateFakeCrash(WinHost);
             else
             {
-                if(SettingsValues.MakeWindowTopMost)
+                if(AppSettings.MakeWindowTopMost)
                     WinHost.Topmost = true;
-                if(SettingsValues.DisableAltF4)
+                if(AppSettings.DisableAltF4)
                     WinHost.Closing += Common.CancelCloseWindow;
                 FakeAppCrashFill.Visibility = Visibility.Visible;
                 FakeHost = new FakeNotRespondingDialog();
@@ -604,7 +624,7 @@ namespace UniversalAnimeDownloader.UserControls
 
         private void ActivateBGPlayer()
         {
-            if (SettingsValues.IsPauseWhenSneakyWactherActive)
+            if (AppSettings.IsPauseWhenSneakyWactherActive)
             {
                 mediaPlayer.Pause();
                 isPlaying = false;
@@ -624,25 +644,25 @@ namespace UniversalAnimeDownloader.UserControls
             FakeHost.Close();
             FakeAppCrashFill.Visibility = Visibility.Collapsed;
             IsFakeCrashActive = false;
-            if (SettingsValues.MakeWindowTopMost)
+            if (AppSettings.MakeWindowTopMost)
                 WinHost.Topmost = false;
-            if (SettingsValues.DisableAltF4)
+            if (AppSettings.DisableAltF4)
                 WinHost.Closing -= Common.CancelCloseWindow;
 
-            if (SettingsValues.ChangeAppIconWhenSneakyWatcherActive)
+            if (AppSettings.ChangeAppIconWhenSneakyWatcherActive)
                 OnRequestIconChange(new Uri("pack://application:,,,/Resources/UADIcon.ico"));
         }
 
         private void InitSneakyWatcher()
         {
-            if (SettingsValues.IsPauseWhenSneakyWactherActive)
+            if (AppSettings.IsPauseWhenSneakyWactherActive)
             {
                 mediaPlayer.Pause();
                 isPlaying = false;
                 (btnPlayPause.Content as PackIcon).Kind = PackIconKind.Play;
             }
 
-            if (SettingsValues.ChangeAppIconWhenSneakyWatcherActive)
+            if (AppSettings.ChangeAppIconWhenSneakyWatcherActive)
                 OnRequestIconChange(new Uri("pack://application:,,,/Resources/WinDefaultIcon.png"));
 
             Focus();
@@ -655,21 +675,5 @@ namespace UniversalAnimeDownloader.UserControls
 
         public void OnRequestWindowState(WindowState state) => RequestWindowState?.Invoke(this, new RequestingWindowStateEventArgs() { RequestState = state });
         public void OnRequestIconChange(Uri iconLocation) => RequestIconChange?.Invoke(this, new RequestWindowIconChangeEventArgs() { IconLocation = iconLocation });
-
-        private void AlwaysCanExecute(object sender, CanExecuteRoutedEventArgs e) => e.CanExecute = true;
-
-        private void Command_Forward30Sec(object sender, ExecutedRoutedEventArgs e) => mediaPlayer.Position += TimeSpan.FromSeconds(30);
-
-        private void Command_Previous10Sec(object sender, ExecutedRoutedEventArgs e) => mediaPlayer.Position -= TimeSpan.FromSeconds(10);
-
-        private void Command_VolumeDown(object sender, ExecutedRoutedEventArgs e) => VM.PlayerVolume -= 5;
-
-        private void Command_VolumeUp(object sender, ExecutedRoutedEventArgs e) => VM.PlayerVolume += 5;
-
-        private void Command_QuitFullScreen(object sender, ExecutedRoutedEventArgs e)
-        {
-            OnRequestWindowState(WindowState.Normal);
-            (btnFullScreenToggle.Content as PackIcon).Kind = PackIconKind.ArrowExpand;
-        }
     }
 }

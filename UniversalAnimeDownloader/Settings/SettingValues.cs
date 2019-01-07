@@ -1,22 +1,26 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 
-namespace UniversalAnimeDownloader
+namespace UniversalAnimeDownloader.Settings
 {
-    static class SettingsValues
+    public class SettingValues
     {
+        public string SettingName { get; set; }
+
         #region PlayblackSetting
-        private static PlayerType preferedPlayer = PlayerType.Embeded;
-        public static PlayerType PreferedPlayer
+        private PlayerType preferedPlayer = PlayerType.Embeded;
+        public PlayerType PreferedPlayer
         {
             get { return preferedPlayer; }
             set
             {
-                if(preferedPlayer != value)
+                if (preferedPlayer != value)
                 {
                     preferedPlayer = value;
                     UpdateSetting();
@@ -24,13 +28,13 @@ namespace UniversalAnimeDownloader
             }
         }
 
-        private static bool playMediaFullScreen = true;
-        public static bool PlayMediaFullScreen
+        private bool playMediaFullScreen = true;
+        public bool PlayMediaFullScreen
         {
             get { return playMediaFullScreen; }
             set
             {
-                if(playMediaFullScreen != value)
+                if (playMediaFullScreen != value)
                 {
                     playMediaFullScreen = value;
                     UpdateSetting();
@@ -38,8 +42,8 @@ namespace UniversalAnimeDownloader
             }
         }
 
-        private static double playbackVolume = 100;
-        public static double PlaybackVolume
+        private double playbackVolume = 100;
+        public double PlaybackVolume
         {
             get { return playbackVolume; }
             set
@@ -52,13 +56,13 @@ namespace UniversalAnimeDownloader
             }
         }
 
-        private static bool isDrawingEnabled = true;
-        public static bool IsDrawingEnabled
+        private bool isDrawingEnabled = true;
+        public bool IsDrawingEnabled
         {
             get { return isDrawingEnabled; }
             set
             {
-                if(isDrawingEnabled != value)
+                if (isDrawingEnabled != value)
                 {
                     isDrawingEnabled = value;
                     UpdateSetting();
@@ -66,13 +70,13 @@ namespace UniversalAnimeDownloader
             }
         }
 
-        private static bool isSneakyWatherEnabled = true;
-        public static bool IsSneakyWatcherEnabled
+        private bool isSneakyWatherEnabled = true;
+        public bool IsSneakyWatcherEnabled
         {
             get { return isSneakyWatherEnabled; }
             set
             {
-                if(isDrawingEnabled != value)
+                if (isDrawingEnabled != value)
                 {
                     isDrawingEnabled = value;
                     UpdateSetting();
@@ -80,8 +84,8 @@ namespace UniversalAnimeDownloader
             }
         }
 
-        private static bool isSneakyWatcherBorderEnabled = false;
-        public static bool IsSneakyWatcherBorderEnabled
+        private bool isSneakyWatcherBorderEnabled = false;
+        public bool IsSneakyWatcherBorderEnabled
         {
             get { return isSneakyWatcherBorderEnabled; }
 
@@ -96,13 +100,13 @@ namespace UniversalAnimeDownloader
         }
 
         #region Pen
-        private static Color primaryPenColor = Colors.OrangeRed;
-        public static Color PrimaryPenColor
+        private Color primaryPenColor = Colors.OrangeRed;
+        public Color PrimaryPenColor
         {
             get { return primaryPenColor; }
             set
             {
-                if(primaryPenColor != value)
+                if (primaryPenColor != value)
                 {
                     primaryPenColor = value;
                     UpdateSetting();
@@ -110,13 +114,13 @@ namespace UniversalAnimeDownloader
             }
         }
 
-        private static double primaryBurshThickness = 20;
-        public static double PrimaryBurshThickness
+        private double primaryBurshThickness = 20;
+        public double PrimaryBurshThickness
         {
             get { return primaryBurshThickness; }
             set
             {
-                if(primaryBurshThickness != value)
+                if (primaryBurshThickness != value)
                 {
                     primaryBurshThickness = value;
                     UpdateSetting();
@@ -125,8 +129,8 @@ namespace UniversalAnimeDownloader
         }
 
 
-        private static Color secondaryPenColor = Colors.White;
-        public static Color SecondaryPenColor
+        private Color secondaryPenColor = Colors.White;
+        public Color SecondaryPenColor
         {
             get { return secondaryPenColor; }
             set
@@ -139,8 +143,8 @@ namespace UniversalAnimeDownloader
             }
         }
 
-        private static double secondaryBurshThickness = 20;
-        public static double SecondaryBurshThickness
+        private double secondaryBurshThickness = 20;
+        public double SecondaryBurshThickness
         {
             get { return secondaryBurshThickness; }
             set
@@ -153,8 +157,8 @@ namespace UniversalAnimeDownloader
             }
         }
 
-        private static Color highlighterPenColor = Colors.YellowGreen;
-        public static Color HighlighterPenColor
+        private Color highlighterPenColor = Colors.YellowGreen;
+        public Color HighlighterPenColor
         {
             get { return highlighterPenColor; }
             set
@@ -167,8 +171,8 @@ namespace UniversalAnimeDownloader
             }
         }
 
-        private static double highlighterBurshThickness = 20;
-        public static double HighlighterBurshThickness
+        private double highlighterBurshThickness = 20;
+        public double HighlighterBurshThickness
         {
             get { return highlighterBurshThickness; }
             set
@@ -183,8 +187,8 @@ namespace UniversalAnimeDownloader
         #endregion
 
         #region Sneaky Watcher Settings
-        private static bool isPauseWhenSneakyWatcherActive = true;
-        public static bool IsPauseWhenSneakyWactherActive
+        private bool isPauseWhenSneakyWatcherActive = true;
+        public bool IsPauseWhenSneakyWactherActive
         {
             get { return isPauseWhenSneakyWatcherActive; }
             set
@@ -197,13 +201,13 @@ namespace UniversalAnimeDownloader
             }
         }
 
-        private static Color blockerColor = Colors.Black;
-        public static Color BlockerColor
+        private Color blockerColor = Colors.Black;
+        public Color BlockerColor
         {
             get { return blockerColor; }
             set
             {
-                if(blockerColor != value)
+                if (blockerColor != value)
                 {
                     blockerColor = value;
                     UpdateSetting();
@@ -211,13 +215,13 @@ namespace UniversalAnimeDownloader
             }
         }
 
-        private static bool isBlockerImageEnabled = false;
-        public static bool IsBlockerImageEnabled
+        private bool isBlockerImageEnabled = false;
+        public bool IsBlockerImageEnabled
         {
             get { return isBlockerImageEnabled; }
             set
             {
-                if(isBlockerImageEnabled != value)
+                if (isBlockerImageEnabled != value)
                 {
                     isBlockerImageEnabled = value;
                     UpdateSetting();
@@ -225,13 +229,13 @@ namespace UniversalAnimeDownloader
             }
         }
 
-        private static string blockerImageLocation;
-        public static string BlockerImageLocation
+        private string blockerImageLocation = string.Empty;
+        public string BlockerImageLocation
         {
             get { return blockerImageLocation; }
             set
             {
-                if(blockerImageLocation != value)
+                if (blockerImageLocation != value)
                 {
                     blockerImageLocation = value;
                     UpdateSetting();
@@ -239,13 +243,13 @@ namespace UniversalAnimeDownloader
             }
         }
 
-        private static Stretch blockerStretchMode = Stretch.Fill;
-        public static Stretch BlockerStretchMode
+        private Stretch blockerStretchMode = Stretch.Fill;
+        public Stretch BlockerStretchMode
         {
             get { return blockerStretchMode; }
             set
             {
-                if(blockerStretchMode != value)
+                if (blockerStretchMode != value)
                 {
                     blockerStretchMode = value;
                     UpdateSetting();
@@ -253,13 +257,13 @@ namespace UniversalAnimeDownloader
             }
         }
 
-        private static bool makeWindowTopMost = true;
-        public static bool MakeWindowTopMost
+        private bool makeWindowTopMost = true;
+        public bool MakeWindowTopMost
         {
             get { return makeWindowTopMost; }
             set
             {
-                if(makeWindowTopMost != value)
+                if (makeWindowTopMost != value)
                 {
                     makeWindowTopMost = value;
                     UpdateSetting();
@@ -267,13 +271,13 @@ namespace UniversalAnimeDownloader
             }
         }
 
-        private static bool disableAltF4 = false;
-        public static bool DisableAltF4
+        private bool disableAltF4 = false;
+        public bool DisableAltF4
         {
             get { return disableAltF4; }
             set
             {
-                if(disableAltF4 != value)
+                if (disableAltF4 != value)
                 {
                     disableAltF4 = value;
                     UpdateSetting();
@@ -281,13 +285,13 @@ namespace UniversalAnimeDownloader
             }
         }
 
-        private static bool isEnableMasterPassword = true;
-        public static bool IsEnableMasterPassword
+        private bool isEnableMasterPassword = true;
+        public bool IsEnableMasterPassword
         {
             get { return isEnableMasterPassword; }
             set
             {
-                if(isEnableMasterPassword != value)
+                if (isEnableMasterPassword != value)
                 {
                     isEnableMasterPassword = value;
                     UpdateSetting();
@@ -295,13 +299,13 @@ namespace UniversalAnimeDownloader
             }
         }
 
-        private static string sneakyWatcherMasterPassword = "12345";
-        public static string SneakyWatcherMasterPassword
+        private string sneakyWatcherMasterPassword = "12345";
+        public string SneakyWatcherMasterPassword
         {
             get { return sneakyWatcherMasterPassword; }
             set
             {
-                if(sneakyWatcherMasterPassword != value)
+                if (sneakyWatcherMasterPassword != value)
                 {
                     sneakyWatcherMasterPassword = value;
                     UpdateSetting();
@@ -309,8 +313,8 @@ namespace UniversalAnimeDownloader
             }
         }
 
-        private static bool isRandomizePasswordBox = true;
-        public static bool IsRandomizePasswordBox
+        private bool isRandomizePasswordBox = true;
+        public bool IsRandomizePasswordBox
         {
             get { return isRandomizePasswordBox; }
             set
@@ -323,13 +327,13 @@ namespace UniversalAnimeDownloader
             }
         }
 
-        private static bool changeAppIconWhenSneakyWatcherActive = true;
-        public static bool ChangeAppIconWhenSneakyWatcherActive
+        private bool changeAppIconWhenSneakyWatcherActive = true;
+        public bool ChangeAppIconWhenSneakyWatcherActive
         {
             get { return changeAppIconWhenSneakyWatcherActive; }
             set
             {
-                if(changeAppIconWhenSneakyWatcherActive != value)
+                if (changeAppIconWhenSneakyWatcherActive != value)
                 {
                     changeAppIconWhenSneakyWatcherActive = value;
                     UpdateSetting();
@@ -340,14 +344,15 @@ namespace UniversalAnimeDownloader
 
         #endregion
 
-        private static void UpdateSetting()
+        private void UpdateSetting()
         {
-            
+            string saveContent = JsonConvert.SerializeObject(this);
+            File.WriteAllText("Settings\\" + SettingName, saveContent);
         }
     }
 
     public enum PlayerType
     {
-        External, Embeded
+        Embeded, External
     }
 }
