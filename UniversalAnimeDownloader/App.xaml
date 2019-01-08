@@ -179,7 +179,7 @@
             <SolidColorBrush x:Key="Primary">DeepSkyBlue</SolidColorBrush>
             <SolidColorBrush x:Key="FileSize">LightGray</SolidColorBrush>
 
-            
+
             <Style x:Key="listViewEpisodeBaseTemplate" TargetType="ListView">
                 <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
                 <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled"/>
@@ -417,9 +417,9 @@
                                             </Style>
                                             <Style TargetType="materialDesign:PackIcon">
                                                 <Setter Property="FontSize" Value="{DynamicResource Heading4}"/>
-                                            </Style>       
+                                            </Style>
                                         </StackPanel.Resources>
-                                        
+
                                         <TextBlock>
                                             <TextBlock Text="MB"/>
                                             <TextBlock Text="{Binding ByteToReceive, StringFormat='0.00'}"/>
@@ -434,7 +434,7 @@
                                         <TextBlock Text="{Binding DownloadRate}"/>
                                         <materialDesign:PackIcon Kind="TrendingUp" Margin="0,0,10,0"/>
                                     </StackPanel>
-                                    
+
                                     <ProgressBar Value="{Binding Progress}" Grid.Row="1" Visibility="{Binding DetailVisibility}"/>
 
                                     <Button Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Grid.Column="1">
@@ -626,12 +626,11 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Dark.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
-                
+
                 <!--Color Palete Here-->
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepOrange.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.LightBlue.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
-
 </Application>

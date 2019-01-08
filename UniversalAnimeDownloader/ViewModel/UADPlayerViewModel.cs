@@ -13,7 +13,6 @@ namespace UniversalAnimeDownloader.ViewModel
 {
     public class UADPlayerViewModel : ViewModelBase
     {
-        private SettingValues AppSettings = SettingsManager.Current;
 
         private double seekLocation;
         public double SeekLocation
@@ -31,20 +30,20 @@ namespace UniversalAnimeDownloader.ViewModel
 
         public double PlayerVolume
         {
-            get { return AppSettings.PlaybackVolume; }
+            get { return SettingsManager.Current.PlaybackVolume; }
             set
             {
-                if (AppSettings.PlaybackVolume != value)
+                if (SettingsManager.Current.PlaybackVolume != value)
                 {
-                    AppSettings.PlaybackVolume = value;
-                    MediaElementVolume = AppSettings.PlaybackVolume / 100;
+                    SettingsManager.Current.PlaybackVolume = value;
+                    MediaElementVolume = SettingsManager.Current.PlaybackVolume / 100;
                     OnPropertyChanged("PlayerVolume");
                 }
             }
         }
         public bool IsDrawingEnabled
         {
-            get { return AppSettings.IsDrawingEnabled; }
+            get { return SettingsManager.Current.IsDrawingEnabled; }
         }
 
         private double mediaElementVolume;
@@ -92,31 +91,31 @@ namespace UniversalAnimeDownloader.ViewModel
 
         public DrawingAttributes PrimaryPen
         {
-            get { return new DrawingAttributes() { Color = AppSettings.PrimaryPenColor, Width = AppSettings.PrimaryBurshThickness, Height = AppSettings.PrimaryBurshThickness }; }
+            get { return new DrawingAttributes() { Color = SettingsManager.Current.PrimaryPenColor, Width = SettingsManager.Current.PrimaryBurshThickness, Height = SettingsManager.Current.PrimaryBurshThickness }; }
             set
             {
-                AppSettings.PrimaryBurshThickness = value.Height;
-                AppSettings.PrimaryPenColor = value.Color;
+                SettingsManager.Current.PrimaryBurshThickness = value.Height;
+                SettingsManager.Current.PrimaryPenColor = value.Color;
             }
         }
 
         public DrawingAttributes SecondaryPen
         {
-            get { return new DrawingAttributes() { Color = AppSettings.SecondaryPenColor, Width = AppSettings.SecondaryBurshThickness, Height = AppSettings.SecondaryBurshThickness }; }
+            get { return new DrawingAttributes() { Color = SettingsManager.Current.SecondaryPenColor, Width = SettingsManager.Current.SecondaryBurshThickness, Height = SettingsManager.Current.SecondaryBurshThickness }; }
             set
             {
-                AppSettings.SecondaryBurshThickness = value.Height;
-                AppSettings.SecondaryPenColor = value.Color;
+                SettingsManager.Current.SecondaryBurshThickness = value.Height;
+                SettingsManager.Current.SecondaryPenColor = value.Color;
             }
         }
 
         public DrawingAttributes HighlighterPen
         {
-            get { return new DrawingAttributes() { IsHighlighter = true, Color = AppSettings.HighlighterPenColor, Width = AppSettings.HighlighterBurshThickness, Height = AppSettings.HighlighterBurshThickness }; }
+            get { return new DrawingAttributes() { IsHighlighter = true, Color = SettingsManager.Current.HighlighterPenColor, Width = SettingsManager.Current.HighlighterBurshThickness, Height = SettingsManager.Current.HighlighterBurshThickness }; }
             set
             {
-                AppSettings.HighlighterBurshThickness = value.Height;
-                AppSettings.HighlighterPenColor = value.Color;
+                SettingsManager.Current.HighlighterBurshThickness = value.Height;
+                SettingsManager.Current.HighlighterPenColor = value.Color;
             }
         }
 
@@ -124,7 +123,7 @@ namespace UniversalAnimeDownloader.ViewModel
         {
             get
             {
-                if (AppSettings.IsSneakyWatcherEnabled && AppSettings.IsSneakyWatcherBorderEnabled)
+                if (SettingsManager.Current.IsSneakyWatcherEnabled && SettingsManager.Current.IsSneakyWatcherBorderEnabled)
                     return 2;
                 else
                     return 0;
@@ -135,34 +134,54 @@ namespace UniversalAnimeDownloader.ViewModel
         {
             get
             {
-                if (AppSettings.IsSneakyWatcherEnabled)
+                if (SettingsManager.Current.IsSneakyWatcherEnabled)
                     return true;
                 else
                     return false;
             }
         }
 
-        public SolidColorBrush ScreenBlockerColor => new SolidColorBrush(AppSettings.BlockerColor);
+        public SolidColorBrush ScreenBlockerColor => new SolidColorBrush(SettingsManager.Current.BlockerColor);
 
-        public bool ShowBlockerImage => IsBlockerActive && AppSettings.IsBlockerImageEnabled;
+        public bool ShowBlockerImage => IsBlockerActive && SettingsManager.Current.IsBlockerImageEnabled;
 
         public ImageSource BlockerImageSource
         {
             get
             {
-                if(!string.IsNullOrEmpty(AppSettings.BlockerImageLocation))
-                    return new BitmapImage(new Uri(AppSettings.BlockerImageLocation));
+                if(!string.IsNullOrEmpty(SettingsManager.Current.BlockerImageLocation))
+                    return new BitmapImage(new Uri(SettingsManager.Current.BlockerImageLocation));
                 else
                     return new BitmapImage();
             }
         }
 
-        public Stretch BlockerStretchMode => AppSettings.BlockerStretchMode;
+        public Stretch BlockerStretchMode => SettingsManager.Current.BlockerStretchMode;
 
+       
         public UADPlayerViewModel()
         {
-            MediaElementVolume = AppSettings.PlaybackVolume / 100;
+            MediaElementVolume = SettingsManager.Current.PlaybackVolume / 100;
             InkCanvasVisibility = Visibility.Collapsed;
+        }
+
+        public void UpdateBindings()
+        {
+            OnPropertyChanged("SeekLocation");
+            OnPropertyChanged("MediaElementVolume");
+            OnPropertyChanged("InkCanvasVisibility");
+            OnPropertyChanged("PlayerVolume");
+            OnPropertyChanged("IsBlockerActive");
+            OnPropertyChanged("ShowBlockerImage");
+            OnPropertyChanged("IsDrawingEnabled");
+            OnPropertyChanged("PrimaryPen");
+            OnPropertyChanged("SecondaryPen");
+            OnPropertyChanged("HighlighterPen");
+            OnPropertyChanged("PlayerBorderThickness");
+            OnPropertyChanged("IsSneakyWatcherEnabled");
+            OnPropertyChanged("ScreenBlockerColor");
+            OnPropertyChanged("BlockerImageSource");
+            OnPropertyChanged("BlockerStretchMode");
         }
     }
 }

@@ -5,13 +5,14 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace UniversalAnimeDownloader.Settings
 {
     public class SettingValues
     {
-        public string SettingName { get; set; }
+        public string SettingName { get; set; } = "Dummy.json";
 
         #region PlayblackSetting
         private PlayerType preferedPlayer = PlayerType.Embeded;
@@ -76,9 +77,9 @@ namespace UniversalAnimeDownloader.Settings
             get { return isSneakyWatherEnabled; }
             set
             {
-                if (isDrawingEnabled != value)
+                if (isSneakyWatherEnabled != value)
                 {
-                    isDrawingEnabled = value;
+                    isSneakyWatherEnabled = value;
                     UpdateSetting();
                 }
             }
@@ -187,6 +188,72 @@ namespace UniversalAnimeDownloader.Settings
         #endregion
 
         #region Sneaky Watcher Settings
+
+        #region Sneaky Watcher Hotkeys
+        private char blockerToggleHotKeys = 'B';
+        public char BlockerToggleHotKeys
+        {
+            get { return blockerToggleHotKeys; }
+            set
+            {
+                if(blockerToggleHotKeys != value)
+                {
+                    blockerToggleHotKeys = value;
+                    int enumNumber = value;
+                    if (char.IsLetter(value))
+                        enumNumber -= 21;
+                    if (char.IsNumber(value))
+                        enumNumber -= 14;
+                
+                    CustomCommands.ScreenBlockerHotkey.InputGestures[0] = new KeyGesture((Key)enumNumber, ModifierKeys.Control);
+                    UpdateSetting();
+                }
+            }
+        }
+
+        private char appCrashToggleHotKeys = 'C';
+        public char AppCrashToggleHotKeys
+        {
+            get { return appCrashToggleHotKeys; }
+            set
+            {
+                if (appCrashToggleHotKeys != value)
+                {
+                    appCrashToggleHotKeys = value;
+                    int enumNumber = value;
+                    if (char.IsLetter(value))
+                        enumNumber -= 21;
+                    if (char.IsNumber(value))
+                        enumNumber -= 14;
+
+                    CustomCommands.FakeAppCrashHotkey.InputGestures[0] = new KeyGesture((Key)enumNumber, ModifierKeys.Control);
+                    UpdateSetting();
+                }
+            }
+        }
+
+        private char bgPlayerToggleHotKeys = 'N';
+        public char BgPlayerToggleHotKeys
+        {
+            get { return bgPlayerToggleHotKeys; }
+            set
+            {
+                if (bgPlayerToggleHotKeys != value)
+                {
+                    bgPlayerToggleHotKeys = value;
+                    int enumNumber = value;
+                    if (char.IsLetter(value))
+                        enumNumber -= 21;
+                    if (char.IsNumber(value))
+                        enumNumber -= 14;
+
+                    CustomCommands.BackgroundPlayerHotkey.InputGestures[0] = new KeyGesture((Key)enumNumber, ModifierKeys.Control);
+                    UpdateSetting();
+                }
+            }
+        }
+        #endregion
+
         private bool isPauseWhenSneakyWatcherActive = true;
         public bool IsPauseWhenSneakyWactherActive
         {
@@ -257,7 +324,7 @@ namespace UniversalAnimeDownloader.Settings
             }
         }
 
-        private bool makeWindowTopMost = true;
+        private bool makeWindowTopMost = false;
         public bool MakeWindowTopMost
         {
             get { return makeWindowTopMost; }

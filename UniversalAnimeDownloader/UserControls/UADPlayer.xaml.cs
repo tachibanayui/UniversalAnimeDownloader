@@ -42,7 +42,6 @@ namespace UniversalAnimeDownloader.UserControls
         private string lastCapImgLocation;
         private int currentHideControllerTimeOutID;
         private DateTime LastClick;
-        private SettingValues AppSettings;
 
         public bool IsBackgroundPlayerActive { get; set; }
         public bool IsFakeCrashActive { get; set; }
@@ -143,7 +142,7 @@ namespace UniversalAnimeDownloader.UserControls
         public bool isPlaying = true;
         public UADPlayer()
         {
-            AppSettings = SettingsManager.Current;
+            SettingsManager.Current = SettingsManager.Current;
             VM = new UADPlayerViewModel();
             InitializeComponent();
             DataContext = VM;
@@ -157,7 +156,7 @@ namespace UniversalAnimeDownloader.UserControls
             t.Visibility = Visibility.Visible;
             mediaPlayer.Pause();
 
-            if(AppSettings.PlayMediaFullScreen)
+            if(SettingsManager.Current.PlayMediaFullScreen)
             {
                 OnRequestWindowState(WindowState.Maximized);
                 (btnFullScreenToggle.Content as PackIcon).Kind = PackIconKind.ArrowCollapse;
@@ -569,12 +568,12 @@ namespace UniversalAnimeDownloader.UserControls
         {
             InitSneakyWatcher();
             if (VM.IsBlockerActive)
-                if (AppSettings.IsEnableMasterPassword)
-                    if (new SneakyWatcherPasswordBox().ValidatePassword(AppSettings.SneakyWatcherMasterPassword, AppSettings.IsRandomizePasswordBox))
+                if (SettingsManager.Current.IsEnableMasterPassword)
+                    if (new SneakyWatcherPasswordBox().ValidatePassword(SettingsManager.Current.SneakyWatcherMasterPassword, SettingsManager.Current.IsRandomizePasswordBox))
                     {
                         VM.IsBlockerActive = false;
 
-                        if (AppSettings.ChangeAppIconWhenSneakyWatcherActive)
+                        if (SettingsManager.Current.ChangeAppIconWhenSneakyWatcherActive)
                             OnRequestIconChange(new Uri("pack://application:,,,/Resources/UADIcon.ico"));
                     }
                     else
@@ -583,7 +582,7 @@ namespace UniversalAnimeDownloader.UserControls
                 {
                     VM.IsBlockerActive = false;
 
-                    if (AppSettings.ChangeAppIconWhenSneakyWatcherActive)
+                    if (SettingsManager.Current.ChangeAppIconWhenSneakyWatcherActive)
                         OnRequestIconChange(new Uri("pack://application:,,,/Resources/UADIcon.ico"));
                 }
             else
@@ -592,18 +591,12 @@ namespace UniversalAnimeDownloader.UserControls
 
         private void ActivateFakeCrash()
         {
-            if (AppSettings.IsPauseWhenSneakyWactherActive)
-            {
-                mediaPlayer.Pause();
-                isPlaying = false;
-                (btnPlayPause.Content as PackIcon).Kind = PackIconKind.Play;
-            }
-              
+            InitSneakyWatcher();
             var WinHost = Window.GetWindow(this);
             
             if (IsFakeCrashActive)
-                if(AppSettings.IsEnableMasterPassword)
-                    if (new SneakyWatcherPasswordBox().ValidatePassword(AppSettings.SneakyWatcherMasterPassword, AppSettings.IsRandomizePasswordBox))
+                if(SettingsManager.Current.IsEnableMasterPassword)
+                    if (new SneakyWatcherPasswordBox().ValidatePassword(SettingsManager.Current.SneakyWatcherMasterPassword, SettingsManager.Current.IsRandomizePasswordBox))
                         UnActivateFakeCrash(WinHost);
                     else
                         return;
@@ -611,9 +604,9 @@ namespace UniversalAnimeDownloader.UserControls
                     UnActivateFakeCrash(WinHost);
             else
             {
-                if(AppSettings.MakeWindowTopMost)
+                if(SettingsManager.Current.MakeWindowTopMost)
                     WinHost.Topmost = true;
-                if(AppSettings.DisableAltF4)
+                if(SettingsManager.Current.DisableAltF4)
                     WinHost.Closing += Common.CancelCloseWindow;
                 FakeAppCrashFill.Visibility = Visibility.Visible;
                 FakeHost = new FakeNotRespondingDialog();
@@ -624,7 +617,7 @@ namespace UniversalAnimeDownloader.UserControls
 
         private void ActivateBGPlayer()
         {
-            if (AppSettings.IsPauseWhenSneakyWactherActive)
+            if (SettingsManager.Current.IsPauseWhenSneakyWactherActive)
             {
                 mediaPlayer.Pause();
                 isPlaying = false;
@@ -644,25 +637,25 @@ namespace UniversalAnimeDownloader.UserControls
             FakeHost.Close();
             FakeAppCrashFill.Visibility = Visibility.Collapsed;
             IsFakeCrashActive = false;
-            if (AppSettings.MakeWindowTopMost)
+            if (SettingsManager.Current.MakeWindowTopMost)
                 WinHost.Topmost = false;
-            if (AppSettings.DisableAltF4)
+            if (SettingsManager.Current.DisableAltF4)
                 WinHost.Closing -= Common.CancelCloseWindow;
 
-            if (AppSettings.ChangeAppIconWhenSneakyWatcherActive)
+            if (SettingsManager.Current.ChangeAppIconWhenSneakyWatcherActive)
                 OnRequestIconChange(new Uri("pack://application:,,,/Resources/UADIcon.ico"));
         }
 
         private void InitSneakyWatcher()
         {
-            if (AppSettings.IsPauseWhenSneakyWactherActive)
+            if (SettingsManager.Current.IsPauseWhenSneakyWactherActive)
             {
                 mediaPlayer.Pause();
                 isPlaying = false;
                 (btnPlayPause.Content as PackIcon).Kind = PackIconKind.Play;
             }
 
-            if (AppSettings.ChangeAppIconWhenSneakyWatcherActive)
+            if (SettingsManager.Current.ChangeAppIconWhenSneakyWatcherActive)
                 OnRequestIconChange(new Uri("pack://application:,,,/Resources/WinDefaultIcon.png"));
 
             Focus();

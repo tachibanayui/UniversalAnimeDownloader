@@ -115,7 +115,7 @@
                         <Button Style="{StaticResource FlatControlBtn}" IsEnabled="{Binding IsDrawingEnabled}" Click="ToggleDrawing">
                             <materialDesign:PackIcon Kind="Pencil" Foreground="{DynamicResource ForeGroundColor}"/>
                         </Button>
-                        <Button Style="{StaticResource FlatControlBtn}" IsEnabled="{Binding IsDrawingEnabled}" Click="VideoSpeedChange_Popup">
+                        <Button Style="{StaticResource FlatControlBtn}" Click="VideoSpeedChange_Popup">
                             <materialDesign:PackIcon Kind="Timelapse" Foreground="{DynamicResource ForeGroundColor}"/>
                         </Button>
                     </StackPanel>
@@ -363,9 +363,9 @@
             </Grid>
             <Grid x:Name="grdSneakyWatcher" Grid.RowSpan="2">
                 <Rectangle x:Name="screenBlockerSolidColorFill" Fill="{Binding ScreenBlockerColor}" Visibility="{Binding IsBlockerActive, Converter={StaticResource boolToInvisConverter}, ConverterParameter=Normal}"/>
+                <Rectangle x:Name="FakeAppCrashFill" Fill="#9B9B9B" Visibility="Collapsed" MouseDown="ReopenCrashDialog"/>
                 <Image Source="{Binding BlockerImageSource}" Stretch="{Binding BlockerStretchMode}"
                        Visibility="{Binding ShowBlockerImage, Converter={StaticResource boolToInvisConverter}, ConverterParameter=Normal, FallbackValue=Collapsed}"/>
-                <Rectangle x:Name="FakeAppCrashFill" Fill="#9B9B9B" Visibility="Collapsed" MouseDown="ReopenCrashDialog"/>
             </Grid>
         </Grid>
     </Border>

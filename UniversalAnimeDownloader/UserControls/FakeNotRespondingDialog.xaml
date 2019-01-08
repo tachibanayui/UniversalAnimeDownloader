@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UniversalAnimeDownloader.UserControls"
         mc:Ignorable="d" Closing="CancelClose"
+        Icon="pack://application:,,,/Resources/WinDefaultIcon.png"
         Title="Programs" Height="200" Width="370" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Topmost="True">
     <StackPanel Margin="10">
         <StackPanel.Resources>

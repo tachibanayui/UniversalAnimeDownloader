@@ -39,6 +39,7 @@ namespace UniversalAnimeDownloader
                 player.AnimeThumbnail = new BitmapImage(new Uri(info.AnimeThumbnail));
                 player.SubbedTitle = episode.EpisodeName;
                 player.VideoUri = new Uri(mediaLocation);
+                player.VM.UpdateBindings();
                 Common.FadeInAnimation(Common.MainWin.UADEmbededPlayerContainer, TimeSpan.FromSeconds(1), false, AnimationFinish);
             }
             else
@@ -47,6 +48,7 @@ namespace UniversalAnimeDownloader
 
         private void AnimationFinish(object sender, EventArgs e)
         {
+            
             var player = Common.MainWin.UADEmbededPlayerContainer.Children[2] as UADPlayer;
 
             if (SettingsManager.Current.PlayMediaFullScreen)
@@ -59,6 +61,9 @@ namespace UniversalAnimeDownloader
 
         private void ScreenBlocker_Click(object sender, RoutedEventArgs e)
         {
+            if (!SettingsManager.Current.IsSneakyWatcherEnabled)
+                return;
+
             UADPlayer player = Current.FindResource("uadEmbededPlayer") as UADPlayer;
 
             if (SettingsManager.Current.IsPauseWhenSneakyWactherActive)
@@ -93,6 +98,9 @@ namespace UniversalAnimeDownloader
 
         private void FakeAppCrash_Click(object sender, RoutedEventArgs e)
         {
+            if (!SettingsManager.Current.IsSneakyWatcherEnabled)
+                return;
+
             UADPlayer player = Current.FindResource("uadEmbededPlayer") as UADPlayer;
             if (SettingsManager.Current.IsPauseWhenSneakyWactherActive)
             {
@@ -144,6 +152,9 @@ namespace UniversalAnimeDownloader
 
         private void BackgroundPlayer_Click(object sender, RoutedEventArgs e)
         {
+            if (!SettingsManager.Current.IsSneakyWatcherEnabled)
+                return;
+
             UADPlayer player = Current.FindResource("uadEmbededPlayer") as UADPlayer;
             if (SettingsManager.Current.IsPauseWhenSneakyWactherActive)
             {

@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UniversalAnimeDownloader.UserControls"
+        Icon="pack://application:,,,/Resources/WinDefaultIcon.png"
         mc:Ignorable="d"
         Title="Program" Height="180" Width="530" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Topmost="True">
     <Grid>

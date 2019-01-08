@@ -57,7 +57,6 @@ namespace UniversalAnimeDownloader.Settings
 
         private void AssignColor(object sender, RoutedEventArgs e)
         {
-            
             switch (lastColorPicker.Name)
             {
                 case "textColor":
