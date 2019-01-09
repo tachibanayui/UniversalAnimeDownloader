@@ -167,26 +167,34 @@
                                 Foreground="{DynamicResource FileSize}" FontSize="{DynamicResource Heading3}" TextWrapping="WrapWithOverflow"/>
                     <StackPanel Margin="25,25,0,0">
                         <CheckBox Content="Enable Sneaky Watcher" FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource ForeGroundColor}"
-                                  IsChecked="{Binding IsSneakyWatcherEnabled}"/>
+                                  x:Name="ckbEnableSneakyWatcher" IsChecked="{Binding IsSneakyWatcherEnabled}"/>
                         <CheckBox Content="Toggle orange border to indicate Sneaky Watcher" FontSize="{DynamicResource Heading3}" 
-                                  Foreground="{DynamicResource ForeGroundColor}" IsChecked="{Binding SneakyWatcherOrangeBorder}"/>
+                                  Foreground="{DynamicResource ForeGroundColor}" IsChecked="{Binding SneakyWatcherOrangeBorder}"
+                                  IsEnabled="{Binding ElementName=ckbEnableSneakyWatcher, Path=IsChecked}"/>
                         <TextBox materialDesign:HintAssist.Hint="Master Password:" FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource ForeGroundColor}"
-                                   Style="{StaticResource MaterialDesignFloatingHintTextBox}" Text="{Binding MasterPassword}"/>
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}" Text="{Binding MasterPassword}"
+                                 IsEnabled="{Binding ElementName=ckbEnableSneakyWatcher, Path=IsChecked}"/>
                         <TextBlock Text="Password is required when you try to inactivate the Sneaky Watcher"
-                                   FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource FileSize}"/>
+                                   FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource FileSize}"
+                                   IsEnabled="{Binding ElementName=ckbEnableSneakyWatcher, Path=IsChecked}"/>
                         <CheckBox Content="Enable Master Password" FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource ForeGroundColor}"
-                                  IsChecked="{Binding EnableMasterPassword}"/>
+                                  IsChecked="{Binding EnableMasterPassword}"
+                                  IsEnabled="{Binding ElementName=ckbEnableSneakyWatcher, Path=IsChecked}"/>
                         <CheckBox Content="Randomize text in password textbox" FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource ForeGroundColor}"
-                                  IsChecked="{Binding IsRandomizePasswordText}"/>
+                                  IsChecked="{Binding IsRandomizePasswordText}"
+                                  IsEnabled="{Binding ElementName=ckbEnableSneakyWatcher, Path=IsChecked}"/>
                         <CheckBox Content="Change app icon when Sneaky Watcher is activated" FontSize="{DynamicResource Heading3}" 
-                                  Foreground="{DynamicResource ForeGroundColor}" IsChecked="{Binding SneakyWatcherChangeAppIcon}"/>
+                                  Foreground="{DynamicResource ForeGroundColor}" IsChecked="{Binding SneakyWatcherChangeAppIcon}"
+                                  IsEnabled="{Binding ElementName=ckbEnableSneakyWatcher, Path=IsChecked}"/>
                         <CheckBox Content="Pause video when Sneaky Watcher is activated" FontSize="{DynamicResource Heading3}"
-                                  Foreground="{DynamicResource ForeGroundColor}" IsChecked="{Binding SneakyWatcherPause}"/>
+                                  Foreground="{DynamicResource ForeGroundColor}" IsChecked="{Binding SneakyWatcherPause}"
+                                  IsEnabled="{Binding ElementName=ckbEnableSneakyWatcher, Path=IsChecked}"/>
 
                         <TextBlock Text="Screen blocker" Margin="0,25,0,0" Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}"/>
                         <TextBlock Text="Block your video playback with an image or a solid color when you press a special key"
                                     Foreground="{DynamicResource FileSize}" FontSize="{DynamicResource Heading3}"/>
-                        <StackPanel Margin="25,25,0,0">
+                        <StackPanel Margin="25,25,0,0"
+                                    IsEnabled="{Binding ElementName=ckbEnableSneakyWatcher, Path=IsChecked}">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="auto"/>
@@ -209,8 +217,10 @@
 
                             <TextBlock Text="Blocker Content: " Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}" Margin="0,25,0,0"/>
                             <StackPanel Margin="25,25,0,0">
-                                <RadioButton Content="Solid Color" Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}" IsChecked="True"/>
-                                <StackPanel Orientation="Horizontal" x:Name="BlockerColor">
+                                <RadioButton Content="Solid Color" Foreground="{DynamicResource ForeGroundColor}" 
+                                             x:Name="rdbSolidColor" FontSize="{DynamicResource Heading3}" IsChecked="True"/>
+                                <StackPanel Orientation="Horizontal" x:Name="BlockerColor"
+                                            IsEnabled="{Binding ElementName=rdbSolidColor, Path=IsChecked}">
                                     <Button x:Name="blockerColor" Style="{StaticResource MaterialDesignFlatButton}" 
                                             Width="100" Height="50" Click="Event_ChooseColor">
                                         <Rectangle Fill="{DynamicResource ForeGroundColor}"
@@ -225,8 +235,8 @@
                                 </StackPanel>
 
                                 <RadioButton Content="Image" Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}" Margin="0,25,0,0"
-                                             IsChecked="{Binding IsBlockerSolidColor}"/>
-                                <StackPanel>
+                                             x:Name="rdbImage" IsChecked="{Binding IsBlockerSolidColor}"/>
+                                <StackPanel IsEnabled="{Binding ElementName=rdbImage, Path=IsChecked}">
                                     <Border Height="200" Width="360" BorderBrush="{DynamicResource ForeGroundColor}" BorderThickness="1" HorizontalAlignment="Left">
                                         <Image x:Name="imgPreviewImage" Stretch="{Binding BlockerImageStretchMode}"/>
                                     </Border>
@@ -258,7 +268,8 @@
                                         Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}"/>
                         <TextBlock Text="This feature will make a fake crash dialog message and add a white overlay screen. If you click close the program, a fake window error report will pop up and you can't close the fake dialog unless you press the unique key"
                                     TextWrapping="WrapWithOverflow" FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource FileSize}"/>
-                        <StackPanel Margin="25,25,0,0">
+                        <StackPanel Margin="25,25,0,0"
+                                    IsEnabled="{Binding ElementName=ckbEnableSneakyWatcher, Path=IsChecked}">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="auto"/>
@@ -288,25 +299,28 @@
                                         Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}"/>
                         <TextBlock Text="Make video window disappear to the taskbar icon"
                                     Foreground="{DynamicResource FileSize}" FontSize="{DynamicResource Heading3}"/>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="auto"/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition Width="auto"/>
-                                <ColumnDefinition Width="100"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="Toggle Key: " FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource ForeGroundColor}" VerticalAlignment="Center"/>
-                            <TextBlock Text="Ctrl + " Grid.Column="2" Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading2}"/>
-                            <Border Grid.Column="3" BorderThickness="1" BorderBrush="{DynamicResource ForeGroundColor}"
+                        <StackPanel Margin="25,0,0,0" 
+                                    IsEnabled="{Binding ElementName=ckbEnableSneakyWatcher, Path=IsChecked}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="100"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Toggle Key: " FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource ForeGroundColor}" VerticalAlignment="Center"/>
+                                <TextBlock Text="Ctrl + " Grid.Column="2" Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading2}"/>
+                                <Border Grid.Column="3" BorderThickness="1" BorderBrush="{DynamicResource ForeGroundColor}"
                                     x:Name="BGKeyBox" Background="Black">
-                                <Grid>
-                                    <TextBlock Text="N" Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}"
+                                    <Grid>
+                                        <TextBlock Text="N" Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}"
                                                 VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                    <Button Width="{Binding ActualWidth, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Border}}}" 
+                                        <Button Width="{Binding ActualWidth, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Border}}}" 
                                                 Style="{StaticResource MaterialDesignFlatButton}" Click="Event_ChangeKeyBinding"/>
-                                </Grid>
-                            </Border>
-                        </Grid>
+                                    </Grid>
+                                </Border>
+                            </Grid>
+                        </StackPanel>
                     </StackPanel>
                 </StackPanel>
             </StackPanel>

@@ -80,7 +80,8 @@ namespace UniversalAnimeDownloader.Settings
             ((BrushHighlighter.Children[0] as Button).Content as Rectangle).Fill = new SolidColorBrush(SettingsManager.Current.HighlighterPenColor);
 
             //Get Blocker Image
-            imgPreviewImage.Source = new BitmapImage(new Uri(SettingsManager.Current.BlockerImageLocation));
+            if(!string.IsNullOrEmpty(SettingsManager.Current.BlockerImageLocation))
+                imgPreviewImage.Source = new BitmapImage(new Uri(SettingsManager.Current.BlockerImageLocation));
             stretchMode.SelectedIndex = (int)SettingsManager.Current.BlockerStretchMode;
         }
 

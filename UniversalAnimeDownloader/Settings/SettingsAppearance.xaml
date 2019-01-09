@@ -34,8 +34,6 @@
                 <StackPanel Style="{StaticResource downloadSection}">
                     <TextBlock Text="Color Setting: " FontSize="{DynamicResource Heading2}"/>
                     <StackPanel>
-                        <TextBlock Text="This setting will change colors in your application to fit your look" FontStyle="Italic"
-                                   Foreground="{DynamicResource FileSize}" FontSize="{DynamicResource Heading3}" Margin="25,0,0,0"/>
                         <StackPanel  Margin="50,0,0,0">
                             <StackPanel Orientation="Horizontal" >
                                 <Button x:Name="textColor" Style="{StaticResource MaterialDesignFlatButton}" 
@@ -82,8 +80,6 @@
                 <StackPanel Style="{StaticResource downloadSection}">
                     <TextBlock Text="Text Size Setting: " FontSize="{DynamicResource Heading2}"/>
                     <StackPanel>
-                        <TextBlock Text="This setting will change the size in your application to fit your look" FontStyle="Italic"
-                                   Foreground="{DynamicResource FileSize}" FontSize="{DynamicResource Heading3}" Margin="25,0,0,0"/>
                         <StackPanel Margin="25,0,0,0">
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -94,7 +90,7 @@
                                 <TextBlock Text="Heading" FontSize="{DynamicResource Heading}" VerticalAlignment="Bottom"
                                            Foreground="{DynamicResource ForeGroundColor}"/>
                                 <Slider Grid.Column="1" VerticalAlignment="Bottom" Style="{StaticResource MaterialDesignDiscreteSlider}"
-                                        x:Name="headingSlider" Minimum="2" Maximum="72" Value="{DynamicResource Heading}"/>
+                                        x:Name="headingSlider" Minimum="2" Maximum="72" Value="{Binding Heading}"/>
                                 <Button Style="{StaticResource MaterialDesignFlatButton}" Grid.Column="2" ToolTip="Reset">
                                     <materialDesign:PackIcon Kind="BackupRestore" Foreground="{DynamicResource ForeGroundColor}"/>
                                 </Button>
@@ -108,7 +104,7 @@
                                 <TextBlock Text="Heading2" FontSize="{DynamicResource Heading2}" VerticalAlignment="Bottom"
                                            Foreground="{DynamicResource ForeGroundColor}"/>
                                 <Slider Grid.Column="1" VerticalAlignment="Bottom" Style="{StaticResource MaterialDesignDiscreteSlider}"
-                                        x:Name="heading2Slider" Minimum="2" Maximum="72" Value="{DynamicResource Heading2}"/>
+                                        x:Name="heading2Slider" Minimum="2" Maximum="72" Value="{Binding Heading2}"/>
                                 <Button Style="{StaticResource MaterialDesignFlatButton}" Grid.Column="2" ToolTip="Reset">
                                     <materialDesign:PackIcon Kind="BackupRestore" Foreground="{DynamicResource ForeGroundColor}"/>
                                 </Button>
@@ -122,7 +118,7 @@
                                 <TextBlock Text="Heading3" FontSize="{DynamicResource Heading3}" VerticalAlignment="Bottom"
                                            Foreground="{DynamicResource ForeGroundColor}"/>
                                 <Slider Grid.Column="1" VerticalAlignment="Bottom" Style="{StaticResource MaterialDesignDiscreteSlider}"
-                                        x:Name="heading3Slider" Minimum="2" Maximum="72" Value="{DynamicResource Heading3}"/>
+                                        x:Name="heading3Slider" Minimum="2" Maximum="72" Value="{Binding Heading3}"/>
                                 <Button Style="{StaticResource MaterialDesignFlatButton}" Grid.Column="2" ToolTip="Reset">
                                     <materialDesign:PackIcon Kind="BackupRestore" Foreground="{DynamicResource ForeGroundColor}"/>
                                 </Button>
@@ -136,7 +132,7 @@
                                 <TextBlock Text="Heading4" FontSize="{DynamicResource Heading4}" VerticalAlignment="Bottom"
                                            Foreground="{DynamicResource ForeGroundColor}"/>
                                 <Slider Grid.Column="1" VerticalAlignment="Bottom" Style="{StaticResource MaterialDesignDiscreteSlider}"
-                                        x:Name="heading4Slider" Minimum="2" Maximum="72" Value="{DynamicResource Heading4}"/>
+                                        x:Name="heading4Slider" Minimum="2" Maximum="72" Value="{Binding Heading4}"/>
                                 <Button Style="{StaticResource MaterialDesignFlatButton}" Grid.Column="2" ToolTip="Reset">
                                     <materialDesign:PackIcon Kind="BackupRestore" Foreground="{DynamicResource ForeGroundColor}"/>
                                 </Button>
@@ -152,20 +148,21 @@
                                    Foreground="{DynamicResource FileSize}" FontSize="{DynamicResource Heading3}" Margin="25,0,0,0"/>
                         <StackPanel Margin="25,0,0,0">
                             <CheckBox x:Name="useMenubar" Foreground="{DynamicResource ForeGroundColor}" HorizontalContentAlignment="Stretch"
-                                      VerticalAlignment="Top" Content="Use menu bar background" FontSize="{DynamicResource Heading3}"/>
+                                      VerticalAlignment="Top" Content="Use menu bar background" FontSize="{DynamicResource Heading3}"
+                                      IsChecked="{Binding IsBGMenubarEnabled}"/>
                             <StackPanel IsEnabled="{Binding ElementName=useMenubar, Path=IsChecked}">
                                 <Border Grid.Row="1" Height="200" Width="360" HorizontalAlignment="Left"
-                                            BorderThickness="1" BorderBrush="{DynamicResource ForeGroundColor}">
-                                    <Image Stretch="Fill"/>
+                                        BorderThickness="1" BorderBrush="{DynamicResource ForeGroundColor}">
+                                    <Image x:Name="imgPreviewImageBGmenubar" Stretch="UniformToFill"/>
                                 </Border>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition/>
                                         <ColumnDefinition Width="60"/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBox Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="{DynamicResource ForeGroundColor}"
-                                         materialDesign:HintAssist.Hint="Image Location:" FontSize="{DynamicResource Heading3}"/>
-                                    <Button Width="50" Grid.Column="1">
+                                    <TextBox Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="{DynamicResource ForeGroundColor}" IsReadOnly="True"
+                                             x:Name="txbBGmenubarLocation" materialDesign:HintAssist.Hint="Image Location:" FontSize="{DynamicResource Heading3}"/>
+                                    <Button Width="50" Grid.Column="1" Click="Event_OpenFileDialog">
                                         <materialDesign:PackIcon Kind="File" />
                                     </Button>
                                 </Grid>
@@ -174,42 +171,32 @@
                                         <ColumnDefinition Width="auto"/>
                                         <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Text="Opacity: " FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource ForeGroundColor}"
-                                               VerticalAlignment="Bottom"/>
-                                    <Slider Grid.Column="1" VerticalAlignment="Bottom" Style="{StaticResource MaterialDesignDiscreteSlider}"
-                                            Minimum="2" Maximum="72" Value="100"/>
                                 </Grid>
                             </StackPanel>
                         </StackPanel>
 
-                        <CheckBox x:Name="useBackground" Foreground="{DynamicResource ForeGroundColor}" HorizontalContentAlignment="Stretch"
-                                  Margin="25,50,0,0" VerticalAlignment="Top" Content="Use content viewer background" FontSize="{DynamicResource Heading3}"/>
-                        <StackPanel IsEnabled="{Binding ElementName=useBackground, Path=IsChecked}" Margin="25,0,0,0">
-                            <Border Grid.Row="1" Height="200" Width="360" HorizontalAlignment="Left"
-                                            BorderThickness="1" BorderBrush="{DynamicResource ForeGroundColor}">
-                                <Image Stretch="Fill"/>
-                            </Border>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition Width="60"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBox Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="{DynamicResource ForeGroundColor}"
-                                         materialDesign:HintAssist.Hint="Image Location:" FontSize="{DynamicResource Heading3}"/>
-                                <Button Width="50" Grid.Column="1">
-                                    <materialDesign:PackIcon Kind="File" />
-                                </Button>
-                            </Grid>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto"/>
-                                    <ColumnDefinition/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="Opacity: " FontSize="{DynamicResource Heading3}" Foreground="{DynamicResource ForeGroundColor}"
-                                               VerticalAlignment="Bottom"/>
-                                <Slider Grid.Column="1" VerticalAlignment="Bottom" Style="{StaticResource MaterialDesignDiscreteSlider}"
-                                            Minimum="2" Maximum="72" Value="100"/>
-                            </Grid>
+                        <StackPanel Margin="25,50,0,0">
+                            <CheckBox x:Name="useBackground" Foreground="{DynamicResource ForeGroundColor}" HorizontalContentAlignment="Stretch"
+                                      VerticalAlignment="Top" Content="Use content viewer background" FontSize="{DynamicResource Heading3}"
+                                      IsChecked="{Binding IsBGViewerEnabled}"/>
+                            <StackPanel IsEnabled="{Binding ElementName=useBackground, Path=IsChecked}" >
+                                <Border Grid.Row="1" Height="200" Width="360" HorizontalAlignment="Left"
+                                    BorderThickness="1" BorderBrush="{DynamicResource ForeGroundColor}">
+                                    <Image Stretch="Fill" x:Name="imgPreviewImageBGviewer"/>
+                                </Border>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="60"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="{DynamicResource ForeGroundColor}"
+                                         materialDesign:HintAssist.Hint="Image Location:" FontSize="{DynamicResource Heading3}"
+                                         x:Name="txbBGViewerLocation" IsReadOnly="True"/>
+                                    <Button Width="50" Grid.Column="1" Click="Event_OpenFileDialog">
+                                        <materialDesign:PackIcon Kind="File" />
+                                    </Button>
+                                </Grid>
+                            </StackPanel>
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>

@@ -411,6 +411,169 @@ namespace UniversalAnimeDownloader.Settings
 
         #endregion
 
+        #region AppearanceSetting
+        private Color foregroundColor = Colors.White;
+        public Color ForegroundColor
+        {
+            get { return foregroundColor; }
+            set
+            {
+                if(foregroundColor != value)
+                {
+                    foregroundColor = value;
+                    System.Windows.Application.Current.Resources["ForeGroundColor"] = new SolidColorBrush(value);
+                    UpdateSetting();
+                }
+            }
+        }
+
+        //Why the name...
+        private Color fileSizeColor = Colors.LightGray;
+        public Color FileSizeColor
+        {
+            get { return fileSizeColor; }
+            set
+            {
+                if(fileSizeColor != value)
+                {
+                    fileSizeColor = value;
+                    System.Windows.Application.Current.Resources["FileSize"] = new SolidColorBrush(value);
+                    UpdateSetting();
+                }
+            }
+        }
+
+        private Color primaryColor = Colors.DeepSkyBlue;
+        public Color PrimaryColor
+        {
+            get { return primaryColor; }
+            set
+            {
+                if (primaryColor != value)
+                {
+                    primaryColor = value;
+                    System.Windows.Application.Current.Resources["Primary"] = new SolidColorBrush(value);
+                }
+            }
+        }
+
+        private double fontSizeHeading = 40;
+        public double FontSizeHeading
+        {
+            get { return fontSizeHeading; }
+            set
+            {
+                if(fontSizeHeading != value)
+                {
+                    fontSizeHeading = value;
+                    System.Windows.Application.Current.Resources["Heading"] = value;
+                    UpdateSetting();
+                }
+            }
+        }
+
+        private double fontSizeHeading2 = 24;
+        public double FontSizeHeading2
+        {
+            get { return fontSizeHeading2; }
+            set
+            {
+                if (fontSizeHeading2 != value)
+                {
+                    fontSizeHeading2 = value;
+                    System.Windows.Application.Current.Resources["Heading2"] = value;
+                    UpdateSetting();
+                }
+            }
+        }
+
+        private double fontSizeHeading3 = 18;
+        public double FontSizeHeading3
+        {
+            get { return fontSizeHeading3; }
+            set
+            {
+                if (fontSizeHeading3 != value)
+                {
+                    fontSizeHeading3 = value;
+                    System.Windows.Application.Current.Resources["Heading3"] = value;
+                    UpdateSetting();
+                }
+            }
+        }
+
+        private double fontSizeHeading4 = 15;
+        public double FontSizeHeading4
+        {
+            get { return fontSizeHeading4; }
+            set
+            {
+                if (fontSizeHeading4 != value)
+                {
+                    fontSizeHeading4 = value;
+                    System.Windows.Application.Current.Resources["Heading4"] = value;
+                    UpdateSetting();
+                }
+            }
+        }
+
+        private bool enableBGMenubarImage;
+        public bool EnableBGMenubarImage
+        {
+            get { return enableBGMenubarImage; }
+            set
+            {
+                if(enableBGMenubarImage != value)
+                {
+                    enableBGMenubarImage = value;
+                    UpdateSetting();
+                }
+            }
+        }
+
+        private string bgMenubarImageLocation;
+        public string BGMenubarImageLocation
+        {
+            get { return bgMenubarImageLocation; }
+            set
+            {
+                if(bgMenubarImageLocation != value)
+                {
+                    bgMenubarImageLocation = value;
+                    UpdateSetting();
+                }
+            }
+        }
+
+        private bool enableBGViewerImage;
+        public bool EnableBGViewerImage
+        {
+            get { return enableBGViewerImage; }
+            set
+            {
+                if(enableBGViewerImage != value)
+                {
+                    enableBGViewerImage = value;
+                    UpdateSetting();
+                }
+            }
+        }
+
+        private string bgViewerImageLocation;
+        public string BGViewerImageLocation
+        {
+            get { return bgViewerImageLocation; }
+            set
+            {
+                if (bgViewerImageLocation != value)
+                {
+                    bgViewerImageLocation = value;
+                    UpdateSetting();
+                }
+            }
+        }
+        #endregion
+
         private void UpdateSetting()
         {
             string saveContent = JsonConvert.SerializeObject(this);
