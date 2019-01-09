@@ -278,9 +278,10 @@
         </Grid>
 
 
-        <!--<Grid x:Name="welcomeScreenRoot" Background="{DynamicResource Primary}"
+        <Grid x:Name="welcomeScreenRoot" Background="{DynamicResource Primary}"
               HorizontalAlignment="Left" Width="{Binding ElementName=rootWindow, Path=ActualWidth}">
             <Grid.Triggers>
+                
                 <EventTrigger RoutedEvent="Loaded">
                     <BeginStoryboard>
                         <Storyboard>
@@ -293,15 +294,13 @@
                             <ThicknessAnimation To="0" Duration="0:0:1" BeginTime="0:0:1.5" DecelerationRatio="0.5"
                                                     Storyboard.TargetName="uad" Storyboard.TargetProperty="Margin"/>
                             <DoubleAnimation To="1" Duration="0:0:1" BeginTime="0:0:2.75"
-                                                 Storyboard.TargetName="wish" Storyboard.TargetProperty="Opacity"/>
-                            <DoubleAnimation From="{Binding ElementName=rootWindow, Path=ActualWidth}"
-                                             To="275" BeginTime="0:0:3.75" Duration="0:0:1" DecelerationRatio="0.5"
-                                             Storyboard.TargetName="welcomeScreenRoot" Storyboard.TargetProperty="Width"/>
-                            <DoubleAnimation To="0" Duration="0:0:0.5" BeginTime="0:0:4.5"
-                                             Storyboard.TargetName="welcomeScreenRoot" Storyboard.TargetProperty="Opacity"/>
-                            <DoubleAnimation To="0" Duration="0:0:0.000001" BeginTime="0:0:5"
-                                             Storyboard.TargetName="welcomeScreenRoot" Storyboard.TargetProperty="Width"/>
-                        </Storyboard>        
+                                             Storyboard.TargetName="wish" Storyboard.TargetProperty="Opacity"/>
+                            <DoubleAnimation To="1" Duration="0:0:0.1" BeginTime="0:0:3.5"
+                                             Storyboard.TargetName="txblInitStatus" Storyboard.TargetProperty="Opacity"/>
+                            <DoubleAnimation To="1" Duration="0:0:0.1" BeginTime="0:0:3.5"
+                                             Storyboard.TargetName="prgBarInitStatus" Storyboard.TargetProperty="Opacity"/>
+                            
+                        </Storyboard>
                     </BeginStoryboard>
                 </EventTrigger>
             </Grid.Triggers>
@@ -314,7 +313,10 @@
                 <TextBlock x:Name="uad" Opacity="0" Margin="0,200,0,0" Text="Universal Anime Downloader" HorizontalAlignment="Center" FontSize="{DynamicResource Heading}"/>
                 <TextBlock x:Name="wish" Opacity="0" Text="I wish you have a fun time watching anime!" HorizontalAlignment="Center" Margin="0,110,0,0" FontSize="{DynamicResource Heading2}"/>
             </StackPanel>
+            <TextBlock Opacity="0" Text="Initializing..." FontSize="{DynamicResource Heading2}" Margin="0,0,10,10"
+                       x:Name="txblInitStatus" Grid.Row="2" VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
+            <ProgressBar Opacity="0" x:Name="prgBarInitStatus" Height="5" Grid.Row="2"
+                         VerticalAlignment="Bottom" IsIndeterminate="True"/>
         </Grid>
-        -->
     </Grid>
 </Window>

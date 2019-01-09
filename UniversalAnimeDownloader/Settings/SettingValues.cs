@@ -432,10 +432,10 @@ namespace UniversalAnimeDownloader.Settings
             get { return foregroundColor; }
             set
             {
-                if(foregroundColor != value)
+                System.Windows.Application.Current.Resources["ForeGroundColor"] = new SolidColorBrush(value);
+                if (foregroundColor != value)
                 {
                     foregroundColor = value;
-                    System.Windows.Application.Current.Resources["ForeGroundColor"] = new SolidColorBrush(value);
                     UpdateSetting();
                 }
             }
@@ -448,10 +448,10 @@ namespace UniversalAnimeDownloader.Settings
             get { return fileSizeColor; }
             set
             {
+                System.Windows.Application.Current.Resources["FileSize"] = new SolidColorBrush(value);
                 if(fileSizeColor != value)
                 {
                     fileSizeColor = value;
-                    System.Windows.Application.Current.Resources["FileSize"] = new SolidColorBrush(value);
                     UpdateSetting();
                 }
             }
@@ -463,10 +463,11 @@ namespace UniversalAnimeDownloader.Settings
             get { return primaryColor; }
             set
             {
+                System.Windows.Application.Current.Resources["Primary"] = new SolidColorBrush(value);
                 if (primaryColor != value)
                 {
                     primaryColor = value;
-                    System.Windows.Application.Current.Resources["Primary"] = new SolidColorBrush(value);
+                    UpdateSetting();
                 }
             }
         }

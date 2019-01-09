@@ -9,6 +9,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using UniversalAnimeDownloader.Settings;
@@ -31,6 +32,51 @@ namespace UniversalAnimeDownloader.View
             uadEmbededPlayer.RequestWindowState += HandlePlayerWindowStateRequest;
             uadEmbededPlayer.RequestIconChange += IconChange;
             UADEmbededPlayerContainer.Children.Add(uadEmbededPlayer);
+            Common.MainWin = this;
+            InitializingApplication();
+        }
+
+        private async void InitializingApplication()
+        {
+            await Task.Delay(4250);
+            txblInitStatus.Text = "Checking for updates...";
+            //Checking updates here
+            await Task.Delay(1000);
+            txblInitStatus.Text = "Loading settings...";
+            await Task.Delay(500);
+            txblInitStatus.Text = "Finalizing...";
+            await Task.Delay(500);
+            welcomeScreenRoot.Focus();
+
+            //Close Animation:
+            Binding bd = new Binding();
+            bd.ElementName = "rootWindow";
+            bd.Path = new PropertyPath(ActualWidthProperty);
+            DoubleAnimation dbAnimation = new DoubleAnimation { To = 275, DecelerationRatio = 0.5 };
+            dbAnimation.Duration = TimeSpan.FromSeconds(1);
+            dbAnimation.BeginTime = TimeSpan.FromSeconds(0);
+            Storyboard.SetTargetName(dbAnimation, "welcomeScreenRoot");
+            Storyboard.SetTargetProperty(dbAnimation, new PropertyPath(WidthProperty));
+            BindingOperations.SetBinding(dbAnimation, DoubleAnimation.FromProperty, bd);
+
+            DoubleAnimation dbAnimation2 = new DoubleAnimation { To = 0 };
+            dbAnimation2.Duration = TimeSpan.FromSeconds(0.5);
+            dbAnimation2.BeginTime = TimeSpan.FromSeconds(0.75);
+            Storyboard.SetTargetName(dbAnimation2, "welcomeScreenRoot");
+            Storyboard.SetTargetProperty(dbAnimation2, new PropertyPath(OpacityProperty));
+
+            DoubleAnimation dbAnimation3 = new DoubleAnimation { To = 0 };
+            dbAnimation3.Duration = TimeSpan.FromSeconds(0.001);
+            dbAnimation3.BeginTime = TimeSpan.FromSeconds(1.25);
+            Storyboard.SetTargetName(dbAnimation3, "welcomeScreenRoot");
+            Storyboard.SetTargetProperty(dbAnimation3, new PropertyPath(WidthProperty));
+
+            Storyboard strBoard = new Storyboard();
+            strBoard.Children.Add(dbAnimation);
+            strBoard.Children.Add(dbAnimation2);
+            strBoard.Children.Add(dbAnimation3);
+
+            strBoard.Begin(welcomeScreenRoot);
         }
 
         private void IconChange(object sender, RequestWindowIconChangeEventArgs e)

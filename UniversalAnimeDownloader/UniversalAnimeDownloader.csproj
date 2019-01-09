@@ -176,10 +176,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\SplashScreen.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Compile Include="Animations\GridLengthAnimation.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
@@ -257,10 +253,6 @@
     <Compile Include="View\OnlineAnimeDetail.cs" />
     <Compile Include="View\AnimeDetailBase.xaml.cs">
       <DependentUpon>AnimeDetailBase.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\SplashScreen.xaml.cs">
-      <DependentUpon>SplashScreen.xaml</DependentUpon>
-      <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>

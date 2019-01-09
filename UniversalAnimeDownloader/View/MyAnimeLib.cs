@@ -1,10 +1,12 @@
-﻿using System;
+﻿using MaterialDesignThemes.Wpf;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using uadcorelib.Models;
@@ -47,6 +49,24 @@ namespace UniversalAnimeDownloader.View
                 };
                 await Task.Delay(20);
             }
+
+            if(animeCardContainer.Children.Count == 0)
+                ShowsNothingToShow();
+        }
+
+        private void ShowsNothingToShow()
+        {
+            StackPanel stackPanel = new StackPanel { VerticalAlignment = VerticalAlignment.Center };
+            PackIcon packIcon = new PackIcon { Kind = PackIconKind.EmoticonSad, Width = 100, Height = double.NaN};
+            packIcon.SetResourceReference(ForegroundProperty, "ForeGroundColor");
+            stackPanel.Children.Add(packIcon);
+            TextBlock textBlock = new TextBlock { Text = "Nothing to show here", HorizontalAlignment = HorizontalAlignment.Center};
+            textBlock.SetResourceReference(FontSizeProperty, "Heading");
+            stackPanel.Children.Add(textBlock);
+            TextBlock txblDescription = new TextBlock { Text = "Your downloaded anime will show here, so go and download some", HorizontalAlignment = HorizontalAlignment.Center };
+            txblDescription.SetResourceReference(FontSizeProperty, "Heading2");
+            stackPanel.Children.Add(txblDescription);
+            ((animeCardContainer.Parent as StackPanel).Parent as Grid).Children.Add(stackPanel);
         }
     }
 }

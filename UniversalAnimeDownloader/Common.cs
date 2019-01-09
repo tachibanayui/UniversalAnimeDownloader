@@ -126,5 +126,10 @@ namespace UniversalAnimeDownloader
 
         public static void CancelCloseWindow(object sender, CancelEventArgs e) => e.Cancel = true;
 
+        public static void VerionCheck()
+        {
+
+        }
+
     }
 }
