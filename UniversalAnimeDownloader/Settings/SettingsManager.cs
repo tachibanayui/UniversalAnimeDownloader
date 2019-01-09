@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -32,6 +33,23 @@ namespace UniversalAnimeDownloader.Settings
                 string saveContent = JsonConvert.SerializeObject(Current);
                 File.WriteAllText("Settings\\CurrentSettings.json", saveContent);
             }
+
+            //Migrate Settings Checker
+            if(Current.SettingsVersion < 1)
+            {
+                //Do something
+            }
+        }
+
+        public static void ResetCurrentSettings()
+        {
+            File.Delete("Settings\\CurrentSettings.json");
+            string restartBatchFileContent = "start UniversalAnimeDownloader.exe";
+            File.WriteAllText("RestartUAD.bat", restartBatchFileContent);
+            System.Windows.Application.Current.Shutdown();
+            ProcessStartInfo processStartInfo = new ProcessStartInfo("RestartUAD.bat");
+            processStartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            Process.Start(processStartInfo);
         }
     }
 }

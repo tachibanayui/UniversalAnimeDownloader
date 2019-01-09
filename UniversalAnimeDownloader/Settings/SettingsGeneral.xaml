@@ -39,9 +39,9 @@
                             <ColumnDefinition Width="60"/>
                         </Grid.ColumnDefinitions>
                         <TextBox Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}"
-                                 materialDesign:HintAssist.Hint="Anime Library Directory: "
-                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
-                        <Button Width="50" Grid.Column="1">
+                                 x:Name="txbAnimeDir" materialDesign:HintAssist.Hint="Anime Library Directory: "
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}" LostFocus="Event_SelectFolderManual"/>
+                        <Button Width="50" Grid.Column="1" Click="Event_SelectFolder">
                             <materialDesign:PackIcon Kind="File" />
                         </Button>
                         <Button Width="50" Grid.Column="2">
@@ -55,9 +55,9 @@
                             <ColumnDefinition Width="60"/>
                         </Grid.ColumnDefinitions>
                         <TextBox Foreground="{DynamicResource ForeGroundColor}" FontSize="{DynamicResource Heading3}"
-                                 materialDesign:HintAssist.Hint="Music Playback Directory: "
+                                 x:Name="txbMusicDir" materialDesign:HintAssist.Hint="Music Playback Directory: "
                                  Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
-                        <Button Width="50" Grid.Column="1">
+                        <Button Width="50" Grid.Column="1" Click="Event_SelectFolder">
                             <materialDesign:PackIcon Kind="File" />
                         </Button>
                         <Button Width="50" Grid.Column="2">
@@ -75,7 +75,7 @@
                         </Grid.ColumnDefinitions>
                         <materialDesign:PackIcon Kind="{Binding BackgroundVolumeIcon}" VerticalAlignment="Bottom"/>
                         <Slider Minimum="0" Maximum="100" Value="{Binding BackGroundMusicVolume}" Grid.Column="1"
-                                Style="{StaticResource MaterialDesignDiscreteSlider}"/>
+                                Style="{StaticResource MaterialDesignDiscreteSlider}" Thumb.DragCompleted="Event_BGMusicChanged"/>
                     </Grid>
                 </StackPanel>
 
@@ -95,6 +95,16 @@
                             </Grid.ColumnDefinitions>
                             <materialDesign:PackIcon Kind="ContentSave" />
                             <TextBlock Text="Save Setting Profile!" Grid.Column="1" VerticalAlignment="Center"/> 
+                        </Grid>
+                    </Button>
+                    <Button Click="Event_ResetThisSettingProfile">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <materialDesign:PackIcon Kind="BackupRestore" />
+                            <TextBlock Text="Reset this Setting Profile!" Grid.Column="1" VerticalAlignment="Center"/>
                         </Grid>
                     </Button>
                     <Button>

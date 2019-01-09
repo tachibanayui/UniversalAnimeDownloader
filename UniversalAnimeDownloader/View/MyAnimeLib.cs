@@ -9,6 +9,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using uadcorelib.Models;
 using UniversalAnimeDownloader.CustomControl;
+using UniversalAnimeDownloader.Settings;
 
 namespace UniversalAnimeDownloader.View
 {
@@ -23,7 +24,7 @@ namespace UniversalAnimeDownloader.View
 
         private async void AddAnimeCardAsync()
         {
-            string animeLibDir = AppDomain.CurrentDomain.BaseDirectory + "AnimeLibrary";
+            string animeLibDir = SettingsManager.Current.AnimeLibraryDirectory;
             
             //Check if the animeLibDir exist
             if (!Directory.Exists(animeLibDir))

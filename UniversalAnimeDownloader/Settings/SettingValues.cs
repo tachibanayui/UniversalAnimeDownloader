@@ -12,6 +12,20 @@ namespace UniversalAnimeDownloader.Settings
 {
     public class SettingValues
     {
+        private int settingsVersion = 1;
+        public int SettingsVersion
+        {
+            get { return settingsVersion; }
+            set
+            {
+                if(settingsVersion != value)
+                {
+                    settingsVersion = value;
+                    UpdateSetting();
+                }
+            }
+        }
+
         public string SettingName { get; set; } = "Dummy.json";
 
         #region PlayblackSetting
@@ -568,6 +582,50 @@ namespace UniversalAnimeDownloader.Settings
                 if (bgViewerImageLocation != value)
                 {
                     bgViewerImageLocation = value;
+                    UpdateSetting();
+                }
+            }
+        }
+        #endregion
+
+        #region General Settings
+        private string animeLibraryDirectory = AppDomain.CurrentDomain.BaseDirectory + "AnimeLibrary\\";
+        public string AnimeLibraryDirectory
+        {
+            get { return animeLibraryDirectory; }
+            set
+            {
+                if(animeLibraryDirectory != value)
+                {
+                    animeLibraryDirectory = value;
+                    UpdateSetting();
+                }
+            }
+        }
+
+        private string backgroundMusicDirectory = AppDomain.CurrentDomain.BaseDirectory + "BackgroundMusic\\";
+        public string BackgroundMusicDirectory
+        {
+            get { return backgroundMusicDirectory; }
+            set
+            {
+                if(backgroundMusicDirectory != value)
+                {
+                    backgroundMusicDirectory = value;
+                    UpdateSetting();
+                }
+            }
+        }
+
+        private double backgroundMusicVolume = 50;
+        public double BackgroundMusicVolume
+        {
+            get { return backgroundMusicVolume; }
+            set
+            {
+                if(backgroundMusicVolume != value)
+                {
+                    backgroundMusicVolume = value;
                     UpdateSetting();
                 }
             }

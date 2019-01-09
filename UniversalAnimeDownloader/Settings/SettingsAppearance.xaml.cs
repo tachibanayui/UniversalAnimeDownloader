@@ -47,10 +47,16 @@ namespace UniversalAnimeDownloader.Settings
 
         private void GetValuesFromSettings()
         {
-            imgPreviewImageBGmenubar.Source = new BitmapImage(new Uri(SettingsManager.Current.BGMenubarImageLocation));
-            txbBGmenubarLocation.Text = SettingsManager.Current.BGViewerImageLocation;
-            imgPreviewImageBGviewer.Source = new BitmapImage(new Uri(SettingsManager.Current.BGViewerImageLocation));
-            txbBGViewerLocation.Text = SettingsManager.Current.BGViewerImageLocation;
+            if(!string.IsNullOrEmpty(SettingsManager.Current.BGMenubarImageLocation))
+            {
+                imgPreviewImageBGmenubar.Source = new BitmapImage(new Uri(SettingsManager.Current.BGMenubarImageLocation));
+                txbBGmenubarLocation.Text = SettingsManager.Current.BGMenubarImageLocation;
+            }
+            if (!string.IsNullOrEmpty(SettingsManager.Current.BGViewerImageLocation))
+            {
+                imgPreviewImageBGviewer.Source = new BitmapImage(new Uri(SettingsManager.Current.BGViewerImageLocation));
+                txbBGViewerLocation.Text = SettingsManager.Current.BGViewerImageLocation;
+            }
         }
 
         private void ChooseColor(object sender, RoutedEventArgs e)

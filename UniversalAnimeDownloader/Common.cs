@@ -19,6 +19,8 @@ namespace UniversalAnimeDownloader
     {
         public static bool InternetAvaible = false;
 
+        public static string Version = "v0.8.2_beta";
+
         public static bool CheckForInternetConnection()
         {
             try
