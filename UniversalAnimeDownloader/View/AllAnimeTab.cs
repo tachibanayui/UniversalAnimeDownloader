@@ -28,6 +28,7 @@ namespace UniversalAnimeDownloader.View
     /// </summary>
     public partial class AllAnimeTab : AnimeList
     {
+        private StackPanel NoConnectionOverlay;
         public AnimeListViewModel VM;
         private bool isAvaible = true;
 
@@ -36,10 +37,16 @@ namespace UniversalAnimeDownloader.View
             VM = new AnimeListViewModel(Dispatcher);
             DataContext = VM;
 
-            VM.IsHaveConnection = Common.InternetAvaible;
+            VM.IsHaveConnection = Common.IsInternetAvaible;
+            
+            NoConnectionOverlay = CreateNoConnectionOverlay();
 
-            CreateNoConnectionOverlay();
+            Common.InternetStateChanged += async(s, e) =>
+            {
+                Dispatcher.Invoke( () => NoConnectionOverlay.Visibility = Common.IsInternetAvaible ? Visibility.Collapsed : Visibility.Visible);
+            };
             InitializingFilmList();
+            Title = "Browse All Anime";
         }
 
         private async void InitializingFilmList()
@@ -56,7 +63,7 @@ namespace UniversalAnimeDownloader.View
         /// <summary>
         /// Code behind version for No Connection overlay used to implement in xaml
         /// </summary>
-        private void CreateNoConnectionOverlay()
+        private StackPanel CreateNoConnectionOverlay()
         {
             StackPanel pnl = new StackPanel() { HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center };
             Binding visibilityBinding = new Binding();
@@ -73,6 +80,7 @@ namespace UniversalAnimeDownloader.View
             pnl.Children.Add(textBlock);
 
             overlayContainer.Children.Add(pnl);
+            return pnl;
         }
 
         private async void AddCard(FilmListModel filmList, bool removeOldCard = true, string genre = null)
@@ -90,20 +98,18 @@ namespace UniversalAnimeDownloader.View
                 VM.IsLoading = false;
                 return;
             }
-            VuigheAnimeCard[] cards = null;
-            cards = new VuigheAnimeCard[filmList.data.Length];
 
             await Task.Delay(10);
 
             for (int i = 0; i < filmList.data.Length; i++)
             {
-                cards[i] = new VuigheAnimeCard();
-                cards[i].Opacity = 0;
-                animeCardContainer.Children.Add(cards[i]);
-                cards[i].AnimeBG = new BitmapImage();
-                cards[i].Data = new VuigheAnimeManager(filmList.data[i]);
-                cards[i].BeginAnimation(OpacityProperty, new DoubleAnimation(1, TimeSpan.FromSeconds(.5)));
-                cards[i].WatchAnimeButtonClicked += (s, e) =>
+                VuigheAnimeCard cards = new VuigheAnimeCard();
+                cards.Opacity = 0;
+                animeCardContainer.Children.Add(cards);
+                cards.AnimeBG = new BitmapImage();
+                cards.Data = new VuigheAnimeManager(filmList.data[i]);
+                cards.BeginAnimation(OpacityProperty, new DoubleAnimation(1, TimeSpan.FromSeconds(.5)));
+                cards.WatchAnimeButtonClicked += (s, e) =>
                 {
                     VuigheAnimeCard animeCard = s as VuigheAnimeCard;
                     AnimeDetailBase animeDetail = new OnlineAnimeDetail(animeCard.Data);

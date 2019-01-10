@@ -24,8 +24,11 @@ namespace UniversalAnimeDownloader.ViewModel
             set
             {
                 if (value != isHaveConnection)
+                {
                     isHaveConnection = value;
-                OnPropertyChanged("IsHaveConnection");
+                    OnPropertyChanged("IsHaveConnection");
+                }
+                    
             }
         }
 

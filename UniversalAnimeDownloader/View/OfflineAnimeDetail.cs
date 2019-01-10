@@ -23,6 +23,7 @@ namespace UniversalAnimeDownloader.View
             OfflineInfo = info;
             DataContext = VM;
 
+            Title = OfflineInfo.AnimeName;
             GetInfomationAsync();
             AddEpisodeListControl();
         }

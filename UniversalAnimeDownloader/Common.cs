@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -12,14 +14,77 @@ using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
+using UniversalAnimeDownloader.Models;
 
 namespace UniversalAnimeDownloader
 {
     static class Common
     {
-        public static bool InternetAvaible = false;
+        #region a
+        private static string AccessToken = "af1a2d0dfe65224918e1259f79a2c55a677dbf00";
+        #endregion
+        public static string SourceVersions { get; set; } = $"https://api.github.com/repos/quangaming2929/UniversalAnimeDownloader/releases/latest?access_token={AccessToken}";
+        public static string CurrentVersionName { get; set; } = "v0.8.2_beta";
+        public static DateTime CurrentVersionReleaseDate { get; set; } = DateTime.Parse("1 Jan, 2019");
 
-        public static string Version = "v0.8.2_beta";
+        public static async Task<GitHubData> GetLatestUpdate()
+        {
+            string apiResult = string.Empty;
+
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(SourceVersions);
+                using (WebResponse resp = await request.GetResponseAsync())
+                {
+                    using (Stream stream = resp.GetResponseStream())
+                    {
+                        StreamReader reader = new StreamReader(stream);
+                        apiResult = await reader.ReadToEndAsync();
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                throw new InvalidOperationException("Can't get latest version!", e);
+            }
+
+            return JsonConvert.DeserializeObject<GitHubData>(apiResult);
+        }
+
+        public static void DownloadUpdateContent(GitHubData data, AsyncCompletedEventHandler callback = null)
+        {
+            WebClient client = new WebClient();
+
+            if (!Directory.Exists("\\Updates"))
+                Directory.CreateDirectory("\\Updates");
+
+            client.DownloadFileAsync(new Uri(data.assets[0].browser_download_url), $"\\Updates\\{data.assets[0].name}");
+
+            if(callback != null)
+                client.DownloadFileCompleted += callback;
+        }
+
+        public static string HtmlWrapWithHtml(string content)
+        {
+            string start = @"<html><body bgcolor=""#424242"">";
+            string end = @"</body></html>";
+            return start + content + end;
+        }
+
+        private static bool isInternetAvaible = false;
+
+        public static bool IsInternetAvaible
+        {
+            get => isInternetAvaible;
+            set
+            {
+                if(isInternetAvaible != value)
+                {
+                    isInternetAvaible = value;
+                    OnInternetConnectionChanged();
+                }
+            }
+        }
 
         public static bool CheckForInternetConnection()
         {
@@ -28,10 +93,11 @@ namespace UniversalAnimeDownloader
                 using (var client = new WebClient())
                 using (var stream = client.OpenRead("http://www.google.com"))
                 {
+                    IsInternetAvaible = true;
                     return true;
                 }
             }
-            catch
+            catch (Exception e)
             {
                 return false;
             }
@@ -125,6 +191,12 @@ namespace UniversalAnimeDownloader
         public static View.MainWindow MainWin;
 
         public static void CancelCloseWindow(object sender, CancelEventArgs e) => e.Cancel = true;
+
+        private static void OnInternetConnectionChanged() => InternetStateChanged?.Invoke(null, e: EventArgs.Empty);
+
+        public static event EventHandler<EventArgs> InternetStateChanged;
+        
+
 
         public static void VerionCheck()
         {

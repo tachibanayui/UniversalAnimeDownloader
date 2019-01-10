@@ -28,6 +28,8 @@ namespace UniversalAnimeDownloader.Settings
 
         public string SettingName { get; set; } = "Dummy.json";
 
+
+
         #region PlayblackSetting
         private PlayerType preferedPlayer = PlayerType.Embeded;
         public PlayerType PreferedPlayer
@@ -627,6 +629,20 @@ namespace UniversalAnimeDownloader.Settings
                 if(backgroundMusicVolume != value)
                 {
                     backgroundMusicVolume = value;
+                    UpdateSetting();
+                }
+            }
+        }
+
+        private bool downloadUpdateWithoutAsking = true;
+        public bool DownloadUpdateWithoutAsking
+        {
+            get { return downloadUpdateWithoutAsking; }
+            set
+            {
+                if(downloadUpdateWithoutAsking != value)
+                {
+                    downloadUpdateWithoutAsking = value;
                     UpdateSetting();
                 }
             }

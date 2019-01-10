@@ -45,7 +45,7 @@
                                 
                             </StackPanel>
                             
-                            <materialDesign:PopupBox Grid.Row="2" VerticalAlignment="Bottom"
+                            <!--<materialDesign:PopupBox Grid.Row="2" VerticalAlignment="Bottom"
                                                      HorizontalAlignment="Right" Margin="10"
                                                      Style="{TemplateBinding PopUpBoxStyle}"
                                                      PlacementMode="BottomAndAlignCentres"
@@ -58,7 +58,7 @@
                                         <materialDesign:PackIcon Kind="Play" Width="{TemplateBinding AnimeFontSize}" Height="auto" ToolTip="Watch this anime!"/>
                                     </Button>
                                 </StackPanel>
-                            </materialDesign:PopupBox>
+                            </materialDesign:PopupBox>-->
 
 
                         </Grid>
@@ -74,38 +74,33 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:TaskCompletePopup}">
-                    <Grid Background="Transparent" x:Name="container" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}">
-                        <materialDesign:DialogHost IsOpen="{TemplateBinding DialogOpen}" >
+                        <materialDesign:DialogHost IsOpen="{TemplateBinding DialogOpen}" DialogTheme="Dark" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}">
                             <materialDesign:DialogHost.DialogContent>
-                                <materialDesign:Card Width="{TemplateBinding DialogWidth}" Height="{TemplateBinding DialogHeight}" Background="{TemplateBinding CardBackGround}"
-                                                     VerticalAlignment="Center" HorizontalAlignment="Center" UniformCornerRadius="{TemplateBinding DialogUniformRadius}">
-                                    <Grid Background="Transparent">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition/>
-                                            <RowDefinition/>
-                                            <RowDefinition Height="35"/>
-                                        </Grid.RowDefinitions>
+                                <Grid Background="Transparent" Width="600" Height="400">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition Height="35"/>
+                                    </Grid.RowDefinitions>
 
-                                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Vertical">
-                                            <materialDesign:PackIcon Kind="{TemplateBinding IconKind}" Width="100" Height="auto" Foreground="White" HorizontalAlignment="Center"/>
-                                            <TextBlock Text="{TemplateBinding PopupTitle}" FontWeight="Bold" Foreground="{TemplateBinding DialogTitleForeground}"
-                                                       FontSize="{TemplateBinding DialogTitleFontSize}" HorizontalAlignment="Center"/>
-                                        </StackPanel>
+                                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Vertical">
+                                        <materialDesign:PackIcon Kind="{TemplateBinding IconKind}" Width="100" Height="auto" Foreground="White" HorizontalAlignment="Center"/>
+                                        <TextBlock Text="{TemplateBinding PopupTitle}" FontWeight="Bold" Foreground="{TemplateBinding DialogTitleForeground}"
+                                                    FontSize="{TemplateBinding DialogTitleFontSize}" HorizontalAlignment="Center"/>
+                                    </StackPanel>
 
-                                        <TextBlock Margin="15" Grid.Row="1" TextWrapping="Wrap"
-                                                   Text="{TemplateBinding PopupText}" Foreground="{TemplateBinding DialogTitleForeground}"/>
+                                    <TextBlock Margin="15" Grid.Row="1" TextWrapping="Wrap"
+                                                Text="{TemplateBinding PopupText}" Foreground="{TemplateBinding DialogTitleForeground}"/>
 
-                                        <StackPanel Margin="15,0,15,0" Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right">
-                                            <Button Style="{TemplateBinding ActionButtonStyle}" 
-                                                    materialDesign:RippleAssist.Feedback="{TemplateBinding ButtonRippleColor}" Content="Give Feedback" Margin="5,0,5,0"/>
-                                            <Button Style="{TemplateBinding ActionButtonStyle}"
-                                                    materialDesign:RippleAssist.Feedback="{TemplateBinding ButtonRippleColor}" Content="OK" Margin="5,0,5,0" x:Name="btnOk"/>
-                                        </StackPanel>
-                                    </Grid>
-                                </materialDesign:Card>
+                                    <StackPanel Margin="15,0,15,0" Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right">
+                                        <Button Style="{TemplateBinding ActionButtonStyle}" 
+                                                materialDesign:RippleAssist.Feedback="{TemplateBinding ButtonRippleColor}" Content="Give Feedback" Margin="5,0,5,0"/>
+                                        <Button Style="{TemplateBinding ActionButtonStyle}"
+                                                materialDesign:RippleAssist.Feedback="{TemplateBinding ButtonRippleColor}" Content="OK" Margin="5,0,5,0" x:Name="btnOk"/>
+                                    </StackPanel>
+                                </Grid>
                             </materialDesign:DialogHost.DialogContent>
                         </materialDesign:DialogHost>
-                    </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

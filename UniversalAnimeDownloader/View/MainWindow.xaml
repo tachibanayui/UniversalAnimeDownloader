@@ -58,7 +58,7 @@
                         <TreeView>
                             <TreeViewItem >
                                 <TreeViewItem.Header>
-                                    <Grid MouseLeftButtonDown="NavigateToExplore" Width="240">
+                                    <Grid MouseLeftButtonDown="NotImplementedYet" Width="240">
                                         <Rectangle />
                                         <StackPanel Orientation="Horizontal">
                                             <materialDesign:PackIcon Kind="Earth"/>
@@ -68,7 +68,7 @@
                                 </TreeViewItem.Header>
                                 <TreeViewItem>
                                     <TreeViewItem.Header>
-                                        <Grid MouseLeftButtonDown="NavigateToExplore" Width="220">
+                                        <Grid MouseLeftButtonDown="NotImplementedYet" Width="220">
                                             <Rectangle />
                                             <StackPanel Orientation="Horizontal">
                                                 <materialDesign:PackIcon Kind="Star"/>
@@ -79,7 +79,7 @@
                                 </TreeViewItem>
                                 <TreeViewItem>
                                     <TreeViewItem.Header>
-                                        <Grid MouseLeftButtonDown="NavigateToExplore" Width="220">
+                                        <Grid MouseLeftButtonDown="NotImplementedYet" Width="220">
                                             <Rectangle />
                                             <StackPanel Orientation="Horizontal">
                                                 <materialDesign:PackIcon Kind="Account"/>
@@ -113,7 +113,7 @@
                             </TreeViewItem>
                             <TreeViewItem>
                                 <TreeViewItem.Header>
-                                    <Grid MouseLeftButtonDown="NavigateToExplore" Width="240">
+                                    <Grid MouseLeftButtonDown="NotImplementedYet" Width="240">
                                         <Rectangle />
                                         <StackPanel Orientation="Horizontal">
                                             <materialDesign:PackIcon Kind="Bell"/>
@@ -188,20 +188,31 @@
                                     </TreeViewItem.Header>
                                 </TreeViewItem>
                             </TreeViewItem>
+                            <TreeViewItem>
+                                <TreeViewItem.Header>
+                                    <Grid MouseLeftButtonDown="NotImplementedYet" Width="240">
+                                        <Rectangle />
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="Exclamation"/>
+                                            <TextBlock Text=" About"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </TreeViewItem.Header>
+                            </TreeViewItem>
                         </TreeView>
                     </ScrollViewer>
 
                     <Rectangle Height="2" Fill="{DynamicResource ForeGroundColor}"/>
-                    <TextBlock Margin="0,15,0,0" FontSize="{DynamicResource Heading3}" HorizontalAlignment="Center">
+            <!--<TextBlock Margin="0,15,0,0" FontSize="{DynamicResource Heading3}" HorizontalAlignment="Center">
                     <Hyperlink>Download</Hyperlink>
                     <TextBlock> - </TextBlock>
                     <Hyperlink>Facebook</Hyperlink>
                     <TextBlock> - </TextBlock>
                     <Hyperlink> About</Hyperlink>
-                </TextBlock>
+                </TextBlock>-->
                 </StackPanel>
 
-                <Grid x:Name="Account" Background="Black" Height="75" VerticalAlignment="Bottom">
+                <!--<Grid x:Name="Account" Background="Black" Height="75" VerticalAlignment="Bottom">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="75"/>
                         <ColumnDefinition/>
@@ -213,7 +224,7 @@
 
                     <materialDesign:PackIcon Kind="AccountCircle" Width="100" Grid.RowSpan="2"/>
                     <TextBlock Text="Please Sign in!" Grid.Column="1" Grid.RowSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                </Grid>
+                </Grid>-->
 
 
             </Grid>
@@ -227,11 +238,11 @@
                     <ColumnDefinition Width="50"/>
                     <ColumnDefinition Width="50"/>
                 </Grid.ColumnDefinitions>
-                <Button Style="{StaticResource MaterialDesignFlatButton}" Click="NavigateBack">
-                    <materialDesign:PackIcon Kind="KeyboardBackspace" Foreground="Black" Width="50"/>
+                <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}" Click="NavigateBack">
+                    <materialDesign:PackIcon Kind="KeyboardBackspace" Foreground="White" Width="50"/>
                 </Button>
                 
-                <TextBlock Text="Explore" Foreground="Black" FontSize="{DynamicResource Heading}" Grid.Column="2" VerticalAlignment="Center"/>
+                <TextBlock x:Name="txblNavigationTitle" Text="Explore" Foreground="Black" FontSize="{DynamicResource Heading}" Grid.Column="2" VerticalAlignment="Center"/>
                 <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
                     Grid.Column="3" Click="MinimizedWindow">
                     <materialDesign:PackIcon Kind="WindowMinimize"/>
@@ -277,6 +288,79 @@
             </StackPanel>
         </Grid>
 
+        <materialDesign:DialogHost DialogTheme="Dark" x:Name="notImplementDialog" CloseOnClickAway="False">
+            <materialDesign:DialogHost.DialogContent>
+                <Grid Width="325" Height="200" Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Not implemented yet!" FontSize="{DynamicResource Heading2}" FontWeight="SemiBold"/>
+                    <TextBlock Text="This feature is in development and not available to use!"
+                               Grid.Row="2" TextWrapping="Wrap" FontSize="{DynamicResource Heading3}"/>
+                    <Button Content="OK" Grid.Row="3" Style="{StaticResource MaterialDesignFlatButton}"
+                            HorizontalAlignment="Right" Click="Event_CloseNotImplementDialog"/>
+                </Grid>
+            </materialDesign:DialogHost.DialogContent>
+        </materialDesign:DialogHost>
+
+        <materialDesign:DialogHost DialogTheme="Dark" IsOpen="False" x:Name="newVersionAvaiable" CloseOnClickAway="False">
+            <materialDesign:DialogHost.DialogContent>
+                <Grid Width="600" Height="400" Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock x:Name="txblUpdateDialogTitle" Text="New update is ready to install!" FontSize="{DynamicResource Heading2}" FontWeight="SemiBold"/>
+
+                    <StackPanel Grid.Row="2">
+                        <StackPanel.Resources>
+                            <Style TargetType="TextBlock" >
+                                <Setter Property="Foreground" Value="{DynamicResource ForeGroundColor}"/>
+                                <Setter Property="FontSize" Value="{DynamicResource Heading3}"/>
+                                <Setter Property="Margin" Value="0,2,0,2"/>
+                            </Style>
+                        </StackPanel.Resources>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Version: "/>
+                            <TextBlock x:Name="txblUpdateVersion" Text="v0.8.2-beta"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Update Size: "/>
+                            <TextBlock x:Name="txblUpdateSize" Text="1.5MB"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Release Date: "/>
+                            <TextBlock x:Name="txblUpdateReleaseDate" Text="2/1/2019"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Update Title: "/>
+                            <TextBlock x:Name="txblUpdateTitle" Text="Test Update"/>
+                        </StackPanel>
+                        <TextBlock Text="Update Description"/>
+
+                        <WebBrowser x:Name="webUpdateDescription"/>
+                    </StackPanel>
+                    
+                    <StackPanel x:Name="updateRestartPnl" Orientation="Horizontal"
+                                Visibility="Collapsed" Grid.Row="3" HorizontalAlignment="Right">
+                        <Button Content="Restart later" Style="{StaticResource MaterialDesignFlatButton}"
+                                Click="Event_CloseUpdateDialog"/>
+                        <Button Content="Restart now" Click="Event_ApplyUpdate"/>
+                    </StackPanel>
+                    <StackPanel x:Name="updateDownloadPnl" Orientation="Horizontal"
+                                Grid.Row="3" HorizontalAlignment="Right">
+                        <Button Content="Download later" Style="{StaticResource MaterialDesignFlatButton}"
+                                Click="Event_CloseUpdateDialog"/>
+                        <Button Content="Download now" Click="Event_DownloadUpdate"/>
+                    </StackPanel>
+                </Grid>
+            </materialDesign:DialogHost.DialogContent>
+        </materialDesign:DialogHost>
 
         <Grid x:Name="welcomeScreenRoot" Background="{DynamicResource Primary}"
               HorizontalAlignment="Left" Width="{Binding ElementName=rootWindow, Path=ActualWidth}">

@@ -60,20 +60,18 @@
                 <materialDesign:PackIcon Kind="Close" Width="{StaticResource Heading2}" Height="auto" Foreground="{DynamicResource ForeGroundColor}"/>
             </Button>
         </Grid>
-            
+
         <ScrollViewer Grid.Row="1" Grid.ColumnSpan="2" ScrollChanged="LoadMore">
             <Grid>
-                <StackPanel >
-                    <WrapPanel x:Name="animeCardContainer">
-                        <WrapPanel.Resources>
-                            <Style TargetType="customControl:VuigheAnimeCard">
-                                <Setter Property="PlayButtonStyle" Value="{StaticResource MaterialDesignFloatingActionButton}"/>
-                                <Setter Property="Margin" Value="5,0,5,0"/>
-                                <Setter Property="PopUpBoxStyle" Value="{StaticResource MaterialDesignMultiFloatingActionPopupBox}"/>
-                            </Style>
-                        </WrapPanel.Resources>
-                    </WrapPanel>
-                </StackPanel>
+                <WrapPanel x:Name="animeCardContainer">
+                    <WrapPanel.Resources>
+                        <Style TargetType="customControl:VuigheAnimeCard">
+                            <Setter Property="PlayButtonStyle" Value="{StaticResource MaterialDesignFloatingActionButton}"/>
+                            <!--<Setter Property="PopUpBoxStyle" Value="{StaticResource MaterialDesignMultiFloatingActionPopupBox}"/>-->
+                            <Setter Property="Margin" Value="5,0,5,0"/>
+                        </Style>
+                    </WrapPanel.Resources>
+                </WrapPanel>
             </Grid>
         </ScrollViewer>
 

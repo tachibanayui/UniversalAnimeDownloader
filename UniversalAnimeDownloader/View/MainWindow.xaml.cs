@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using UniversalAnimeDownloader.Models;
 using UniversalAnimeDownloader.Settings;
 using UniversalAnimeDownloader.UserControls;
 
@@ -23,6 +25,8 @@ namespace UniversalAnimeDownloader.View
     public partial class MainWindow : Window
     {
         UADPlayer uadEmbededPlayer = null;
+        GitHubData updateData;
+        bool updateWhenExit;
 
         public MainWindow()
         {
@@ -38,8 +42,30 @@ namespace UniversalAnimeDownloader.View
 
         private async void InitializingApplication()
         {
+            bool askToUpdate = false;
+
             await Task.Delay(4250);
             txblInitStatus.Text = "Checking for updates...";
+            await Task.Run(() => Common.CheckForInternetConnection());
+            if (Common.IsInternetAvaible)
+            {
+                try
+                {
+                    updateData = await Common.GetLatestUpdate();
+                    if (updateData.assets[0].updated_at > Common.CurrentVersionReleaseDate)
+                    {
+                        if (SettingsManager.Current.DownloadUpdateWithoutAsking)
+                        {
+                            Common.DownloadUpdateContent(updateData, new AsyncCompletedEventHandler(ApplyUpdate));
+                        }
+                        else
+                        {
+                            askToUpdate = true;
+                        }
+                    }
+                }
+                catch { }
+            }
             //Checking updates here
             await Task.Delay(1000);
             txblInitStatus.Text = "Loading settings...";
@@ -49,6 +75,38 @@ namespace UniversalAnimeDownloader.View
             welcomeScreenRoot.Focus();
 
             //Close Animation:
+            CloseWelcomeAnimation();
+
+            if(askToUpdate)
+                OpenUpdateDialog(true);
+        }
+
+        private void OpenUpdateDialog(bool isDownload)
+        {
+            if(isDownload)
+            {
+                txblUpdateDialogTitle.Text = "New update is avaiable!";
+                updateDownloadPnl.Visibility = Visibility.Visible;
+                updateRestartPnl.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                txblUpdateDialogTitle.Text = "New update is ready to install!";
+                updateDownloadPnl.Visibility = Visibility.Collapsed;
+                updateRestartPnl.Visibility = Visibility.Visible;
+            }
+            txblUpdateVersion.Text = updateData.tag_name;
+            txblUpdateReleaseDate.Text = updateData.assets[0].updated_at.ToLongDateString();
+            txblUpdateSize.Text = updateData.assets[0].size.ToString();
+            txblUpdateTitle.Text = updateData.name;
+            webUpdateDescription.NavigateToString(updateData.body);
+            newVersionAvaiable.IsOpen = true;
+        }
+
+        private void ApplyUpdate(object sender, AsyncCompletedEventArgs e) => OpenUpdateDialog(false);
+
+        private void CloseWelcomeAnimation()
+        {
             Binding bd = new Binding();
             bd.ElementName = "rootWindow";
             bd.Path = new PropertyPath(ActualWidthProperty);
@@ -86,7 +144,9 @@ namespace UniversalAnimeDownloader.View
 
         private void PageTransition(object sender, EventArgs e)
         {
-            //ClearPageHistory();
+            Frame frm = sender as Frame;
+            string pageName = (frm.Content as Page).Title;
+            txblNavigationTitle.Text = pageName;
         }
 
         private void ClearPageHistory()
@@ -109,15 +169,6 @@ namespace UniversalAnimeDownloader.View
             ClearPageHistory();
         }
 
-        private void NavigateToFeatured(object sender, MouseButtonEventArgs e)
-        {
-        }
-
-        private void NavigateToYouMayLike(object sender, MouseButtonEventArgs e)
-        {
-
-        }
-
         private void NavigateToAllAnime(object sender, MouseButtonEventArgs e)
         {
             pageViewer.Content = new AllAnimeTab { FrameHost = pageViewer };
@@ -135,7 +186,6 @@ namespace UniversalAnimeDownloader.View
             if(pageViewer.CanGoBack)
                 pageViewer.GoBack();
         }
-
 
         private void NavigateToSetting(object sender, MouseButtonEventArgs e)
         {
@@ -182,6 +232,28 @@ namespace UniversalAnimeDownloader.View
             uadEmbededPlayer.mediaPlayer.Pause();
             UADEmbededPlayerContainer.Visibility = Visibility.Collapsed;
             UADEmbededPlayerContainer.Opacity = 0;
+        }
+
+        private void NotImplementedYet(object sender, MouseButtonEventArgs e) => notImplementDialog.IsOpen = true;
+
+        private void Event_CloseNotImplementDialog(object sender, RoutedEventArgs e) => notImplementDialog.IsOpen = false;
+
+        private void Event_CloseUpdateDialog(object sender, RoutedEventArgs e)
+        {
+            newVersionAvaiable.IsOpen = false;
+            if ((sender as Button).Content.ToString() == "Restart later")
+                updateWhenExit = true;
+        }
+
+        private void Event_DownloadUpdate(object sender, RoutedEventArgs e)
+        {
+            Common.DownloadUpdateContent(updateData, new AsyncCompletedEventHandler(ApplyUpdate));
+            newVersionAvaiable.IsOpen = false;
+        }
+
+        private void Event_ApplyUpdate(object sender, RoutedEventArgs e)
+        {
+            //Do some update work here
         }
     }
 }

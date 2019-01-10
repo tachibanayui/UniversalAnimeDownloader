@@ -160,6 +160,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\About.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\AnimeList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -189,6 +193,7 @@
     <Compile Include="CustomControl\VuigheAnimeCard.cs" />
     <Compile Include="EventArgsCollection.cs" />
     <Compile Include="Models\GenreModel.cs" />
+    <Compile Include="Models\GithubJsonToObjectModel.cs" />
     <Compile Include="Settings\SettingsAccount.xaml.cs">
       <DependentUpon>SettingsAccount.xaml</DependentUpon>
     </Compile>
@@ -238,6 +243,9 @@
     <Compile Include="ViewModel\SettingsPlaybackViewModel.cs" />
     <Compile Include="ViewModel\UADPlayerViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
+    <Compile Include="View\About.xaml.cs">
+      <DependentUpon>About.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\AllAnimeTab.cs" />
     <Compile Include="View\AnimeList.xaml.cs">
       <DependentUpon>AnimeList.xaml</DependentUpon>

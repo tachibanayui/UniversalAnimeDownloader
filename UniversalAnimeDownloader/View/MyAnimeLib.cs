@@ -22,6 +22,7 @@ namespace UniversalAnimeDownloader.View
             progressIndicator.Visibility = Visibility.Collapsed;
 
             AddAnimeCardAsync();
+            Title = "My anime library";
         }
 
         private async void AddAnimeCardAsync()
