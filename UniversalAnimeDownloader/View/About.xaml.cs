@@ -20,6 +20,16 @@ namespace UniversalAnimeDownloader.View
     /// </summary>
     public partial class About : Page
     {
+        public Frame FrameHost
+        {
+            get { return (Frame)GetValue(FrameHostProperty); }
+            set { SetValue(FrameHostProperty, value); }
+        }
+        public static readonly DependencyProperty FrameHostProperty =
+            DependencyProperty.Register("FrameHost", typeof(Frame), typeof(About), new PropertyMetadata());
+
+
+
         public About()
         {
             InitializeComponent();

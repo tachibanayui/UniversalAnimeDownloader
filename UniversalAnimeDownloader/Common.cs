@@ -34,6 +34,7 @@ namespace UniversalAnimeDownloader
             try
             {
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(SourceVersions);
+                request.UserAgent = @"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.140 Safari/537.36 Edge/17.17134";
                 using (WebResponse resp = await request.GetResponseAsync())
                 {
                     using (Stream stream = resp.GetResponseStream())
@@ -55,10 +56,11 @@ namespace UniversalAnimeDownloader
         {
             WebClient client = new WebClient();
 
-            if (!Directory.Exists("\\Updates"))
-                Directory.CreateDirectory("\\Updates");
+            string path = AppDomain.CurrentDomain.BaseDirectory + "Updates\\";
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
 
-            client.DownloadFileAsync(new Uri(data.assets[0].browser_download_url), $"\\Updates\\{data.assets[0].name}");
+            client.DownloadFileAsync(new Uri(data.assets[0].browser_download_url), path + data.assets[0].name);
 
             if(callback != null)
                 client.DownloadFileCompleted += callback;

@@ -32,9 +32,9 @@
                 </StackPanel.Resources>
 
                 <StackPanel Style="{StaticResource downloadSection}">
-                    <TextBlock Text="Color Setting: " FontSize="{DynamicResource Heading2}"/>
+                    <TextBlock Text="Color Setting: " Margin="0,10,0,0" FontSize="{DynamicResource Heading2}"/>
                     <StackPanel>
-                        <StackPanel  Margin="50,0,0,0">
+                        <StackPanel  Margin="50,10,0,0">
                             <StackPanel Orientation="Horizontal" >
                                 <Button x:Name="textColor" Style="{StaticResource MaterialDesignFlatButton}" 
                                         Width="100" Height="50" Click="ChooseColor">
@@ -143,14 +143,14 @@
 
                 <StackPanel Style="{StaticResource downloadSection}">
                     <TextBlock Text="Background Image Setting: " FontSize="{DynamicResource Heading2}"/>
-                    <StackPanel>
+                    <StackPanel Margin="0,10,0,0">
                         <TextBlock Text="Set image background" FontStyle="Italic"
                                    Foreground="{DynamicResource FileSize}" FontSize="{DynamicResource Heading3}" Margin="25,0,0,0"/>
-                        <StackPanel Margin="25,0,0,0">
+                        <StackPanel Margin="25,10,0,0">
                             <CheckBox x:Name="useMenubar" Foreground="{DynamicResource ForeGroundColor}" HorizontalContentAlignment="Stretch"
                                       VerticalAlignment="Top" Content="Use menu bar background" FontSize="{DynamicResource Heading3}"
                                       IsChecked="{Binding IsBGMenubarEnabled}"/>
-                            <StackPanel IsEnabled="{Binding ElementName=useMenubar, Path=IsChecked}">
+                            <StackPanel IsEnabled="{Binding ElementName=useMenubar, Path=IsChecked}" Margin="0,10,0,0">
                                 <Border Grid.Row="1" Height="200" Width="360" HorizontalAlignment="Left"
                                         BorderThickness="1" BorderBrush="{DynamicResource ForeGroundColor}">
                                     <Image x:Name="imgPreviewImageBGmenubar" Stretch="UniformToFill"/>
@@ -179,7 +179,7 @@
                             <CheckBox x:Name="useBackground" Foreground="{DynamicResource ForeGroundColor}" HorizontalContentAlignment="Stretch"
                                       VerticalAlignment="Top" Content="Use content viewer background" FontSize="{DynamicResource Heading3}"
                                       IsChecked="{Binding IsBGViewerEnabled}"/>
-                            <StackPanel IsEnabled="{Binding ElementName=useBackground, Path=IsChecked}" >
+                            <StackPanel IsEnabled="{Binding ElementName=useBackground, Path=IsChecked}" Margin="0,10,0,0">
                                 <Border Grid.Row="1" Height="200" Width="360" HorizontalAlignment="Left"
                                     BorderThickness="1" BorderBrush="{DynamicResource ForeGroundColor}">
                                     <Image Stretch="Fill" x:Name="imgPreviewImageBGviewer"/>

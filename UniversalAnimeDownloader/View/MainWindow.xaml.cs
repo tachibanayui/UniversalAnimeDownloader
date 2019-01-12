@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -64,10 +65,9 @@ namespace UniversalAnimeDownloader.View
                         }
                     }
                 }
-                catch { }
+                catch(Exception e) { }
             }
             //Checking updates here
-            await Task.Delay(1000);
             txblInitStatus.Text = "Loading settings...";
             await Task.Delay(500);
             txblInitStatus.Text = "Finalizing...";
@@ -78,7 +78,10 @@ namespace UniversalAnimeDownloader.View
             CloseWelcomeAnimation();
 
             if(askToUpdate)
-                OpenUpdateDialog(true);
+            {
+                
+                 OpenUpdateDialog(true);
+            }
         }
 
         private void OpenUpdateDialog(bool isDownload)
@@ -97,14 +100,16 @@ namespace UniversalAnimeDownloader.View
             }
             txblUpdateVersion.Text = updateData.tag_name;
             txblUpdateReleaseDate.Text = updateData.assets[0].updated_at.ToLongDateString();
-            txblUpdateSize.Text = updateData.assets[0].size.ToString();
+            txblUpdateSize.Text = (updateData.assets[0].size / 1024d).ToString() + "KB";
             txblUpdateTitle.Text = updateData.name;
-            webUpdateDescription.NavigateToString(updateData.body);
             newVersionAvaiable.IsOpen = true;
+            Color color = (Application.Current.Resources["ForeGroundColor"] as SolidColorBrush).Color;
+            string rgbValue = $"rgb({color.R}, {color.G}, {color.B})";
+            webUpdateDescription.Text = $"<body style=\"color: {rgbValue}\" >" + updateData.body + "</body>";
         }
 
         private void ApplyUpdate(object sender, AsyncCompletedEventArgs e) => OpenUpdateDialog(false);
-
+        // color: rgba(255, 255, 255, 255)
         private void CloseWelcomeAnimation()
         {
             Binding bd = new Binding();
@@ -172,7 +177,7 @@ namespace UniversalAnimeDownloader.View
         private void NavigateToAllAnime(object sender, MouseButtonEventArgs e)
         {
             pageViewer.Content = new AllAnimeTab { FrameHost = pageViewer };
-            ClearPageHistory();
+            ClearPageHistory(); 
         }
 
         private void NavigateToMyAnime(object sender, MouseButtonEventArgs e)
@@ -242,7 +247,10 @@ namespace UniversalAnimeDownloader.View
         {
             newVersionAvaiable.IsOpen = false;
             if ((sender as Button).Content.ToString() == "Restart later")
+            {
                 updateWhenExit = true;
+                btnApplyUpdate.Visibility = Visibility.Visible;
+            }
         }
 
         private void Event_DownloadUpdate(object sender, RoutedEventArgs e)
@@ -253,7 +261,15 @@ namespace UniversalAnimeDownloader.View
 
         private void Event_ApplyUpdate(object sender, RoutedEventArgs e)
         {
-            //Do some update work here
+            string updaterLocation = AppDomain.CurrentDomain.BaseDirectory + "Updates\\" + updateData.assets[0].name;
+            Application.Current.Shutdown();
+            Process.Start(updaterLocation, "update " + Common.CurrentVersionName);
+        }
+
+        private void NavigateToAbout(object sender, MouseButtonEventArgs e)
+        {
+            pageViewer.Content = new About() { FrameHost = pageViewer };
+            ClearPageHistory();
         }
     }
 }

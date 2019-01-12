@@ -10,6 +10,7 @@
         xmlns:customControl="clr-namespace:UniversalAnimeDownloader.CustomControl"
         xmlns:userControl="clr-namespace:UniversalAnimeDownloader.UserControls"
         xmlns:animation="clr-namespace:UniversalAnimeDownloader.Animations"
+        xmlns:web="clr-namespace:TheArtOfDev.HtmlRenderer.WPF;assembly=HtmlRenderer.WPF"
         mc:Ignorable="d"
         x:Name="rootWindow"
         Title="Universal Anime Downloader" Height="720" Width="{DynamicResource WindowWidth}"
@@ -190,7 +191,7 @@
                             </TreeViewItem>
                             <TreeViewItem>
                                 <TreeViewItem.Header>
-                                    <Grid MouseLeftButtonDown="NotImplementedYet" Width="240">
+                                    <Grid MouseLeftButtonDown="NavigateToAbout" Width="240">
                                         <Rectangle />
                                         <StackPanel Orientation="Horizontal">
                                             <materialDesign:PackIcon Kind="Exclamation"/>
@@ -237,22 +238,32 @@
                     <ColumnDefinition Width="50"/>
                     <ColumnDefinition Width="50"/>
                     <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="50"/>
                 </Grid.ColumnDefinitions>
-                <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}" Click="NavigateBack">
+                <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}" Click="NavigateBack"
+                        ToolTip="Go back">
                     <materialDesign:PackIcon Kind="KeyboardBackspace" Foreground="White" Width="50"/>
                 </Button>
                 
                 <TextBlock x:Name="txblNavigationTitle" Text="Explore" Foreground="Black" FontSize="{DynamicResource Heading}" Grid.Column="2" VerticalAlignment="Center"/>
                 <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
-                    Grid.Column="3" Click="MinimizedWindow">
+                    ToolTip="Update now!" Visibility="Collapsed" x:Name="btnApplyUpdate"
+                    Grid.Column="3" Click="Event_ApplyUpdate">
+                    <materialDesign:PackIcon Kind="Restart"/>
+                </Button>
+                <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
+                        ToolTip="Minimize!"
+                    Grid.Column="4" Click="MinimizedWindow">
                     <materialDesign:PackIcon Kind="WindowMinimize"/>
                 </Button>
                 <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
-                    Grid.Column="4" Click="MaximizeWindow">
+                        ToolTip="Maximize"
+                    Grid.Column="5" Click="MaximizeWindow">
                     <materialDesign:PackIcon Kind="WindowMaximize"/>
                 </Button>
                 <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
-                    Grid.Column="5" Click="ExitApplication">
+                        ToolTip="Close"
+                    Grid.Column="6" Click="ExitApplication">
                     <materialDesign:PackIcon Kind="WindowClose"/>
                 </Button>
             </Grid>
@@ -312,8 +323,9 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="10"/>
-                        <RowDefinition/>
                         <RowDefinition Height="auto"/>
+                        <RowDefinition/>
+                        <RowDefinition Height="75"/>
                     </Grid.RowDefinitions>
                     <TextBlock x:Name="txblUpdateDialogTitle" Text="New update is ready to install!" FontSize="{DynamicResource Heading2}" FontWeight="SemiBold"/>
 
@@ -343,17 +355,19 @@
                         </StackPanel>
                         <TextBlock Text="Update Description"/>
 
-                        <WebBrowser x:Name="webUpdateDescription"/>
                     </StackPanel>
-                    
+
+                    <web:HtmlLabel x:Name="webUpdateDescription" Foreground="White"
+                                   Grid.Row="3" Background="#424242"/>
+
                     <StackPanel x:Name="updateRestartPnl" Orientation="Horizontal"
-                                Visibility="Collapsed" Grid.Row="3" HorizontalAlignment="Right">
+                                Visibility="Collapsed" Grid.Row="4" HorizontalAlignment="Right">
                         <Button Content="Restart later" Style="{StaticResource MaterialDesignFlatButton}"
                                 Click="Event_CloseUpdateDialog"/>
                         <Button Content="Restart now" Click="Event_ApplyUpdate"/>
                     </StackPanel>
                     <StackPanel x:Name="updateDownloadPnl" Orientation="Horizontal"
-                                Grid.Row="3" HorizontalAlignment="Right">
+                                Grid.Row="4" HorizontalAlignment="Right">
                         <Button Content="Download later" Style="{StaticResource MaterialDesignFlatButton}"
                                 Click="Event_CloseUpdateDialog"/>
                         <Button Content="Download now" Click="Event_DownloadUpdate"/>
@@ -402,5 +416,6 @@
             <ProgressBar Opacity="0" x:Name="prgBarInitStatus" Height="5" Grid.Row="2"
                          VerticalAlignment="Bottom" IsIndeterminate="True"/>
         </Grid>
+
     </Grid>
 </Window>
