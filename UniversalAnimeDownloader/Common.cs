@@ -7,11 +7,13 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
+using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using UniversalAnimeDownloader.Models;
@@ -20,17 +22,18 @@ namespace UniversalAnimeDownloader
 {
     static class Common
     {
-        #region a
-        private static string AccessToken = "af1a2d0dfe65224918e1259f79a2c55a677dbf00";
-        #endregion
-        public static string SourceVersions { get; set; } = $"https://api.github.com/repos/quangaming2929/UniversalAnimeDownloader/releases/latest?access_token={AccessToken}";
-        public static string CurrentVersionName { get; set; } = "v0.8.2_beta";
-        public static DateTime CurrentVersionReleaseDate { get; set; } = DateTime.Parse("1 Jan, 2019");
+        public static string SourceVersions { get; set; } = $"https://api.github.com/repos/quangaming2929/UniversalAnimeDownloader/releases/latest";
+        public static string CurrentVersionName { get; set; } = "v0.8.0";
+        public static DateTime CurrentVersionReleaseDate { get; set; } = DateTime.Parse("1/30/2019 6:46:04 PM");
 
-        public static async Task<GitHubData> GetLatestUpdate()
+        public static async Task<GitHubData> GetLatestUpdate(string accessToken = null)
         {
             string apiResult = string.Empty;
-
+            string req = SourceVersions;
+            if(!string.IsNullOrEmpty(accessToken))
+            {
+                req += $"?access_token={accessToken}";
+            }
             try
             {
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(SourceVersions);
@@ -44,9 +47,25 @@ namespace UniversalAnimeDownloader
                     }
                 }
             }
-            catch (Exception e)
+            catch
             {
-                throw new InvalidOperationException("Can't get latest version!", e);
+                try
+                {
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(req);
+                    request.UserAgent = @"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.140 Safari/537.36 Edge/17.17134";
+                    using (WebResponse resp = await request.GetResponseAsync())
+                    {
+                        using (Stream stream = resp.GetResponseStream())
+                        {
+                            StreamReader reader = new StreamReader(stream);
+                            apiResult = await reader.ReadToEndAsync();
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    throw new InvalidOperationException("Can't get latest version!", e);
+                }
             }
 
             return JsonConvert.DeserializeObject<GitHubData>(apiResult);
@@ -149,7 +168,7 @@ namespace UniversalAnimeDownloader
             using (var screenBmp = new Bitmap(
                 (int)SystemParameters.PrimaryScreenWidth,
                 (int)SystemParameters.PrimaryScreenHeight,
-                PixelFormat.Format32bppArgb))
+                System.Drawing.Imaging.PixelFormat.Format32bppArgb))
             {
                 using (var bmpGraphics = Graphics.FromImage(screenBmp))
                 {
@@ -198,12 +217,153 @@ namespace UniversalAnimeDownloader
 
         public static event EventHandler<EventArgs> InternetStateChanged;
         
-
-
-        public static void VerionCheck()
+        public static string AddHtmlColorBody(string content)
         {
-
+            var color = (Application.Current.Resources["ForeGroundColor"] as SolidColorBrush).Color;
+            string rgbValue = $"rgb({color.R}, {color.G}, {color.B})";
+            return $"<body style=\"color: {rgbValue}\">" + content + " </body>";
         }
 
+        public static string GetFolderName(string path) => path.Substring(path.LastIndexOf('\\') + 1);
+
+        //Report error
+        public static async void ReportError(Exception e)
+        {
+            string title = "Error received from user: " + e.ToString().Substring(0, e.ToString().IndexOf("\r\n"));
+
+            string content = "Exception Message: \r\n" + e.ToString() + "\r\n\r\n";
+            content += await View.ReportError.GetUserInformationDialog(e) + "\r\n\r\n";
+
+            if (CheckForErrorDuplication(e))
+                Environment.Exit(-1);
+
+            content += "Additional Information: \r\n";
+            content += "Program Dir: " + AppDomain.CurrentDomain.BaseDirectory + "\r\n";
+            content += "Program Version: " + CurrentVersionName + "\r\n";
+            content += "Program Release Date: " + CurrentVersionReleaseDate + "\r\n";
+            content += "Local time: " + DateTime.Now + "\r\n";
+            content += "UTC Local time: " + DateTime.UtcNow + "\r\n";
+            content += "Current Setting Profile Json:" + File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "Settings\\CurrentSettings.json") + "\r\n\r\n"; 
+            content += "Enviroment Detail: \r\n";
+            content += $@"Current Directory: {Environment.CurrentDirectory}
+Machine name: {Environment.MachineName}
+OSVersion: {Environment.OSVersion}
+Processor count: {Environment.ProcessorCount}
+StackTrace: {Environment.StackTrace}
+System Dir: {Environment.SystemDirectory}
+System Page Size: {Environment.SystemPageSize}
+TickCount: {Environment.TickCount}
+UserDomainName: {Environment.UserDomainName}
+Username: {Environment.UserName}
+Version (or CLR Version): {Environment.Version}
+Working set: {Environment.WorkingSet}
+ProgramFileDir: {Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)}" + "\r\n\r\n";
+            content += "AppDirectory Tree: \r\n";
+
+            content += CreateDirectoryTree(AppDomain.CurrentDomain.BaseDirectory) + "\r\n\r\n";
+
+            content += await GetVuigheResp();
+
+            SendEmailToUADServices(title, content);
+
+            SaveErrorLog(e);
+            Application.Current.Shutdown();
+        }
+
+        private static void SaveErrorLog(Exception e)
+        {
+            string dir = AppDomain.CurrentDomain.BaseDirectory + "ErrorLog";
+            string compare = e.ToString();
+            if (!Directory.Exists(dir))
+                Directory.CreateDirectory(dir);
+
+            string filePath = dir + "\\" + (Directory.GetFiles(dir).Length + 1) + ".txt";
+            File.WriteAllText(filePath, compare);
+        }
+
+        private static bool CheckForErrorDuplication(Exception e)
+        {
+            string dir = AppDomain.CurrentDomain.BaseDirectory + "ErrorLog";
+            string compare = e.ToString();
+            if (!Directory.Exists(dir))
+                return false;
+
+            foreach (string item in Directory.GetFiles(dir))
+            {
+                if (compare == File.ReadAllText(item))
+                    return true;
+            }
+
+            return false;
+        }
+
+        private static async Task<string> GetVuigheResp()
+        {
+            HttpWebRequest resq = (HttpWebRequest)WebRequest.Create("https://vuighe.net/");
+            using (var resp = await resq.GetResponseAsync())
+            {
+                using (var stream = resp.GetResponseStream())
+                {
+                    StreamReader reader = new StreamReader(stream);
+                    return await reader.ReadToEndAsync();
+                }
+            }
+        }
+
+        private static string CreateDirectoryTree(string baseDirectory)
+        {
+            string result = "-| " + System.IO.Path.GetDirectoryName(baseDirectory) + "\r\n";
+            result = GetFolderContent(baseDirectory, result, 1);
+            return result;
+        }
+
+        private static string GetFolderContent(string baseDirectory, string result, int recursiveLevel)
+        {
+            foreach (string item in Directory.GetFiles(baseDirectory))
+            {
+                result += DrawTreeItem(recursiveLevel, false);
+                result += System.IO.Path.GetFileName(item) + "\r\n";
+            }
+
+            foreach (string item in Directory.GetDirectories(baseDirectory))
+            {
+                result += DrawTreeItem(recursiveLevel, true);
+                result += GetFolderName(item) + "\r\n";
+                result = GetFolderContent(item, result, recursiveLevel + 1);
+            }
+
+            return result;
+        }
+
+        private static string DrawTreeItem(int recursiveLevel, bool isFolder)
+        {
+            string result = " ";
+            for (int i = 0; i < recursiveLevel; i++)
+                result += "|--";
+            result += isFolder ? "| " : "- ";
+            return result;
+        }
+
+        public static void SendEmailToUADServices(string title, string content)
+        {
+
+            try
+            {
+                MailMessage mail = new MailMessage();
+                SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
+
+                mail.From = new MailAddress("uad.reportservices@gmail.com");
+                mail.To.Add("uad.apiservices@gmail.com");
+                mail.Subject = title;
+                mail.Body = content;
+
+                SmtpServer.Port = 587;
+                SmtpServer.Credentials = new NetworkCredential("uad.reportservices@gmail.com", "uadProject");
+                SmtpServer.EnableSsl = true;
+
+                SmtpServer.Send(mail);
+            }
+            catch { }
+        }
     }
 }

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 using uadcorelib.Models;
 using UniversalAnimeDownloader.ViewModel;
 
@@ -58,7 +59,8 @@ namespace UniversalAnimeDownloader.View
         private async void GetInfomationAsync()
         {
             VM.AnimeTitle = OfflineInfo.AnimeName;
-            VM.AnimeDescription = OfflineInfo.Description;
+            VM.AnimeDescription = Common.AddHtmlColorBody(OfflineInfo.Description);
+            VM.AnimeThumbnail = new BitmapImage(new Uri(OfflineInfo.AnimeThumbnail));
             VM.AnimeGemres = OfflineInfo.AnimeGenres;
 
 

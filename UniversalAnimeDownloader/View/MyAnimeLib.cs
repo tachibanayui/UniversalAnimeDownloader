@@ -67,7 +67,7 @@ namespace UniversalAnimeDownloader.View
             TextBlock txblDescription = new TextBlock { Text = "Your downloaded anime will show here, so go and download some", HorizontalAlignment = HorizontalAlignment.Center };
             txblDescription.SetResourceReference(FontSizeProperty, "Heading2");
             stackPanel.Children.Add(txblDescription);
-            ((animeCardContainer.Parent as StackPanel).Parent as Grid).Children.Add(stackPanel);
+            (animeCardContainer.Parent as Grid).Children.Add(stackPanel);
         }
     }
 }

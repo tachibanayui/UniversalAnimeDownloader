@@ -245,7 +245,9 @@
                     <materialDesign:PackIcon Kind="KeyboardBackspace" Foreground="White" Width="50"/>
                 </Button>
                 
-                <TextBlock x:Name="txblNavigationTitle" Text="Explore" Foreground="Black" FontSize="{DynamicResource Heading}" Grid.Column="2" VerticalAlignment="Center"/>
+                <TextBlock x:Name="txblNavigationTitle" Text="Explore" Foreground="Black" 
+                           FontSize="{DynamicResource Heading}" Grid.Column="2" 
+                           VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
                 <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
                     ToolTip="Update now!" Visibility="Collapsed" x:Name="btnApplyUpdate"
                     Grid.Column="3" Click="Event_ApplyUpdate">
@@ -319,7 +321,7 @@
 
         <materialDesign:DialogHost DialogTheme="Dark" IsOpen="False" x:Name="newVersionAvaiable" CloseOnClickAway="False">
             <materialDesign:DialogHost.DialogContent>
-                <Grid Width="600" Height="400" Margin="10">
+                <Grid Width="800" Height="600" Margin="10">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="10"/>
@@ -356,9 +358,13 @@
                         <TextBlock Text="Update Description"/>
 
                     </StackPanel>
-
-                    <web:HtmlLabel x:Name="webUpdateDescription" Foreground="White"
-                                   Grid.Row="3" Background="#424242"/>
+                    
+                    <ScrollViewer Grid.Row="3">
+                        <StackPanel>
+                            <web:HtmlLabel x:Name="webUpdateDescription" Foreground="White"
+                                            Background="#424242"/>
+                        </StackPanel>
+                    </ScrollViewer>
 
                     <StackPanel x:Name="updateRestartPnl" Orientation="Horizontal"
                                 Visibility="Collapsed" Grid.Row="4" HorizontalAlignment="Right">

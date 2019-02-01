@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 using System.Windows.Threading;
 
 namespace UniversalAnimeDownloader.ViewModel
@@ -66,6 +67,20 @@ namespace UniversalAnimeDownloader.ViewModel
                 {
                     isEpisodeLoading = value;
                     OnPropertyChanged("IsEpisodeLoading");
+                }
+            }
+        }
+
+        private ImageSource animeThumbnail;
+        public ImageSource AnimeThumbnail
+        {
+            get => animeThumbnail;
+            set
+            {
+                if(animeThumbnail != value)
+                {
+                    animeThumbnail = value;
+                    OnPropertyChanged("AnimeThumbnail");
                 }
             }
         }

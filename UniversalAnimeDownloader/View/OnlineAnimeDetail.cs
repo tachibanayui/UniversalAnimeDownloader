@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using uadcorelib;
 using uadcorelib.Models;
 using UniversalAnimeDownloader.CustomControl;
@@ -27,6 +28,7 @@ namespace UniversalAnimeDownloader.View
             VM = new OnlineAnimeDetailViewModel(Dispatcher);
 
             AddEpisodeAndDownloadUsingCode();
+            Title = data.CurrentFilm.Name;
             DataContext = VM;
             cbxQuality.SelectedIndex = 3;
             cbxQuality.SelectionChanged += ChangeQuality;
@@ -82,6 +84,8 @@ namespace UniversalAnimeDownloader.View
             grdRoot.Children.Add(cbxQuality);
 
             episodeContainer = new ListView();
+            episodeContainer.SetValue(ScrollViewer.VerticalScrollBarVisibilityProperty, ScrollBarVisibility.Disabled);
+            episodeContainer.SetValue(ScrollViewer.HorizontalScrollBarVisibilityProperty, ScrollBarVisibility.Disabled);
             episodeContainer.Style = Application.Current.Resources["listViewDownloadTemplate"] as Style;
             grdRoot.Children.Add(episodeContainer);
 
@@ -143,7 +147,8 @@ namespace UniversalAnimeDownloader.View
         private void ReceiveGeneralData()
         {
             VM.AnimeTitle = Data.CurrentFilm.Name;
-            VM.AnimeDescription = Data.CurrentFilm.Description;
+            VM.AnimeDescription = Common.AddHtmlColorBody(Data.CurrentFilm.Description);
+            VM.AnimeThumbnail = new BitmapImage(new Uri(Data.CurrentFilm.Thumbnail));
 
             //Add Anime Genres From source.
             for (int i = 0; i < Data.CurrentFilm.Genres.Data.Length; i++)
@@ -161,7 +166,7 @@ namespace UniversalAnimeDownloader.View
             //mng.ComponentProgressChanged += UpdateProgressToViewModel;
             //await mng.DownloadAllAnimeAsync();
 
-            SegmentedDownloadManager segmentedDownload = (SegmentedDownloadManager)DownloadManagerBase.Create(Data, "AnimeLibrary", DownloadMethod.Segmented, 2, 8, 500);
+            SegmentedDownloadManager segmentedDownload = (SegmentedDownloadManager)DownloadManagerBase.Create(Data, "AnimeLibrary", DownloadMethod.Segmented, 1, 16, 500);
             segmentedDownload.ComponentProgressChanged += ReportProgress;
             await segmentedDownload.DownloadAllAnimeAsync();
 

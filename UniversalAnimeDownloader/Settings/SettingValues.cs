@@ -620,6 +620,20 @@ namespace UniversalAnimeDownloader.Settings
             }
         }
 
+        private string gitHubAccessToken = "5eba8827aa833401a98f06b9e367aede67444d44";
+        public string GitHubAccessToken
+        {
+            get { return gitHubAccessToken; }
+            set
+            {
+                if(gitHubAccessToken != value)
+                {
+                    gitHubAccessToken = value;
+                    UpdateSetting();
+                }
+            }
+        }
+
         private double backgroundMusicVolume = 50;
         public double BackgroundMusicVolume
         {

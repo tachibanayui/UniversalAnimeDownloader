@@ -23,6 +23,16 @@ namespace UniversalAnimeDownloader
     /// </summary>
     public partial class App : Application
     {
+        public App()
+        {
+            Current.DispatcherUnhandledException += (s, e) =>
+            {
+                e.Handled = true;
+                Common.ReportError(e.Exception as Exception);
+            };
+        }
+
+
         private void OfflineAnimeListviewItem_PlayButton_Clicked(object sender, RoutedEventArgs e)
         {
             OfflineAnimeListviewItem obj = sender as OfflineAnimeListviewItem;

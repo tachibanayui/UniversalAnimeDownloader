@@ -52,7 +52,7 @@ namespace UniversalAnimeDownloader.View
             {
                 try
                 {
-                    updateData = await Common.GetLatestUpdate();
+                    updateData = await Common.GetLatestUpdate(SettingsManager.Current.GitHubAccessToken);
                     if (updateData.assets[0].updated_at > Common.CurrentVersionReleaseDate)
                     {
                         if (SettingsManager.Current.DownloadUpdateWithoutAsking)
@@ -103,9 +103,7 @@ namespace UniversalAnimeDownloader.View
             txblUpdateSize.Text = (updateData.assets[0].size / 1024d).ToString() + "KB";
             txblUpdateTitle.Text = updateData.name;
             newVersionAvaiable.IsOpen = true;
-            Color color = (Application.Current.Resources["ForeGroundColor"] as SolidColorBrush).Color;
-            string rgbValue = $"rgb({color.R}, {color.G}, {color.B})";
-            webUpdateDescription.Text = $"<body style=\"color: {rgbValue}\" >" + updateData.body + "</body>";
+            webUpdateDescription.Text = Common.AddHtmlColorBody(updateData.body);
         }
 
         private void ApplyUpdate(object sender, AsyncCompletedEventArgs e) => OpenUpdateDialog(false);
@@ -165,7 +163,17 @@ namespace UniversalAnimeDownloader.View
         //Handle the Custom Window Action
         private void MinimizedWindow(object sender, RoutedEventArgs e) => WindowState = WindowState.Minimized;
         private void MaximizeWindow(object sender, RoutedEventArgs e) => WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
-        private void ExitApplication(object sender, RoutedEventArgs e) => Application.Current.Shutdown(0);
+        private void ExitApplication(object sender, RoutedEventArgs e)
+        {
+            if(updateWhenExit)
+            {
+                UpdateAction();
+            }
+            else
+            {
+                Application.Current.Shutdown(0);
+            }
+        }
 
         //Navigation
         private void NavigateToExplore(object sender, MouseButtonEventArgs e)
@@ -259,7 +267,9 @@ namespace UniversalAnimeDownloader.View
             newVersionAvaiable.IsOpen = false;
         }
 
-        private void Event_ApplyUpdate(object sender, RoutedEventArgs e)
+        private void Event_ApplyUpdate(object sender, RoutedEventArgs e) => UpdateAction();
+
+        private void UpdateAction()
         {
             string updaterLocation = AppDomain.CurrentDomain.BaseDirectory + "Updates\\" + updateData.assets[0].name;
             Application.Current.Shutdown();

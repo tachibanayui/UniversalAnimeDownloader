@@ -6,6 +6,7 @@
       xmlns:local="clr-namespace:UniversalAnimeDownloader.View"
       xmlns:proj="clr-namespace:UniversalAnimeDownloader"
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:web="clr-namespace:TheArtOfDev.HtmlRenderer.WPF;assembly=HtmlRenderer.WPF"
       xmlns:customControl="clr-namespace:UniversalAnimeDownloader.CustomControl"
       mc:Ignorable="d" 
       d:DesignHeight="4500" d:DesignWidth="800"
@@ -16,33 +17,54 @@
     <Grid x:Name="root" Margin="10">
         <Grid.Resources>
             <Style TargetType="materialDesign:Card">
-                <Setter Property="UniformCornerRadius" Value="25"/>
+                <Setter Property="UniformCornerRadius" Value="10"/>
                 <Setter Property="Margin" Value="0 0 0 20"/>
+                <Setter Property="Opacity" Value=".5"/>
+                <Style.Triggers>
+                    <EventTrigger RoutedEvent="UIElement.MouseEnter">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation To="1" Duration="0:0:0.17"
+                                                 Storyboard.TargetProperty="Opacity"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+
+                    <EventTrigger RoutedEvent="UIElement.MouseLeave">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation To="0.5" Duration="0:0:0.17"
+                                                 Storyboard.TargetProperty="Opacity"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </Style.Triggers>
             </Style>
         </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="200"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Grid x:Name="Header" Margin="10">
-            <Grid.Resources>
-                <Style TargetType="TextBlock">
-                    <Setter Property="FontSize" Value="{DynamicResource Heading2}"/>
-                    <Setter Property="Foreground" Value="{DynamicResource ForeGroundColor}"/>
-                    <Setter Property="FontWeight" Value="Bold"/>
-                    <Setter Property="VerticalAlignment" Value="Center"/>
-                </Style>
-            </Grid.Resources>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="2*"/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <TextBlock Text="{Binding AnimeTitle}" FontSize="{DynamicResource Heading}"/>
-            <TextBlock Grid.Row="1">
-                <TextBlock Text="Anime Genres: " FontWeight="Normal"/>
-                <TextBlock Text="{Binding AnimeGemres}"/>
-            </TextBlock>
-        </Grid>
+        <Image Grid.RowSpan="2" Source="{Binding AnimeThumbnail}" Stretch="UniformToFill">
+            <Image.Effect>
+                <BlurEffect Radius="0"/>
+            </Image.Effect>
+        </Image>
+            <StackPanel VerticalAlignment="Bottom" x:Name="Header" Margin="10">
+                <StackPanel.Resources>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="FontSize" Value="{DynamicResource Heading2}"/>
+                        <Setter Property="Foreground" Value="{DynamicResource ForeGroundColor}"/>
+                        <Setter Property="FontWeight" Value="Bold"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                    </Style>
+                </StackPanel.Resources>
+                <TextBlock Text="{Binding AnimeTitle}" FontSize="{DynamicResource Heading}" Grid.Row="1"/>
+                <TextBlock Grid.Row="1">
+                    <TextBlock Text="Anime Genres: " FontWeight="Normal"/>
+                    <TextBlock Text="{Binding AnimeGemres}"/>
+                </TextBlock>
+            </StackPanel>
         <ProgressBar VerticalAlignment="Bottom" Height="5" IsIndeterminate="True" 
                      Visibility="{Binding IsHeaderLoading, Converter={StaticResource boolToInvisConverter}, ConverterParameter=Normal, FallbackValue={x:Static Visibility.Collapsed}}"/>
         <ScrollViewer Grid.Row="1">
@@ -54,14 +76,16 @@
                             <RowDefinition/>
                         </Grid.RowDefinitions>
                         <TextBlock Text="Anime Description: " FontWeight="Bold" 
-                       FontSize="{DynamicResource Heading}" VerticalAlignment="Center"/>
-                        <TextBlock Text="{Binding AnimeDescription}" Grid.Row="1" TextWrapping="Wrap"
-                       FontSize="{DynamicResource Heading2}"/>
+                                   FontSize="{DynamicResource Heading}" VerticalAlignment="Center"/>
+                        <web:HtmlPanel Text="{Binding AnimeDescription}" Grid.Row="1"
+                                       Foreground="{DynamicResource ForeGroundColor}"
+                                       Background="Transparent"
+                                       FontSize="{DynamicResource Heading2}"/>
                         <ProgressBar VerticalAlignment="Bottom" Height="5" Grid.Row="1" IsIndeterminate="True"
                                      Visibility="{Binding IsDescriptionLoading, Converter={StaticResource boolToInvisConverter}, ConverterParameter=Normal, FallbackValue={x:Static Visibility.Collapsed}}"/>
                     </Grid>
                 </materialDesign:Card>
-                <materialDesign:Card>
+                <!--<materialDesign:Card>
                     <Grid Margin="10">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="75"/>
@@ -83,7 +107,7 @@
                         <ProgressBar Grid.Row="1" VerticalAlignment="Bottom" Height="5" IsIndeterminate="True" 
                                      Visibility="{Binding IsPictureLoading, Converter={StaticResource boolToInvisConverter}, ConverterParameter=Normal, FallbackValue={x:Static Visibility.Collapsed}}"/>
                     </Grid>
-                </materialDesign:Card>
+                </materialDesign:Card>-->
                 <materialDesign:Card x:Name="animeEpisodes" MinHeight="300">
 
                 </materialDesign:Card>
