@@ -33,7 +33,6 @@ namespace UniversalAnimeDownloader.View
         {
             new SettingsManager();
             uadEmbededPlayer = Application.Current.FindResource("uadEmbededPlayer") as UADPlayer;
-            throw new Exception("Test lel");
             InitializeComponent();
             uadEmbededPlayer.RequestWindowState += HandlePlayerWindowStateRequest;
             uadEmbededPlayer.RequestIconChange += IconChange;
