@@ -23,8 +23,8 @@ namespace UniversalAnimeDownloader
     static class Common
     {
         public static string SourceVersions { get; set; } = $"https://api.github.com/repos/quangaming2929/UniversalAnimeDownloader/releases/latest";
-        public static string CurrentVersionName { get; set; } = "v0.8.0";
-        public static DateTime CurrentVersionReleaseDate { get; set; } = DateTime.Parse("1/30/2019 6:46:04 PM");
+        public static string CurrentVersionName { get; set; } = "v0.8.1";
+        public static DateTime CurrentVersionReleaseDate { get; set; } = DateTime.Parse("2/2/2019 6:46:04 PM");
 
         public static async Task<GitHubData> GetLatestUpdate(string accessToken = null)
         {
