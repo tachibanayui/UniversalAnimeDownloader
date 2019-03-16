@@ -232,10 +232,18 @@ namespace UADAPI
         public static bool operator ==(GenreItem a, GenreItem b) => a.Name == b.Name;
         public static bool operator !=(GenreItem a, GenreItem b) => a.Name != b.Name;
 
-        public override bool Equals(object obj) => (obj as GenreItem).Name == Name;
+        //public override bool Equals(object obj) => (obj as GenreItem).Name == Name;
         public override int GetHashCode()
         {
             return base.GetHashCode();
         }
+    }
+
+
+    public class SeasonItem
+    {
+        public string Name { get; set; }
+        public string Slug { get; set; }
+        public string ID { get; set; }
     }
 }

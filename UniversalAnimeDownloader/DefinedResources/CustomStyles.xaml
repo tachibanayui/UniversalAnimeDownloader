@@ -1,0 +1,60 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:animations="clr-namespace:UniversalAnimeDownloader.Animations"
+    xmlns:local="clr-namespace:UniversalAnimeDownloader.DefinedResources"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+    <Style
+        x:Key="MaterialDesignActionFlatButton"
+        BasedOn="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
+        TargetType="Button">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+    </Style>
+
+    <Style x:Key="SideBarNavIcon" TargetType="materialDesign:PackIcon">
+        <Setter Property="Width" Value="{StaticResource Heading1}" />
+        <Setter Property="Height" Value="{StaticResource Heading1}" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="Foreground" Value="{StaticResource MaterialDesignBody}" />
+    </Style>
+
+    <Style x:Key="SideBarNavTextBlock" TargetType="TextBlock">
+        <Setter Property="Grid.Column" Value="2" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="FontSize" Value="{StaticResource Heading1}" />
+        <Setter Property="Foreground" Value="{StaticResource MaterialDesignBody}" />
+    </Style>
+
+    <Storyboard x:Key="OpenNavSideBar">
+        <animations:GridLengthAnimation
+            DecelerationRatio="0.16"
+            Storyboard.TargetName="navSideBar"
+            Storyboard.TargetProperty="ColumnDefinition.Width"
+            To="200"
+            Duration="0:0:0.5" />
+        <DoubleAnimation
+            DecelerationRatio="0.16"
+            Storyboard.TargetName="grdContentContainer"
+            Storyboard.TargetProperty="Grid.Opacity"
+            To="0.5"
+            Duration="0:0:0.5" />
+    </Storyboard>
+
+    <Storyboard x:Key="CloseNavSideBar">
+        <animations:GridLengthAnimation
+            DecelerationRatio="0.16"
+            Storyboard.TargetName="navSideBar"
+            Storyboard.TargetProperty="ColumnDefinition.Width"
+            To="75"
+            Duration="0:0:0.5" />
+        <DoubleAnimation
+            DecelerationRatio="0.16"
+            Storyboard.TargetName="grdContentContainer"
+            Storyboard.TargetProperty="Grid.Opacity"
+            To="1"
+            Duration="0:0:0.5" />
+    </Storyboard>
+</ResourceDictionary>

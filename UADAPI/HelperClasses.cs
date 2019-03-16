@@ -925,13 +925,11 @@ namespace UADAPI
             {
                 try
                 {
-                    var manager = modAssemblies[i].GetTypes().Where(SearchForManagerTypes);
-                    ManagerTypes.AddRange(manager);
-
-                    var query = modAssemblies[i].GetTypes().Where(SearchForQueryTypes).ToList();
-                    QueryTypes.AddRange(query);
+                    var assemblyTypes = modAssemblies[i].ExportedTypes;
+                    ManagerTypes.AddRange(assemblyTypes.Where(SearchForManagerTypes));
+                    QueryTypes.AddRange(assemblyTypes.Where(SearchForQueryTypes));
                 }
-                catch { }
+                catch(Exception e) { Console.WriteLine(e); }
             }
 
             ExamineMods();

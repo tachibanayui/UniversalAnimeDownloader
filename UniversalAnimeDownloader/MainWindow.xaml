@@ -1,0 +1,243 @@
+﻿<Window
+    x:Class="UniversalAnimeDownloader.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:animations="clr-namespace:UniversalAnimeDownloader.Animations"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:local="clr-namespace:UniversalAnimeDownloader"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    x:Name="mainWindow"
+    Title="MainWindow"
+    Width="800"
+    Height="450"
+    Background="{DynamicResource MaterialDesignPaper}"
+    DataContext="{StaticResource MainWindowViewModel}"
+    FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
+    ResizeMode="NoResize"
+    TextElement.FontSize="14"
+    TextElement.FontWeight="Medium"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    WindowStartupLocation="CenterScreen"
+    WindowStyle="None"
+    mc:Ignorable="d">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries />
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition x:Name="navSideBar" Width="{Binding SideBarWidth}" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="65" />
+                <ColumnDefinition Width="50" />
+                <ColumnDefinition Width="50" />
+                <ColumnDefinition Width="50" />
+                <ColumnDefinition Width="125" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="200" />
+                <ColumnDefinition Width="50" />
+                <ColumnDefinition Width="50" />
+                <ColumnDefinition Width="50" />
+                <ColumnDefinition Width="50" />
+            </Grid.ColumnDefinitions>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseLeftButtonDown">
+                    <i:InvokeCommandAction Command="{Binding DragMoveWindowCommand}" CommandParameter="{Binding ElementName=mainWindow}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+
+            <Rectangle Grid.ColumnSpan="10" Fill="{StaticResource MaterialDesignPaper}" />
+            <ToggleButton IsChecked="{Binding IsExpandSidePanel}" Style="{StaticResource MaterialDesignHamburgerToggleButton}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <i:InvokeCommandAction Command="{Binding ToggleNavSideBarCommand}" CommandParameter="{Binding ElementName=mainWindow}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ToggleButton>
+            <Button Grid.Column="1" Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}">
+                <materialDesign:PackIcon Kind="ArrowLeftBold" />
+            </Button>
+            <Button Grid.Column="2" Style="{StaticResource MaterialDesignActionFlatButton}">
+                <materialDesign:PackIcon Kind="ArrowRightBold" />
+            </Button>
+            <Button Grid.Column="3" Style="{StaticResource MaterialDesignActionFlatButton}">
+                <materialDesign:PackIcon Kind="Refresh" />
+            </Button>
+            <TextBlock
+                Grid.Column="4"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Text="Test App Icon" />
+            <Grid Grid.Column="6">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+
+                <Button Style="{StaticResource MaterialDesignActionFlatButton}">
+                    <materialDesign:PackIcon Kind="Magnify" />
+                </Button>
+
+                <TextBox
+                    Grid.Column="1"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Top"
+                    materialDesign:HintAssist.Hint="Search Anime"
+                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+
+                <Button Grid.Column="2" Style="{StaticResource MaterialDesignActionFlatButton}">
+                    <materialDesign:PackIcon Kind="Close" />
+                </Button>
+            </Grid>
+
+            <Button Grid.Column="7" Style="{StaticResource MaterialDesignActionFlatButton}">
+                <materialDesign:PackIcon Kind="Bell" />
+            </Button>
+
+            <Button
+                Grid.Column="8"
+                Command="{Binding MinimizeWindowCommand}"
+                CommandParameter="{Binding ElementName=mainWindow}"
+                Style="{StaticResource MaterialDesignActionFlatButton}">
+                <materialDesign:PackIcon Kind="WindowMinimize" />
+            </Button>
+
+            <Button
+                x:Name="btnWinState"
+                Grid.Column="9"
+                Command="{Binding ChangeWindowStateCommand}"
+                CommandParameter="{Binding ElementName=btnWinState}"
+                Style="{StaticResource MaterialDesignActionFlatButton}">
+                <materialDesign:PackIcon Kind="WindowMaximize" />
+            </Button>
+
+            <Button
+                Grid.Column="10"
+                Command="{Binding CloseWindowCommand}"
+                Style="{StaticResource MaterialDesignActionFlatButton}">
+                <materialDesign:PackIcon Kind="WindowClose" />
+            </Button>
+        </Grid>
+
+        <ScrollViewer
+            Grid.Row="1"
+            HorizontalScrollBarVisibility="Disabled"
+            VerticalScrollBarVisibility="Hidden">
+
+            <StackPanel>
+                <Button
+                    Height="75"
+                    HorizontalContentAlignment="Left"
+                    Style="{StaticResource MaterialDesignFlatButton}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="10" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+                        <materialDesign:PackIcon Kind="Earth" Style="{StaticResource SideBarNavIcon}" />
+                        <TextBlock Style="{StaticResource SideBarNavTextBlock}" Text="Explore" />
+                    </Grid>
+                </Button>
+
+                <Button
+                    Height="75"
+                    HorizontalContentAlignment="Left"
+                    Style="{StaticResource MaterialDesignFlatButton}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="10" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+                        <materialDesign:PackIcon Kind="Star" Style="{StaticResource SideBarNavIcon}" />
+                        <TextBlock Style="{StaticResource SideBarNavTextBlock}" Text="Featured" />
+                    </Grid>
+                </Button>
+
+                <Button
+                    Height="75"
+                    HorizontalContentAlignment="Left"
+                    Style="{StaticResource MaterialDesignFlatButton}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="10" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+                        <materialDesign:PackIcon Kind="Account" Style="{StaticResource SideBarNavIcon}" />
+                        <TextBlock Style="{StaticResource SideBarNavTextBlock}" Text="You may like" />
+                    </Grid>
+                </Button>
+
+                <Button
+                    Height="75"
+                    HorizontalContentAlignment="Left"
+                    Style="{StaticResource MaterialDesignFlatButton}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="10" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+                        <materialDesign:PackIcon Kind="FormatListBulleted" Style="{StaticResource SideBarNavIcon}" />
+                        <TextBlock Style="{StaticResource SideBarNavTextBlock}" Text="All Anime" />
+                    </Grid>
+                </Button>
+
+                <Separator Margin="10,0,10,0" />
+
+                <Button
+                    Height="75"
+                    HorizontalContentAlignment="Left"
+                    Style="{StaticResource MaterialDesignFlatButton}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="10" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+                        <materialDesign:PackIcon Kind="Book" Style="{StaticResource SideBarNavIcon}" />
+                        <TextBlock Style="{StaticResource SideBarNavTextBlock}" Text="My Anime Library" />
+                    </Grid>
+                </Button>
+
+                <Button
+                    Height="75"
+                    HorizontalContentAlignment="Left"
+                    Style="{StaticResource MaterialDesignFlatButton}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="10" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+                        <materialDesign:PackIcon Kind="Settings" Style="{StaticResource SideBarNavIcon}" />
+                        <TextBlock Style="{StaticResource SideBarNavTextBlock}" Text="Settings" />
+                    </Grid>
+                </Button>
+            </StackPanel>
+        </ScrollViewer>
+
+        <Grid
+            x:Name="grdContentContainer"
+            Grid.Row="1"
+            Grid.Column="1">
+            <TextBlock Text="Test" />
+            <Rectangle Margin="100" Fill="Green" />
+        </Grid>
+    </Grid>
+</Window>
+
