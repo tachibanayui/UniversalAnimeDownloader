@@ -8,6 +8,7 @@
     xmlns:local="clr-namespace:UniversalAnimeDownloader"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:pages="clr-namespace:UniversalAnimeDownloader.UcContentPages"
     x:Name="mainWindow"
     Title="MainWindow"
     Width="800"
@@ -57,7 +58,7 @@
                 </i:EventTrigger>
             </i:Interaction.Triggers>
 
-            <Rectangle Grid.ColumnSpan="10" Fill="{StaticResource MaterialDesignPaper}" />
+            <Rectangle Grid.ColumnSpan="10" Fill="{DynamicResource MaterialDesignPaper}" />
             <ToggleButton IsChecked="{Binding IsExpandSidePanel}" Style="{StaticResource MaterialDesignHamburgerToggleButton}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
@@ -66,13 +67,13 @@
                 </i:Interaction.Triggers>
             </ToggleButton>
             <Button Grid.Column="1" Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}">
-                <materialDesign:PackIcon Kind="ArrowLeftBold" />
+                <materialDesign:PackIcon Foreground="{DynamicResource MaterialDesignBody}" Kind="ArrowLeftBold" />
             </Button>
             <Button Grid.Column="2" Style="{StaticResource MaterialDesignActionFlatButton}">
-                <materialDesign:PackIcon Kind="ArrowRightBold" />
+                <materialDesign:PackIcon Foreground="{DynamicResource MaterialDesignBody}" Kind="ArrowRightBold" />
             </Button>
             <Button Grid.Column="3" Style="{StaticResource MaterialDesignActionFlatButton}">
-                <materialDesign:PackIcon Kind="Refresh" />
+                <materialDesign:PackIcon Foreground="{DynamicResource MaterialDesignBody}" Kind="Refresh" />
             </Button>
             <TextBlock
                 Grid.Column="4"
@@ -87,7 +88,7 @@
                 </Grid.ColumnDefinitions>
 
                 <Button Style="{StaticResource MaterialDesignActionFlatButton}">
-                    <materialDesign:PackIcon Kind="Magnify" />
+                    <materialDesign:PackIcon Foreground="{DynamicResource MaterialDesignBody}" Kind="Magnify" />
                 </Button>
 
                 <TextBox
@@ -98,12 +99,15 @@
                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
 
                 <Button Grid.Column="2" Style="{StaticResource MaterialDesignActionFlatButton}">
-                    <materialDesign:PackIcon Kind="Close" />
+                    <materialDesign:PackIcon Foreground="{DynamicResource MaterialDesignBody}" Kind="Close" />
                 </Button>
             </Grid>
 
-            <Button Grid.Column="7" Style="{StaticResource MaterialDesignActionFlatButton}">
-                <materialDesign:PackIcon Kind="Bell" />
+            <Button
+                Grid.Column="7"
+                Command="{Binding TestCommand}"
+                Style="{StaticResource MaterialDesignActionFlatButton}">
+                <materialDesign:PackIcon Foreground="{DynamicResource MaterialDesignBody}" Kind="Bell" />
             </Button>
 
             <Button
@@ -111,7 +115,7 @@
                 Command="{Binding MinimizeWindowCommand}"
                 CommandParameter="{Binding ElementName=mainWindow}"
                 Style="{StaticResource MaterialDesignActionFlatButton}">
-                <materialDesign:PackIcon Kind="WindowMinimize" />
+                <materialDesign:PackIcon Foreground="{DynamicResource MaterialDesignBody}" Kind="WindowMinimize" />
             </Button>
 
             <Button
@@ -120,14 +124,14 @@
                 Command="{Binding ChangeWindowStateCommand}"
                 CommandParameter="{Binding ElementName=btnWinState}"
                 Style="{StaticResource MaterialDesignActionFlatButton}">
-                <materialDesign:PackIcon Kind="WindowMaximize" />
+                <materialDesign:PackIcon Foreground="{DynamicResource MaterialDesignBody}" Kind="WindowMaximize" />
             </Button>
 
             <Button
                 Grid.Column="10"
                 Command="{Binding CloseWindowCommand}"
                 Style="{StaticResource MaterialDesignActionFlatButton}">
-                <materialDesign:PackIcon Kind="WindowClose" />
+                <materialDesign:PackIcon Foreground="{DynamicResource MaterialDesignBody}" Kind="WindowClose" />
             </Button>
         </Grid>
 
@@ -234,9 +238,19 @@
         <Grid
             x:Name="grdContentContainer"
             Grid.Row="1"
-            Grid.Column="1">
-            <TextBlock Text="Test" />
-            <Rectangle Margin="100" Fill="Green" />
+            Grid.Column="1"
+            Margin="5">
+            <materialDesign:Transitioner AutoApplyTransitionOrigins="True" SelectedIndex="0">
+                <materialDesign:TransitionerSlide
+                    Background="{DynamicResource MaterialDesignPaper}"
+                    ClipToBounds="True"
+                    Foreground="{DynamicResource MaterialDesignBody}">
+                    <materialDesign:TransitionerSlide.OpeningEffects>
+                        <materialDesign:TransitionEffect Kind="SlideInFromBottom" Duration="0:0:0.5" />
+                    </materialDesign:TransitionerSlide.OpeningEffects>
+                    <pages:AllAnimeTab />
+                </materialDesign:TransitionerSlide>
+            </materialDesign:Transitioner>
         </Grid>
     </Grid>
 </Window>

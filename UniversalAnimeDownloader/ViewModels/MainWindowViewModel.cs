@@ -8,7 +8,7 @@ using UniversalAnimeDownloader.Animations;
 
 namespace UniversalAnimeDownloader.ViewModels
 {
-    class MainWindowViewModel : BaseViewModel
+    public class MainWindowViewModel : BaseViewModel
     {
 
         #region Commands
@@ -17,6 +17,7 @@ namespace UniversalAnimeDownloader.ViewModels
         public ICommand MinimizeWindowCommand { get; set; }
         public ICommand DragMoveWindowCommand { get; set; }
         public ICommand ToggleNavSideBarCommand { get; set; }
+        public ICommand TestCommand { get; set; }
         #endregion
 
         #region BindableProperties
@@ -55,6 +56,7 @@ namespace UniversalAnimeDownloader.ViewModels
         }
         #endregion
 
+        public bool IsDark { get; set; }
         public MainWindowViewModel()
         {
             CloseWindowCommand = new RelayCommand<object>(p => true, p => Application.Current.Shutdown());
@@ -110,6 +112,7 @@ namespace UniversalAnimeDownloader.ViewModels
                     //grid.BeginAnimation(UIElement.OpacityProperty, opacityAnim);
                 }
             });
+            TestCommand = new RelayCommand<object>(p => true, p => { (Application.Current.FindResource("PaletteHelper") as PaletteHelper).SetLightDark(!IsDark); IsDark = !IsDark; });
         }
     }
 }

@@ -13,19 +13,19 @@
     </Style>
 
     <Style x:Key="SideBarNavIcon" TargetType="materialDesign:PackIcon">
-        <Setter Property="Width" Value="{StaticResource Heading1}" />
-        <Setter Property="Height" Value="{StaticResource Heading1}" />
+        <Setter Property="Width" Value="{DynamicResource Heading1}" />
+        <Setter Property="Height" Value="{DynamicResource Heading1}" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="HorizontalAlignment" Value="Center" />
-        <Setter Property="Foreground" Value="{StaticResource MaterialDesignBody}" />
+        <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}" />
     </Style>
 
     <Style x:Key="SideBarNavTextBlock" TargetType="TextBlock">
         <Setter Property="Grid.Column" Value="2" />
         <Setter Property="HorizontalAlignment" Value="Left" />
         <Setter Property="VerticalAlignment" Value="Center" />
-        <Setter Property="FontSize" Value="{StaticResource Heading1}" />
-        <Setter Property="Foreground" Value="{StaticResource MaterialDesignBody}" />
+        <Setter Property="FontSize" Value="{DynamicResource Heading1}" />
+        <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}" />
     </Style>
 
     <Storyboard x:Key="OpenNavSideBar">

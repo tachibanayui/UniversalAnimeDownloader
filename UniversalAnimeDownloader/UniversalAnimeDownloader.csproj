@@ -72,6 +72,12 @@
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\AnimeInformationModel.cs" />
+    <Compile Include="UcContentPages\AllAnimeTab.xaml.cs">
+      <DependentUpon>AllAnimeTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ValueConverters\GenreItemListToStringConverter.cs" />
+    <Compile Include="ViewModels\AllAnimeTabViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Page Include="DefinedResources\CustomStyles.xaml">
@@ -91,6 +97,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UcContentPages\AllAnimeTab.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -122,6 +132,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\UADAPI\UADAPI.csproj">
+      <Project>{2E485D50-DFAB-4755-BCE5-2389D51B31CC}</Project>
+      <Name>UADAPI</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
