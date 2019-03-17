@@ -186,12 +186,12 @@ namespace UADAPI
         /// </summary>
         public string AnimeSeriesSavedDirectory { get; set; }
 
-        public override bool Equals(object obj) => AnimeID == (obj as AnimeSeriesInfo).AnimeID;
+        //public override bool Equals(object obj) => AnimeID == (obj as AnimeSeriesInfo).AnimeID;
 
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
+        //public override int GetHashCode()
+        //{
+        //    return base.GetHashCode();
+        //}
     }
 
     /// <summary>
@@ -229,8 +229,14 @@ namespace UADAPI
         public string Slug { get; set; }
         public int ID { get; set; }
 
-        public static bool operator ==(GenreItem a, GenreItem b) => a.Name == b.Name;
-        public static bool operator !=(GenreItem a, GenreItem b) => a.Name != b.Name;
+        //public static bool operator ==(GenreItem a, GenreItem b) => a.Name == b.Name;
+        //public static bool operator !=(GenreItem a, GenreItem b)
+        //{
+        //    if (a != null || b != null)
+        //        return a.Name != b.Name;
+        //    else
+        //        return false;
+        //}
 
         //public override bool Equals(object obj) => (obj as GenreItem).Name == Name;
         public override int GetHashCode()

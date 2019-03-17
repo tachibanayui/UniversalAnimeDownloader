@@ -69,14 +69,18 @@
     </ApplicationDefinition>
     <Compile Include="Animations\ExpanderDoubleAnimation.cs" />
     <Compile Include="Animations\GridLengthAnimation.cs" />
+    <Compile Include="DelayedObservableCollection.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MiscClass.cs" />
     <Compile Include="Models\AnimeInformationModel.cs" />
     <Compile Include="UcContentPages\AllAnimeTab.xaml.cs">
       <DependentUpon>AllAnimeTab.xaml</DependentUpon>
     </Compile>
     <Compile Include="ValueConverters\GenreItemListToStringConverter.cs" />
+    <Compile Include="ValueConverters\MediaSourceInfoToImageSource.cs" />
+    <Compile Include="ValueConverters\TypeToStringConverter.cs" />
     <Compile Include="ViewModels\AllAnimeTabViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />

@@ -42,7 +42,7 @@ namespace UADAPI
         /// Get all the anime season defined at the remote host
         /// </summary>
         /// <returns>A list of anime seasons</returns>
-        Task<List<string>> GetAnimeSeasons();
+        Task<List<SeasonItem>> GetAnimeSeasons();
     }
 
     public interface IAnimeSeriesManager

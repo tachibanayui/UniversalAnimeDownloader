@@ -4,7 +4,10 @@
     xmlns:local="clr-namespace:UniversalAnimeDownloader.DefinedResources"
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
     xmlns:valueConverter="clr-namespace:UniversalAnimeDownloader.ValueConverters">
+
     <valueConverter:GenreItemListToStringConverter x:Key="GenreItemListToStringConverter" />
+    <valueConverter:MediaSourceInfoToImageSource x:Key="MediaSourceInfoToImageSourceConverter" />
+    <valueConverter:TypeToStringConverter x:Key="TypeToStringConverter" />
 
     <sys:Double x:Key="Heading1">36</sys:Double>
     <sys:Double x:Key="Heading2">24</sys:Double>

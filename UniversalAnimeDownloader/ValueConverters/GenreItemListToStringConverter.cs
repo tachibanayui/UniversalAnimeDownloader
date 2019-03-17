@@ -14,7 +14,7 @@ namespace UniversalAnimeDownloader.ValueConverters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             string res = string.Empty;
-            if (!(value is List<GenreItem> genreItems))
+            if (!(value is IList<GenreItem> genreItems))
                 return res;
 
             foreach (GenreItem item in genreItems)
@@ -27,7 +27,7 @@ namespace UniversalAnimeDownloader.ValueConverters
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            List<GenreItem> genreItems = null;
+            IList<GenreItem> genreItems = null;
             try
             {
                 string orginalString = value as string;

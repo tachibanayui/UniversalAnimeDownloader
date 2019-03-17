@@ -250,6 +250,15 @@
                     </materialDesign:TransitionerSlide.OpeningEffects>
                     <pages:AllAnimeTab />
                 </materialDesign:TransitionerSlide>
+                <materialDesign:TransitionerSlide
+                    Background="{DynamicResource MaterialDesignPaper}"
+                    ClipToBounds="True"
+                    Foreground="{DynamicResource MaterialDesignBody}">
+                    <materialDesign:TransitionerSlide.OpeningEffects>
+                        <materialDesign:TransitionEffect Kind="SlideInFromBottom" Duration="0:0:0.5" />
+                    </materialDesign:TransitionerSlide.OpeningEffects>
+                    <pages:AllAnimeTab />
+                </materialDesign:TransitionerSlide>
             </materialDesign:Transitioner>
         </Grid>
     </Grid>
