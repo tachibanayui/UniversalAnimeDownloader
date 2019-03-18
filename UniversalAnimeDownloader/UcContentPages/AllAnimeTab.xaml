@@ -96,7 +96,7 @@
             </Grid>
         </materialDesign:Card>
 
-        <ListBox ItemsSource="{Binding AnimeInfos}">
+        <ListBox Grid.Row="1" ItemsSource="{Binding AnimeInfos}">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel />
@@ -197,7 +197,10 @@
                         TextAlignment="Center"
                         TextWrapping="WrapWithOverflow" />
 
-                    <Button Margin="0,10,0,0" Content="Reload" />
+                    <Button
+                        Margin="0,10,0,0"
+                        Command="{Binding OverlayNoInternetVisibility}"
+                        Content="Reload" />
                 </StackPanel>
             </Grid>
 
@@ -230,6 +233,37 @@
                         TextWrapping="WrapWithOverflow" />
                     <Button Margin="0,10,0,0" Content="See error detail" />
                 </StackPanel>
+            </Grid>
+
+            <Grid x:Name="overlayActivityIndicator" Visibility="{Binding OverlayActiityIndicatorVisibility}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <ProgressBar
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Foreground="{DynamicResource MaterialDesignBody}"
+                    IsIndeterminate="True"
+                    RenderTransformOrigin="0.5,0.5"
+                    Style="{StaticResource MaterialDesignCircularProgressBar}"
+                    Value="0">
+                    <ProgressBar.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform ScaleX="3" ScaleY="3" />
+                            <SkewTransform />
+                            <RotateTransform />
+                            <TranslateTransform />
+                        </TransformGroup>
+                    </ProgressBar.RenderTransform>
+                </ProgressBar>
             </Grid>
         </Grid>
     </Grid>

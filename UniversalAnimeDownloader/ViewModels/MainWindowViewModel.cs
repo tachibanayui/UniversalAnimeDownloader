@@ -4,7 +4,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
-using UniversalAnimeDownloader.Animations;
 
 namespace UniversalAnimeDownloader.ViewModels
 {
@@ -21,7 +20,7 @@ namespace UniversalAnimeDownloader.ViewModels
         #endregion
 
         #region BindableProperties
-        private GridLength _SideBarWidth = new GridLength(75);
+        private GridLength _SideBarWidth = new GridLength(65);
         public GridLength SideBarWidth
         {
             get
@@ -81,35 +80,27 @@ namespace UniversalAnimeDownloader.ViewModels
             DragMoveWindowCommand = new RelayCommand<Window>(p => true, p => p.DragMove());
             ToggleNavSideBarCommand = new RelayCommand<Window>(p => true, p =>
             {
-                if(p != null)
+                if (p != null)
                 {
-                    ColumnDefinition column = (p.Content as Grid).ColumnDefinitions[0];
-                    Grid grid = (p.Content as Grid).Children[2] as Grid;
+                    ScrollViewer scroll = (p.Content as Grid).Children[2] as ScrollViewer;
+                    Grid grd = (p.Content as Grid).Children[1] as Grid;
 
-                    GridLengthAnimation anim = new GridLengthAnimation()
+                    DoubleAnimationUsingKeyFrames transitionAnim = new DoubleAnimationUsingKeyFrames();
+                    transitionAnim.KeyFrames.Add(new EasingDoubleKeyFrame() { KeyTime = KeyTime.FromTimeSpan(TimeSpan.FromSeconds(0)), Value = scroll.Width });
+                    transitionAnim.KeyFrames.Add(new EasingDoubleKeyFrame() { KeyTime = KeyTime.FromTimeSpan(TimeSpan.FromSeconds(0.35)), Value = 255 });
+
+                    //DoubleAnimation transitionAnim = new DoubleAnimation(scroll.Width, 255, TimeSpan.FromSeconds(0.35)) { DecelerationRatio = 0.1 };
+
+                    DoubleAnimation opacityAnim = new DoubleAnimation(grd.Opacity, 0.5, TimeSpan.FromSeconds(0.35)) { DecelerationRatio = 0.1 };
+
+                    if (!IsExpandSidePanel)
                     {
-                        From = column.Width,
-                        To = new GridLength(400),
-                        Duration = TimeSpan.FromSeconds(0.35),
-                        DecelerationRatio = 0.1
-                    };
-
-                    //DoubleAnimation opacityAnim = new DoubleAnimation()
-                    //{
-                    //    From = grid.Opacity,
-                    //    To = 0.5,
-                    //    Duration = TimeSpan.FromSeconds(0.35),
-                    //    DecelerationRatio = 0.1
-                    //};
-
-                    if(!IsExpandSidePanel)
-                    {
-                        anim.To = new GridLength(75);
-                        //opacityAnim.To = 1;
+                        transitionAnim.KeyFrames[1].Value = 65;
+                        opacityAnim.To = 1;
                     }
 
-                    column.BeginAnimation(ColumnDefinition.WidthProperty, anim);
-                    //grid.BeginAnimation(UIElement.OpacityProperty, opacityAnim);
+                    scroll.BeginAnimation(FrameworkElement.WidthProperty, transitionAnim);
+                    grd.BeginAnimation(UIElement.OpacityProperty, opacityAnim);
                 }
             });
             TestCommand = new RelayCommand<object>(p => true, p => { (Application.Current.FindResource("PaletteHelper") as PaletteHelper).SetLightDark(!IsDark); IsDark = !IsDark; });

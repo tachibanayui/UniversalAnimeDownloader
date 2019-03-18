@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,10 +21,13 @@ namespace UniversalAnimeDownloader.ViewModels
         public ObservableCollection<GenreItem> Genres { get; set; }
         public ObservableCollection<SeasonItem> Seasons { get; set; }
         public CancellationTokenSource LoadAnimeCancelToken { get; set; } = new CancellationTokenSource();
+        public Exception LastError { get; set; }
         #endregion
 
         #region RelayCommand
         public ICommand SearchAnimeCommand { get; set; }
+        public ICommand ReloadInternetCommand { get; set; }
+        public ICommand ShowErrorCommand { get; set; }
         #endregion
 
         #region BindableProperties
@@ -101,7 +105,7 @@ namespace UniversalAnimeDownloader.ViewModels
             }
         }
 
-        private Visibility _OverlayNoInternetVisibility;
+        private Visibility _OverlayNoInternetVisibility = Visibility.Collapsed;
         public Visibility OverlayNoInternetVisibility
         {
             get
@@ -118,7 +122,7 @@ namespace UniversalAnimeDownloader.ViewModels
             }
         }
 
-        private Visibility _OverlayErrorOccuredVisibility;
+        private Visibility _OverlayErrorOccuredVisibility = Visibility.Collapsed;
         public Visibility OverlayErrorOccuredVisibility
         {
             get
@@ -135,24 +139,32 @@ namespace UniversalAnimeDownloader.ViewModels
             }
         }
 
+        private Visibility _OverlayActiityIndicatorVisibility = Visibility.Collapsed;
+        public Visibility OverlayActiityIndicatorVisibility
+        {
+            get
+            {
+                return _OverlayActiityIndicatorVisibility;
+            }
+            set
+            {
+                if (_OverlayActiityIndicatorVisibility != value)
+                {
+                    _OverlayActiityIndicatorVisibility = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
 
         #endregion
 
 
         public AllAnimeTabViewModel()
         {
-            SearchAnimeCommand = new RelayCommand<object>(p => true, async (p) =>
-            {
-                try
-                {
-                    await LoadAnime(0, 50);
-                }
-                catch
-                {
-                    //Add a error message in UADAPI.OutputLogHelper class
-                    //Show error overlay
-                }
-            });
+            SearchAnimeCommand = new RelayCommand<object>(p => true, async (p) => await LoadAnime(0, 50));
+
+            ReloadInternetCommand = new RelayCommand<object>(p => OverlayNoInternetVisibility == Visibility.Visible, async (p) => await LoadAnime(0, 50));
 
             ApiHelpper.LoadAssembly();
             AnimeInfos = new DelayedObservableCollection<AnimeSeriesInfo>();
@@ -169,46 +181,72 @@ namespace UniversalAnimeDownloader.ViewModels
             SelectedGenresIndex = 0;
             try
             {
-                await TempTask;
+                //await TempTask;
 
-                await LoadAnime(0, 50);
+                //await LoadAnime(0, 50);
+                for (int i = 0; i < 50; i++)
+                {
+                    await AnimeInfos.AddAndWait(new AnimeSeriesInfo() { Name = "Test: " + i, Genres = new List<GenreItem>() { new GenreItem() { Name = "Cancer" } } });
+                }
             }
-            catch
+            catch (Exception e)
             {
+                ShowErrorOcuredOverlay(e);
                 //Add an error in UADAPI.OutputLogHelper class
             }
         }
 
         private async Task LoadAnime(int offset, int count, bool clearPreviousCard = true)
         {
-            if (Querier != null)
+            try
             {
-                LoadAnimeCancelToken.Cancel();
-                LoadAnimeCancelToken = new CancellationTokenSource();
-                string strGenres = string.Empty;
-                string strSeason = string.Empty;
-                if (Genres.Count > SelectedGenresIndex)
+                if (ApiHelpper.CheckForInternetConnection())
                 {
-                    strGenres = Genres[SelectedGenresIndex]?.Slug;
-                }
+                    HideAllOverlay();
+                    OverlayActiityIndicatorVisibility = Visibility.Visible;
+                    if (Querier != null)
+                    {
+                        LoadAnimeCancelToken.Cancel();
+                        LoadAnimeCancelToken = new CancellationTokenSource();
+                        string strGenres = string.Empty;
+                        string strSeason = string.Empty;
+                        if (Genres.Count > SelectedGenresIndex)
+                        {
+                            strGenres = Genres[SelectedGenresIndex]?.Slug;
+                        }
 
-                if (Seasons.Count > SelectedSeasonIndex)
-                {
-                    strSeason = Seasons[SelectedSeasonIndex]?.Slug;
-                }
+                        if (Seasons.Count > SelectedSeasonIndex)
+                        {
+                            strSeason = Seasons[SelectedSeasonIndex]?.Slug;
+                        }
 
-                var animes = await Querier.GetAnime(offset, count, SearchAnime, strGenres, strSeason);
-                if (clearPreviousCard)
-                {
-                    AnimeInfos.RemoveAll();
+                        var animes = await Querier.GetAnime(offset, count, SearchAnime, strGenres, strSeason);
+                        if (clearPreviousCard)
+                        {
+                            AnimeInfos.RemoveAll();
+                        }
+                        try
+                        {
+                            await AnimeInfos.AddRange(animes, LoadAnimeCancelToken.Token);
+                        }
+                        catch { }
+                    }
+                    HideAllOverlay();
                 }
-                try
+                else
                 {
-                    await AnimeInfos.AddRange(animes, LoadAnimeCancelToken.Token);
+                    HideAllOverlay();
+                    ShowNoInternetOverlay();
                 }
-                catch { }
+            }
+            catch (Exception e)
+            {
+                //Add a error message in UADAPI.OutputLogHelper class
+                HideAllOverlay();
+                ShowErrorOcuredOverlay(e);
             }
         }
+        
 
         private async Task LoadGenresAndSeasons()
         {
@@ -227,6 +265,50 @@ namespace UniversalAnimeDownloader.ViewModels
                 {
                     Seasons.Add(item);
                 }
+            }
+        }
+
+        private void ShowNoInternetOverlay()
+        {
+            if (OverlayErrorOccuredVisibility == Visibility.Visible)
+            {
+                OverlayErrorOccuredVisibility = Visibility.Collapsed;
+            }
+
+            if (OverlayNoInternetVisibility == Visibility.Collapsed)
+            {
+                OverlayNoInternetVisibility = Visibility.Visible;
+            }
+
+            OverlayActiityIndicatorVisibility = Visibility.Collapsed;
+        }
+
+        private void ShowErrorOcuredOverlay(Exception e)
+        {
+            if (OverlayNoInternetVisibility == Visibility.Visible)
+            {
+                OverlayNoInternetVisibility = Visibility.Collapsed;
+            }
+
+            if (OverlayErrorOccuredVisibility == Visibility.Collapsed)
+            {
+                OverlayErrorOccuredVisibility = Visibility.Visible;
+            }
+            OverlayActiityIndicatorVisibility = Visibility.Collapsed;
+
+            LastError = e;
+        }
+
+        private void HideAllOverlay()
+        {
+            if (OverlayNoInternetVisibility == Visibility.Visible)
+            {
+                OverlayNoInternetVisibility = Visibility.Collapsed;
+            }
+
+            if (OverlayErrorOccuredVisibility == Visibility.Visible)
+            {
+                OverlayErrorOccuredVisibility = Visibility.Collapsed;
             }
         }
     }
