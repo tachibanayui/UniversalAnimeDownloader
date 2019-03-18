@@ -126,6 +126,56 @@
                                 </Style.Triggers>
                             </Style>
                         </materialDesign:Card.Style>
+                        <materialDesign:Card.ToolTip>
+                            <ToolTip
+                                Background="Transparent"
+                                ToolTipService.BetweenShowDelay="1500"
+                                ToolTipService.HasDropShadow="True"
+                                ToolTipService.InitialShowDelay="1500">
+                                <materialDesign:Card Width="400" Height="250">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <Image Margin="10" Source="{Binding Thumbnail, Converter={StaticResource MediaSourceInfoToImageSourceConverter}}" />
+                                        <Grid Grid.Column="1" Margin="5">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="48" />
+                                                <RowDefinition Height="72" />
+                                                <RowDefinition />
+                                                <RowDefinition Height="48" />
+                                            </Grid.RowDefinitions>
+                                            <Grid.Resources>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Margin" Value="5" />
+                                                    <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}" />
+                                                    <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+                                                    <Setter Property="TextWrapping" Value="WrapWithOverflow" />
+                                                </Style>
+                                            </Grid.Resources>
+                                            <TextBlock>
+                                                <Run Text="Title: " />
+                                                <Run Text="{Binding Name}" />
+                                            </TextBlock>
+                                            <Separator VerticalAlignment="Bottom"/>
+                                            <TextBlock Grid.Row="1">
+                                                <Run Text="Genres: " />
+                                                <Run Text="{Binding Genres, Converter={StaticResource GenreItemListToStringConverter}}" />
+                                            </TextBlock>
+                                            <TextBlock Grid.Row="2">
+                                                <Run Text="Description: " />
+                                                <Run Text="{Binding Description}" />
+                                            </TextBlock>
+                                            <TextBlock
+                                                Grid.Row="3"
+                                                FontSize="12"
+                                                Text="Click the arrow button to see more." />
+                                        </Grid>
+                                    </Grid>
+                                </materialDesign:Card>
+                            </ToolTip>
+                        </materialDesign:Card.ToolTip>
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition />

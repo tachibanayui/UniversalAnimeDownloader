@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
+using System.Windows.Shapes;
 
 namespace UniversalAnimeDownloader.ViewModels
 {
@@ -82,25 +83,21 @@ namespace UniversalAnimeDownloader.ViewModels
             {
                 if (p != null)
                 {
-                    ScrollViewer scroll = (p.Content as Grid).Children[2] as ScrollViewer;
-                    Grid grd = (p.Content as Grid).Children[1] as Grid;
+                    ScrollViewer scroll = (p.Content as Grid).Children[3] as ScrollViewer;
+                    Rectangle fadeOverlay = (p.Content as Grid).Children[2] as Rectangle;
 
-                    DoubleAnimationUsingKeyFrames transitionAnim = new DoubleAnimationUsingKeyFrames();
-                    transitionAnim.KeyFrames.Add(new EasingDoubleKeyFrame() { KeyTime = KeyTime.FromTimeSpan(TimeSpan.FromSeconds(0)), Value = scroll.Width });
-                    transitionAnim.KeyFrames.Add(new EasingDoubleKeyFrame() { KeyTime = KeyTime.FromTimeSpan(TimeSpan.FromSeconds(0.35)), Value = 255 });
+                    DoubleAnimation transitionAnim = new DoubleAnimation(scroll.Width, 255, TimeSpan.FromSeconds(0.5)) { DecelerationRatio = 0.1, EasingFunction = new BackEase() { EasingMode = EasingMode.EaseOut } };
 
-                    //DoubleAnimation transitionAnim = new DoubleAnimation(scroll.Width, 255, TimeSpan.FromSeconds(0.35)) { DecelerationRatio = 0.1 };
-
-                    DoubleAnimation opacityAnim = new DoubleAnimation(grd.Opacity, 0.5, TimeSpan.FromSeconds(0.35)) { DecelerationRatio = 0.1 };
+                    DoubleAnimation opacityAnim = new DoubleAnimation(fadeOverlay.Opacity, 0.5, TimeSpan.FromSeconds(0.5)) { DecelerationRatio = 0.1 };
 
                     if (!IsExpandSidePanel)
                     {
-                        transitionAnim.KeyFrames[1].Value = 65;
-                        opacityAnim.To = 1;
+                        transitionAnim.To = 65;
+                        opacityAnim.To = 0;
                     }
 
                     scroll.BeginAnimation(FrameworkElement.WidthProperty, transitionAnim);
-                    grd.BeginAnimation(UIElement.OpacityProperty, opacityAnim);
+                    fadeOverlay.BeginAnimation(UIElement.OpacityProperty, opacityAnim);
                 }
             });
             TestCommand = new RelayCommand<object>(p => true, p => { (Application.Current.FindResource("PaletteHelper") as PaletteHelper).SetLightDark(!IsDark); IsDark = !IsDark; });

@@ -161,6 +161,12 @@
             </materialDesign:Transitioner>
         </Grid>
 
+        <Rectangle
+            Grid.Row="2"
+            Fill="Black"
+            IsHitTestVisible="False"
+            Opacity="0" />
+
         <ScrollViewer
             Grid.Row="1"
             Width="65"
