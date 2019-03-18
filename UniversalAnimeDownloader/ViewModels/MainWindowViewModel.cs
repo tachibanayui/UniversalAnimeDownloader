@@ -17,6 +17,9 @@ namespace UniversalAnimeDownloader.ViewModels
         public ICommand MinimizeWindowCommand { get; set; }
         public ICommand DragMoveWindowCommand { get; set; }
         public ICommand ToggleNavSideBarCommand { get; set; }
+        public ICommand DeleteSearchBoxCommand { get; set; }
+        public ICommand CheckForEnterKeyCommand { get; set; }
+        public ICommand SearchButtonClickCommand { get; set; }
         public ICommand TestCommand { get; set; }
         #endregion
 
@@ -100,6 +103,20 @@ namespace UniversalAnimeDownloader.ViewModels
                     fadeOverlay.BeginAnimation(UIElement.OpacityProperty, opacityAnim);
                 }
             });
+            DeleteSearchBoxCommand = new RelayCommand<TextBox>(p => true, p => p.Clear());
+            CheckForEnterKeyCommand = new RelayCommand<TextBox>(p => true, p =>
+            {
+                if (p != null)
+                {
+                    if (p.Text.Contains("\n") || p.Text.Contains("\r"))
+                    {
+                        p.Text = p.Text.Trim('\r', '\n');
+                        MiscClass.OnUserSearched(this, p.Text);
+                    }
+                }
+
+            });
+            SearchButtonClickCommand = new RelayCommand<TextBox>(p => true, p => MiscClass.OnUserSearched(this, p.Text));
             TestCommand = new RelayCommand<object>(p => true, p => { (Application.Current.FindResource("PaletteHelper") as PaletteHelper).SetLightDark(!IsDark); IsDark = !IsDark; });
         }
     }

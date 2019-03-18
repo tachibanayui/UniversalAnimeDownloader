@@ -94,19 +94,33 @@
                     <ColumnDefinition />
                     <ColumnDefinition Width="auto" />
                 </Grid.ColumnDefinitions>
-
-                <Button Style="{StaticResource MaterialDesignActionFlatButton}">
+                <Button
+                    Command="{Binding SearchButtonClickCommand}"
+                    CommandParameter="{Binding ElementName=txbSearch}"
+                    Style="{StaticResource MaterialDesignActionFlatButton}">
                     <materialDesign:PackIcon Foreground="{DynamicResource MaterialDesignBody}" Kind="Magnify" />
                 </Button>
 
                 <TextBox
+                    x:Name="txbSearch"
                     Grid.Column="1"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Top"
                     materialDesign:HintAssist.Hint="Search Anime"
-                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                    AcceptsReturn="True"
+                    Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="TextChanged">
+                            <i:InvokeCommandAction Command="{Binding CheckForEnterKeyCommand}" CommandParameter="{Binding ElementName=txbSearch}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </TextBox>
 
-                <Button Grid.Column="2" Style="{StaticResource MaterialDesignActionFlatButton}">
+                <Button
+                    Grid.Column="2"
+                    Command="{Binding DeleteSearchBoxCommand}"
+                    CommandParameter="{Binding ElementName=txbSearch}"
+                    Style="{StaticResource MaterialDesignActionFlatButton}">
                     <materialDesign:PackIcon Foreground="{DynamicResource MaterialDesignBody}" Kind="Close" />
                 </Button>
             </Grid>

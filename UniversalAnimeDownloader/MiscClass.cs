@@ -1,15 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UADAPI;
 
 namespace UniversalAnimeDownloader
 {
-    class MiscClass : AnimeSeriesInfo
+    class MiscClass
     {
-        public int MyProperty { get; set; }
+        public static event EventHandler<SearchEventArgs> UserSearched;
+        public static void OnUserSearched(object sender, string searchKeyword) => UserSearched?.Invoke(sender, new SearchEventArgs(searchKeyword));
 
+    }
+
+
+    public class SearchEventArgs : EventArgs
+    {
+        public SearchEventArgs()
+        {
+
+        }
+
+        public SearchEventArgs(string keyword)
+        {
+            Keyword = keyword;
+        }
+        public string Keyword { get; set; }
     }
 }

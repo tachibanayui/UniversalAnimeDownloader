@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using UADAPI;
 
@@ -28,6 +29,7 @@ namespace UniversalAnimeDownloader.ViewModels
         public ICommand SearchAnimeCommand { get; set; }
         public ICommand ReloadInternetCommand { get; set; }
         public ICommand ShowErrorCommand { get; set; }
+        public ICommand DetailTooltipOpenedCommand { get; set; }
         #endregion
 
         #region BindableProperties
@@ -163,8 +165,8 @@ namespace UniversalAnimeDownloader.ViewModels
         public AllAnimeTabViewModel()
         {
             SearchAnimeCommand = new RelayCommand<object>(p => true, async (p) => await LoadAnime(0, 50));
-
             ReloadInternetCommand = new RelayCommand<object>(p => OverlayNoInternetVisibility == Visibility.Visible, async (p) => await LoadAnime(0, 50));
+            MiscClass.UserSearched += async(s, e) => { SearchAnime = e.Keyword; await LoadAnime(0, 50); };
 
             ApiHelpper.LoadAssembly();
             AnimeInfos = new DelayedObservableCollection<AnimeSeriesInfo>();
@@ -181,13 +183,13 @@ namespace UniversalAnimeDownloader.ViewModels
             SelectedGenresIndex = 0;
             try
             {
-                //await TempTask;
+                await TempTask;
 
-                //await LoadAnime(0, 50);
-                for (int i = 0; i < 50; i++)
-                {
-                    await AnimeInfos.AddAndWait(new AnimeSeriesInfo() { Name = "Test: " + i, Genres = new List<GenreItem>() { new GenreItem() { Name = "Cancer" } } });
-                }
+                await LoadAnime(0, 50);
+                //for (int i = 0; i < 50; i++)
+                //{
+                //    await AnimeInfos.AddAndWait(new AnimeSeriesInfo() { Name = "Test: " + i, Genres = new List<GenreItem>() { new GenreItem() { Name = "Cancer" } } });
+                //}
             }
             catch (Exception e)
             {
@@ -310,6 +312,8 @@ namespace UniversalAnimeDownloader.ViewModels
             {
                 OverlayErrorOccuredVisibility = Visibility.Collapsed;
             }
+
+            OverlayActiityIndicatorVisibility = Visibility.Collapsed;
         }
     }
 }
