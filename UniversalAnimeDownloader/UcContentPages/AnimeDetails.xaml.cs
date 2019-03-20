@@ -16,14 +16,13 @@ using System.Windows.Shapes;
 namespace UniversalAnimeDownloader.UcContentPages
 {
     /// <summary>
-    /// Interaction logic for AllAnimeTab.xaml
+    /// Interaction logic for AnimeDetails.xaml
     /// </summary>
-    public partial class AllAnimeTab : UserControl
+    public partial class AnimeDetails : UserControl
     {
-        public AllAnimeTab()
+        public AnimeDetails()
         {
             InitializeComponent();
         }
-
     }
 }

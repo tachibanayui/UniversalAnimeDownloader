@@ -21,7 +21,7 @@ namespace UniversalAnimeDownloader.ValueConverters
             {
                 res += $"{item.Name}, ";
             }
-            res = res.Substring(0, res.IndexOf(','));
+            res = res.Substring(0, res.LastIndexOf(','));
             return res;
         }
 

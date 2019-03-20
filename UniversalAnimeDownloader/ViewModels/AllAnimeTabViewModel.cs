@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using UADAPI;
 
 namespace UniversalAnimeDownloader.ViewModels
@@ -22,6 +23,7 @@ namespace UniversalAnimeDownloader.ViewModels
         public ObservableCollection<GenreItem> Genres { get; set; }
         public ObservableCollection<SeasonItem> Seasons { get; set; }
         public CancellationTokenSource LoadAnimeCancelToken { get; set; } = new CancellationTokenSource();
+        public bool IsLoadOngoing { get; set; }
         public Exception LastError { get; set; }
         #endregion
 
@@ -30,6 +32,8 @@ namespace UniversalAnimeDownloader.ViewModels
         public ICommand ReloadInternetCommand { get; set; }
         public ICommand ShowErrorCommand { get; set; }
         public ICommand DetailTooltipOpenedCommand { get; set; }
+        public ICommand AnimeListScrollingCommand { get; set; }
+        public ICommand ShowAnimeDetailCommand { get; set; }
         #endregion
 
         #region BindableProperties
@@ -166,6 +170,31 @@ namespace UniversalAnimeDownloader.ViewModels
         {
             SearchAnimeCommand = new RelayCommand<object>(p => true, async (p) => await LoadAnime(0, 50));
             ReloadInternetCommand = new RelayCommand<object>(p => OverlayNoInternetVisibility == Visibility.Visible, async (p) => await LoadAnime(0, 50));
+            AnimeListScrollingCommand = new RelayCommand<object>(p =>
+            {
+                if(p != null)
+                {
+                    ScrollViewer scr = MiscClass.FindVisualChild<ScrollViewer>(p as ListBox);
+                    return scr.VerticalOffset > scr.ScrollableHeight - 100 && !IsLoadOngoing && scr.ScrollableHeight != 0;
+                }
+                else
+                {
+                    return false;
+                }
+            }, async(p) => 
+            {
+                await LoadAnime(AnimeInfos.Count,50, false);
+            });
+            ShowAnimeDetailCommand = new RelayCommand<AnimeSeriesInfo>(p => true, async(p) =>
+            {
+                if(p != null)
+                {
+                    IAnimeSeriesManager manager = ApiHelpper.CreateAnimeSeriesManagerObjectByType(p.ModInfo.ModType);
+                    manager.AttachedAnimeSeriesInfo = p;
+                    await manager.GetPrototypeEpisodes();
+                    (Application.Current.FindResource("AnimeDetailsViewModel") as AnimeDetailsViewModel).CurrentSeries = manager;
+                }
+            });
             MiscClass.UserSearched += async(s, e) => { SearchAnime = e.Keyword; await LoadAnime(0, 50); };
 
             ApiHelpper.LoadAssembly();
@@ -179,6 +208,8 @@ namespace UniversalAnimeDownloader.ViewModels
 
         private async void InitAnimeList()
         {
+            //await new QGExtractor.VuigheAnimeQuery().GetAnime(250, 50);
+            
             SelectedQueryModIndex = 0;
             SelectedGenresIndex = 0;
             try
@@ -186,7 +217,7 @@ namespace UniversalAnimeDownloader.ViewModels
                 await TempTask;
 
                 await LoadAnime(0, 50);
-                //for (int i = 0; i < 50; i++)
+                //for (int i = 0; i < 500; i++)
                 //{
                 //    await AnimeInfos.AddAndWait(new AnimeSeriesInfo() { Name = "Test: " + i, Genres = new List<GenreItem>() { new GenreItem() { Name = "Cancer" } } });
                 //}
@@ -200,6 +231,7 @@ namespace UniversalAnimeDownloader.ViewModels
 
         private async Task LoadAnime(int offset, int count, bool clearPreviousCard = true)
         {
+            IsLoadOngoing = true;
             try
             {
                 if (ApiHelpper.CheckForInternetConnection())
@@ -247,8 +279,8 @@ namespace UniversalAnimeDownloader.ViewModels
                 HideAllOverlay();
                 ShowErrorOcuredOverlay(e);
             }
+            IsLoadOngoing = false;
         }
-        
 
         private async Task LoadGenresAndSeasons()
         {

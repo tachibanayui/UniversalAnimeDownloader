@@ -78,6 +78,7 @@
     <Compile Include="Animations\ExpanderDoubleAnimation.cs" />
     <Compile Include="Animations\GridLengthAnimation.cs" />
     <Compile Include="DelayedObservableCollection.cs" />
+    <Compile Include="Extensions\ListBoxExtensions.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
@@ -86,10 +87,16 @@
     <Compile Include="UcContentPages\AllAnimeTab.xaml.cs">
       <DependentUpon>AllAnimeTab.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UcContentPages\AnimeDetails.xaml.cs">
+      <DependentUpon>AnimeDetails.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ValueConverters\GenreItemListToStringConverter.cs" />
+    <Compile Include="ValueConverters\HtmlTagToColoredTextConverter.cs" />
     <Compile Include="ValueConverters\MediaSourceInfoToImageSource.cs" />
+    <Compile Include="ValueConverters\SelectedEpisodeInfoToSelectedValueStringConverter.cs" />
     <Compile Include="ValueConverters\TypeToStringConverter.cs" />
     <Compile Include="ViewModels\AllAnimeTabViewModel.cs" />
+    <Compile Include="ViewModels\AnimeDetailsViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Page Include="DefinedResources\CustomStyles.xaml">
@@ -113,6 +120,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UcContentPages\AllAnimeTab.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UcContentPages\AnimeDetails.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

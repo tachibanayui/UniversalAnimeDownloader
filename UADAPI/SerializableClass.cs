@@ -61,7 +61,8 @@ namespace UADAPI
         /// <summary>
         /// String reprentation if the result request
         /// </summary>
-        public string ValueString => SaveLocalFile ? File.ReadAllText(LocalFile.ToString()) : Result;
+        public string ValueString => 
+            SaveLocalFile ? /*File.ReadAllText(LocalFile.ToString())*/null : Result;
     }
 
     /// <summary>

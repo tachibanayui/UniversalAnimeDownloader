@@ -6,5 +6,6 @@
     xmlns:vm="clr-namespace:UniversalAnimeDownloader.ViewModels">
     <vm:MainWindowViewModel x:Key="MainWindowViewModel" />
     <vm:AllAnimeTabViewModel x:Key="AllAnimeTabViewModel" />
+    <vm:AnimeDetailsViewModel x:Key="AnimeDetailsViewModel"/>
     <materialDesgin:PaletteHelper x:Key="PaletteHelper" />
 </ResourceDictionary>

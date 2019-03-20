@@ -9,6 +9,8 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:pages="clr-namespace:UniversalAnimeDownloader.UcContentPages"
+    ResizeMode="CanResizeWithGrip"
+    AllowsTransparency="True"
     x:Name="mainWindow"
     Title="MainWindow"
     Width="800"
@@ -16,7 +18,6 @@
     Background="{DynamicResource MaterialDesignPaper}"
     DataContext="{StaticResource MainWindowViewModel}"
     FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
-    ResizeMode="NoResize"
     TextElement.FontSize="14"
     TextElement.FontWeight="Medium"
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
@@ -171,6 +172,15 @@
                         <materialDesign:TransitionEffect Kind="SlideInFromBottom" Duration="0:0:0.5" />
                     </materialDesign:TransitionerSlide.OpeningEffects>
                     <pages:AllAnimeTab />
+                </materialDesign:TransitionerSlide>
+                <materialDesign:TransitionerSlide
+                    Background="{DynamicResource MaterialDesignPaper}"
+                    ClipToBounds="True"
+                    Foreground="{DynamicResource MaterialDesignBody}">
+                    <materialDesign:TransitionerSlide.OpeningEffects>
+                        <materialDesign:TransitionEffect Kind="SlideInFromBottom" Duration="0:0:0.5" />
+                    </materialDesign:TransitionerSlide.OpeningEffects>
+                    <pages:AnimeDetails />
                 </materialDesign:TransitionerSlide>
             </materialDesign:Transitioner>
         </Grid>
