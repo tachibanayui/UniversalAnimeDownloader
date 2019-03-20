@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:html="clr-namespace:TheArtOfDev.HtmlRenderer.WPF;assembly=HtmlRenderer.WPF"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:local="clr-namespace:UniversalAnimeDownloader.UcContentPages"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -132,18 +133,27 @@
                                 FontSize="{DynamicResource Heading2}"
                                 Text="Episode List:" />
                             <TextBox
+                                x:Name="txbSelectEpisode"
                                 Grid.Column="3"
                                 VerticalAlignment="Top"
                                 materialDesign:HintAssist.Hint="Selected Episodes: "
+                                AcceptsReturn="True"
                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                                ToolTip="Type in the epsiode you want to download, for example: 1,2,4-6,7" />
+                                Text="{Binding SelectedIndexString}"
+                                ToolTip="Type in the epsiode you want to download, for example: 1,2,4-6,7 or all">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="TextChanged">
+                                        <i:InvokeCommandAction Command="{Binding SelectedEpisodeCommand}" CommandParameter="{Binding ElementName=txbSelectEpisode}" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </TextBox>
                             <Button
                                 Grid.Column="2"
                                 Style="{StaticResource MaterialDesignActionFlatButton}"
                                 ToolTip="Reset the selected string based on your episode selection below">
                                 <materialDesign:PackIcon Kind="Restart" />
                             </Button>
-                            <Button Grid.Column="5">
+                            <Button Grid.Column="5" Margin="0,0,10,0">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="auto" />
