@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -72,14 +74,25 @@ namespace UniversalAnimeDownloader.ViewModels
         #endregion
 
         #region Commands
+        public AnimeSourceControl SourceControl { get; private set; }
         public ICommand CopyDescriptionCommand { get; set; }
         public ICommand SelectedEpisodeCommand { get; set; }
+        public ICommand WatchEpisodeOnline { get; set; }
+        public ICommand DownloadAnimeCommand { get; set; }
         #endregion
 
 
         public AnimeDetailsViewModel()
         {
             CopyDescriptionCommand = new RelayCommand<object>(p => true, p => Clipboard.SetText(CurrentSeries.AttachedAnimeSeriesInfo.Description));
+            WatchEpisodeOnline = new RelayCommand<SelectableEpisodeInfo>(p => true, async(p) =>
+            {
+                if(p != null)
+                {
+                    var episodeDetail = (await CurrentSeries.GetEpisodes(new List<int>() { p.Data.EpisodeID })).ToList()[0];
+                    Process.Start(episodeDetail.FilmSources[episodeDetail.FilmSources.Keys.ToList()[0]].Url);
+                }
+            });
             SelectedEpisodeCommand = new RelayCommand<TextBox>(p => true, async(p) => await SelectEpisodeIndex(p));
         }
 
@@ -208,6 +221,10 @@ namespace UniversalAnimeDownloader.ViewModels
                 obj.SelectedIndexChanged += (s, e) => { SelectedIndexString = SelectionToText(); };
                 EpisodeInfo.Add(obj);
             }
+
+            SourceControl = new AnimeSourceControl(value);
         }
+
+
     }
 }

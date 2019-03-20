@@ -147,7 +147,7 @@
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
                             </TextBox>
-                            <Button Grid.Column="5" Margin="0,0,10,0">
+                            <Button Grid.Column="5" Margin="0,0,10,0" >
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="auto" />
@@ -189,6 +189,11 @@
                                             VerticalAlignment="Center"
                                             Style="{StaticResource MaterialDesignFloatingActionMiniButton}">
                                             <materialDesign:PackIcon Kind="ArrowRightThick" />
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="Click">
+                                                    <i:InvokeCommandAction Command="{Binding DataContext.WatchEpisodeOnline, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:AnimeDetails}}}" CommandParameter="{Binding}" />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
                                         </Button>
                                     </Grid>
                                 </DataTemplate>

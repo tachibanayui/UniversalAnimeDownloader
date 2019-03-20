@@ -189,11 +189,11 @@ namespace UniversalAnimeDownloader.ViewModels
             {
                 if(p != null)
                 {
+                    MiscClass.NavigationHelper.AddNavigationHistory(1);
                     IAnimeSeriesManager manager = ApiHelpper.CreateAnimeSeriesManagerObjectByType(p.ModInfo.ModType);
                     manager.AttachedAnimeSeriesInfo = p;
                     await manager.GetPrototypeEpisodes();
                     (Application.Current.FindResource("AnimeDetailsViewModel") as AnimeDetailsViewModel).CurrentSeries = manager;
-                    MiscClass.NavigationHelper.AddNavigationHistory(1);
                 }
             });
             MiscClass.UserSearched += async(s, e) => { SearchAnime = e.Keyword; await LoadAnime(0, 50); };
