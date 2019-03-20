@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using UADAPI;
 
 namespace UniversalAnimeDownloader.ViewModels
@@ -78,52 +80,60 @@ namespace UniversalAnimeDownloader.ViewModels
         public AnimeDetailsViewModel()
         {
             CopyDescriptionCommand = new RelayCommand<object>(p => true, p => Clipboard.SetText(CurrentSeries.AttachedAnimeSeriesInfo.Description));
-            SelectedEpisodeCommand = new RelayCommand<TextBox>(p => true, SelectEpisodeIndex);
+            SelectedEpisodeCommand = new RelayCommand<TextBox>(p => true, async(p) => await SelectEpisodeIndex(p));
 
 
             //Test();
         }
 
-        private void SelectEpisodeIndex(TextBox obj)
+        private async Task SelectEpisodeIndex(TextBox obj)
         {
+            
             string res = obj.Text.ToLower();
-            if (res.Contains("\n"))
+            var dispatcher = Window.GetWindow(obj).Dispatcher;
+            await Task.Run(async() =>
             {
-                res = res.Trim('\r', '\n');
-                ResetSelected(false);
-                if (res == "all")
+                if (res.Contains("\n"))
                 {
-                    ResetSelected(true);
-                }
-                else if (!string.IsNullOrEmpty(res))
-                {
-                    string[] parts = res.Split(',');
-                    try
+                    res = res.Trim('\r', '\n');
+                    ResetSelected(false);
+                    if (res == "all")
                     {
-                        for (int i = 0; i < parts.Length; i++)
+                        ResetSelected(true);
+                    }
+                    else if (!string.IsNullOrEmpty(res))
+                    {
+                        string[] parts = res.Split(',');
+                        try
                         {
-                            if (parts[i].Contains("-"))
+                            for (int i = 0; i < parts.Length; i++)
                             {
-                                string[] vs = parts[i].Split('-');
-                                int min = int.Parse(vs[0]);
-                                int max = int.Parse(vs[1]);
-                                for (int j = min; j < max + 1; j++)
+                                if (parts[i].Contains("-"))
                                 {
-                                    EpisodeInfo[j - 1].IsSelected = true;
+                                    string[] vs = parts[i].Split('-');
+                                    int min = int.Parse(vs[0]);
+                                    int max = int.Parse(vs[1]);
+                                    for (int j = min; j < max + 1; j++)
+                                    {
+                                        EpisodeInfo[j - 1].IsSelected = true;
+                                    }
+                                }
+                                else
+                                {
+                                    EpisodeInfo[int.Parse(parts[i]) - 1].IsSelected = true;
                                 }
                             }
-                            else
-                            {
-                                EpisodeInfo[int.Parse(parts[i]) - 1].IsSelected = true;
-                            }
+                        }
+                        catch
+                        {
+                            await dispatcher.InvokeAsync(() => obj.Foreground = new SolidColorBrush(Colors.Red));
+                            await dispatcher.InvokeAsync(() => obj.Text = res.Trim('\r', '\n'));
+                            return;
                         }
                     }
-                    catch
-                    {
-
-                    }
+                    await dispatcher.InvokeAsync(() => obj.SetResourceReference(Control.ForegroundProperty, "MaterialDesignBody"));
                 }
-            }
+            });
         }
 
         private void ResetSelected(bool resetValue)
@@ -198,7 +208,7 @@ namespace UniversalAnimeDownloader.ViewModels
             foreach (var item in CurrentSeries.AttachedAnimeSeriesInfo.Episodes)
             {
                 var obj = new SelectableEpisodeInfo() { Data = item, IsSelected = false, };
-                obj.SelectedIndexChanged += (s, e) => SelectedIndexString = SelectionToText();
+                obj.SelectedIndexChanged += (s, e) => { SelectedIndexString = SelectionToText(); };
                 EpisodeInfo.Add(obj);
             }
         }
