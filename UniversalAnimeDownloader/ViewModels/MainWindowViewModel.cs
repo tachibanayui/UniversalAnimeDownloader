@@ -20,6 +20,8 @@ namespace UniversalAnimeDownloader.ViewModels
         public ICommand DeleteSearchBoxCommand { get; set; }
         public ICommand CheckForEnterKeyCommand { get; set; }
         public ICommand SearchButtonClickCommand { get; set; }
+        public ICommand GoBackNavigationCommand { get; set; }
+        public ICommand GoForwardNavigationCommand { get; set; }
         public ICommand TestCommand { get; set; }
         #endregion
 
@@ -57,6 +59,25 @@ namespace UniversalAnimeDownloader.ViewModels
                 }
             }
         }
+
+        private int _TransisionerIndex = 0;
+        public int TransisionerIndex
+        {
+            get
+            {
+                return _TransisionerIndex;
+            }
+            set
+            {
+                if (_TransisionerIndex != value)
+                {
+                    _TransisionerIndex = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+
         #endregion
 
         public bool IsDark { get; set; }
@@ -117,6 +138,8 @@ namespace UniversalAnimeDownloader.ViewModels
 
             });
             SearchButtonClickCommand = new RelayCommand<TextBox>(p => true, p => MiscClass.OnUserSearched(this, p.Text));
+            GoBackNavigationCommand = new RelayCommand<object>(p => MiscClass.NavigationHelper.CanGoBack, p => TransisionerIndex = MiscClass.NavigationHelper.Back());
+            GoForwardNavigationCommand = new RelayCommand<object>(p => MiscClass.NavigationHelper.CanGoForward, p => TransisionerIndex = MiscClass.NavigationHelper.Forward());
             TestCommand = new RelayCommand<object>(p => true, p => { (Application.Current.FindResource("PaletteHelper") as PaletteHelper).SetLightDark(!IsDark); IsDark = !IsDark; });
         }
     }

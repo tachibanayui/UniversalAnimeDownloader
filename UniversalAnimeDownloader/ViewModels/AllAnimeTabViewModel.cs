@@ -193,6 +193,7 @@ namespace UniversalAnimeDownloader.ViewModels
                     manager.AttachedAnimeSeriesInfo = p;
                     await manager.GetPrototypeEpisodes();
                     (Application.Current.FindResource("AnimeDetailsViewModel") as AnimeDetailsViewModel).CurrentSeries = manager;
+                    MiscClass.NavigationHelper.AddNavigationHistory(1);
                 }
             });
             MiscClass.UserSearched += async(s, e) => { SearchAnime = e.Keyword; await LoadAnime(0, 50); };
@@ -208,19 +209,12 @@ namespace UniversalAnimeDownloader.ViewModels
 
         private async void InitAnimeList()
         {
-            //await new QGExtractor.VuigheAnimeQuery().GetAnime(250, 50);
-            
             SelectedQueryModIndex = 0;
             SelectedGenresIndex = 0;
             try
             {
                 await TempTask;
-
                 await LoadAnime(0, 50);
-                //for (int i = 0; i < 500; i++)
-                //{
-                //    await AnimeInfos.AddAndWait(new AnimeSeriesInfo() { Name = "Test: " + i, Genres = new List<GenreItem>() { new GenreItem() { Name = "Cancer" } } });
-                //}
             }
             catch (Exception e)
             {

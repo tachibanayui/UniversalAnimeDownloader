@@ -81,9 +81,6 @@ namespace UniversalAnimeDownloader.ViewModels
         {
             CopyDescriptionCommand = new RelayCommand<object>(p => true, p => Clipboard.SetText(CurrentSeries.AttachedAnimeSeriesInfo.Description));
             SelectedEpisodeCommand = new RelayCommand<TextBox>(p => true, async(p) => await SelectEpisodeIndex(p));
-
-
-            //Test();
         }
 
         private async Task SelectEpisodeIndex(TextBox obj)
@@ -212,6 +209,5 @@ namespace UniversalAnimeDownloader.ViewModels
                 EpisodeInfo.Add(obj);
             }
         }
-
     }
 }

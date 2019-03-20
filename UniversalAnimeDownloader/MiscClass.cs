@@ -10,6 +10,9 @@ namespace UniversalAnimeDownloader
 {
     class MiscClass
     {
+        public static NavigationTrack NavigationHelper { get; set; } = new NavigationTrack();
+
+
         public static event EventHandler<SearchEventArgs> UserSearched;
         public static void OnUserSearched(object sender, string searchKeyword) => UserSearched?.Invoke(sender, new SearchEventArgs(searchKeyword));
         public static childItem FindVisualChild<childItem>(DependencyObject obj) where childItem : DependencyObject
@@ -74,6 +77,11 @@ namespace UniversalAnimeDownloader
         {
             string rgbValue = $"rgb({color.R}, {color.G}, {color.B})";
             return $"<body style=\"color: {rgbValue}\">" + content + " </body>";
+        }
+
+        static MiscClass()
+        {
+            NavigationHelper.AddNavigationHistory(0);
         }
     }
 
@@ -146,5 +154,45 @@ namespace UniversalAnimeDownloader
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event EventHandler<EventArgs> SelectedIndexChanged;
+    }
+    public class NavigationTrack
+    {
+        private int _Position = -1;
+        public List<int> History { get; } = new List<int>();
+        public bool CanGoBack { get => _Position > 0; }
+        public bool CanGoForward { get => _Position < History.Count - 1; }
+
+        public void RemoveFromAt(int index)
+        {
+            while (index < History.Count)
+            {
+                History.RemoveAt(index);
+            }
+        }
+
+        public void AddNavigationHistory(int pageIndex)
+        {
+            _Position++;
+            RemoveFromAt(_Position);
+            History.Add(pageIndex);
+        }
+
+        public int Back()
+        {
+            _Position--;
+            return History[_Position];
+        }
+
+        public int Forward()
+        {
+            _Position++;
+            return History[_Position];
+        }
+
+        public void Reset()
+        {
+            History.Clear();
+            _Position = -1;
+        }
     }
 }

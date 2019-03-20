@@ -147,12 +147,6 @@
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
                             </TextBox>
-                            <Button
-                                Grid.Column="2"
-                                Style="{StaticResource MaterialDesignActionFlatButton}"
-                                ToolTip="Reset the selected string based on your episode selection below">
-                                <materialDesign:PackIcon Kind="Restart" />
-                            </Button>
                             <Button Grid.Column="5" Margin="0,0,10,0">
                                 <Grid>
                                     <Grid.ColumnDefinitions>

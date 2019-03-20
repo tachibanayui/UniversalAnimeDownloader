@@ -9,15 +9,15 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:pages="clr-namespace:UniversalAnimeDownloader.UcContentPages"
-    ResizeMode="CanResizeWithGrip"
-    AllowsTransparency="True"
     x:Name="mainWindow"
     Title="MainWindow"
     Width="800"
     Height="450"
+    AllowsTransparency="True"
     Background="{DynamicResource MaterialDesignPaper}"
     DataContext="{StaticResource MainWindowViewModel}"
     FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
+    ResizeMode="CanResizeWithGrip"
     TextElement.FontSize="14"
     TextElement.FontWeight="Medium"
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
@@ -75,10 +75,16 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </ToggleButton>
-            <Button Grid.Column="1" Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}">
+            <Button
+                Grid.Column="1"
+                Command="{Binding GoBackNavigationCommand}"
+                Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}">
                 <materialDesign:PackIcon Foreground="{DynamicResource MaterialDesignBody}" Kind="ArrowLeftBold" />
             </Button>
-            <Button Grid.Column="2" Style="{StaticResource MaterialDesignActionFlatButton}">
+            <Button
+                Grid.Column="2"
+                Command="{Binding GoForwardNavigationCommand}"
+                Style="{StaticResource MaterialDesignActionFlatButton}">
                 <materialDesign:PackIcon Foreground="{DynamicResource MaterialDesignBody}" Kind="ArrowRightBold" />
             </Button>
             <Button Grid.Column="3" Style="{StaticResource MaterialDesignActionFlatButton}">
@@ -163,7 +169,7 @@
             Grid.Row="1"
             Grid.Column="1"
             Margin="70,5,5,5">
-            <materialDesign:Transitioner AutoApplyTransitionOrigins="True" SelectedIndex="0">
+            <materialDesign:Transitioner AutoApplyTransitionOrigins="True" SelectedIndex="{Binding TransisionerIndex}">
                 <materialDesign:TransitionerSlide
                     Background="{DynamicResource MaterialDesignPaper}"
                     ClipToBounds="True"
