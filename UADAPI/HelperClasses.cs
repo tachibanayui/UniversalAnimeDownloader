@@ -27,6 +27,9 @@ namespace UADAPI
         /// <param name="manager">The mananger use to get this anime series information</param>
         public AnimeSourceControl(IAnimeSeriesManager manager) => CurrentAnimeSeries = manager;
 
+        public string PreferedQuality { get; set; } = "480p";
+
+
         /// <summary>
         /// Init a anime control with a manager file
         /// </summary>
@@ -54,7 +57,7 @@ namespace UADAPI
         public void DownloadAnimeByIndexes(List<int> episodeIndexes, bool isSelective = true)
         {
             CurrentAnimeSeries.AttachedAnimeSeriesInfo.IsSelectiveDownload = isSelective;
-            DownloadManager.CreateNewDownloadInstance(CurrentAnimeSeries, episodeIndexes, "480p", true);
+            DownloadManager.CreateNewDownloadInstance(CurrentAnimeSeries, episodeIndexes , PreferedQuality, true);
         }
 
         /// <summary>
@@ -185,7 +188,7 @@ namespace UADAPI
 
         public static TimeSpan ReportInterval { get; set; } = TimeSpan.FromSeconds(0.5);
 
-        public static string DownloadDirectory { get; set; } = AppDomain.CurrentDomain.BaseDirectory;
+        public static string DownloadDirectory { get; set; } = AppDomain.CurrentDomain.BaseDirectory + "Anime Library\\";
 
         private static bool IsRegisterProtocol = false;
 
@@ -272,10 +275,9 @@ namespace UADAPI
             if (!Directory.Exists(AttachedManager.AttachedAnimeSeriesInfo.AnimeSeriesSavedDirectory))
                 Directory.CreateDirectory(AttachedManager.AttachedAnimeSeriesInfo.AnimeSeriesSavedDirectory);
 
-            DownloadEpisodes();
+            await DownloadEpisodes();
             await DownloadThumbnail();
             CreateManagerFile();
-
             OnFinishedDownloading();
         }
 
@@ -419,7 +421,7 @@ namespace UADAPI
             return request;
         }
 
-        private void DownloadEpisodes()
+        private async Task DownloadEpisodes()
         {
             foreach (EpisodeInfo item in EpisodeToDownload)
             {
@@ -487,7 +489,7 @@ namespace UADAPI
                                     downloader.Start();
                                 }
                             }
-                            Thread.Sleep((int)DownloadManager.ReportInterval.TotalMilliseconds);
+                            await Task.Delay((int)DownloadManager.ReportInterval.TotalMilliseconds);
                         }
                     }
                     else
@@ -565,7 +567,7 @@ namespace UADAPI
             //null check
             foreach (int item in EpisodeId)
             {
-                EpisodeInfo[] queryRes = AttachedManager.AttachedAnimeSeriesInfo.Episodes.Where(query => query.EpisodeID == item).ToArray();
+                EpisodeInfo[] queryRes = AttachedManager.AttachedAnimeSeriesInfo.Episodes.Where(query => query.Index == item).ToArray();
 
                 if(queryRes.Length != 0)
                 {

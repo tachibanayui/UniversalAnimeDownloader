@@ -68,11 +68,26 @@ namespace UniversalAnimeDownloader.ViewModels
             }
         }
 
+        private string _SelectedQuality;
+        public string SelectedQuality
+        {
+            get
+            {
+                return _SelectedQuality;
+            }
+            set
+            {
+                if (_SelectedQuality != value)
+                {
+                    _SelectedQuality = value;
+                    SourceControl.PreferedQuality = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
 
         #endregion
-
-        public bool isDoneStringSeleting { get; set; } = true;
 
         #region Commands
         public AnimeSourceControl SourceControl { get; private set; }
@@ -83,6 +98,7 @@ namespace UniversalAnimeDownloader.ViewModels
         #endregion
 
         public Task TempTask { get; set; }
+        public bool isDoneStringSeleting { get; set; } = true;
 
         public AnimeDetailsViewModel()
         {
@@ -95,7 +111,21 @@ namespace UniversalAnimeDownloader.ViewModels
                     Process.Start(episodeDetail.FilmSources[episodeDetail.FilmSources.Keys.ToList()[0]].Url);
                 }
             });
-            SelectedEpisodeCommand = new RelayCommand<TextBox>(p => true, async (p) => { TempTask = SelectEpisodeIndex(p);  });
+            SelectedEpisodeCommand = new RelayCommand<TextBox>(p => true, p => { TempTask = SelectEpisodeIndex(p); });
+            DownloadAnimeCommand = new RelayCommand<object>(p => true, async p =>
+            {
+                var selectedIndexList = new List<int>();
+                var selectedIDList = new List<int>();
+                foreach (var item in EpisodeInfo)
+                    if(item.IsSelected)
+                    {
+                        selectedIndexList.Add(item.Data.Index);
+                        selectedIDList.Add(item.Data.EpisodeID);
+                    }
+
+                await CurrentSeries.GetEpisodes(selectedIDList);
+                SourceControl.DownloadAnimeByIndexes(selectedIndexList);
+            });
         }
 
         private async Task SelectEpisodeIndex(TextBox obj)
@@ -183,14 +213,17 @@ namespace UniversalAnimeDownloader.ViewModels
                     if (FindEpisodeByIndex(i).IsSelected)
                     {
                         tempInfo = FindEpisodeByIndex(i - 1);
-                        if(tempInfo != null)
+                        if (tempInfo != null)
                         {
                             if (FindEpisodeByIndex(i - 1).IsSelected)
                             {
                                 if (i + 1 == EpisodeInfo.Last().Data.Index + 1)
                                 {
                                     if (!isDash)
+                                    {
                                         res += ',';
+                                    }
+
                                     res += i.ToString();
                                     break;
                                 }
@@ -253,13 +286,18 @@ namespace UniversalAnimeDownloader.ViewModels
             foreach (var item in CurrentSeries.AttachedAnimeSeriesInfo.Episodes)
             {
                 var obj = new SelectableEpisodeInfo() { Data = item, IsSelected = false, };
-                obj.SelectedIndexChanged += async(s, e) => {
+                obj.SelectedIndexChanged += async (s, e) =>
+                {
                     if (!isDoneStringSeleting)
+                    {
                         return;
-                    if(TempTask != null)
+                    }
+
+                    if (TempTask != null)
                     {
                         await TempTask;
                     }
+
                     SelectedIndexString = await SelectionToText();
                 };
                 EpisodeInfo.Add(obj);

@@ -8,10 +8,13 @@ using UADAPI;
 
 namespace UniversalAnimeDownloader
 {
-    class MiscClass
+    public class MiscClass
     {
         public static NavigationTrack NavigationHelper { get; set; } = new NavigationTrack();
-
+        public static List<string> PresetQuality { get; set; } = new List<string>
+        {
+            "144p", "288p", "360p", "480p", "720p", "1080p", "1440p (2k)", "2160p (4k)", "Best possible", "Worse possible"
+        };
 
         public static event EventHandler<SearchEventArgs> UserSearched;
         public static void OnUserSearched(object sender, string searchKeyword) => UserSearched?.Invoke(sender, new SearchEventArgs(searchKeyword));
