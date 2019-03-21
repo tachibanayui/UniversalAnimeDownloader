@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
@@ -85,23 +84,23 @@ namespace UniversalAnimeDownloader.ViewModels
         public AnimeDetailsViewModel()
         {
             CopyDescriptionCommand = new RelayCommand<object>(p => true, p => Clipboard.SetText(CurrentSeries.AttachedAnimeSeriesInfo.Description));
-            WatchEpisodeOnline = new RelayCommand<SelectableEpisodeInfo>(p => true, async(p) =>
+            WatchEpisodeOnline = new RelayCommand<SelectableEpisodeInfo>(p => true, async (p) =>
             {
-                if(p != null)
+                if (p != null)
                 {
                     var episodeDetail = (await CurrentSeries.GetEpisodes(new List<int>() { p.Data.EpisodeID })).ToList()[0];
                     Process.Start(episodeDetail.FilmSources[episodeDetail.FilmSources.Keys.ToList()[0]].Url);
                 }
             });
-            SelectedEpisodeCommand = new RelayCommand<TextBox>(p => true, async(p) => await SelectEpisodeIndex(p));
+            SelectedEpisodeCommand = new RelayCommand<TextBox>(p => true, async (p) => await SelectEpisodeIndex(p));
         }
 
         private async Task SelectEpisodeIndex(TextBox obj)
         {
-            
+
             string res = obj.Text.ToLower();
             var dispatcher = Window.GetWindow(obj).Dispatcher;
-            await Task.Run(async() =>
+            await Task.Run(async () =>
             {
                 if (res.Contains("\n"))
                 {
@@ -125,12 +124,12 @@ namespace UniversalAnimeDownloader.ViewModels
                                     int max = int.Parse(vs[1]);
                                     for (int j = min; j < max + 1; j++)
                                     {
-                                        EpisodeInfo[j - 1].IsSelected = true;
+                                        FindEpisodeByIndex(j).IsSelected = true;
                                     }
                                 }
                                 else
                                 {
-                                    EpisodeInfo[int.Parse(parts[i]) - 1].IsSelected = true;
+                                    FindEpisodeByIndex(int.Parse(parts[i])).IsSelected = true;
                                 }
                             }
                         }
@@ -159,48 +158,64 @@ namespace UniversalAnimeDownloader.ViewModels
             string res = string.Empty;
             bool isDash = false;
             int st = -1;
-            for (int i = 0; i < EpisodeInfo.Count; i++)
+            for (int i = 0; i < EpisodeInfo.Last().Data.Index + 1; i++)
             {
-                if(EpisodeInfo[i].IsSelected)
+                var currentSelection = FindEpisodeByIndex(i);
+                if (currentSelection != null)
                 {
-                    st = i;
-                    break;
+                    if (currentSelection.IsSelected)
+                    {
+                        st = i;
+                        break;
+                    }
                 }
             }
-            res += (st + 1).ToString();
-            for (int i = st + 1; i < EpisodeInfo.Count; i++)
+            res += st.ToString();
+            for (int i = st + 1; i < EpisodeInfo.Last().Data.Index + 1; i++)
             {
-                if (EpisodeInfo[i].IsSelected)
+                SelectableEpisodeInfo tempInfo = FindEpisodeByIndex(i);
+                if (tempInfo != null)
                 {
-                    if (EpisodeInfo[i - 1].IsSelected)
+                    if (FindEpisodeByIndex(i).IsSelected)
                     {
-                        if (i + 1 == EpisodeInfo.Count)
+                        tempInfo = FindEpisodeByIndex(i - 1);
+                        if(tempInfo != null)
                         {
-                            res += (i + 1).ToString();
-                            break;
-                        }
-                        if (EpisodeInfo[i + 1].IsSelected)
-                        {
-                            if (!isDash)
+                            if (FindEpisodeByIndex(i - 1).IsSelected)
                             {
-                                res += '-';
-                                isDash = true;
+                                if (i + 1 == EpisodeInfo.Count)
+                                {
+                                    res += i.ToString();
+                                    break;
+                                }
+                                tempInfo = FindEpisodeByIndex(i + 1);
+                                if (tempInfo != null)
+                                {
+                                    if (FindEpisodeByIndex(i + 1).IsSelected)
+                                    {
+                                        if (!isDash)
+                                        {
+                                            res += '-';
+                                            isDash = true;
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    if (!isDash)
+                                    {
+                                        res += ',';
+                                    }
+                                    res += i.ToString();
+                                    isDash = false;
+                                }
                             }
                         }
                         else
                         {
-                            if (!isDash)
-                            {
-                                res += ',';
-                            }
-                            res += (i + 1).ToString();
+                            res += ',' + i.ToString();
                             isDash = false;
                         }
-                    }
-                    else
-                    {
-                        res += ',' + (i + 1).ToString();
-                        isDash = false;
                     }
                 }
             }
@@ -225,12 +240,14 @@ namespace UniversalAnimeDownloader.ViewModels
             SourceControl = new AnimeSourceControl(value);
         }
 
-        private SelectableEpisodeInfo FindEpisodeIndex(int desiredIndex)
+        private SelectableEpisodeInfo FindEpisodeByIndex(int desiredIndex)
         {
             foreach (var item in EpisodeInfo)
             {
                 if (desiredIndex == item.Data.Index)
+                {
                     return item;
+                }
             }
 
             return null;
