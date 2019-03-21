@@ -72,6 +72,8 @@ namespace UniversalAnimeDownloader.ViewModels
 
         #endregion
 
+        public bool isDoneStringSeleting { get; set; } = true;
+
         #region Commands
         public AnimeSourceControl SourceControl { get; private set; }
         public ICommand CopyDescriptionCommand { get; set; }
@@ -80,6 +82,7 @@ namespace UniversalAnimeDownloader.ViewModels
         public ICommand DownloadAnimeCommand { get; set; }
         #endregion
 
+        public Task TempTask { get; set; }
 
         public AnimeDetailsViewModel()
         {
@@ -92,12 +95,12 @@ namespace UniversalAnimeDownloader.ViewModels
                     Process.Start(episodeDetail.FilmSources[episodeDetail.FilmSources.Keys.ToList()[0]].Url);
                 }
             });
-            SelectedEpisodeCommand = new RelayCommand<TextBox>(p => true, async (p) => await SelectEpisodeIndex(p));
+            SelectedEpisodeCommand = new RelayCommand<TextBox>(p => true, async (p) => { TempTask = SelectEpisodeIndex(p);  });
         }
 
         private async Task SelectEpisodeIndex(TextBox obj)
         {
-
+            isDoneStringSeleting = false;
             string res = obj.Text.ToLower();
             var dispatcher = Window.GetWindow(obj).Dispatcher;
             await Task.Run(async () =>
@@ -143,6 +146,7 @@ namespace UniversalAnimeDownloader.ViewModels
                     await dispatcher.InvokeAsync(() => obj.SetResourceReference(Control.ForegroundProperty, "MaterialDesignBody"));
                 }
             });
+            isDoneStringSeleting = true;
         }
 
         private void ResetSelected(bool resetValue)
@@ -153,7 +157,7 @@ namespace UniversalAnimeDownloader.ViewModels
             }
         }
 
-        private string SelectionToText()
+        private async Task<string> SelectionToText()
         {
             string res = string.Empty;
             bool isDash = false;
@@ -183,8 +187,10 @@ namespace UniversalAnimeDownloader.ViewModels
                         {
                             if (FindEpisodeByIndex(i - 1).IsSelected)
                             {
-                                if (i + 1 == EpisodeInfo.Count)
+                                if (i + 1 == EpisodeInfo.Last().Data.Index + 1)
                                 {
+                                    if (!isDash)
+                                        res += ',';
                                     res += i.ToString();
                                     break;
                                 }
@@ -199,6 +205,15 @@ namespace UniversalAnimeDownloader.ViewModels
                                             isDash = true;
                                         }
                                     }
+                                    else
+                                    {
+                                        if (!isDash)
+                                        {
+                                            res += ',';
+                                        }
+                                        res += i.ToString();
+                                        isDash = false;
+                                    }
                                 }
                                 else
                                 {
@@ -209,6 +224,11 @@ namespace UniversalAnimeDownloader.ViewModels
                                     res += i.ToString();
                                     isDash = false;
                                 }
+                            }
+                            else
+                            {
+                                res += ',' + i.ToString();
+                                isDash = false;
                             }
                         }
                         else
@@ -233,7 +253,15 @@ namespace UniversalAnimeDownloader.ViewModels
             foreach (var item in CurrentSeries.AttachedAnimeSeriesInfo.Episodes)
             {
                 var obj = new SelectableEpisodeInfo() { Data = item, IsSelected = false, };
-                obj.SelectedIndexChanged += (s, e) => { SelectedIndexString = SelectionToText(); };
+                obj.SelectedIndexChanged += async(s, e) => {
+                    if (!isDoneStringSeleting)
+                        return;
+                    if(TempTask != null)
+                    {
+                        await TempTask;
+                    }
+                    SelectedIndexString = await SelectionToText();
+                };
                 EpisodeInfo.Add(obj);
             }
 
