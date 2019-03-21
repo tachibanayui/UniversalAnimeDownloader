@@ -53,7 +53,8 @@ namespace UADAPI
         /// <param name="isSelective">If user select to download selective this series, return false when download all, download missing episdes, update</param>
         public void DownloadAnimeByIndexes(List<int> episodeIndexes, bool isSelective = true)
         {
-            throw new NotImplementedException();
+            CurrentAnimeSeries.AttachedAnimeSeriesInfo.IsSelectiveDownload = isSelective;
+            DownloadManager.CreateNewDownloadInstance(CurrentAnimeSeries, episodeIndexes, "480p", true);
         }
 
         /// <summary>

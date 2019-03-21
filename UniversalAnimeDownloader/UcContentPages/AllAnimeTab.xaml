@@ -219,10 +219,11 @@
                             </Grid>
 
                             <Grid
-                                Grid.RowSpan="2"
+                                Grid.Row="1"
                                 Margin="15"
-                                HorizontalAlignment="Right">
-                                <Button Command="{x:Static materialDesign:Transitioner.MoveNextCommand}" Style="{StaticResource MaterialDesignFloatingActionButton}">
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Bottom">
+                                <Button Command="{x:Static materialDesign:Transitioner.MoveNextCommand}" Style="{StaticResource MaterialDesignActionFlatButton}">
                                     <materialDesign:PackIcon Kind="ArrowRight" Style="{StaticResource SideBarNavIcon}" />
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="Click">

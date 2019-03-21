@@ -124,6 +124,7 @@
                                 <ColumnDefinition />
                                 <ColumnDefinition Width="auto" />
                                 <ColumnDefinition Width="150" />
+                                <ColumnDefinition Width="150" />
                                 <ColumnDefinition Width="10" />
                                 <ColumnDefinition Width="250" />
                             </Grid.ColumnDefinitions>
@@ -132,9 +133,14 @@
                                 VerticalAlignment="Center"
                                 FontSize="{DynamicResource Heading2}"
                                 Text="Episode List:" />
+                            <ComboBox
+                                Grid.Column="3"
+                                VerticalAlignment="Top"
+                                materialDesign:HintAssist.Hint="Quality"
+                                Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
                             <TextBox
                                 x:Name="txbSelectEpisode"
-                                Grid.Column="3"
+                                Grid.Column="4"
                                 VerticalAlignment="Top"
                                 materialDesign:HintAssist.Hint="Selected Episodes: "
                                 AcceptsReturn="True"
@@ -147,7 +153,7 @@
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
                             </TextBox>
-                            <Button Grid.Column="5" Margin="0,0,10,0" >
+                            <Button Grid.Column="6" Margin="0,0,10,0">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="auto" />

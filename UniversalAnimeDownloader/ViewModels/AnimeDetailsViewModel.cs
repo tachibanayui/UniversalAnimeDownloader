@@ -225,6 +225,15 @@ namespace UniversalAnimeDownloader.ViewModels
             SourceControl = new AnimeSourceControl(value);
         }
 
+        private SelectableEpisodeInfo FindEpisodeIndex(int desiredIndex)
+        {
+            foreach (var item in EpisodeInfo)
+            {
+                if (desiredIndex == item.Data.Index)
+                    return item;
+            }
 
+            return null;
+        }
     }
 }
