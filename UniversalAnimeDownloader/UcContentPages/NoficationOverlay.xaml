@@ -7,13 +7,21 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     d:DesignHeight="450"
     d:DesignWidth="800"
+    DataContext="{StaticResource NoficationOverlayViewModel}"
     mc:Ignorable="d">
     <Grid>
         <ListBox Background="Transparent">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Grid >
-                        
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>

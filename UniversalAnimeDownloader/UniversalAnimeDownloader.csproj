@@ -84,6 +84,7 @@
     </Compile>
     <Compile Include="MiscClass.cs" />
     <Compile Include="Models\AnimeInformationModel.cs" />
+    <Compile Include="LifeSpanObservableCollection.cs" />
     <Compile Include="UcContentPages\AllAnimeTab.xaml.cs">
       <DependentUpon>AllAnimeTab.xaml</DependentUpon>
     </Compile>
@@ -102,6 +103,7 @@
     <Compile Include="ViewModels\AnimeDetailsViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="ViewModels\NoficationOverlayViewModel.cs" />
     <Page Include="DefinedResources\CustomStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
