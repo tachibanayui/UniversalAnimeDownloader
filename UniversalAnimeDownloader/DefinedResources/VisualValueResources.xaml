@@ -9,7 +9,7 @@
     <valueConverter:MediaSourceInfoToImageSource x:Key="MediaSourceInfoToImageSourceConverter" />
     <valueConverter:TypeToStringConverter x:Key="TypeToStringConverter" />
     <valueConverter:HtmlTagToColoredTextConverter x:Key="HtmlTagToColoredTextConverter" />
-    <valueConverter:SelectedEpisodeInfoToSelectedValueStringConverter x:Key="SelectedEpisodeInfoToSelectedValueStringConverter" />
+    <valueConverter:NullOrEmpltyStringToVisibilityValueConverter x:Key="NullOrEmpltyStringToVisibilityValueConverter" />
     <sys:Double x:Key="Heading1">36</sys:Double>
     <sys:Double x:Key="Heading2">24</sys:Double>
     <sys:Double x:Key="Heading3">18</sys:Double>

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Threading;
 
 namespace UniversalAnimeDownloader
@@ -14,9 +15,9 @@ namespace UniversalAnimeDownloader
     /// Collection that remove the item after an delay
     /// </summary>
     /// <typeparam name="T">The Type of the items</typeparam>
-    class LifeSpanObservableCollection<T> : ObservableCollection<T>, IDisposable
+    public class LifeSpanObservableCollection<T> : ObservableCollection<T>, IDisposable
     {
-        public TimeSpan ItemLifeSpan { get; set; } = TimeSpan.FromSeconds(20);
+        public TimeSpan ItemLifeSpan { get; set; } = TimeSpan.FromSeconds(10);
         public Thread LifeSpanTimerThread { get; private set; }
         public LifeSpanState State { get; private set; }
         private ManualResetEvent pauseThread = new ManualResetEvent(true);
@@ -24,7 +25,9 @@ namespace UniversalAnimeDownloader
 
         public LifeSpanObservableCollection() : base()
         {
-            LifeSpanTimerThread = new Thread(RemoveItemEndOfLife);
+            LifeSpanTimerThread = new Thread(RemoveItemEndOfLife) { IsBackground = true};
+            UIThread = Application.Current.Dispatcher;
+            LifeSpanTimerThread.Start();
             State = LifeSpanState.Running;
         }
 
@@ -49,12 +52,16 @@ namespace UniversalAnimeDownloader
 
         public void ResumeLifeSpan()
         {
+            if (State == LifeSpanState.Running)
+                return;
             pauseThread.Set();
             State = LifeSpanState.Running;
         }
 
         public void PauseLifeSpan()
         {
+            if (State == LifeSpanState.Pasuing)
+                return;
             pauseThread.Reset();
             State = LifeSpanState.Pasuing;
         }

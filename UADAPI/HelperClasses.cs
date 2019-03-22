@@ -624,7 +624,54 @@ namespace UADAPI
     /// </summary>
     public class NotificationManager
     {
-        
+        public static List<NotificationItem> Notifications { get; private set; } = new List<NotificationItem>();
+        public static void Add(NotificationItem item)
+        {
+            Notifications.Add(item);
+            OnItemAdded(item);
+        }
+        public static void Remove(NotificationItem item)
+        {
+            Notifications.Remove(item);
+            OnItemRemoved(item);
+        }
+        public static void RemoveAt(int index)
+        {
+            if (index > Notifications.Count - 1)
+                throw new IndexOutOfRangeException();
+
+            var item = Notifications[index];
+            Notifications.Remove(item);
+            OnItemRemoved(item);
+        }
+
+        public static event EventHandler<NotificationEventArgs> ItemAdded;
+        public static event EventHandler<NotificationEventArgs> ItemRemoved;
+        public static void OnItemAdded(NotificationItem item) => ItemAdded?.Invoke(Notifications, new NotificationEventArgs() { AffectededItem = item });
+        public static void OnItemRemoved(NotificationItem item) => ItemAdded?.Invoke(Notifications, new NotificationEventArgs() { AffectededItem = item });
+    }
+
+    /// <summary>
+    /// Indiviual Notification
+    /// </summary>
+    public class NotificationItem
+    {
+        public NotificationItem()
+        {
+            CreatedTime = DateTime.Now;
+        }
+
+        public DateTime CreatedTime { get; set; }
+        public string Title { get; set; }
+        public string Detail { get; set; }
+        /// <summary>
+        /// The string will be placed in the button. Can be null or empty
+        /// </summary>
+        public string ActionButtonContent { get; set; }
+        /// <summary>
+        /// THe callback if the user click the button, Can be null
+        /// </summary>
+        public Action ButtonAction { get; set; } = () => { };
     }
 
 

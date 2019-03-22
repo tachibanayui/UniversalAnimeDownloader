@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace UADAPI
 {
     public class DownloadCompletedEventArgs : EventArgs
@@ -23,5 +24,10 @@ namespace UADAPI
         public long Transfered { get; set; }
         public DownloaderState State { get; set; }
         public List<Segment> Segments { get; set; }
+    }
+
+    public class NotificationEventArgs : EventArgs
+    {
+        public NotificationItem AffectededItem { get; set; }
     }
 }

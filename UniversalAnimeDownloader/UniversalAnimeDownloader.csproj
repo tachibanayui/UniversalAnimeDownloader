@@ -35,6 +35,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DevExpress.Data.v17.1, Version=17.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Xpo.v17.1, Version=17.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="HtmlRenderer, Version=1.5.0.5, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\HtmlRenderer.Core.1.5.0.5\lib\net45\HtmlRenderer.dll</HintPath>
     </Reference>
@@ -91,19 +93,15 @@
     <Compile Include="UcContentPages\AnimeDetails.xaml.cs">
       <DependentUpon>AnimeDetails.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UcContentPages\NoficationOverlay.xaml.cs">
-      <DependentUpon>NoficationOverlay.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ValueConverters\GenreItemListToStringConverter.cs" />
     <Compile Include="ValueConverters\HtmlTagToColoredTextConverter.cs" />
     <Compile Include="ValueConverters\MediaSourceInfoToImageSource.cs" />
-    <Compile Include="ValueConverters\SelectedEpisodeInfoToSelectedValueStringConverter.cs" />
+    <Compile Include="ValueConverters\NullOrEmpltyStringToVisibilityValueConverter.cs" />
     <Compile Include="ValueConverters\TypeToStringConverter.cs" />
     <Compile Include="ViewModels\AllAnimeTabViewModel.cs" />
     <Compile Include="ViewModels\AnimeDetailsViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
-    <Compile Include="ViewModels\NoficationOverlayViewModel.cs" />
     <Page Include="DefinedResources\CustomStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -129,10 +127,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UcContentPages\AnimeDetails.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UcContentPages\NoficationOverlay.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

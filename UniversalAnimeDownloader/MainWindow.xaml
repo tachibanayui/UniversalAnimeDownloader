@@ -300,6 +300,19 @@
                 </StackPanel>
             </Grid>
         </ScrollViewer>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="1.5*" />
+            </Grid.RowDefinitions>
+            <pages:NoficationOverlay Grid.Row="1" Grid.Column="2" />
+        </Grid>
     </Grid>
 </Window>
 
