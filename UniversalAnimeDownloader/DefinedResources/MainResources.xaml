@@ -7,5 +7,6 @@
     <vm:MainWindowViewModel x:Key="MainWindowViewModel" />
     <vm:AllAnimeTabViewModel x:Key="AllAnimeTabViewModel" />
     <vm:AnimeDetailsViewModel x:Key="AnimeDetailsViewModel" />
+    <vm:DownloadCenterViewModel x:Key="DownloadCenterViewModel" />
     <materialDesgin:PaletteHelper x:Key="PaletteHelper" />
 </ResourceDictionary>

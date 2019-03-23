@@ -52,6 +52,7 @@
     <Reference Include="Microsoft.Expression.Interactions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Windows.Interactivity.WPF.2.0.20525\lib\net40\Microsoft.Expression.Interactions.dll</HintPath>
     </Reference>
+    <Reference Include="SegmentDownloader.Core, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -85,7 +86,6 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="MiscClass.cs" />
-    <Compile Include="Models\AnimeInformationModel.cs" />
     <Compile Include="LifeSpanObservableCollection.cs" />
     <Compile Include="UcContentPages\AllAnimeTab.xaml.cs">
       <DependentUpon>AllAnimeTab.xaml</DependentUpon>
@@ -93,6 +93,11 @@
     <Compile Include="UcContentPages\AnimeDetails.xaml.cs">
       <DependentUpon>AnimeDetails.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UcContentPages\DownloadCenter.xaml.cs">
+      <DependentUpon>DownloadCenter.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ValueConverters\AutomatedUnitConversionFromByteConverter.cs" />
+    <Compile Include="ValueConverters\DateTimeToStringConverter.cs" />
     <Compile Include="ValueConverters\GenreItemListToStringConverter.cs" />
     <Compile Include="ValueConverters\HtmlTagToColoredTextConverter.cs" />
     <Compile Include="ValueConverters\MediaSourceInfoToImageSource.cs" />
@@ -101,6 +106,7 @@
     <Compile Include="ViewModels\AllAnimeTabViewModel.cs" />
     <Compile Include="ViewModels\AnimeDetailsViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\DownloadCenterViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Page Include="DefinedResources\CustomStyles.xaml">
       <SubType>Designer</SubType>
@@ -127,6 +133,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UcContentPages\AnimeDetails.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UcContentPages\DownloadCenter.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

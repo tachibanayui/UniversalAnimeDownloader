@@ -1,11 +1,9 @@
-﻿using System;
-using System.Web;
+﻿using SegmentDownloader.Core;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Collections.ObjectModel;
 using System.Net;
-using System.IO;
+using UADAPI.PlatformSpecific;
 
 namespace UADAPI
 {
@@ -25,7 +23,7 @@ namespace UADAPI
             get { return _LocalFile; }
             set
             {
-                if(_LocalFile != value)
+                if (_LocalFile != value)
                 {
                     _LocalFile = value;
                     SaveLocalFile = !string.IsNullOrEmpty(_LocalFile);
@@ -61,7 +59,7 @@ namespace UADAPI
         /// <summary>
         /// String reprentation if the result request
         /// </summary>
-        public string ValueString => 
+        public string ValueString =>
             SaveLocalFile ? /*File.ReadAllText(LocalFile.ToString())*/null : Result;
     }
 
@@ -98,7 +96,7 @@ namespace UADAPI
         /// <summary>
         /// This will tell the state of the download, mostly for downloader to report.
         /// </summary>
-        public EpisodeDownloadState EpisodeDownloadState { get; set; }
+        public DownloaderProgress EpisodeDownloadState { get; set; } = new DownloaderProgress();
 
         /// <summary>
         /// If the episode is downloaded, can be able to play without internet connection
@@ -252,5 +250,144 @@ namespace UADAPI
         public string Name { get; set; }
         public string Slug { get; set; }
         public string ID { get; set; }
+    }
+
+    public class DownloaderProgress : BaseViewModel
+    {
+        private long _FileSize;
+        public long FileSize
+        {
+            get
+            {
+                return _FileSize;
+            }
+            set
+            {
+                if (_FileSize != value)
+                {
+                    _FileSize = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private TimeSpan _EstimatedTimeLeft;
+        public TimeSpan EstimatedTimeLeft
+        {
+            get
+            {
+                return _EstimatedTimeLeft;
+            }
+            set
+            {
+                if (_EstimatedTimeLeft != value)
+                {
+                    _EstimatedTimeLeft = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private double _Progress;
+        public double Progress
+        {
+            get
+            {
+                return _Progress;
+            }
+            set
+            {
+                if (_Progress != value)
+                {
+                    _Progress = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private double _DownloadSpeed;
+        public double DownloadSpeed
+        {
+            get
+            {
+                return _DownloadSpeed;
+            }
+            set
+            {
+                if (_DownloadSpeed != value)
+                {
+                    _DownloadSpeed = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private long _Transfered;
+        public long Transfered
+        {
+            get
+            {
+                return _Transfered;
+            }
+            set
+            {
+                if (_Transfered != value)
+                {
+                    _Transfered = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private DownloaderState _State;
+        public DownloaderState State
+        {
+            get
+            {
+                return _State;
+            }
+            set
+            {
+                if (_State != value)
+                {
+                    _State = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private EpisodeDownloadState _EpisodeDownloadState;
+        public EpisodeDownloadState EpisodeDownloadState
+        {
+            get
+            {
+                return _EpisodeDownloadState;
+            }
+            set
+            {
+                if (_EpisodeDownloadState != value)
+                {
+                    _EpisodeDownloadState = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private ObservableCollection<Segment> _Segments = new ObservableCollection<Segment>();
+        public ObservableCollection<Segment> Segments
+        {
+            get
+            {
+                return _Segments;
+            }
+            set
+            {
+                if (_Segments != value)
+                {
+                    _Segments = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
     }
 }

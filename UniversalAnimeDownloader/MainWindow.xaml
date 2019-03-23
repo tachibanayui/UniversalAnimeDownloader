@@ -188,6 +188,15 @@
                     </materialDesign:TransitionerSlide.OpeningEffects>
                     <pages:AnimeDetails />
                 </materialDesign:TransitionerSlide>
+                <materialDesign:TransitionerSlide
+                    Background="{DynamicResource MaterialDesignPaper}"
+                    ClipToBounds="True"
+                    Foreground="{DynamicResource MaterialDesignBody}">
+                    <materialDesign:TransitionerSlide.OpeningEffects>
+                        <materialDesign:TransitionEffect Kind="SlideInFromBottom" Duration="0:0:0.5" />
+                    </materialDesign:TransitionerSlide.OpeningEffects>
+                    <pages:DownloadCenter />
+                </materialDesign:TransitionerSlide>
             </materialDesign:Transitioner>
         </Grid>
 
@@ -283,6 +292,21 @@
                         </Grid>
                     </Button>
 
+                    <Button Command="{Binding NavigateToDownloadCenter}"
+                        Height="75"
+                        HorizontalContentAlignment="Left"
+                        Style="{StaticResource MaterialDesignFlatButton}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="10" />
+                                <ColumnDefinition Width="auto" />
+                            </Grid.ColumnDefinitions>
+                            <materialDesign:PackIcon Kind="CloudDownload" Style="{StaticResource SideBarNavIcon}"/>
+                            <TextBlock Style="{StaticResource SideBarNavTextBlock}" Text="Download Center"/>
+                        </Grid>
+                    </Button>
+
                     <Button
                         Height="75"
                         HorizontalContentAlignment="Left"
@@ -300,19 +324,6 @@
                 </StackPanel>
             </Grid>
         </ScrollViewer>
-
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition Height="1.5*" />
-            </Grid.RowDefinitions>
-            <pages:NoficationOverlay Grid.Row="1" Grid.Column="2" />
-        </Grid>
     </Grid>
 </Window>
 
