@@ -516,6 +516,7 @@ namespace UADAPI
                         };
 
                         downloader.Start();
+                        item.EpisodeDownloadState.EpisodeDownloadState = EpisodeDownloadState.Downloading;
                         IsCompletedDownloading = false;
                         while (!IsCompletedDownloading)
                         {

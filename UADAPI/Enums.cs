@@ -8,7 +8,7 @@ namespace UADAPI
 {
     public enum EpisodeDownloadState
     {
-        NotDownloaded, InDownloadQueue, FinishedDownloading, FailedDownloading
+        NotDownloaded, InDownloadQueue, FinishedDownloading, FailedDownloading, Downloading
     }
 
     public enum UADDownloaderState

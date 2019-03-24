@@ -94,28 +94,56 @@
                                                 <RowDefinition />
                                                 <RowDefinition />
                                             </Grid.RowDefinitions>
-                                            <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
-                                            <Grid Grid.Row="1">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="auto" />
+                                                    <ColumnDefinition Width="10" />
+                                                    <ColumnDefinition Width="auto" />
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
+                                                <materialDesign:PackIcon
+                                                    Grid.Column="2"
+                                                    Foreground="{DynamicResource MaterialDesignBody}"
+                                                    Kind="CheckboxMarkedCircleOutline"
+                                                    Visibility="{Binding EpisodeDownloadState.EpisodeDownloadState, Converter={StaticResource EpisodeDownloadStateToVisibilityConverter}, ConverterParameter=IconTitle}" />
+                                            </Grid>
+                                            <Grid Grid.Row="1" Visibility="{Binding EpisodeDownloadState.EpisodeDownloadState, Converter={StaticResource EpisodeDownloadStateToVisibilityConverter}, ConverterParameter=SegmentProgressBar}">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition />
                                                     <ColumnDefinition />
                                                     <ColumnDefinition />
                                                     <ColumnDefinition />
                                                     <ColumnDefinition />
-                                                    <ColumnDefinition />
-                                                    <ColumnDefinition />
-                                                    <ColumnDefinition />
                                                 </Grid.ColumnDefinitions>
-                                                <ProgressBar Grid.Column="0" Value="{Binding EpisodeDownloadState.Segments[0].Progress, Mode=OneWay}" />
-                                                <ProgressBar Grid.Column="1" Value="{Binding EpisodeDownloadState.Segments[1].Progress, Mode=OneWay}" />
-                                                <ProgressBar Grid.Column="2" Value="{Binding EpisodeDownloadState.Segments[2].Progress, Mode=OneWay}" />
-                                                <ProgressBar Grid.Column="3" Value="{Binding EpisodeDownloadState.Segments[3].Progress, Mode=OneWay}" />
-                                                <ProgressBar Grid.Column="4" Value="{Binding EpisodeDownloadState.Segments[4].Progress, Mode=OneWay}" />
-                                                <ProgressBar Grid.Column="5" Value="{Binding EpisodeDownloadState.Segments[5].Progress, Mode=OneWay}" />
-                                                <ProgressBar Grid.Column="6" Value="{Binding EpisodeDownloadState.Segments[6].Progress, Mode=OneWay}" />
-                                                <ProgressBar Grid.Column="7" Value="{Binding EpisodeDownloadState.Segments[7].Progress, Mode=OneWay}" />
+                                                <ProgressBar
+                                                    Grid.Column="0"
+                                                    materialDesign:TransitionAssist.DisableTransitions="True"
+                                                    Value="{Binding EpisodeDownloadState.Segments[0].Progress, Mode=OneWay}" />
+                                                <ProgressBar
+                                                    Grid.Column="1"
+                                                    materialDesign:TransitionAssist.DisableTransitions="True"
+                                                    Value="{Binding EpisodeDownloadState.Segments[1].Progress, Mode=OneWay}" />
+                                                <ProgressBar
+                                                    Grid.Column="2"
+                                                    materialDesign:TransitionAssist.DisableTransitions="True"
+                                                    Value="{Binding EpisodeDownloadState.Segments[2].Progress, Mode=OneWay}" />
+                                                <ProgressBar
+                                                    Grid.Column="3"
+                                                    materialDesign:TransitionAssist.DisableTransitions="True"
+                                                    Value="{Binding EpisodeDownloadState.Segments[3].Progress, Mode=OneWay}" />
+                                                <ProgressBar
+                                                    Grid.Column="4"
+                                                    materialDesign:TransitionAssist.DisableTransitions="True"
+                                                    Value="{Binding EpisodeDownloadState.Segments[4].Progress, Mode=OneWay}" />
+
                                             </Grid>
-                                            <Grid Grid.Row="2">
+                                            <TextBlock
+                                                Grid.Row="1"
+                                                VerticalAlignment="Center"
+                                                Text="Getting information..."
+                                                Visibility="{Binding EpisodeDownloadState.EpisodeDownloadState, Converter={StaticResource EpisodeDownloadStateToVisibilityConverter}, ConverterParameter=WaitingTextBlock}" />
+
+                                            <Grid Grid.Row="2" Visibility="{Binding EpisodeDownloadState.EpisodeDownloadState, Converter={StaticResource EpisodeDownloadStateToVisibilityConverter}, ConverterParameter=DownloaderDetail}">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition />
                                                     <ColumnDefinition />
