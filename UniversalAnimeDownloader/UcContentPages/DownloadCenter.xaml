@@ -22,134 +22,103 @@
             HorizontalAlignment="Right"
             FontSize="{DynamicResource Heading2}"
             Text="Download center" />
+        <Grid Margin="0,50,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="110" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="100" />
+                </Grid.ColumnDefinitions>
 
-        <ListView
-            Margin="0,50,0,0"
-            ItemsSource="{x:Static uadapi:DownloadManager.Instances}"
-            Style="{StaticResource listViewEpisodeBaseTemplate}">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Expander>
-                        <Expander.Header>
-                            <Grid Height="100">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="150" />
-                                    <ColumnDefinition />
-                                </Grid.ColumnDefinitions>
-                                <Image Source="{Binding AttachedManager.AttachedAnimeSeriesInfo.Thumbnail.Url}" Stretch="UniformToFill" />
-                                <Grid Grid.Column="1">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition />
-                                        <RowDefinition />
-                                    </Grid.RowDefinitions>
-
-                                    <TextBlock
-                                        Margin="10"
-                                        VerticalAlignment="Center"
-                                        FontSize="{DynamicResource Heading2}"
-                                        Text="{Binding AttachedManager.AttachedAnimeSeriesInfo.Name}" />
-
-                                    <Grid
-                                        Grid.Row="1"
-                                        Margin="10"
-                                        VerticalAlignment="Bottom">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition />
-                                            <ColumnDefinition />
-                                            <ColumnDefinition />
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock>
-                                            <Run Text="State:" />
-                                            <Run Text="{Binding State, Mode=OneWay}" />
-                                        </TextBlock>
-                                        <TextBlock Grid.Column="1">
-                                            <Run Text="Prefered Quality:" />
-                                            <Run Text="{Binding Quality, Mode=OneWay}" />
-                                        </TextBlock>
-                                        <TextBlock Grid.Column="2">
-                                            <Run Text="Progress:" />
-                                            <Run Text="{Binding CompletedEpisodeCount}" /><Run Text="/" /><Run Text="{Binding EpisodeToDownload.Count, Mode=OneWay}" />
-                                        </TextBlock>
-                                    </Grid>
-                                </Grid>
-
-                            </Grid>
-
-                        </Expander.Header>
-                        <ListView
-                            Margin="50,0,0,0"
-                            ItemsSource="{Binding AttachedManager.AttachedAnimeSeriesInfo.Episodes}"
-                            Style="{StaticResource listViewEpisodeBaseTemplate}">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="100" />
-                                            <ColumnDefinition />
-                                        </Grid.ColumnDefinitions>
-                                        <Image Source="{Binding Thumbnail.Url}" />
-                                        <Grid Grid.Column="1" Margin="10">
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="1.25*" />
-                                                <RowDefinition />
-                                                <RowDefinition />
-                                            </Grid.RowDefinitions>
-                                            <Grid>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="auto" />
-                                                    <ColumnDefinition Width="10" />
-                                                    <ColumnDefinition Width="auto" />
-                                                </Grid.ColumnDefinitions>
-                                                <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
-                                                <materialDesign:PackIcon
-                                                    Grid.Column="2"
-                                                    Foreground="{DynamicResource MaterialDesignBody}"
-                                                    Kind="CheckboxMarkedCircleOutline"
-                                                    Visibility="{Binding EpisodeDownloadState.EpisodeDownloadState, Converter={StaticResource EpisodeDownloadStateToVisibilityConverter}, ConverterParameter=IconTitle}" />
-                                            </Grid>
-                                            <Grid Grid.Row="1" Visibility="{Binding EpisodeDownloadState.EpisodeDownloadState, Converter={StaticResource EpisodeDownloadStateToVisibilityConverter}, ConverterParameter=SegmentProgressBar}">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition />
-                                                    <ColumnDefinition />
-                                                    <ColumnDefinition />
-                                                    <ColumnDefinition />
-                                                    <ColumnDefinition />
-                                                </Grid.ColumnDefinitions>
-                                                <ProgressBar
-                                                    Grid.Column="0"
-                                                    materialDesign:TransitionAssist.DisableTransitions="True"
-                                                    Value="{Binding EpisodeDownloadState.Segments[0].Progress, Mode=OneWay}" />
-                                                <ProgressBar
-                                                    Grid.Column="1"
-                                                    materialDesign:TransitionAssist.DisableTransitions="True"
-                                                    Value="{Binding EpisodeDownloadState.Segments[1].Progress, Mode=OneWay}" />
-                                                <ProgressBar
-                                                    Grid.Column="2"
-                                                    materialDesign:TransitionAssist.DisableTransitions="True"
-                                                    Value="{Binding EpisodeDownloadState.Segments[2].Progress, Mode=OneWay}" />
-                                                <ProgressBar
-                                                    Grid.Column="3"
-                                                    materialDesign:TransitionAssist.DisableTransitions="True"
-                                                    Value="{Binding EpisodeDownloadState.Segments[3].Progress, Mode=OneWay}" />
-                                                <ProgressBar
-                                                    Grid.Column="4"
-                                                    materialDesign:TransitionAssist.DisableTransitions="True"
-                                                    Value="{Binding EpisodeDownloadState.Segments[4].Progress, Mode=OneWay}" />
-
-                                            </Grid>
-                                            <TextBlock
-                                                Grid.Row="1"
-                                                VerticalAlignment="Center"
-                                                Text="Getting information..."
-                                                Visibility="{Binding EpisodeDownloadState.EpisodeDownloadState, Converter={StaticResource EpisodeDownloadStateToVisibilityConverter}, ConverterParameter=WaitingTextBlock}" />
-
-                                            <Grid Grid.Row="2" Visibility="{Binding EpisodeDownloadState.EpisodeDownloadState, Converter={StaticResource EpisodeDownloadStateToVisibilityConverter}, ConverterParameter=DownloaderDetail}">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition />
-                                                    <ColumnDefinition />
-                                                    <ColumnDefinition />
-                                                    <ColumnDefinition />
-                                                </Grid.ColumnDefinitions>
+                <Button
+                    x:Name="btnRemoveAll"
+                    Height="110"
+                    Command="{Binding RemoveAllCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:DownloadCenter}}}"
+                    CommandParameter="{Binding ElementName=btnRemoveAll}"
+                    Style="{StaticResource MaterialDesignFlatButton}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1.25*" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <materialDesign:PackIcon Kind="PlaylistRemove" Style="{StaticResource AutoSizeIconPack}" />
+                        <TextBlock Style="{StaticResource DownloadMenuCenterTextBlock}" Text="Remove download history" />
+                    </Grid>
+                </Button>
+                <Button
+                    x:Name="btnCancelAll"
+                    Grid.Column="1"
+                    Height="110"
+                    Command="{Binding CancelAllCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:DownloadCenter}}}"
+                    CommandParameter="{Binding ElementName=btnCancelAll}"
+                    Style="{StaticResource MaterialDesignFlatButton}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1.25*" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <materialDesign:PackIcon Kind="Cancel" Style="{StaticResource AutoSizeIconPack}" />
+                        <TextBlock Style="{StaticResource DownloadMenuCenterTextBlock}" Text="Cancel all download" />
+                    </Grid>
+                </Button>
+                <Button
+                    x:Name="btnPauseAll"
+                    Grid.Column="2"
+                    Height="100"
+                    Command="{Binding PauseAllCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:DownloadCenter}}}"
+                    CommandParameter="{Binding ElementName=btnPauseAll}"
+                    Style="{StaticResource MaterialDesignFlatButton}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1.25*" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <materialDesign:PackIcon Kind="Pause" Style="{StaticResource AutoSizeIconPack}" />
+                        <TextBlock Style="{StaticResource DownloadMenuCenterTextBlock}" Text="Pause all download" />
+                    </Grid>
+                </Button>
+                <Button
+                    x:Name="btnResumeAll"
+                    Grid.Column="3"
+                    Height="100"
+                    Command="{Binding ResumeAllCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:DownloadCenter}}}"
+                    CommandParameter="{Binding ElementName=btnResumeAll}"
+                    Style="{StaticResource MaterialDesignFlatButton}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1.25*" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <materialDesign:PackIcon Kind="Play" Style="{StaticResource AutoSizeIconPack}" />
+                        <TextBlock Style="{StaticResource DownloadMenuCenterTextBlock}" Text="Resume all download" />
+                    </Grid>
+                </Button>
+            </Grid>
+            <Separator VerticalAlignment="Bottom" />
+            <ListView ItemsSource="{x:Static uadapi:DownloadManager.Instances}" Style="{StaticResource listViewEpisodeBaseTemplate}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Expander>
+                            <Expander.Header>
+                                <Grid Height="100">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <materialDesign:PopupBox
+                                        Grid.ColumnSpan="2"
+                                        HorizontalAlignment="Right"
+                                        Foreground="{DynamicResource MaterialDesignBody}">
+                                        <StackPanel>
+                                            <Button
+                                                x:Name="btnPauseResume"
+                                                Command="{Binding PauseResumeDownloadCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:DownloadCenter}}}"
+                                                CommandParameter="{Binding ElementName=btnPauseResume}">
                                                 <Grid>
                                                     <Grid.ColumnDefinitions>
                                                         <ColumnDefinition Width="auto" />
@@ -159,16 +128,19 @@
                                                     <materialDesign:PackIcon
                                                         HorizontalAlignment="Center"
                                                         VerticalAlignment="Center"
-                                                        Foreground="{DynamicResource MaterialDesignBody}"
-                                                        Kind="File" />
-                                                    <TextBlock Grid.Column="2" VerticalAlignment="Center">
-                                                        <Run Text="{Binding EpisodeDownloadState.Transfered, Converter={StaticResource AutomatedUnitConversionFromByteConverter}}" />
-                                                        <Run Text="of" />
-                                                        <Run Text="{Binding EpisodeDownloadState.FileSize, Converter={StaticResource AutomatedUnitConversionFromByteConverter}}" />
-                                                    </TextBlock>
+                                                        Kind="Pause" />
+                                                    <TextBlock
+                                                        Grid.Column="2"
+                                                        HorizontalAlignment="Center"
+                                                        VerticalAlignment="Center"
+                                                        Text="Pause Download" />
                                                 </Grid>
-
-                                                <Grid Grid.Column="1">
+                                            </Button>
+                                            <Button
+                                                x:Name="btnCancel"
+                                                Command="{Binding CancelDownloadCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:DownloadCenter}}}"
+                                                CommandParameter="{Binding ElementName=btnCancel}">
+                                                <Grid>
                                                     <Grid.ColumnDefinitions>
                                                         <ColumnDefinition Width="auto" />
                                                         <ColumnDefinition Width="10" />
@@ -177,14 +149,19 @@
                                                     <materialDesign:PackIcon
                                                         HorizontalAlignment="Center"
                                                         VerticalAlignment="Center"
-                                                        Foreground="{DynamicResource MaterialDesignBody}"
-                                                        Kind="Timelapse" />
-                                                    <TextBlock Grid.Column="2" Text="{Binding EpisodeDownloadState.EstimatedTimeLeft, Converter={StaticResource DateTimeToStringConverter}}" />
-
-
+                                                        Kind="Cancel" />
+                                                    <TextBlock
+                                                        Grid.Column="2"
+                                                        HorizontalAlignment="Center"
+                                                        VerticalAlignment="Center"
+                                                        Text="Cancel Download" />
                                                 </Grid>
-
-                                                <Grid Grid.Column="2">
+                                            </Button>
+                                            <Button
+                                                x:Name="btnRemove"
+                                                Command="{Binding RemoveFromListCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:DownloadCenter}}}"
+                                                CommandParameter="{Binding ElementName=btnRemove}">
+                                                <Grid>
                                                     <Grid.ColumnDefinitions>
                                                         <ColumnDefinition Width="auto" />
                                                         <ColumnDefinition Width="10" />
@@ -193,35 +170,203 @@
                                                     <materialDesign:PackIcon
                                                         HorizontalAlignment="Center"
                                                         VerticalAlignment="Center"
-                                                        Foreground="{DynamicResource MaterialDesignBody}"
-                                                        Kind="TrendingUp" />
-                                                    <TextBlock Grid.Column="2" Text="{Binding EpisodeDownloadState.DownloadSpeed, Converter={StaticResource AutomatedUnitConversionFromByteConverter}}" />
+                                                        Kind="PlaylistRemove" />
+                                                    <TextBlock
+                                                        Grid.Column="2"
+                                                        HorizontalAlignment="Center"
+                                                        VerticalAlignment="Center"
+                                                        Text="Remove from this list" />
                                                 </Grid>
+                                            </Button>
+                                        </StackPanel>
+                                    </materialDesign:PopupBox>
+                                    <Image Source="{Binding AttachedManager.AttachedAnimeSeriesInfo.Thumbnail.Url}" Stretch="UniformToFill" />
+                                    <Grid Grid.Column="1">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
 
-                                                <Grid Grid.Column="3">
+                                        <TextBlock
+                                            Margin="10"
+                                            VerticalAlignment="Center"
+                                            FontSize="{DynamicResource Heading2}"
+                                            Text="{Binding AttachedManager.AttachedAnimeSeriesInfo.Name}" />
+
+                                        <Grid
+                                            Grid.Row="1"
+                                            Margin="10"
+                                            VerticalAlignment="Bottom">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition />
+                                                <ColumnDefinition />
+                                                <ColumnDefinition />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock>
+                                                <Run Text="State:" />
+                                                <Run Text="{Binding State, Mode=OneWay}" />
+                                            </TextBlock>
+                                            <TextBlock Grid.Column="1">
+                                                <Run Text="Prefered Quality:" />
+                                                <Run Text="{Binding Quality, Mode=OneWay}" />
+                                            </TextBlock>
+                                            <TextBlock Grid.Column="2">
+                                                <Run Text="Progress:" />
+                                                <Run Text="{Binding CompletedEpisodeCount}" /><Run Text="/" /><Run Text="{Binding EpisodeToDownload.Count, Mode=OneWay}" />
+                                            </TextBlock>
+                                        </Grid>
+                                    </Grid>
+
+                                </Grid>
+
+                            </Expander.Header>
+                            <ListView
+                                Margin="50,0,0,0"
+                                ItemsSource="{Binding AttachedManager.AttachedAnimeSeriesInfo.Episodes}"
+                                Style="{StaticResource listViewEpisodeBaseTemplate}">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="100" />
+                                                <ColumnDefinition />
+                                            </Grid.ColumnDefinitions>
+                                            <Image Source="{Binding Thumbnail.Url}" />
+                                            <Grid Grid.Column="1" Margin="10">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="1.25*" />
+                                                    <RowDefinition />
+                                                    <RowDefinition />
+                                                </Grid.RowDefinitions>
+                                                <Grid>
                                                     <Grid.ColumnDefinitions>
                                                         <ColumnDefinition Width="auto" />
                                                         <ColumnDefinition Width="10" />
                                                         <ColumnDefinition Width="auto" />
                                                     </Grid.ColumnDefinitions>
+                                                    <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
                                                     <materialDesign:PackIcon
-                                                        HorizontalAlignment="Center"
-                                                        VerticalAlignment="Center"
+                                                        Grid.Column="2"
                                                         Foreground="{DynamicResource MaterialDesignBody}"
-                                                        Kind="CheckboxMarkedCircleOutline" />
-                                                    <TextBlock Grid.Column="2">
-                                                        <Run Text="{Binding EpisodeDownloadState.Progress, StringFormat='0.00'}" /><Run Text="%" />
-                                                    </TextBlock>
+                                                        Kind="CheckboxMarkedCircleOutline"
+                                                        Visibility="{Binding EpisodeDownloadState.EpisodeDownloadState, Converter={StaticResource EpisodeDownloadStateToVisibilityConverter}, ConverterParameter=IconTitle}" />
+                                                </Grid>
+                                                <Grid Grid.Row="1" Visibility="{Binding EpisodeDownloadState.EpisodeDownloadState, Converter={StaticResource EpisodeDownloadStateToVisibilityConverter}, ConverterParameter=SegmentProgressBar}">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition />
+                                                        <ColumnDefinition />
+                                                        <ColumnDefinition />
+                                                        <ColumnDefinition />
+                                                        <ColumnDefinition />
+                                                    </Grid.ColumnDefinitions>
+                                                    <ProgressBar
+                                                        Grid.Column="0"
+                                                        materialDesign:TransitionAssist.DisableTransitions="True"
+                                                        Value="{Binding EpisodeDownloadState.Segments[0].Progress, Mode=OneWay}" />
+                                                    <ProgressBar
+                                                        Grid.Column="1"
+                                                        materialDesign:TransitionAssist.DisableTransitions="True"
+                                                        Value="{Binding EpisodeDownloadState.Segments[1].Progress, Mode=OneWay}" />
+                                                    <ProgressBar
+                                                        Grid.Column="2"
+                                                        materialDesign:TransitionAssist.DisableTransitions="True"
+                                                        Value="{Binding EpisodeDownloadState.Segments[2].Progress, Mode=OneWay}" />
+                                                    <ProgressBar
+                                                        Grid.Column="3"
+                                                        materialDesign:TransitionAssist.DisableTransitions="True"
+                                                        Value="{Binding EpisodeDownloadState.Segments[3].Progress, Mode=OneWay}" />
+                                                    <ProgressBar
+                                                        Grid.Column="4"
+                                                        materialDesign:TransitionAssist.DisableTransitions="True"
+                                                        Value="{Binding EpisodeDownloadState.Segments[4].Progress, Mode=OneWay}" />
+
+                                                </Grid>
+                                                <TextBlock
+                                                    Grid.Row="1"
+                                                    VerticalAlignment="Center"
+                                                    Text="Getting information..."
+                                                    Visibility="{Binding EpisodeDownloadState.EpisodeDownloadState, Converter={StaticResource EpisodeDownloadStateToVisibilityConverter}, ConverterParameter=WaitingTextBlock}" />
+
+                                                <Grid Grid.Row="2" Visibility="{Binding EpisodeDownloadState.EpisodeDownloadState, Converter={StaticResource EpisodeDownloadStateToVisibilityConverter}, ConverterParameter=DownloaderDetail}">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition />
+                                                        <ColumnDefinition />
+                                                        <ColumnDefinition />
+                                                        <ColumnDefinition />
+                                                    </Grid.ColumnDefinitions>
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="auto" />
+                                                            <ColumnDefinition Width="10" />
+                                                            <ColumnDefinition Width="auto" />
+                                                        </Grid.ColumnDefinitions>
+                                                        <materialDesign:PackIcon
+                                                            HorizontalAlignment="Center"
+                                                            VerticalAlignment="Center"
+                                                            Foreground="{DynamicResource MaterialDesignBody}"
+                                                            Kind="File" />
+                                                        <TextBlock Grid.Column="2" VerticalAlignment="Center">
+                                                            <Run Text="{Binding EpisodeDownloadState.Transfered, Converter={StaticResource AutomatedUnitConversionFromByteConverter}}" />
+                                                            <Run Text="of" />
+                                                            <Run Text="{Binding EpisodeDownloadState.FileSize, Converter={StaticResource AutomatedUnitConversionFromByteConverter}}" />
+                                                        </TextBlock>
+                                                    </Grid>
+
+                                                    <Grid Grid.Column="1">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="auto" />
+                                                            <ColumnDefinition Width="10" />
+                                                            <ColumnDefinition Width="auto" />
+                                                        </Grid.ColumnDefinitions>
+                                                        <materialDesign:PackIcon
+                                                            HorizontalAlignment="Center"
+                                                            VerticalAlignment="Center"
+                                                            Foreground="{DynamicResource MaterialDesignBody}"
+                                                            Kind="Timelapse" />
+                                                        <TextBlock Grid.Column="2" Text="{Binding EpisodeDownloadState.EstimatedTimeLeft, Converter={StaticResource DateTimeToStringConverter}}" />
+
+
+                                                    </Grid>
+
+                                                    <Grid Grid.Column="2">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="auto" />
+                                                            <ColumnDefinition Width="10" />
+                                                            <ColumnDefinition Width="auto" />
+                                                        </Grid.ColumnDefinitions>
+                                                        <materialDesign:PackIcon
+                                                            HorizontalAlignment="Center"
+                                                            VerticalAlignment="Center"
+                                                            Foreground="{DynamicResource MaterialDesignBody}"
+                                                            Kind="TrendingUp" />
+                                                        <TextBlock Grid.Column="2" Text="{Binding EpisodeDownloadState.DownloadSpeed, Converter={StaticResource AutomatedUnitConversionFromByteConverter}}" />
+                                                    </Grid>
+
+                                                    <Grid Grid.Column="3">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="auto" />
+                                                            <ColumnDefinition Width="10" />
+                                                            <ColumnDefinition Width="auto" />
+                                                        </Grid.ColumnDefinitions>
+                                                        <materialDesign:PackIcon
+                                                            HorizontalAlignment="Center"
+                                                            VerticalAlignment="Center"
+                                                            Foreground="{DynamicResource MaterialDesignBody}"
+                                                            Kind="CheckboxMarkedCircleOutline" />
+                                                        <TextBlock Grid.Column="2">
+                                                            <Run Text="{Binding EpisodeDownloadState.Progress, StringFormat='0.00'}" /><Run Text="%" />
+                                                        </TextBlock>
+                                                    </Grid>
                                                 </Grid>
                                             </Grid>
                                         </Grid>
-                                    </Grid>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
-                    </Expander>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListView>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </Expander>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListView>
+        </Grid>
     </Grid>
 </UserControl>
