@@ -139,6 +139,8 @@
                                 VerticalAlignment="Top"
                                 materialDesign:HintAssist.Hint="Quality"
                                 ItemsSource="{x:Static uadGlobal:MiscClass.PresetQuality}"
+                                SelectedIndex="3"
+                                SelectedValue="{Binding SelectedQuality}"
                                 Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
                             <TextBox
                                 x:Name="txbSelectEpisode"

@@ -5,7 +5,6 @@ VisualStudioVersion = 15.0.28010.2046
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{97495833-5BE6-4214-B0B1-35B49A2542F7}"
 	ProjectSection(SolutionItems) = preProject
-		TestResult.txt = TestResult.txt
 		Todo List.txt = Todo List.txt
 	EndProjectSection
 EndProject

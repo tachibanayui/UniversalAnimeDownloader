@@ -210,7 +210,7 @@
                                                 </TextBlock>
                                                 <TextBlock Grid.Column="1">
                                                     <Run Text="Prefered Quality:" />
-                                                    <Run Text="{Binding Quality, Mode=OneWay}" />
+                                                    <Run Text="{Binding PreferedQuality, Mode=OneWay}" />
                                                 </TextBlock>
                                                 <TextBlock Grid.Column="2">
                                                     <Run Text="Progress:" />

@@ -43,6 +43,8 @@ namespace UADAPI
         /// </summary>
         /// <returns>A list of anime seasons</returns>
         Task<List<SeasonItem>> GetAnimeSeasons();
+
+        
     }
 
     public interface IAnimeSeriesManager
@@ -92,6 +94,12 @@ namespace UADAPI
         /// </summary>
         /// <returns></returns>
         Task<List<string>> GetQualities();
+
+        /// <summary>
+        /// Get the stardrandize quaility for example "m480p" => "480p" or "something720xyzp" => "720p".
+        /// </summary>
+        /// <returns> Object represent the source with the specified quality. Return null if no filmSources is suitable</returns>
+        Task<MediaSourceInfo> GetCommonQuality(Dictionary<string, MediaSourceInfo> filmSources, string requestedQuality);
     }
 
 

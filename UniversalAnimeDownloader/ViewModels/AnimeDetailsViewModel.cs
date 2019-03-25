@@ -124,6 +124,7 @@ namespace UniversalAnimeDownloader.ViewModels
                     }
 
                 await CurrentSeries.GetEpisodes(selectedIDList);
+                SourceControl.PreferedQuality = string.IsNullOrEmpty(SelectedQuality) ? "480p" : SelectedQuality ;
                 SourceControl.DownloadAnimeByIndexes(selectedIndexList);
             });
         }

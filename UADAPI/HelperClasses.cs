@@ -57,11 +57,11 @@ namespace UADAPI
         {
             CurrentAnimeSeries.AttachedAnimeSeriesInfo.IsSelectiveDownload = isSelective;
             var instance = DownloadManager.CreateNewDownloadInstance(CurrentAnimeSeries, episodeIndexes, PreferedQuality, true);
-            NotificationManager.Add(new NotificationItem() { Title = "Download started!", Detail = $"{instance.AttachedManager.AttachedAnimeSeriesInfo.Name} has been started!. Prefer quality: {instance.Quality}" });
+            NotificationManager.Add(new NotificationItem() { Title = "Download started!", Detail = $"{instance.AttachedManager.AttachedAnimeSeriesInfo.Name} has been started!. Prefer quality: {instance.PreferedQuality}" });
             instance.FinishedDownloading += FinishedDownloading;
         }
 
-        
+
 
         /// <summary>
         /// Sort hand to download all anime indexes
@@ -151,7 +151,7 @@ namespace UADAPI
         {
             var instance = sender as DownloadInstance;
             string episodeName = instance.AttachedManager.AttachedAnimeSeriesInfo.Name;
-            string quality = instance.Quality;
+            string quality = instance.PreferedQuality;
             int epCount = instance.EpisodeToDownload.Count;
             int epAllCount = instance.AttachedManager.AttachedAnimeSeriesInfo.Episodes.Count;
             var nof = new NotificationItem()
@@ -161,7 +161,7 @@ namespace UADAPI
                 ShowActionButton = false
             };
             NotificationManager.Add(nof);
-        } 
+        }
         #endregion
     }
 
@@ -213,6 +213,13 @@ namespace UADAPI
         /// </summary>
         public static ObservableCollection<DownloadInstance> Instances { get; private set; } = new ObservableCollection<DownloadInstance>();
 
+        private static List<string> _PresetQuality { get; set; } = new List<string>
+        {
+           "Worse possible", "144p", "288p", "360p", "480p", "720p", "1080p", "1440p", "2160p", "Best possible",
+        };
+
+        public static ReadOnlyCollection<string> PresetQuality { get => _PresetQuality.AsReadOnly(); }
+
         /// <summary>
         /// Number of segment to download
         /// </summary>
@@ -241,7 +248,7 @@ namespace UADAPI
                 throw new ArgumentNullException("Episodes list is null!");
             }
 
-            DownloadInstance ins = new DownloadInstance() { AttachedManager = manager, EpisodeId = episodeId, Quality = quality };
+            DownloadInstance ins = new DownloadInstance() { AttachedManager = manager, EpisodeId = episodeId, PreferedQuality = quality };
             Instances.Add(ins);
 
             if (startNow == true)
@@ -288,7 +295,7 @@ namespace UADAPI
         /// </summary>
         public IAnimeSeriesManager AttachedManager { get; set; }
         public List<int> EpisodeId { get; set; }
-        public string Quality { get; set; }
+        public string PreferedQuality { get; set; }
         public List<EpisodeInfo> EpisodeToDownload { get; private set; } = new List<EpisodeInfo>();
         private bool IsCompletedDownloading { get; set; } = false;
 
@@ -360,11 +367,14 @@ namespace UADAPI
                 Directory.CreateDirectory(AttachedManager.AttachedAnimeSeriesInfo.AnimeSeriesSavedDirectory);
             }
 
-            await DownloadEpisodes();
+            await Task.Run(async() => await DownloadEpisodes());
             await DownloadThumbnail();
             CreateManagerFile();
-            if(State != UADDownloaderState.Canceled)
+            if (State != UADDownloaderState.Canceled)
+            {
                 State = UADDownloaderState.Finished;
+            }
+
             OnFinishedDownloading();
         }
 
@@ -517,8 +527,12 @@ namespace UADAPI
         {
             foreach (EpisodeInfo item in EpisodeToDownload)
             {
-                var source = item.FilmSources[Quality];
+                MediaSourceInfo source = await GetSource(item.FilmSources, PreferedQuality);
                 CompletedEpisodeCount++;
+
+                if (string.IsNullOrEmpty(source.LocalFile))
+                    source.LocalFile = $"{AttachedManager.AttachedAnimeSeriesInfo.AnimeSeriesSavedDirectory}{item.EpisodeID}-{item.Index} {item.Name}-{PreferedQuality}.mp4";
+                source.IsFinishedRequesting = false;
 
                 try
                 {
@@ -608,6 +622,25 @@ namespace UADAPI
             }
         }
 
+        private async Task<MediaSourceInfo> GetSource(Dictionary<string, MediaSourceInfo> filmSources, string preferedQuality)
+        {
+            int index = DownloadManager.PresetQuality.IndexOf(preferedQuality);
+            if (index < 0)
+                return null;
+
+            for (int i = index; i >= 0; i--)
+            {
+                var result = await AttachedManager.GetCommonQuality(filmSources, DownloadManager.PresetQuality[i]);
+                if (result != null)
+                    return result;
+            }
+
+            foreach (var item in filmSources.Keys)
+                return filmSources[item];
+
+            return null;
+        }
+
         private void CreateManagerFile()
         {
             File.WriteAllText(AttachedManager.AttachedAnimeSeriesInfo.ManagerFileLocation, JsonConvert.SerializeObject(AttachedManager.AttachedAnimeSeriesInfo, new JsonSerializerSettings() { Error = new EventHandler<Newtonsoft.Json.Serialization.ErrorEventArgs>((s, e) => { e.ErrorContext.Handled = true; }) }));
@@ -646,18 +679,10 @@ namespace UADAPI
 
         private void AssignDirectory()
         {
-            AttachedManager.AttachedAnimeSeriesInfo.AnimeSeriesSavedDirectory = DownloadManager.DownloadDirectory + "-" + AttachedManager.AttachedAnimeSeriesInfo.AnimeID.ToString() + AttachedManager.AttachedAnimeSeriesInfo.Name + "\\";
+            AttachedManager.AttachedAnimeSeriesInfo.AnimeSeriesSavedDirectory = DownloadManager.DownloadDirectory + AttachedManager.AttachedAnimeSeriesInfo.AnimeID.ToString() + "-" + AttachedManager.AttachedAnimeSeriesInfo.Name + "\\";
             AttachedManager.AttachedAnimeSeriesInfo.ManagerFileLocation = AttachedManager.AttachedAnimeSeriesInfo.AnimeSeriesSavedDirectory + "Manager.json";
 
-            foreach (EpisodeInfo item in EpisodeToDownload)
-            {
-                if (string.IsNullOrEmpty(item.FilmSources[Quality].LocalFile))
-                {
-                    item.FilmSources[Quality].LocalFile = $"{AttachedManager.AttachedAnimeSeriesInfo.AnimeSeriesSavedDirectory}{item.EpisodeID}-{item.Index} {item.Name}-{Quality}.mp4";
-                }
 
-                item.FilmSources[Quality].IsFinishedRequesting = false;
-            }
 
             foreach (EpisodeInfo item in EpisodeToDownload)
             {
