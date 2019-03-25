@@ -138,6 +138,7 @@ namespace UniversalAnimeDownloader.ViewModels
                 if (res.Contains("\n"))
                 {
                     res = res.Trim('\r', '\n');
+                    await dispatcher.InvokeAsync(() => obj.Text = res);
                     ResetSelected(false);
                     if (res == "all")
                     {

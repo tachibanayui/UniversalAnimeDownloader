@@ -218,6 +218,7 @@
                     <Button
                         Height="75"
                         HorizontalContentAlignment="Left"
+                        Command="{Binding NavigateToAllAnimeCommand}"
                         Style="{StaticResource MaterialDesignFlatButton}">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -292,9 +293,10 @@
                         </Grid>
                     </Button>
 
-                    <Button Command="{Binding NavigateToDownloadCenter}"
+                    <Button
                         Height="75"
                         HorizontalContentAlignment="Left"
+                        Command="{Binding NavigateToDownloadCenter}"
                         Style="{StaticResource MaterialDesignFlatButton}">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -302,8 +304,8 @@
                                 <ColumnDefinition Width="10" />
                                 <ColumnDefinition Width="auto" />
                             </Grid.ColumnDefinitions>
-                            <materialDesign:PackIcon Kind="CloudDownload" Style="{StaticResource SideBarNavIcon}"/>
-                            <TextBlock Style="{StaticResource SideBarNavTextBlock}" Text="Download Center"/>
+                            <materialDesign:PackIcon Kind="CloudDownload" Style="{StaticResource SideBarNavIcon}" />
+                            <TextBlock Style="{StaticResource SideBarNavTextBlock}" Text="Download Center" />
                         </Grid>
                     </Button>
 

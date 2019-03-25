@@ -23,6 +23,7 @@ namespace UniversalAnimeDownloader.ViewModels
         public ICommand SearchButtonClickCommand { get; set; }
         public ICommand GoBackNavigationCommand { get; set; }
         public ICommand GoForwardNavigationCommand { get; set; }
+        public ICommand NavigateToAllAnimeCommand { get; set; }
         public ICommand NavigateToDownloadCenter { get; set; }
         public ICommand TestCommand { get; set; }
         #endregion
@@ -142,7 +143,8 @@ namespace UniversalAnimeDownloader.ViewModels
             SearchButtonClickCommand = new RelayCommand<TextBox>(p => true, p => MiscClass.OnUserSearched(this, p.Text));
             GoBackNavigationCommand = new RelayCommand<object>(p => MiscClass.NavigationHelper.CanGoBack, p => TransisionerIndex = MiscClass.NavigationHelper.Back());
             GoForwardNavigationCommand = new RelayCommand<object>(p => MiscClass.NavigationHelper.CanGoForward, p => TransisionerIndex = MiscClass.NavigationHelper.Forward());
-            NavigateToDownloadCenter = new RelayCommand<object>(p => true, p => TransisionerIndex = 2);
+            NavigateToDownloadCenter = new RelayCommand<object>(p => true, p => { TransisionerIndex = 2; MiscClass.NavigationHelper.AddNavigationHistory(2); });
+            NavigateToAllAnimeCommand = new RelayCommand<object>(p => true, p => { TransisionerIndex = 0; MiscClass.NavigationHelper.AddNavigationHistory(0); });
             TestCommand = new RelayCommand<object>(p => true, p => { (Application.Current.FindResource("PaletteHelper") as PaletteHelper).SetLightDark(!IsDark); IsDark = !IsDark; NotificationManager.Add(new NotificationItem() { Title = "Test" }); });
         }
     }

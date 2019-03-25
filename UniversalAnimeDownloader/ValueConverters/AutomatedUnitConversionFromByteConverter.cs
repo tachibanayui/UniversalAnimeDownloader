@@ -14,18 +14,18 @@ namespace UniversalAnimeDownloader.ValueConverters
         {
             double byteRate = double.Parse(value.ToString());
             double convertedValue = byteRate;
-            string unitType = "Byte/s";
+            string unitType = "Byte";
 
 
             if (byteRate < Math.Pow(2, 20))
             {
                 convertedValue /= Math.Pow(2, 10);
-                unitType = "KB/s";
+                unitType = "KB";
             }
             else if (byteRate < Math.Pow(2, 30))
             {
                 convertedValue /= Math.Pow(2, 20);
-                unitType = "MB/s";
+                unitType = "MB";
             }
 
             return string.Format("{0:N2}", convertedValue) + unitType;

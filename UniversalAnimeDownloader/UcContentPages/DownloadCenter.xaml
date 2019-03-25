@@ -342,7 +342,9 @@
                                                                 VerticalAlignment="Center"
                                                                 Foreground="{DynamicResource MaterialDesignBody}"
                                                                 Kind="TrendingUp" />
-                                                            <TextBlock Grid.Column="2" Text="{Binding EpisodeDownloadState.DownloadSpeed, Converter={StaticResource AutomatedUnitConversionFromByteConverter}}" />
+                                                            <TextBlock Grid.Column="2">
+                                                                <Run Text="{Binding EpisodeDownloadState.DownloadSpeed, Converter={StaticResource AutomatedUnitConversionFromByteConverter}}" /><Run Text="/s" />
+                                                            </TextBlock>
                                                         </Grid>
 
                                                         <Grid Grid.Column="3">

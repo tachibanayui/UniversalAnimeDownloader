@@ -265,7 +265,6 @@ namespace UADAPI
         /// </summary>
         public IAnimeSeriesManager AttachedManager { get; set; }
         public List<int> EpisodeId { get; set; }
-        public UADDownloaderState State { get; private set; } = UADDownloaderState.NotStarted;
         public string Quality { get; set; }
         public List<EpisodeInfo> EpisodeToDownload { get; private set; } = new List<EpisodeInfo>();
         private bool IsCompletedDownloading { get; set; } = false;
@@ -284,6 +283,23 @@ namespace UADAPI
                 if (_CompletedEpisodeCount != value)
                 {
                     _CompletedEpisodeCount = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private UADDownloaderState _State = UADDownloaderState.NotStarted;
+        public UADDownloaderState State
+        {
+            get
+            {
+                return _State;
+            }
+            set
+            {
+                if (_State != value)
+                {
+                    _State = value;
                     OnPropertyChanged();
                 }
             }
@@ -324,6 +340,7 @@ namespace UADAPI
             await DownloadEpisodes();
             await DownloadThumbnail();
             CreateManagerFile();
+            State = UADDownloaderState.Finished;
             OnFinishedDownloading();
         }
 
@@ -567,7 +584,10 @@ namespace UADAPI
             }
         }
 
-        private void CreateManagerFile() => File.WriteAllText(AttachedManager.AttachedAnimeSeriesInfo.ManagerFileLocation, JsonConvert.SerializeObject(AttachedManager.AttachedAnimeSeriesInfo));
+        private void CreateManagerFile()
+        {
+            File.WriteAllText(AttachedManager.AttachedAnimeSeriesInfo.ManagerFileLocation, JsonConvert.SerializeObject(AttachedManager.AttachedAnimeSeriesInfo, new JsonSerializerSettings() { Error = new EventHandler<Newtonsoft.Json.Serialization.ErrorEventArgs>((s, e) => { e.ErrorContext.Handled = true; }) }));
+        }
 
         private void ReportProgress(Downloader downloader, EpisodeInfo info)
         {
@@ -587,11 +607,13 @@ namespace UADAPI
             info.EpisodeDownloadState.DownloadSpeed = downloader.Rate;
             info.EpisodeDownloadState.Transfered = downloader.Transfered;
             info.EpisodeDownloadState.State = downloader.State;
-            if(downloader.Segments.Count != 0)
+            if (downloader.Segments.Count != 0)
             {
                 info.EpisodeDownloadState.Segments.Clear();
                 foreach (var item in downloader.Segments)
-                   info.EpisodeDownloadState.Segments.Add(item);
+                {
+                    info.EpisodeDownloadState.Segments.Add(item);
+                }
             }
 
 
@@ -600,7 +622,7 @@ namespace UADAPI
 
         private void AssignDirectory()
         {
-            AttachedManager.AttachedAnimeSeriesInfo.AnimeSeriesSavedDirectory = DownloadManager.DownloadDirectory + AttachedManager.AttachedAnimeSeriesInfo.AnimeID.ToString() + AttachedManager.AttachedAnimeSeriesInfo.Name + "\\";
+            AttachedManager.AttachedAnimeSeriesInfo.AnimeSeriesSavedDirectory = DownloadManager.DownloadDirectory + "-" + AttachedManager.AttachedAnimeSeriesInfo.AnimeID.ToString() + AttachedManager.AttachedAnimeSeriesInfo.Name + "\\";
             AttachedManager.AttachedAnimeSeriesInfo.ManagerFileLocation = AttachedManager.AttachedAnimeSeriesInfo.AnimeSeriesSavedDirectory + "Manager.json";
 
             foreach (EpisodeInfo item in EpisodeToDownload)
