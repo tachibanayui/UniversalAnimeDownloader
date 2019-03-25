@@ -43,13 +43,11 @@ namespace UniversalAnimeDownloader.ViewModels
                     (grd.Children[1] as TextBlock).Text = "Pause Download";
                 }
             });
-
             CancelDownloadCommand = new RelayCommand<Button>(CanPauseCancelButtonExcute, p =>
             {
                 var data = p.DataContext as DownloadInstance;
                 data.Cancel();
             });
-
             RemoveFromListCommand = new RelayCommand<Button>(p => true, p =>
             {
                 var data = p.DataContext as DownloadInstance;
@@ -57,6 +55,24 @@ namespace UniversalAnimeDownloader.ViewModels
                     data.Cancel();
 
                 DownloadManager.Instances.Remove(data);
+            });
+            CancelAllCommand = new RelayCommand<Button>(p => true, p =>
+            {
+                foreach (var item in DownloadManager.Instances)
+                    if (item.State == UADDownloaderState.Working)
+                        item.Cancel();
+            });
+            PauseAllCommand = new RelayCommand<Button>(p => true, p =>
+            {
+                foreach (var item in DownloadManager.Instances)
+                    if (item.State == UADDownloaderState.Working)
+                        item.Pause();
+            });
+            ResumeAllCommand = new RelayCommand<Button>(p => true, p =>
+            {
+                foreach (var item in DownloadManager.Instances)
+                    if (item.State == UADDownloaderState.Paused)
+                        item.Resume();
             });
         }
 

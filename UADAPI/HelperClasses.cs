@@ -340,7 +340,8 @@ namespace UADAPI
             await DownloadEpisodes();
             await DownloadThumbnail();
             CreateManagerFile();
-            State = UADDownloaderState.Finished;
+            if(State != UADDownloaderState.Canceled)
+                State = UADDownloaderState.Finished;
             OnFinishedDownloading();
         }
 
@@ -548,7 +549,7 @@ namespace UADAPI
                             {
                                 if (downloader.State != DownloaderState.Paused || downloader.State != DownloaderState.Pausing)
                                 {
-                                    downloader.Pause();
+                                    await Task.Run(() => downloader.Pause());
                                 }
                             }
                             else

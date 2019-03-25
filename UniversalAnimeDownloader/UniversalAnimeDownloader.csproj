@@ -106,6 +106,7 @@
     <Compile Include="ValueConverters\MediaSourceInfoToImageSource.cs" />
     <Compile Include="ValueConverters\NullOrEmpltyStringToVisibilityValueConverter.cs" />
     <Compile Include="ValueConverters\TypeToStringConverter.cs" />
+    <Compile Include="ValueConverters\UADDownloaderStateToIconKindConverter.cs" />
     <Compile Include="ViewModels\AllAnimeTabViewModel.cs" />
     <Compile Include="ViewModels\AnimeDetailsViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />

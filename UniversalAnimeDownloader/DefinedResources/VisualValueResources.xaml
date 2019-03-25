@@ -15,6 +15,8 @@
     <valueConverter:EpisodeDownloadStateToVisibilityConverter x:Key="EpisodeDownloadStateToVisibilityConverter" />
     <valueConverter:EpisodeDownloadStateToPackIconKindConverter x:Key="EpisodeDownloadStateToPackIconKindConverter" />
     <valueConverter:EpisodeDownloadStateToStringConverter x:Key="EpisodeDownloadStateToStringConverter" />
+    <valueConverter:UADDownloaderStateToIconKindConverter x:Key="UADDownloaderStateToIconKindConverter" />
+    <valueConverter:UADDownloaderStateToStringConverter x:Key="UADDownloaderStateToStringConverter" />
     <sys:Double x:Key="Heading1">36</sys:Double>
     <sys:Double x:Key="Heading2">24</sys:Double>
     <sys:Double x:Key="Heading3">18</sys:Double>
