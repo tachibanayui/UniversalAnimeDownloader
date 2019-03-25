@@ -117,6 +117,7 @@
     <Compile Include="ViewModels\DownloadCenterViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\NotifycationPanelViewModel.cs" />
+    <Compile Include="ViewModels\SmallerThanParameterToVisibilityConverter.cs" />
     <Page Include="DefinedResources\CustomStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

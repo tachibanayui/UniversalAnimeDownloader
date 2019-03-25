@@ -3,7 +3,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:UniversalAnimeDownloader.DefinedResources"
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
-    xmlns:valueConverter="clr-namespace:UniversalAnimeDownloader.ValueConverters">
+    xmlns:valueConverter="clr-namespace:UniversalAnimeDownloader.ValueConverters"
+    xmlns:viewmodels="clr-namespace:UniversalAnimeDownloader.ViewModels">
     <valueConverter:InvertableBooleanToVisibilityConverter x:Key="InvertableBooleanToVisibilityConverter" />
     <valueConverter:GenreItemListToStringConverter x:Key="GenreItemListToStringConverter" />
     <valueConverter:MediaSourceInfoToImageSource x:Key="MediaSourceInfoToImageSourceConverter" />
@@ -17,6 +18,7 @@
     <valueConverter:EpisodeDownloadStateToStringConverter x:Key="EpisodeDownloadStateToStringConverter" />
     <valueConverter:UADDownloaderStateToIconKindConverter x:Key="UADDownloaderStateToIconKindConverter" />
     <valueConverter:UADDownloaderStateToStringConverter x:Key="UADDownloaderStateToStringConverter" />
+    <viewmodels:SmallerThanParameterToVisibilityConverter x:Key="SmallerThanParameterToVisibilityConverter" />
 
     <sys:Double x:Key="Heading1">36</sys:Double>
     <sys:Double x:Key="Heading2">24</sys:Double>
