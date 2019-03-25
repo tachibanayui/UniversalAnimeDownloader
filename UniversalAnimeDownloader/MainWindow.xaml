@@ -131,17 +131,30 @@
                     <materialDesign:PackIcon Foreground="{DynamicResource MaterialDesignBody}" Kind="Close" />
                 </Button>
             </Grid>
-
-            <materialDesign:PopupBox
-                StaysOpen="True"
+            <materialDesign:Badged
                 Grid.Column="7"
                 HorizontalAlignment="Center"
-                VerticalAlignment="Center">
-                <materialDesign:PopupBox.ToggleContent>
-                    <materialDesign:PackIcon Foreground="{DynamicResource MaterialDesignBody}" Kind="Bell" />
-                </materialDesign:PopupBox.ToggleContent>
-                <pages:NotifycationPanel Width="400" Height="500" />
-            </materialDesign:PopupBox>
+                VerticalAlignment="Center"
+                BadgeBackground="{Binding BadgeBackgroundBrush}"
+                Foreground="{DynamicResource MaterialDesignBody}">
+                <materialDesign:Badged.Badge>
+                    <TextBlock
+                        Foreground="{DynamicResource MaterialDesignBody}"
+                        Text="{Binding NotifycationBadgeCount}"
+                        Visibility="{Binding BadgeContentVisibility}" />
+                </materialDesign:Badged.Badge>
+                <materialDesign:PopupBox StaysOpen="True" >
+                    <materialDesign:PopupBox.ToggleContent>
+                        <materialDesign:PackIcon Foreground="{DynamicResource MaterialDesignBody}" Kind="Bell" />
+                    </materialDesign:PopupBox.ToggleContent>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Opened">
+                            <i:InvokeCommandAction Command="{Binding ResetNotifyBadgeCommand}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    <pages:NotifycationPanel Width="400" Height="500" />
+                </materialDesign:PopupBox>
+            </materialDesign:Badged>
 
             <Button
                 Grid.Column="8"

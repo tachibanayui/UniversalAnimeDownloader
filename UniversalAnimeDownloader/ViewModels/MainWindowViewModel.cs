@@ -3,6 +3,7 @@ using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using UADAPI;
@@ -25,6 +26,7 @@ namespace UniversalAnimeDownloader.ViewModels
         public ICommand GoForwardNavigationCommand { get; set; }
         public ICommand NavigateToAllAnimeCommand { get; set; }
         public ICommand NavigateToDownloadCenter { get; set; }
+        public ICommand ResetNotifyBadgeCommand { get; set; }
         public ICommand TestCommand { get; set; }
         #endregion
 
@@ -80,12 +82,33 @@ namespace UniversalAnimeDownloader.ViewModels
             }
         }
 
+        private int _NotifycationBadgeCount = 0;
+        public int NotifycationBadgeCount
+        {
+            get
+            {
+                return _NotifycationBadgeCount;
+            }
+            set
+            {
+                if (_NotifycationBadgeCount != value)
+                {
+                    _NotifycationBadgeCount = value;
+                    OnPropertyChanged();
+                    OnPropertyChanged("BadgeBackgroundBrush");
+                    OnPropertyChanged("BadgeContentVisibility");
+                }
+            }
+        }
 
+        public Brush BadgeBackgroundBrush => NotifycationBadgeCount == 0 ? new SolidColorBrush(Colors.Transparent) : Application.Current.FindResource("PrimaryHueDarkBrush") as Brush;
+        public Visibility BadgeContentVisibility { get => NotifycationBadgeCount == 0 ? Visibility.Collapsed : Visibility.Visible; }
         #endregion
 
         public bool IsDark { get; set; }
         public MainWindowViewModel()
         {
+            NotificationManager.ItemAdded += (s, e) => NotifycationBadgeCount++;
             NotificationManager.Add(new NotificationItem() { Title = "Test notification", Detail = "This is a test notification!", ShowActionButton = true, ActionButtonContent = "Click here!", ButtonAction = new Action(() => { MessageBox.Show("Test"); }) });
             NotificationManager.Add(new NotificationItem() { Title = "Test notification", Detail = "This is a test notification!", ShowActionButton = false, ActionButtonContent = "Click here!", ButtonAction = new Action(() => { MessageBox.Show("Test"); }) });
             NotificationManager.Add(new NotificationItem() { Title = "Test notification", Detail = "This is a test notification!", ShowActionButton = true, ActionButtonContent = "Click here!", ButtonAction = new Action(() => { MessageBox.Show("Test"); }) });
@@ -151,6 +174,7 @@ namespace UniversalAnimeDownloader.ViewModels
             GoForwardNavigationCommand = new RelayCommand<object>(p => MiscClass.NavigationHelper.CanGoForward, p => TransisionerIndex = MiscClass.NavigationHelper.Forward());
             NavigateToDownloadCenter = new RelayCommand<object>(p => true, p => { TransisionerIndex = 2; MiscClass.NavigationHelper.AddNavigationHistory(2); });
             NavigateToAllAnimeCommand = new RelayCommand<object>(p => true, p => { TransisionerIndex = 0; MiscClass.NavigationHelper.AddNavigationHistory(0); });
+            ResetNotifyBadgeCommand = new RelayCommand<object>(p => true, p => NotifycationBadgeCount = 0);
             TestCommand = new RelayCommand<object>(p => true, p => { (Application.Current.FindResource("PaletteHelper") as PaletteHelper).SetLightDark(!IsDark); IsDark = !IsDark; NotificationManager.Add(new NotificationItem() { Title = "Test" }); });
         }
     }
