@@ -132,12 +132,16 @@
                 </Button>
             </Grid>
 
-            <Button
+            <materialDesign:PopupBox
+                StaysOpen="True"
                 Grid.Column="7"
-                Command="{Binding TestCommand}"
-                Style="{StaticResource MaterialDesignActionFlatButton}">
-                <materialDesign:PackIcon Foreground="{DynamicResource MaterialDesignBody}" Kind="Bell" />
-            </Button>
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center">
+                <materialDesign:PopupBox.ToggleContent>
+                    <materialDesign:PackIcon Foreground="{DynamicResource MaterialDesignBody}" Kind="Bell" />
+                </materialDesign:PopupBox.ToggleContent>
+                <pages:NotifycationPanel Width="400" Height="500" />
+            </materialDesign:PopupBox>
 
             <Button
                 Grid.Column="8"

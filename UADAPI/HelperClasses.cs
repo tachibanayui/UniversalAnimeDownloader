@@ -722,7 +722,7 @@ namespace UADAPI
     /// </summary>
     public class NotificationManager
     {
-        public static List<NotificationItem> Notifications { get; private set; } = new List<NotificationItem>();
+        public static ObservableCollection<NotificationItem> Notifications { get; private set; } = new ObservableCollection<NotificationItem>();
         public static void Add(NotificationItem item)
         {
             Notifications.Add(item);
@@ -763,6 +763,7 @@ namespace UADAPI
 
         public DateTime CreatedTime { get; set; }
         public string Title { get; set; }
+        public bool ShowActionButton { get; set; }
         public string Detail { get; set; }
         /// <summary>
         /// The string will be placed in the button. Can be null or empty

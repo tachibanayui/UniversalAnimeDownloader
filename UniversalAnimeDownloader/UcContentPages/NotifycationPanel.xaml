@@ -1,0 +1,100 @@
+﻿<UserControl
+    x:Class="UniversalAnimeDownloader.UcContentPages.NotifycationPanel"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:UniversalAnimeDownloader.UcContentPages"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:uadapi="clr-namespace:UADAPI;assembly=UADAPI"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    DataContext="{StaticResource NotifycationPanelViewModel}"
+    FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
+    TextElement.FontSize="14"
+    TextElement.FontWeight="Normal"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    mc:Ignorable="d">
+    <Grid>
+        <GroupBox
+            materialDesign:ShadowAssist.ShadowDepth="Depth3"
+            Style="{StaticResource MaterialDesignGroupBox}"
+            UseLayoutRounding="True">
+            <GroupBox.Header>
+                <Grid Height="25">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="20" />
+                        <ColumnDefinition Width="10" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <materialDesign:PackIcon Kind="Bell" Style="{StaticResource AutoSizeIconPack}" />
+                    <TextBlock
+                        Grid.Column="2"
+                        VerticalAlignment="Center"
+                        FontSize="{DynamicResource Heading3}"
+                        FontWeight="SemiBold"
+                        Text="Notification" />
+                </Grid>
+            </GroupBox.Header>
+            <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                <ListView
+                    materialDesign:RippleAssist.IsDisabled="True"
+                    ItemsSource="{x:Static uadapi:NotificationManager.Notifications}"
+                    Style="{StaticResource listViewEpisodeBaseTemplate}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Height="150">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30" />
+                                    <RowDefinition Height="35" />
+                                    <RowDefinition />
+                                    <RowDefinition Height="35" />
+                                </Grid.RowDefinitions>
+                                <TextBlock
+                                    Margin="0,0,25,0"
+                                    HorizontalAlignment="Right"
+                                    FontStyle="Italic"
+                                    Text="{Binding CreatedTime}" />
+                                <Button
+                                    x:Name="btnRemove"
+                                    Width="36"
+                                    Height="36"
+                                    Margin="0,-10,-10,0"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Top"
+                                    materialDesign:RippleAssist.IsDisabled="False"
+                                    Command="{Binding DataContext.RemoveNotificationItem, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:NotifycationPanel}}}"
+                                    CommandParameter="{Binding ElementName=btnRemove}"
+                                    Style="{StaticResource MaterialDesignActionFlatButton}"
+                                    Visibility="Visible">
+
+                                    <materialDesign:PackIcon Kind="Close" />
+                                </Button>
+                                <TextBlock
+                                    Grid.Row="1"
+                                    VerticalAlignment="Center"
+                                    FontWeight="SemiBold"
+                                    Text="{Binding Title}" />
+                                <TextBlock
+                                    Grid.Row="2"
+                                    Text="{Binding Detail}"
+                                    TextTrimming="CharacterEllipsis"
+                                    TextWrapping="Wrap" />
+                                <Button
+                                    x:Name="btnAction"
+                                    Grid.Row="3"
+                                    materialDesign:RippleAssist.IsDisabled="False"
+                                    Command="{Binding DataContext.InvokeActionButton, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:NotifycationPanel}}}"
+                                    CommandParameter="{Binding ElementName=btnAction}"
+                                    Content="{Binding ActionButtonContent}"
+                                    Style="{StaticResource MaterialDesignRaisedButton}"
+                                    Visibility="{Binding ShowActionButton, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Normal}" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </ScrollViewer>
+        </GroupBox>
+
+    </Grid>
+</UserControl>

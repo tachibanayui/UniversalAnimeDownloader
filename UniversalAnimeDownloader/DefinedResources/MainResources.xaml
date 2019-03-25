@@ -8,5 +8,6 @@
     <vm:AllAnimeTabViewModel x:Key="AllAnimeTabViewModel" />
     <vm:AnimeDetailsViewModel x:Key="AnimeDetailsViewModel" />
     <vm:DownloadCenterViewModel x:Key="DownloadCenterViewModel" />
+    <vm:NotifycationPanelViewModel x:Key="NotifycationPanelViewModel" />
     <materialDesgin:PaletteHelper x:Key="PaletteHelper" />
 </ResourceDictionary>

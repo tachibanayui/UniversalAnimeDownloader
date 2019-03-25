@@ -96,7 +96,11 @@
     <Compile Include="UcContentPages\DownloadCenter.xaml.cs">
       <DependentUpon>DownloadCenter.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UcContentPages\NotifycationPanel.xaml.cs">
+      <DependentUpon>NotifycationPanel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ValueConverters\AutomatedUnitConversionFromByteConverter.cs" />
+    <Compile Include="ValueConverters\InvertableBoolToVisibilityConverter.cs" />
     <Compile Include="ValueConverters\DateTimeToStringConverter.cs" />
     <Compile Include="ValueConverters\EpisodeDownloadStateToPackIconKindConverter.cs" />
     <Compile Include="ValueConverters\EpisodeDownloadStateToStringConverter.cs" />
@@ -112,6 +116,7 @@
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\DownloadCenterViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="ViewModels\NotifycationPanelViewModel.cs" />
     <Page Include="DefinedResources\CustomStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -141,6 +146,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UcContentPages\DownloadCenter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UcContentPages\NotifycationPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
