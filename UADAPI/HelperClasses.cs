@@ -56,8 +56,12 @@ namespace UADAPI
         public void DownloadAnimeByIndexes(List<int> episodeIndexes, bool isSelective = true)
         {
             CurrentAnimeSeries.AttachedAnimeSeriesInfo.IsSelectiveDownload = isSelective;
-            DownloadManager.CreateNewDownloadInstance(CurrentAnimeSeries, episodeIndexes, PreferedQuality, true);
+            var instance = DownloadManager.CreateNewDownloadInstance(CurrentAnimeSeries, episodeIndexes, PreferedQuality, true);
+            NotificationManager.Add(new NotificationItem() { Title = "Download started!", Detail = $"{instance.AttachedManager.AttachedAnimeSeriesInfo.Name} has been started!. Prefer quality: {instance.Quality}" });
+            instance.FinishedDownloading += FinishedDownloading;
         }
+
+        
 
         /// <summary>
         /// Sort hand to download all anime indexes
@@ -140,6 +144,25 @@ namespace UADAPI
             string maangerFileContent = JsonConvert.SerializeObject(CurrentAnimeSeries.AttachedAnimeSeriesInfo);
             File.WriteAllText(CurrentAnimeSeries.AttachedAnimeSeriesInfo.ManagerFileLocation, maangerFileContent);
         }
+
+
+        #region EventHanlers
+        private void FinishedDownloading(object sender, EventArgs e)
+        {
+            var instance = sender as DownloadInstance;
+            string episodeName = instance.AttachedManager.AttachedAnimeSeriesInfo.Name;
+            string quality = instance.Quality;
+            int epCount = instance.EpisodeToDownload.Count;
+            int epAllCount = instance.AttachedManager.AttachedAnimeSeriesInfo.Episodes.Count;
+            var nof = new NotificationItem()
+            {
+                Title = $"{episodeName} has finished downloading!",
+                Detail = $"{episodeName} has been downloaded. {epCount}/{epAllCount} were requested to download. Preferer quality: {quality}",
+                ShowActionButton = false
+            };
+            NotificationManager.Add(nof);
+        } 
+        #endregion
     }
 
 
