@@ -117,7 +117,7 @@
                                         <StackPanel>
                                             <Button
                                                 x:Name="btnPauseResume"
-                                                Command="{Binding PauseResumeDownloadCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:DownloadCenter}}}"
+                                                Command="{Binding DataContext.PauseResumeDownloadCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:DownloadCenter}}}"
                                                 CommandParameter="{Binding ElementName=btnPauseResume}">
                                                 <Grid>
                                                     <Grid.ColumnDefinitions>
@@ -138,7 +138,7 @@
                                             </Button>
                                             <Button
                                                 x:Name="btnCancel"
-                                                Command="{Binding CancelDownloadCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:DownloadCenter}}}"
+                                                Command="{Binding DataContext.CancelDownloadCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:DownloadCenter}}}"
                                                 CommandParameter="{Binding ElementName=btnCancel}">
                                                 <Grid>
                                                     <Grid.ColumnDefinitions>
@@ -159,7 +159,7 @@
                                             </Button>
                                             <Button
                                                 x:Name="btnRemove"
-                                                Command="{Binding RemoveFromListCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:DownloadCenter}}}"
+                                                Command="{Binding DataContext.RemoveFromListCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:DownloadCenter}}}"
                                                 CommandParameter="{Binding ElementName=btnRemove}">
                                                 <Grid>
                                                     <Grid.ColumnDefinitions>

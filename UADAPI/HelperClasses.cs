@@ -537,7 +537,7 @@ namespace UADAPI
                             else
                             {
                                 ReportProgress(downloader, item);
-                                if (!(downloader.State != DownloaderState.Paused || downloader.State != DownloaderState.Pausing))
+                                if (downloader.State != DownloaderState.Paused || downloader.State != DownloaderState.Pausing)
                                 {
                                     downloader.Start();
                                 }
