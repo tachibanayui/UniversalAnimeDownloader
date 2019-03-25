@@ -55,6 +55,7 @@
         <Setter Property="Grid.ColumnSpan" Value="3" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="VerticalContentAlignment" Value="Stretch" />
+        <Setter Property="ScrollViewer.CanContentScroll" Value="False" />
         <Setter Property="ItemContainerStyle">
             <Setter.Value>
                 <Style TargetType="ListViewItem">
@@ -275,9 +276,7 @@
                         <converters:ListViewGridViewConverter>
                             <converters:ListViewGridViewConverter.DefaultValue>
                                 <ControlTemplate TargetType="{x:Type ListView}">
-                                    <ScrollViewer>
-                                        <ItemsPresenter />
-                                    </ScrollViewer>
+                                    <ItemsPresenter />
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsGrouping" Value="True">
                                             <Setter Property="ScrollViewer.CanContentScroll" Value="False" />
@@ -287,9 +286,7 @@
                             </converters:ListViewGridViewConverter.DefaultValue>
                             <converters:ListViewGridViewConverter.ViewValue>
                                 <ControlTemplate TargetType="{x:Type ListView}">
-                                    <ScrollViewer Style="{DynamicResource}">
-                                        <ItemsPresenter />
-                                    </ScrollViewer>
+                                    <ItemsPresenter />
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsGrouping" Value="True">
                                             <Setter Property="ScrollViewer.CanContentScroll" Value="False" />

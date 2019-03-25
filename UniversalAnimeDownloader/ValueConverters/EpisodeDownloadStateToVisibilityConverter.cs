@@ -31,7 +31,7 @@ namespace UniversalAnimeDownloader.ValueConverters
                 case "IconTitle":
                     return parsedVal != EpisodeDownloadState.InDownloadQueue && parsedVal != EpisodeDownloadState.Downloading ? Visibility.Visible : Visibility.Collapsed;
                 case "WaitingTextBlock":
-                    return parsedVal == EpisodeDownloadState.InDownloadQueue ? Visibility.Visible : Visibility.Collapsed;
+                    return parsedVal != EpisodeDownloadState.Downloading ? Visibility.Visible : Visibility.Collapsed;
                 default:
                     return Visibility.Collapsed;
             }

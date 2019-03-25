@@ -98,6 +98,8 @@
     </Compile>
     <Compile Include="ValueConverters\AutomatedUnitConversionFromByteConverter.cs" />
     <Compile Include="ValueConverters\DateTimeToStringConverter.cs" />
+    <Compile Include="ValueConverters\EpisodeDownloadStateToPackIconKindConverter.cs" />
+    <Compile Include="ValueConverters\EpisodeDownloadStateToStringConverter.cs" />
     <Compile Include="ValueConverters\EpisodeDownloadStateToVisibilityConverter.cs" />
     <Compile Include="ValueConverters\GenreItemListToStringConverter.cs" />
     <Compile Include="ValueConverters\HtmlTagToColoredTextConverter.cs" />
