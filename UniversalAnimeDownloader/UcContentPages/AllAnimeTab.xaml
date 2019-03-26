@@ -183,56 +183,64 @@
                                             <TextBlock
                                                 Grid.Row="3"
                                                 FontSize="12"
-                                                Text="Click the arrow button to see more." />
+                                                Text="Click the card view to see more." />
                                         </Grid>
                                     </Grid>
                                 </materialDesign:Card>
                             </ToolTip>
                         </materialDesign:Card.ToolTip>
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition />
-                                <RowDefinition />
-                            </Grid.RowDefinitions>
-                            <Image
-                                Margin="5"
-                                Source="{Binding Thumbnail, Converter={StaticResource MediaSourceInfoToImageSourceConverter}}"
-                                Stretch="UniformToFill" />
-
-                            <Grid Grid.Row="1">
+                        <Button Command="{x:Static materialDesign:Transitioner.MoveNextCommand}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <i:InvokeCommandAction Command="{Binding DataContext.ShowAnimeDetailCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:AllAnimeTab}}}" CommandParameter="{Binding}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <ContentPresenter Content="{TemplateBinding Content}" />
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Button.Style>
+                            <Grid
+                                TextElement.FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
+                                TextElement.FontSize="14"
+                                TextElement.FontWeight="Medium"
+                                TextElement.Foreground="{DynamicResource MaterialDesignBody}">
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="35" />
+                                    <RowDefinition />
                                     <RowDefinition />
                                 </Grid.RowDefinitions>
-                                <TextBlock
+                                <Image
                                     Margin="5"
-                                    VerticalAlignment="Center"
-                                    FontWeight="SemiBold"
-                                    Text="{Binding Name}"
-                                    TextTrimming="CharacterEllipsis" />
-                                <TextBlock
-                                    Grid.Row="1"
-                                    Margin="5"
-                                    Text="{Binding Genres, Converter={StaticResource GenreItemListToStringConverter}}"
-                                    TextTrimming="WordEllipsis"
-                                    TextWrapping="WrapWithOverflow" />
+                                    Source="{Binding Thumbnail, Converter={StaticResource MediaSourceInfoToImageSourceConverter}}"
+                                    Stretch="UniformToFill" />
+
+                                <Grid Grid.Row="1">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="35" />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <TextBlock
+                                        Margin="5"
+                                        VerticalAlignment="Center"
+                                        FontWeight="SemiBold"
+                                        Text="{Binding Name}"
+                                        TextTrimming="CharacterEllipsis" />
+                                    <TextBlock
+                                        Grid.Row="1"
+                                        Margin="5"
+                                        Text="{Binding Genres, Converter={StaticResource GenreItemListToStringConverter}}"
+                                        TextTrimming="WordEllipsis"
+                                        TextWrapping="WrapWithOverflow" />
+                                </Grid>
                             </Grid>
 
-                            <Grid
-                                Grid.Row="1"
-                                Margin="15"
-                                HorizontalAlignment="Right"
-                                VerticalAlignment="Bottom">
-                                <Button Command="{x:Static materialDesign:Transitioner.MoveNextCommand}" Style="{StaticResource MaterialDesignActionFlatButton}">
-                                    <materialDesign:PackIcon Kind="ArrowRight" Style="{StaticResource SideBarNavIcon}" />
-                                    <i:Interaction.Triggers>
-                                        <i:EventTrigger EventName="Click">
-                                            <i:InvokeCommandAction Command="{Binding DataContext.ShowAnimeDetailCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:AllAnimeTab}}}" CommandParameter="{Binding}" />
-                                        </i:EventTrigger>
-                                    </i:Interaction.Triggers>
-                                </Button>
-                            </Grid>
-                        </Grid>
+                        </Button>
                     </materialDesign:Card>
                 </DataTemplate>
             </ListBox.ItemTemplate>
