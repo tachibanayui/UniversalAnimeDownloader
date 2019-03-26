@@ -52,6 +52,9 @@
     <Reference Include="Microsoft.Expression.Interactions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Windows.Interactivity.WPF.2.0.20525\lib\net40\Microsoft.Expression.Interactions.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="SegmentDownloader.Core, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -102,6 +105,9 @@
     <Compile Include="UcContentPages\NotifycationPanel.xaml.cs">
       <DependentUpon>NotifycationPanel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UcContentPages\OfflineAnimeDetail.xaml.cs">
+      <DependentUpon>OfflineAnimeDetail.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ValueConverters\AutomatedUnitConversionFromByteConverter.cs" />
     <Compile Include="ValueConverters\InvertableBoolToVisibilityConverter.cs" />
     <Compile Include="ValueConverters\DateTimeToStringConverter.cs" />
@@ -122,6 +128,7 @@
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\MyAnimeLibraryViewModel.cs" />
     <Compile Include="ViewModels\NotifycationPanelViewModel.cs" />
+    <Compile Include="ViewModels\OfflineAnimeDetailViewModel.cs" />
     <Page Include="DefinedResources\CustomStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -159,6 +166,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UcContentPages\NotifycationPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UcContentPages\OfflineAnimeDetail.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

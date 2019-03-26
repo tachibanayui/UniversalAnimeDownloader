@@ -10,5 +10,6 @@
     <vm:DownloadCenterViewModel x:Key="DownloadCenterViewModel" />
     <vm:NotifycationPanelViewModel x:Key="NotifycationPanelViewModel" />
     <vm:MyAnimeLibraryViewModel x:Key="MyAnimeLibraryViewModel" />
+    <vm:OfflineAnimeDetailViewModel x:Key="OfflineAnimeDetailViewModel" />
     <materialDesgin:PaletteHelper x:Key="PaletteHelper" />
 </ResourceDictionary>

@@ -86,7 +86,22 @@ namespace UniversalAnimeDownloader.ViewModels
             }
         }
 
-
+        private bool _IsFlipperFliped;
+        public bool IsFlipperFliped
+        {
+            get
+            {
+                return _IsFlipperFliped;
+            }
+            set
+            {
+                if (_IsFlipperFliped != value)
+                {
+                    _IsFlipperFliped = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
         #endregion
 
         #region Commands
@@ -95,6 +110,7 @@ namespace UniversalAnimeDownloader.ViewModels
         public ICommand SelectedEpisodeCommand { get; set; }
         public ICommand WatchEpisodeOnline { get; set; }
         public ICommand DownloadAnimeCommand { get; set; }
+        public ICommand OfflineVerionCommand { get; set; }
         #endregion
 
         public Task TempTask { get; set; }
@@ -102,7 +118,7 @@ namespace UniversalAnimeDownloader.ViewModels
 
         public AnimeDetailsViewModel()
         {
-            CopyDescriptionCommand = new RelayCommand<object>(p => true, p => Clipboard.SetText(CurrentSeries.AttachedAnimeSeriesInfo.Description));
+            CopyDescriptionCommand = new RelayCommand<object>(p => true, p => Clipboard.SetText(CurrentSeries.AttachedAnimeSeriesInfo.Description ?? ""));
             WatchEpisodeOnline = new RelayCommand<SelectableEpisodeInfo>(p => true, async (p) =>
             {
                 if (p != null)
@@ -114,17 +130,20 @@ namespace UniversalAnimeDownloader.ViewModels
             SelectedEpisodeCommand = new RelayCommand<TextBox>(p => true, p => { TempTask = SelectEpisodeIndex(p); });
             DownloadAnimeCommand = new RelayCommand<object>(p => true, async p =>
             {
+                IsFlipperFliped = true;
                 var selectedIndexList = new List<int>();
                 var selectedIDList = new List<int>();
                 foreach (var item in EpisodeInfo)
-                    if(item.IsSelected)
+                {
+                    if (item.IsSelected)
                     {
                         selectedIndexList.Add(item.Data.Index);
                         selectedIDList.Add(item.Data.EpisodeID);
                     }
+                }
 
                 await CurrentSeries.GetEpisodes(selectedIDList);
-                SourceControl.PreferedQuality = string.IsNullOrEmpty(SelectedQuality) ? "480p" : SelectedQuality ;
+                SourceControl.PreferedQuality = string.IsNullOrEmpty(SelectedQuality) ? "480p" : SelectedQuality;
                 SourceControl.DownloadAnimeByIndexes(selectedIndexList);
             });
         }

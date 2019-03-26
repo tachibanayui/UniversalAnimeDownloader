@@ -11,6 +11,8 @@ using System.Reflection;
 using System.Threading.Tasks;
 using UADAPI.PlatformSpecific;
 using ResourceLocation = SegmentDownloader.Core.ResourceLocation;
+using ErrorEventArgs = Newtonsoft.Json.Serialization.ErrorEventArgs;
+using System.Runtime.Serialization.Formatters;
 
 namespace UADAPI
 {
@@ -182,6 +184,11 @@ namespace UADAPI
             ModType = currentType;
         }
 
+        public ModificatorInformation()
+        {
+
+        }
+
         /// <summary>
         /// Your modidication name, this will be displayed when user select extractor mod
         /// </summary>
@@ -198,9 +205,14 @@ namespace UADAPI
         public string Description { get; set; }
 
         /// <summary>
-        /// The type of your extractor, use ModType = typeof(this) if you don't know much about refection
+        /// The type of your extractor, use ModType = GetType() if you don't know much about refection
         /// </summary>
-        public Type ModType { get; set; }
+        public Type ModType { get => Type.GetType(ModTypeString); set => ModTypeString = value.FullName; }
+
+        /// <summary>
+        /// Use to deserialize
+        /// </summary>
+        public string ModTypeString { get; set; }
     }
 
     /// <summary>
@@ -643,7 +655,13 @@ namespace UADAPI
 
         private void CreateManagerFile()
         {
-            File.WriteAllText(AttachedManager.AttachedAnimeSeriesInfo.ManagerFileLocation, JsonConvert.SerializeObject(AttachedManager.AttachedAnimeSeriesInfo, new JsonSerializerSettings() { Error = new EventHandler<Newtonsoft.Json.Serialization.ErrorEventArgs>((s, e) => { e.ErrorContext.Handled = true; }) }));
+            var jsonSetting = new JsonSerializerSettings()
+            {
+                Error = new EventHandler<ErrorEventArgs>((s, e) => e.ErrorContext.Handled = true),
+                TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Full,
+            };
+            string managerFileContent = JsonConvert.SerializeObject(AttachedManager.AttachedAnimeSeriesInfo, jsonSetting);
+            File.WriteAllText(AttachedManager.AttachedAnimeSeriesInfo.ManagerFileLocation, managerFileContent);
         }
 
         private void ReportProgress(Downloader downloader, EpisodeInfo info)
@@ -796,7 +814,7 @@ namespace UADAPI
         public static event EventHandler<NotificationEventArgs> ItemAdded;
         public static event EventHandler<NotificationEventArgs> ItemRemoved;
         public static void OnItemAdded(NotificationItem item) => ItemAdded?.Invoke(Notifications, new NotificationEventArgs() { AffectededItem = item });
-        public static void OnItemRemoved(NotificationItem item) => ItemAdded?.Invoke(Notifications, new NotificationEventArgs() { AffectededItem = item });
+        public static void OnItemRemoved(NotificationItem item) => ItemRemoved?.Invoke(Notifications, new NotificationEventArgs() { AffectededItem = item });
     }
 
     /// <summary>
@@ -1068,7 +1086,7 @@ namespace UADAPI
                 LoadAssembly();
             }
 
-            var queryRes = ManagerTypes.Where(query => query.Name == className).ToList();
+            var queryRes = ManagerTypes.Where(query => className.Contains(className)).ToList();
             if (queryRes.Count != 0)
             {
                 return Activator.CreateInstance(queryRes[0]) as IAnimeSeriesManager;

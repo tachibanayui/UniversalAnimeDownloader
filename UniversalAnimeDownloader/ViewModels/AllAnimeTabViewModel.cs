@@ -194,6 +194,7 @@ namespace UniversalAnimeDownloader.ViewModels
                     manager.AttachedAnimeSeriesInfo = p;
                     await manager.GetPrototypeEpisodes();
                     (Application.Current.FindResource("AnimeDetailsViewModel") as AnimeDetailsViewModel).CurrentSeries = manager;
+                    (Application.Current.FindResource("AnimeDetailsViewModel") as AnimeDetailsViewModel).IsFlipperFliped = false;
                 }
             });
             MiscClass.UserSearched += async(s, e) => { SearchAnime = e.Keyword; await LoadAnime(0, 50); };

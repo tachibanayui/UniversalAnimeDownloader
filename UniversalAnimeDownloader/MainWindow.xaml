@@ -143,7 +143,7 @@
                         Text="{Binding NotifycationBadgeCount}"
                         Visibility="{Binding BadgeContentVisibility}" />
                 </materialDesign:Badged.Badge>
-                <materialDesign:PopupBox StaysOpen="True" >
+                <materialDesign:PopupBox StaysOpen="True">
                     <materialDesign:PopupBox.ToggleContent>
                         <materialDesign:PackIcon Foreground="{DynamicResource MaterialDesignBody}" Kind="Bell" />
                     </materialDesign:PopupBox.ToggleContent>
@@ -213,6 +213,24 @@
                         <materialDesign:TransitionEffect Kind="SlideInFromBottom" Duration="0:0:0.5" />
                     </materialDesign:TransitionerSlide.OpeningEffects>
                     <pages:DownloadCenter />
+                </materialDesign:TransitionerSlide>
+                <materialDesign:TransitionerSlide
+                    Background="{DynamicResource MaterialDesignPaper}"
+                    ClipToBounds="True"
+                    Foreground="{DynamicResource MaterialDesignBody}">
+                    <materialDesign:TransitionerSlide.OpeningEffects>
+                        <materialDesign:TransitionEffect Kind="SlideInFromBottom" Duration="0:0:0.5" />
+                    </materialDesign:TransitionerSlide.OpeningEffects>
+                    <pages:MyAnimeLibrary />
+                </materialDesign:TransitionerSlide>
+                <materialDesign:TransitionerSlide
+                    Background="{DynamicResource MaterialDesignPaper}"
+                    ClipToBounds="True"
+                    Foreground="{DynamicResource MaterialDesignBody}">
+                    <materialDesign:TransitionerSlide.OpeningEffects>
+                        <materialDesign:TransitionEffect Kind="SlideInFromBottom" Duration="0:0:0.5" />
+                    </materialDesign:TransitionerSlide.OpeningEffects>
+                    <pages:OfflineAnimeDetail />
                 </materialDesign:TransitionerSlide>
             </materialDesign:Transitioner>
         </Grid>
@@ -298,6 +316,7 @@
                     <Button
                         Height="75"
                         HorizontalContentAlignment="Left"
+                        Command="{Binding NavigateToMyAnimeLibrary}"
                         Style="{StaticResource MaterialDesignFlatButton}">
                         <Grid>
                             <Grid.ColumnDefinitions>
