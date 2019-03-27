@@ -253,7 +253,6 @@
                     <Button
                         Height="75"
                         HorizontalContentAlignment="Left"
-                        Command="{Binding NavigateToAllAnimeCommand}"
                         Style="{StaticResource MaterialDesignFlatButton}">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -299,6 +298,8 @@
                     <Button
                         Height="75"
                         HorizontalContentAlignment="Left"
+                        Command="{Binding NavigateCommand}"
+                        CommandParameter="AllAnimeTab"
                         Style="{StaticResource MaterialDesignFlatButton}">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -316,7 +317,8 @@
                     <Button
                         Height="75"
                         HorizontalContentAlignment="Left"
-                        Command="{Binding NavigateToMyAnimeLibrary}"
+                        Command="{Binding NavigateCommand}"
+                        CommandParameter="MyAnimeLibrary"
                         Style="{StaticResource MaterialDesignFlatButton}">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -332,7 +334,8 @@
                     <Button
                         Height="75"
                         HorizontalContentAlignment="Left"
-                        Command="{Binding NavigateToDownloadCenter}"
+                        Command="{Binding NavigateCommand}"
+                        CommandParameter="DownloadCenter"
                         Style="{StaticResource MaterialDesignFlatButton}">
                         <Grid>
                             <Grid.ColumnDefinitions>

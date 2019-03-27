@@ -1,5 +1,6 @@
 ﻿using MaterialDesignThemes.Wpf;
 using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -24,10 +25,10 @@ namespace UniversalAnimeDownloader.ViewModels
         public ICommand SearchButtonClickCommand { get; set; }
         public ICommand GoBackNavigationCommand { get; set; }
         public ICommand GoForwardNavigationCommand { get; set; }
-        public ICommand NavigateToAllAnimeCommand { get; set; }
-        public ICommand NavigateToDownloadCenter { get; set; }
-        public ICommand NavigateToMyAnimeLibrary { get; set; }
         public ICommand ResetNotifyBadgeCommand { get; set; }
+
+        public ICommand NavigateCommand { get; set; }
+
         public ICommand TestCommand { get; set; }
         #endregion
 
@@ -171,13 +172,63 @@ namespace UniversalAnimeDownloader.ViewModels
 
             });
             SearchButtonClickCommand = new RelayCommand<TextBox>(p => true, p => MiscClass.OnUserSearched(this, p.Text));
-            GoBackNavigationCommand = new RelayCommand<object>(p => MiscClass.NavigationHelper.CanGoBack, p => TransisionerIndex = MiscClass.NavigationHelper.Back());
+            GoBackNavigationCommand = new RelayCommand<object>(p => MiscClass.NavigationHelper.CanGoBack, p =>{
+                TransisionerIndex = MiscClass.NavigationHelper.Back();
+                var cnt = Pages[TransisionerIndex].DataContext as IPageContent;
+                if (cnt != null)
+                    cnt.OnShow();
+                });
             GoForwardNavigationCommand = new RelayCommand<object>(p => MiscClass.NavigationHelper.CanGoForward, p => TransisionerIndex = MiscClass.NavigationHelper.Forward());
-            NavigateToDownloadCenter = new RelayCommand<object>(p => true, p => { TransisionerIndex = 2; MiscClass.NavigationHelper.AddNavigationHistory(2); });
-            NavigateToAllAnimeCommand = new RelayCommand<object>(p => true, p => { TransisionerIndex = 0; MiscClass.NavigationHelper.AddNavigationHistory(0); });
-            NavigateToMyAnimeLibrary = new RelayCommand<object>(p => true, p => { TransisionerIndex = 3; MiscClass.NavigationHelper.AddNavigationHistory(3); });
             ResetNotifyBadgeCommand = new RelayCommand<object>(p => true, p => NotifycationBadgeCount = 0);
+
+            NavigateCommand = new RelayCommand<string>(p => true, NavigateProcess);
+
             TestCommand = new RelayCommand<object>(p => true, p => { (Application.Current.FindResource("PaletteHelper") as PaletteHelper).SetLightDark(!IsDark); IsDark = !IsDark; NotificationManager.Add(new NotificationItem() { Title = "Test" }); });
         }
+
+        public void NavigateProcess(string pageName)
+        {
+            if (!string.IsNullOrEmpty(pageName))
+            {
+                int pageIndex = -1;
+                switch (pageName)
+                {
+                    case "AllAnimeTab":
+                        pageIndex = 0;
+                        break;
+                    case "MyAnimeLibrary":
+                        pageIndex = 3;
+                        break;
+                    case "DownloadCenter":
+                        pageIndex = 2;
+                        break;
+                    case "OfflineAnimeDetail":
+                        pageIndex = 4;
+                        break;
+                    default:
+                        break;
+                }
+
+                if(pageIndex != -1)
+                {
+                    TransisionerIndex = pageIndex;
+                    MiscClass.NavigationHelper.AddNavigationHistory(pageIndex);
+                    var pageContent = Pages[pageIndex].DataContext as IPageContent;
+                    if (pageContent != null)
+                        pageContent.OnShow();
+                }
+            }
+        }
+
+
+        //Test
+        public List<UserControl> Pages { get; set; } = new List<UserControl>()
+        {
+            new UcContentPages.AllAnimeTab(),
+            new UcContentPages.AnimeDetails(),
+            new UcContentPages.DownloadCenter(),
+            new UcContentPages.MyAnimeLibrary(),
+            new UcContentPages.OfflineAnimeDetail()
+        };
     }
 }

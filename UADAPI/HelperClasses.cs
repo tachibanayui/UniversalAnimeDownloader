@@ -207,12 +207,12 @@ namespace UADAPI
         /// <summary>
         /// The type of your extractor, use ModType = GetType() if you don't know much about refection
         /// </summary>
-        public Type ModType { get => Type.GetType(ModTypeString); set => ModTypeString = value.FullName; }
+        public Type ModType { get => string.IsNullOrEmpty(ModTypeString) ? Type.GetType(ModTypeString) : null; set => ModTypeString = value != null ? value.FullName : string.Empty; }
 
         /// <summary>
         /// Use to deserialize
         /// </summary>
-        public string ModTypeString { get; set; }
+        public string ModTypeString { get;set; }
     }
 
     /// <summary>

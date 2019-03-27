@@ -1,17 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Media;
+using System.Windows.Threading;
 using UADAPI;
 
 namespace UniversalAnimeDownloader.ViewModels
 {
-    public class AllAnimeTabViewModel : BaseViewModel
+    public class AllAnimeTabViewModel : BaseViewModel, IPageContent
     {
         #region Properties
         /// <summary>
@@ -162,7 +163,6 @@ namespace UniversalAnimeDownloader.ViewModels
             }
         }
 
-
         #endregion
 
 
@@ -172,7 +172,7 @@ namespace UniversalAnimeDownloader.ViewModels
             ReloadInternetCommand = new RelayCommand<object>(p => OverlayNoInternetVisibility == Visibility.Visible, async (p) => await LoadAnime(0, 50));
             AnimeListScrollingCommand = new RelayCommand<object>(p =>
             {
-                if(p != null)
+                if (p != null)
                 {
                     ScrollViewer scr = MiscClass.FindVisualChild<ScrollViewer>(p as ListBox);
                     return scr.VerticalOffset > scr.ScrollableHeight - 100 && !IsLoadOngoing && scr.ScrollableHeight != 0;
@@ -181,23 +181,22 @@ namespace UniversalAnimeDownloader.ViewModels
                 {
                     return false;
                 }
-            }, async(p) => 
+            }, async (p) =>
             {
-                await LoadAnime(AnimeInfos.Count,50, false);
+                await LoadAnime(AnimeInfos.Count, 50, false);
             });
-            ShowAnimeDetailCommand = new RelayCommand<AnimeSeriesInfo>(p => true, async(p) =>
+            ShowAnimeDetailCommand = new RelayCommand<AnimeSeriesInfo>(p => true, async (p) =>
             {
-                if(p != null)
+                if (p != null)
                 {
                     MiscClass.NavigationHelper.AddNavigationHistory(1);
-                    IAnimeSeriesManager manager = ApiHelpper.CreateAnimeSeriesManagerObjectByType(p.ModInfo.ModType);
+                    IAnimeSeriesManager manager = ApiHelpper.CreateAnimeSeriesManagerObjectByClassName(p.ModInfo.ModTypeString);
                     manager.AttachedAnimeSeriesInfo = p;
                     await manager.GetPrototypeEpisodes();
                     (Application.Current.FindResource("AnimeDetailsViewModel") as AnimeDetailsViewModel).CurrentSeries = manager;
-                    (Application.Current.FindResource("AnimeDetailsViewModel") as AnimeDetailsViewModel).IsFlipperFliped = false;
                 }
             });
-            MiscClass.UserSearched += async(s, e) => { SearchAnime = e.Keyword; await LoadAnime(0, 50); };
+            MiscClass.UserSearched += async (s, e) => { SearchAnime = e.Keyword; await LoadAnime(0, 50); };
 
             ApiHelpper.LoadAssembly();
             AnimeInfos = new DelayedObservableCollection<AnimeSeriesInfo>();
@@ -341,6 +340,10 @@ namespace UniversalAnimeDownloader.ViewModels
             }
 
             OverlayActiityIndicatorVisibility = Visibility.Collapsed;
+        }
+
+        public async void OnShow()
+        {
         }
     }
 }

@@ -14,7 +14,7 @@ using ErrorEventArgs = Newtonsoft.Json.Serialization.ErrorEventArgs;
 
 namespace UniversalAnimeDownloader.ViewModels
 {
-    class MyAnimeLibraryViewModel : BaseViewModel
+    class MyAnimeLibraryViewModel : BaseViewModel, IPageContent
     {
         #region Commmands
         public ICommand ReloadAnimeCommand { get; set; }
@@ -61,7 +61,6 @@ namespace UniversalAnimeDownloader.ViewModels
 
         public void OnShow()
         {
-
         }
     }
 }

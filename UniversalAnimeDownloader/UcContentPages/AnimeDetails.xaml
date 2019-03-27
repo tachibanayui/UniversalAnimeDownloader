@@ -87,18 +87,19 @@
                     <ColumnDefinition />
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                <materialDesign:Flipper
-                    Grid.Column="7"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
-                    IsFlipped="{Binding IsFlipperFliped}">
-                    <materialDesign:Flipper.FrontContent>
-                        <Grid />
-                    </materialDesign:Flipper.FrontContent>
-                    <materialDesign:Flipper.BackContent>
-                        <materialDesign:PackIcon Kind="Book" Style="{StaticResource AutoSizeIconPack}" />
-                    </materialDesign:Flipper.BackContent>
-                </materialDesign:Flipper>
+                <Grid Grid.Column="7" Margin="25,25,25,25">
+                    <materialDesign:Flipper
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        IsFlipped="{Binding IsFlipperFliped}">
+                        <materialDesign:Flipper.FrontContent>
+                            <Grid />
+                        </materialDesign:Flipper.FrontContent>
+                        <materialDesign:Flipper.BackContent>
+                            <materialDesign:PackIcon Kind="Book" Style="{StaticResource AutoSizeIconPack}" />
+                        </materialDesign:Flipper.BackContent>
+                    </materialDesign:Flipper>
+                </Grid>
                 <Button
                     Grid.Row="1"
                     Grid.Column="6"
@@ -106,7 +107,8 @@
                     HorizontalContentAlignment="Right"
                     VerticalContentAlignment="Stretch"
                     Command="{Binding OfflineVerionCommand}"
-                    Style="{StaticResource MaterialDesignFlatButton}">
+                    Style="{StaticResource MaterialDesignFlatButton}"
+                    Visibility="{Binding OfflineNavigationButtonVisibility}">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="20" />
@@ -216,7 +218,8 @@
                             <Button
                                 Grid.Column="6"
                                 Margin="0,0,10,0"
-                                Command="{Binding DownloadAnimeCommand}">
+                                Command="{Binding DownloadAnimeCommand}"
+                                IsEnabled="{Binding IsDownloadButtonStringEnable}">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="auto" />
@@ -224,7 +227,10 @@
                                         <ColumnDefinition Width="auto" />
                                     </Grid.ColumnDefinitions>
                                     <materialDesign:PackIcon Kind="Download" />
-                                    <TextBlock Grid.Column="2" Text="Download Seleted Episodes" />
+                                    <TextBlock
+                                        Grid.Column="2"
+                                        IsEnabled="{Binding IsDownloadButtonStringEnable}"
+                                        Text="{Binding DownloadButtonString}" />
                                 </Grid>
                             </Button>
 

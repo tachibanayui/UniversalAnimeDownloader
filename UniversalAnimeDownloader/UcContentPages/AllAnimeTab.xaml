@@ -105,7 +105,9 @@
             Grid.Row="1"
             ex:ListBoxExtensions.ScrollChangedCommand="{Binding AnimeListScrollingCommand}"
             ex:ListBoxExtensions.ScrollChangedCommandParameter="{Binding ElementName=animeList}"
-            ItemsSource="{Binding AnimeInfos}">
+            ItemsSource="{Binding AnimeInfos}"
+            VirtualizingStackPanel.IsVirtualizing="True"
+            VirtualizingStackPanel.VirtualizationMode="Recycling">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel />
@@ -219,6 +221,24 @@
                                     Margin="5"
                                     Source="{Binding Thumbnail, Converter={StaticResource MediaSourceInfoToImageSourceConverter}}"
                                     Stretch="UniformToFill" />
+                                <Grid
+                                    Grid.Row="1"
+                                    Width="25"
+                                    Height="25"
+                                    Margin="10"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Bottom">
+                                    <materialDesign:PackIcon
+                                        Kind="Download"
+                                        Style="{StaticResource AutoSizeIconPack}"
+                                        ToolTip="This anime is currently downloading"
+                                        Visibility="{Binding ., Converter={StaticResource AnimeSeriesStorageStateToIconVisibilityConverter}, ConverterParameter=Downloading}" />
+                                    <materialDesign:PackIcon
+                                        Kind="Book"
+                                        Style="{StaticResource AutoSizeIconPack}"
+                                        ToolTip="This anime can be watch offline"
+                                        Visibility="{Binding ., Converter={StaticResource AnimeSeriesStorageStateToIconVisibilityConverter}, ConverterParameter=Offline}" />
+                                </Grid>
 
                                 <Grid Grid.Row="1">
                                     <Grid.RowDefinitions>

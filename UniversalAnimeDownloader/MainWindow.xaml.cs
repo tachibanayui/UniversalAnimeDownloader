@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MaterialDesignThemes.Wpf.Transitions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,7 +19,12 @@ namespace UniversalAnimeDownloader.ValueConverters
                 return null;
 
             if (!string.IsNullOrEmpty(info.LocalFile))
-                return new BitmapImage(new Uri(info.LocalFile));
+            {
+                if(File.Exists(info.LocalFile))
+                    return new BitmapImage(new Uri(info.LocalFile));
+                else
+                    return new BitmapImage(new Uri(info.Url));
+            }
             else if (!string.IsNullOrEmpty(info.Url))
                 return new BitmapImage(new Uri(info.Url));
             else
