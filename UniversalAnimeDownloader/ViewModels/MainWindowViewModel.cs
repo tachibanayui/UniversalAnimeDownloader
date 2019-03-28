@@ -1,6 +1,7 @@
 ﻿using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -213,7 +214,21 @@ namespace UniversalAnimeDownloader.ViewModels
 
         private async void CheckForAnimeSeriesUpdate()
         {
-            NotificationManager.Add(new NotificationItem() { Title = "Check for anime updates", Detail = "We will search through your anime library to find new episode for you, please wait patiently...", ShowActionButton = true, ActionButtonContent = "Cancel" });
+            NotificationManager.Add(new NotificationItem() { Title = "Check for anime updates", Detail = "We will search through your anime library to find new episode for you, please wait patiently..." });
+            var offlineList = (Application.Current.FindResource("MyAnimeLibraryViewModel") as MyAnimeLibraryViewModel).NoDelayAnimeLib;
+            int updatedSeries = 0;
+            for (int i = 0; i < offlineList.Count; i++)
+            {
+                AnimeSeriesInfo item = offlineList[i];
+                var manager = ApiHelpper.CreateAnimeSeriesManagerObjectByClassName(item.ModInfo.ModTypeString);
+                manager.AttachedAnimeSeriesInfo = item;
+                AnimeSourceControl source = new AnimeSourceControl(manager);
+                if (await source.Update())
+                    updatedSeries++;
+            }
+
+            NotificationManager.Add(new NotificationItem() { Title = "Check for anime updates completed", Detail = $"Found {updatedSeries} anime series need to updated out of {offlineList.Count} in your library. See download center for mode detail." });
+
         }
 
         public void NavigateProcess(string pageName)

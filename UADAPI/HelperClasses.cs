@@ -83,14 +83,14 @@ namespace UADAPI
         /// <summary>
         /// Check for new episodes of this CurrentAnimeSeries
         /// </summary>
-        public void Update()
+        public async Task<bool> Update()
         {
             if (CurrentAnimeSeries.AttachedAnimeSeriesInfo.IsSelectiveDownload)
             {
-                return;
+                return false;
             }
 
-            CurrentAnimeSeries.GetEpisodes();
+            await CurrentAnimeSeries.GetPrototypeEpisodes();
 
             List<int> episodesIndex = new List<int>();
             foreach (EpisodeInfo item in CurrentAnimeSeries.AttachedAnimeSeriesInfo.Episodes)
@@ -98,10 +98,18 @@ namespace UADAPI
                 if (!item.AvailableOffline)
                 {
                     episodesIndex.Add(item.Index);
+                    await CurrentAnimeSeries.GetEpisodes(new List<int>() { item.EpisodeID });
                 }
             }
-
-            DownloadAnimeByIndexes(episodesIndex, false);
+            if(episodesIndex.Count != 0)
+            {
+                DownloadAnimeByIndexes(episodesIndex, false);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         /// <summary>
@@ -119,7 +127,8 @@ namespace UADAPI
 
                 foreach (var item2 in info.FilmSources.Keys)
                 {
-                    File.Delete(info.FilmSources[item2].LocalFile.ToString());
+                    if(File.Exists(info.FilmSources[item2].LocalFile.ToString()))
+                        File.Delete(info.FilmSources[item2].LocalFile.ToString());
                 }
             }
         }

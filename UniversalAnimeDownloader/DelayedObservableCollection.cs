@@ -19,8 +19,8 @@ namespace UniversalAnimeDownloader
         /// <summary>
         /// The wait time after a item added in the collection
         /// </summary>
-        public TimeSpan DelayInterval { get; set; } = TimeSpan.FromSeconds(.05);
-        
+        public TimeSpan DelayInterval { get; set; } = TimeSpan.FromSeconds(0.05);
+
         public async Task AddRange(IList<T> items, CancellationToken token)
         {
             for(int i = 0; i < items.Count; i++)

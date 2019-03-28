@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -23,12 +24,14 @@ namespace UniversalAnimeDownloader.ViewModels
 
 
         public DelayedObservableCollection<AnimeSeriesInfo> AnimeLibrary { get; set; } = new DelayedObservableCollection<AnimeSeriesInfo>();
+        public List<AnimeSeriesInfo> NoDelayAnimeLib { get; } = new List<AnimeSeriesInfo>();
 
         public MyAnimeLibraryViewModel()
         {
-            ReloadAnimeLibrary();
+            ReloadAnimeLibrary(true);
+            ReloadAnimeLibrary(false);
 
-            ReloadAnimeCommand = new RelayCommand<object>(p => true, async p => await ReloadAnimeLibrary());
+            ReloadAnimeCommand = new RelayCommand<object>(p => true, async p => await ReloadAnimeLibrary(false));
             ShowAnimeDetailCommand = new RelayCommand<AnimeSeriesInfo>(p => true, p =>
             {
                 MiscClass.NavigationHelper.AddNavigationHistory(4);
@@ -38,7 +41,7 @@ namespace UniversalAnimeDownloader.ViewModels
             });
         }
 
-        private async Task ReloadAnimeLibrary()
+        private async Task ReloadAnimeLibrary(bool isRealtimeList)
         {
             AnimeLibrary.Clear();
             string lib = AppDomain.CurrentDomain.BaseDirectory + "Anime Library\\";
@@ -53,9 +56,16 @@ namespace UniversalAnimeDownloader.ViewModels
                         TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Full,
                     };
                     var info = JsonConvert.DeserializeObject<AnimeSeriesInfo>(content, jsonSetting);
-
-                    await AnimeLibrary.AddAndWait(info);
+                    if (isRealtimeList)
+                        NoDelayAnimeLib.Add(info);
+                    else
+                        await AnimeLibrary.AddAndWait(info);
                 }
+            }
+            if(!isRealtimeList)
+            {
+                NoDelayAnimeLib.Clear();
+                NoDelayAnimeLib.AddRange(AnimeLibrary);
             }
         }
 
