@@ -70,7 +70,7 @@
                         Margin="10,0,10,0"
                         materialDesign:HintAssist.Hint="Genres:"
                         DisplayMemberPath="Name"
-                        ItemsSource="{Binding Genres}"
+                        ItemsSource="{Binding Genres, IsAsync=True}"
                         SelectedIndex="{Binding SelectedGenresIndex}"
                         Style="{StaticResource MaterialDesignFloatingHintComboBox}">
                         <ComboBox.ItemsPanel>
@@ -83,7 +83,7 @@
                         Grid.Column="2"
                         Margin="10,0,10,0"
                         materialDesign:HintAssist.Hint="Season:"
-                        ItemsSource="{Binding Seasons, Converter={StaticResource GenreItemListToStringConverter}}"
+                        ItemsSource="{Binding Seasons, Converter={StaticResource GenreItemListToStringConverter}, IsAsync=True}"
                         SelectedIndex="{Binding SelectedSeasonIndex}"
                         Style="{StaticResource MaterialDesignFloatingHintComboBox}">
                         <ComboBox.ItemsPanel>
@@ -105,7 +105,7 @@
             Grid.Row="1"
             ex:ListBoxExtensions.ScrollChangedCommand="{Binding AnimeListScrollingCommand}"
             ex:ListBoxExtensions.ScrollChangedCommandParameter="{Binding ElementName=animeList}"
-            ItemsSource="{Binding AnimeInfos}"
+            ItemsSource="{Binding AnimeInfos, IsAsync=True}"
             VirtualizingStackPanel.IsVirtualizing="True"
             VirtualizingStackPanel.VirtualizationMode="Recycling">
             <ListBox.ItemsPanel>
@@ -154,7 +154,7 @@
                                             <ColumnDefinition />
                                             <ColumnDefinition />
                                         </Grid.ColumnDefinitions>
-                                        <Image Margin="10" Source="{Binding Thumbnail, Converter={StaticResource MediaSourceInfoToImageSourceConverter}}" />
+                                        <Image Margin="10" Source="{Binding Thumbnail, Converter={StaticResource MediaSourceInfoToImageSourceConverter}, IsAsync=True}" />
                                         <Grid Grid.Column="1" Margin="5">
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="48" />
@@ -172,15 +172,15 @@
                                             </Grid.Resources>
                                             <TextBlock>
                                                 <Run Text="Title: " />
-                                                <Run Text="{Binding Name}" />
+                                                <Run Text="{Binding Name, IsAsync=True, FallbackValue=Loading}" />
                                             </TextBlock>
                                             <TextBlock Grid.Row="1">
                                                 <Run Text="Genres: " />
-                                                <Run Text="{Binding Genres, Converter={StaticResource GenreItemListToStringConverter}}" />
+                                                <Run Text="{Binding Genres, Converter={StaticResource GenreItemListToStringConverter}, IsAsync=True, FallbackValue=Loading}" />
                                             </TextBlock>
                                             <TextBlock Grid.Row="2">
                                                 <Run Text="Description: " />
-                                                <Run Text="{Binding Description}" />
+                                                <Run Text="{Binding Description, IsAsync=True, FallbackValue=Loading}" />
                                             </TextBlock>
                                             <TextBlock
                                                 Grid.Row="3"
@@ -219,7 +219,7 @@
                                 </Grid.RowDefinitions>
                                 <Image
                                     Margin="5"
-                                    Source="{Binding Thumbnail, Converter={StaticResource MediaSourceInfoToImageSourceConverter}}"
+                                    Source="{Binding Thumbnail, Converter={StaticResource MediaSourceInfoToImageSourceConverter}, IsAsync=True}"
                                     Stretch="UniformToFill" />
                                 <Grid
                                     Grid.Row="1"
@@ -229,15 +229,10 @@
                                     HorizontalAlignment="Right"
                                     VerticalAlignment="Bottom">
                                     <materialDesign:PackIcon
-                                        Kind="Download"
-                                        Style="{StaticResource AutoSizeIconPack}"
-                                        ToolTip="This anime is currently downloading"
-                                        Visibility="{Binding ., Converter={StaticResource AnimeSeriesStorageStateToIconVisibilityConverter}, ConverterParameter=Downloading}" />
-                                    <materialDesign:PackIcon
                                         Kind="Book"
                                         Style="{StaticResource AutoSizeIconPack}"
                                         ToolTip="This anime can be watch offline"
-                                        Visibility="{Binding ., Converter={StaticResource AnimeSeriesStorageStateToIconVisibilityConverter}, ConverterParameter=Offline}" />
+                                        Visibility="{Binding ., Converter={StaticResource AnimeSeriesStorageStateToIconVisibilityConverter}, ConverterParameter=Offline, IsAsync=True}" />
                                 </Grid>
 
                                 <Grid Grid.Row="1">
@@ -249,12 +244,12 @@
                                         Margin="5"
                                         VerticalAlignment="Center"
                                         FontWeight="SemiBold"
-                                        Text="{Binding Name}"
+                                        Text="{Binding Name, IsAsync=True, FallbackValue=Loading}"
                                         TextTrimming="CharacterEllipsis" />
                                     <TextBlock
                                         Grid.Row="1"
                                         Margin="5"
-                                        Text="{Binding Genres, Converter={StaticResource GenreItemListToStringConverter}}"
+                                        Text="{Binding Genres, Converter={StaticResource GenreItemListToStringConverter}, IsAsync=True, FallbackValue=Loading}"
                                         TextTrimming="WordEllipsis"
                                         TextWrapping="WrapWithOverflow" />
                                 </Grid>
@@ -268,7 +263,7 @@
 
 
         <Grid x:Name="overlayContainer" Grid.Row="1">
-            <Grid x:Name="overlayNoInternet" Visibility="{Binding OverlayNoInternetVisibility}">
+            <Grid x:Name="overlayNoInternet" Visibility="{Binding OverlayNoInternetVisibility, IsAsync=True, FallbackValue=Collapsed}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                     <ColumnDefinition />
@@ -301,7 +296,7 @@
                 </StackPanel>
             </Grid>
 
-            <Grid x:Name="overlayErrorOccured" Visibility="{Binding OverlayErrorOccuredVisibility}">
+            <Grid x:Name="overlayErrorOccured" Visibility="{Binding OverlayErrorOccuredVisibility, IsAsync=True, FallbackValue=Collapsed}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                     <ColumnDefinition Width="1.65*" />
@@ -332,7 +327,7 @@
                 </StackPanel>
             </Grid>
 
-            <Grid x:Name="overlayActivityIndicator" Visibility="{Binding OverlayActiityIndicatorVisibility}">
+            <Grid x:Name="overlayActivityIndicator" Visibility="{Binding OverlayActiityIndicatorVisibility, IsAsync=True, FallbackValue=Collapsed}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                     <ColumnDefinition />
