@@ -93,7 +93,7 @@
                     Grid.ColumnSpan="2"
                     HorizontalContentAlignment="Right"
                     VerticalContentAlignment="Stretch"
-                    Command="{Binding OfflineVerionCommand}"
+                    Command="{Binding OnlineVersionCommand}"
                     Style="{StaticResource MaterialDesignFlatButton}">
                     <Grid>
                         <Grid.ColumnDefinitions>

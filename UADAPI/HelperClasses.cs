@@ -39,7 +39,7 @@ namespace UADAPI
         {
             AnimeSeriesInfo info = JsonConvert.DeserializeObject<AnimeSeriesInfo>(File.ReadAllText(managerFileLocation));
 
-            var manager = ApiHelpper.CreateAnimeSeriesManagerObjectByType(info.ModInfo.ModType);
+            var manager = ApiHelpper.CreateAnimeSeriesManagerObjectByClassName(info.ModInfo.ModTypeString);
             manager.AttachedAnimeSeriesInfo = info;
 
             CurrentAnimeSeries = manager;
@@ -181,7 +181,7 @@ namespace UADAPI
         public ModificatorInformation(string name, Type currentType)
         {
             ModName = name;
-            ModType = currentType;
+            ModTypeString = currentType.FullName;
         }
 
         public ModificatorInformation()
@@ -207,7 +207,7 @@ namespace UADAPI
         /// <summary>
         /// The type of your extractor, use ModType = GetType() if you don't know much about refection
         /// </summary>
-        public Type ModType { get => string.IsNullOrEmpty(ModTypeString) ? Type.GetType(ModTypeString) : null; set => ModTypeString = value != null ? value.FullName : string.Empty; }
+        //public Type ModType { get => string.IsNullOrEmpty(ModTypeString) ? Type.GetType(ModTypeString) : null; set => ModTypeString = value != null ? value.FullName : string.Empty; }
 
         /// <summary>
         /// Use to deserialize
@@ -1127,7 +1127,8 @@ namespace UADAPI
                 LoadAssembly();
             }
 
-            var queryRes = QueryTypes.Where(query => query.Name == className).ToList();
+            var queryRes = QueryTypes.Where(
+                query => className.Contains(query.FullName)).ToList();
             if (queryRes.Count != 0)
             {
                 return Activator.CreateInstance(queryRes[0]) as IQueryAnimeSeries;

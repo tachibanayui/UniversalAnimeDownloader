@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using UADAPI;
+using UniversalAnimeDownloader.UcContentPages;
 
 namespace UniversalAnimeDownloader.ViewModels
 {
@@ -14,6 +11,7 @@ namespace UniversalAnimeDownloader.ViewModels
     {
         #region Commands
         public ICommand WatchEpisodeCommand { get; set; }
+        public ICommand OnlineVersionCommand { get; set; }
         #endregion
 
         #region BindableProperties
@@ -37,8 +35,18 @@ namespace UniversalAnimeDownloader.ViewModels
 
         public OfflineAnimeDetailViewModel()
         {
-            WatchEpisodeCommand = new RelayCommand<EpisodeInfo>(p => p.AvailableOffline, p => 
+            WatchEpisodeCommand = new RelayCommand<EpisodeInfo>(p => p.AvailableOffline, p =>
             Process.Start(p.FilmSources.Last(query => query.Value.IsFinishedRequesting).Value.LocalFile));
+
+            OnlineVersionCommand = new RelayCommand<object>(p => true,async p =>
+            {
+                var online = await ApiHelpper.CreateQueryAnimeObjectByClassName(CurrentSeries.RelativeQueryInfo.ModTypeString).GetAnimeByID(CurrentSeries.AttachedAnimeSeriesInfo.AnimeID);
+                var onlineManager = ApiHelpper.CreateAnimeSeriesManagerObjectByClassName(online.ModInfo.ModTypeString);
+                onlineManager.AttachedAnimeSeriesInfo = online;
+                await onlineManager.GetPrototypeEpisodes();
+                (Application.Current.FindResource("AnimeDetailsViewModel") as AnimeDetailsViewModel).CurrentSeries = onlineManager;
+                (Application.Current.FindResource("MainWindowViewModel") as MainWindowViewModel).NavigateProcess("AnimeDetails");
+            });
         }
 
         public void OnShow()

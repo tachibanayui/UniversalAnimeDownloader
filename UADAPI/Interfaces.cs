@@ -22,6 +22,8 @@ namespace UADAPI
         /// </summary>
         ModificatorInformation ModInfo { get; set; }
 
+        ModificatorInformation RelativeManagerInfo { get; set; }
+
         /// <summary>
         /// Tell the program how to get anime series.
         /// </summary>
@@ -44,7 +46,12 @@ namespace UADAPI
         /// <returns>A list of anime seasons</returns>
         Task<List<SeasonItem>> GetAnimeSeasons();
 
-        
+        /// <summary>
+        /// Get the anime with the specified AnimeID
+        /// </summary>
+        /// <param name="id">the id of the anime</param>
+        /// <returns></returns>
+        Task<AnimeSeriesInfo> GetAnimeByID(int id);
     }
 
     public interface IAnimeSeriesManager
@@ -55,6 +62,8 @@ namespace UADAPI
         AnimeSeriesInfo AttachedAnimeSeriesInfo { get; set; }
 
         ModificatorInformation ModInfo { get; set; }
+
+        ModificatorInformation RelativeQueryInfo { get; set; }
 
         /// <summary>
         /// Back-stored for GetQualities()

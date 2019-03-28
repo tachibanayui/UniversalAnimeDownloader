@@ -205,6 +205,9 @@ namespace UniversalAnimeDownloader.ViewModels
                     case "OfflineAnimeDetail":
                         pageIndex = 4;
                         break;
+                    case "AnimeDetails":
+                        pageIndex = 1;
+                        break;
                     default:
                         break;
                 }
