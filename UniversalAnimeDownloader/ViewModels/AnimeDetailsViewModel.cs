@@ -373,6 +373,7 @@ namespace UniversalAnimeDownloader.ViewModels
             var downloader = DownloadManager.Instances.FirstOrDefault(p => p.AttachedManager.AttachedAnimeSeriesInfo.AnimeID == value.AttachedAnimeSeriesInfo.AnimeID && (p.State == UADDownloaderState.Paused || p.State == UADDownloaderState.Working));
             var localList = (Application.Current.FindResource("MyAnimeLibraryViewModel") as MyAnimeLibraryViewModel).AnimeLibrary;
             var offline = localList.FirstOrDefault(f => f.AnimeID == value.AttachedAnimeSeriesInfo.AnimeID);
+           
             //if the episode is being download?
             if (downloader != null)
             {
@@ -403,10 +404,17 @@ namespace UniversalAnimeDownloader.ViewModels
                 OfflineNavigationButtonVisibility = Visibility.Collapsed;
             }
 
+
+            //Convert List to Selectible list
             EpisodeInfo.Clear();
+
             foreach (var item in CurrentSeries.AttachedAnimeSeriesInfo.Episodes)
             {
-                var obj = new SelectableEpisodeInfo() { Data = item, IsSelected = false, };
+                var obj = new SelectableEpisodeInfo() { Data = item, IsSelected = true };
+                if (offline != null)
+                    if (offline.Episodes.Any(p => p.EpisodeID == item.EpisodeID))
+                        obj.IsSelected = false;
+
                 obj.SelectedIndexChanged += async (s, e) =>
                 {
                     if (!isDoneStringSeleting)
@@ -423,6 +431,7 @@ namespace UniversalAnimeDownloader.ViewModels
                 };
                 EpisodeInfo.Add(obj);
             }
+
 
             SourceControl = new AnimeSourceControl(value);
         }
