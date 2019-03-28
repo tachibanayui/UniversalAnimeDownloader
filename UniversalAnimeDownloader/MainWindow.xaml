@@ -365,6 +365,51 @@
                 </StackPanel>
             </Grid>
         </ScrollViewer>
+
+        <Grid x:Name="overlay" Grid.Row="1">
+            <materialDesign:DialogHost
+                CloseOnClickAway="False"
+                DialogTheme="Inherit"
+                IsOpen="True">
+                <materialDesign:DialogHost.DialogContent>
+                    <Grid
+                        Width="600"
+                        Height="360"
+                        Margin="5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="25" />
+                            <RowDefinition />
+                            <RowDefinition Height="75" />
+                        </Grid.RowDefinitions>
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            FontWeight="SemiBold"
+                            Text="{Binding MessageTitle}" />
+                        <TextBlock
+                            Grid.Row="2"
+                            Text="{Binding MessageText}"
+                            TextWrapping="WrapWithOverflow" />
+
+                        <Grid Grid.Row="3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*" />
+                                <ColumnDefinition Width="75" />
+                                <ColumnDefinition Width="10" />
+                                <ColumnDefinition Width="75" />
+                            </Grid.ColumnDefinitions>
+
+                            <Button Grid.Column="1" Content="OK" />
+                            <Button
+                                Grid.Column="3"
+                                Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"
+                                Content="Cancel"
+                                Style="{StaticResource MaterialDesignFlatButton}" />
+                        </Grid>
+                    </Grid>
+                </materialDesign:DialogHost.DialogContent>
+            </materialDesign:DialogHost>
+        </Grid>
     </Grid>
 </Window>
 

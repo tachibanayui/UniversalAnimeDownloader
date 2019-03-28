@@ -153,8 +153,6 @@ namespace UniversalAnimeDownloader.ViewModels
                 }
             }
         }
-
-
         #endregion
 
         #region Commands

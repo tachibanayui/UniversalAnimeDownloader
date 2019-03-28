@@ -105,6 +105,43 @@ namespace UniversalAnimeDownloader.ViewModels
 
         public Brush BadgeBackgroundBrush => NotifycationBadgeCount == 0 ? new SolidColorBrush(Colors.Transparent) : Application.Current.FindResource("PrimaryHueDarkBrush") as Brush;
         public Visibility BadgeContentVisibility { get => NotifycationBadgeCount == 0 ? Visibility.Collapsed : Visibility.Visible; }
+
+        #region These properties / fields dedicated to message dialog
+        private string _MessageTitle = "Message Title";
+        public string MessageTitle
+        {
+            get
+            {
+                return _MessageTitle;
+            }
+            set
+            {
+                if (_MessageTitle != value)
+                {
+                    _MessageTitle = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private string _MessageText = "Message Text ...";
+        public string MessageText
+        {
+            get
+            {
+                return _MessageText;
+            }
+            set
+            {
+                if (_MessageText != value)
+                {
+                    _MessageText = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        #endregion
+
         #endregion
 
         public bool IsDark { get; set; }
@@ -172,12 +209,15 @@ namespace UniversalAnimeDownloader.ViewModels
 
             });
             SearchButtonClickCommand = new RelayCommand<TextBox>(p => true, p => MiscClass.OnUserSearched(this, p.Text));
-            GoBackNavigationCommand = new RelayCommand<object>(p => MiscClass.NavigationHelper.CanGoBack, p =>{
+            GoBackNavigationCommand = new RelayCommand<object>(p => MiscClass.NavigationHelper.CanGoBack, p =>
+            {
                 TransisionerIndex = MiscClass.NavigationHelper.Back();
                 var cnt = Pages[TransisionerIndex].DataContext as IPageContent;
                 if (cnt != null)
+                {
                     cnt.OnShow();
-                });
+                }
+            });
             GoForwardNavigationCommand = new RelayCommand<object>(p => MiscClass.NavigationHelper.CanGoForward, p => TransisionerIndex = MiscClass.NavigationHelper.Forward());
             ResetNotifyBadgeCommand = new RelayCommand<object>(p => true, p => NotifycationBadgeCount = 0);
 
@@ -212,13 +252,15 @@ namespace UniversalAnimeDownloader.ViewModels
                         break;
                 }
 
-                if(pageIndex != -1)
+                if (pageIndex != -1)
                 {
                     TransisionerIndex = pageIndex;
                     MiscClass.NavigationHelper.AddNavigationHistory(pageIndex);
                     var pageContent = Pages[pageIndex].DataContext as IPageContent;
                     if (pageContent != null)
+                    {
                         pageContent.OnShow();
+                    }
                 }
             }
         }
