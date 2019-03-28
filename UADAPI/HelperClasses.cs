@@ -381,6 +381,7 @@ namespace UADAPI
 
             await Task.Run(async() => await DownloadEpisodes());
             await DownloadThumbnail();
+            await CheckOfflineEpiodeAvaiblity();
             CreateManagerFile();
             if (State != UADDownloaderState.Canceled)
             {
@@ -543,7 +544,9 @@ namespace UADAPI
                 CompletedEpisodeCount++;
 
                 if (string.IsNullOrEmpty(source.LocalFile))
-                    source.LocalFile = $"{AttachedManager.AttachedAnimeSeriesInfo.AnimeSeriesSavedDirectory}{item.EpisodeID}-{item.Index} {item.Name}-{PreferedQuality}.mp4";
+                    source.LocalFile = $"{AttachedManager.AttachedAnimeSeriesInfo.AnimeSeriesSavedDirectory}{item.EpisodeID}-{item.Index}-{item.Name}.mp4";
+                if (File.Exists(source.LocalFile))
+                    File.Delete(source.LocalFile);
                 source.IsFinishedRequesting = false;
 
                 try
@@ -688,6 +691,18 @@ namespace UADAPI
 
             string managerFileContent = JsonConvert.SerializeObject(AttachedManager.AttachedAnimeSeriesInfo, jsonSetting);
             File.WriteAllText(AttachedManager.AttachedAnimeSeriesInfo.ManagerFileLocation, managerFileContent);
+        }
+
+        /// <summary>
+        /// Do all sort of validating after the download film source is complete
+        /// </summary>
+        /// <returns></returns>
+        private async Task CheckOfflineEpiodeAvaiblity()
+        {
+            await Task.Run(() => {
+                //Check if all episode is present -> mark IsSelectiveDownload to false;
+                AttachedManager.AttachedAnimeSeriesInfo.IsSelectiveDownload = AttachedManager.AttachedAnimeSeriesInfo.Episodes.All(f => f.AvailableOffline) ? false : true;
+            });
         }
 
         private void ReportProgress(Downloader downloader, EpisodeInfo info)

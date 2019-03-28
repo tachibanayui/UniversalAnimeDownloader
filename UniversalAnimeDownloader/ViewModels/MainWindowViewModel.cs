@@ -1,6 +1,7 @@
 ﻿using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -205,6 +206,14 @@ namespace UniversalAnimeDownloader.ViewModels
             NavigateCommand = new RelayCommand<string>(p => true, NavigateProcess);
 
             TestCommand = new RelayCommand<object>(p => true, p => { (Application.Current.FindResource("PaletteHelper") as PaletteHelper).SetLightDark(!IsDark); IsDark = !IsDark; NotificationManager.Add(new NotificationItem() { Title = "Test" }); });
+
+
+            CheckForAnimeSeriesUpdate();
+        }
+
+        private async void CheckForAnimeSeriesUpdate()
+        {
+            NotificationManager.Add(new NotificationItem() { Title = "Check for anime updates", Detail = "We will search through your anime library to find new episode for you, please wait patiently...", ShowActionButton = true, ActionButtonContent = "Cancel" });
         }
 
         public void NavigateProcess(string pageName)

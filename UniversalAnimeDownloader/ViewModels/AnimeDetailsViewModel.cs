@@ -164,8 +164,12 @@ namespace UniversalAnimeDownloader.ViewModels
         public ICommand OfflineVerionCommand { get; set; }
         #endregion
 
+
+        #region Properties
         public Task TempTask { get; set; }
         public bool isDoneStringSeleting { get; set; } = true;
+        public bool ManualSelectEpisodeOnDownloaded { get; set; } = false;
+        #endregion
 
         public AnimeDetailsViewModel()
         {
@@ -181,24 +185,30 @@ namespace UniversalAnimeDownloader.ViewModels
             SelectedEpisodeCommand = new RelayCommand<TextBox>(p => true, p => { TempTask = SelectEpisodeIndex(p); });
             DownloadAnimeCommand = new RelayCommand<object>(p => true, async p =>
             {
-                IsFlipperFliped = true;
-                DownloadButtonString = "Getting Information...";
-                IsDownloadButtonStringEnable = false;
-                var selectedIndexList = new List<int>();
-                var selectedIDList = new List<int>();
-                foreach (var item in EpisodeInfo)
+                MessageDialogResult result = 0;
+                if (ManualSelectEpisodeOnDownloaded)
+                    result = await MessageDialog.ShowAsync("You might trying to redownload some episodes!", "We detected that you have change the selection list. If you attempt to redownload any episodes, it will be overwritten. Do you want to continue download?", MessageDialogButton.YesNoButton);
+                if(result == MessageDialogResult.Yes)
                 {
-                    if (item.IsSelected)
+                    IsFlipperFliped = true;
+                    DownloadButtonString = "Getting Information...";
+                    IsDownloadButtonStringEnable = false;
+                    var selectedIndexList = new List<int>();
+                    var selectedIDList = new List<int>();
+                    foreach (var item in EpisodeInfo)
                     {
-                        selectedIndexList.Add(item.Data.Index);
-                        selectedIDList.Add(item.Data.EpisodeID);
+                        if (item.IsSelected)
+                        {
+                            selectedIndexList.Add(item.Data.Index);
+                            selectedIDList.Add(item.Data.EpisodeID);
+                        }
                     }
-                }
 
-                await CurrentSeries.GetEpisodes(selectedIDList);
-                SourceControl.PreferedQuality = string.IsNullOrEmpty(SelectedQuality) ? "480p" : SelectedQuality;
-                SourceControl.DownloadAnimeByIndexes(selectedIndexList);
-                DownloadButtonString = "Downloading...";
+                    await CurrentSeries.GetEpisodes(selectedIDList);
+                    SourceControl.PreferedQuality = string.IsNullOrEmpty(SelectedQuality) ? "480p" : SelectedQuality;
+                    SourceControl.DownloadAnimeByIndexes(selectedIndexList);
+                    DownloadButtonString = "Downloading...";
+                }
             });
             OfflineVerionCommand = new RelayCommand<object>(p => true, p =>
             {
@@ -264,6 +274,11 @@ namespace UniversalAnimeDownloader.ViewModels
                     await dispatcher.InvokeAsync(() => obj.SetResourceReference(Control.ForegroundProperty, "MaterialDesignBody"));
                 }
             });
+            if(DownloadButtonString == "Download missing episodes")
+            {
+                DownloadButtonString = "Download Seleted Episodes";
+                ManualSelectEpisodeOnDownloaded = true;
+            }
             isDoneStringSeleting = true;
         }
 
@@ -368,12 +383,12 @@ namespace UniversalAnimeDownloader.ViewModels
             return res;
         }
 
-        private void OnDetailAnimeChanged(IAnimeSeriesManager value)
+        private async void OnDetailAnimeChanged(IAnimeSeriesManager value)
         {
             var downloader = DownloadManager.Instances.FirstOrDefault(p => p.AttachedManager.AttachedAnimeSeriesInfo.AnimeID == value.AttachedAnimeSeriesInfo.AnimeID && (p.State == UADDownloaderState.Paused || p.State == UADDownloaderState.Working));
             var localList = (Application.Current.FindResource("MyAnimeLibraryViewModel") as MyAnimeLibraryViewModel).AnimeLibrary;
             var offline = localList.FirstOrDefault(f => f.AnimeID == value.AttachedAnimeSeriesInfo.AnimeID);
-           
+
             //if the episode is being download?
             if (downloader != null)
             {
@@ -407,12 +422,11 @@ namespace UniversalAnimeDownloader.ViewModels
 
             //Convert List to Selectible list
             EpisodeInfo.Clear();
-
             foreach (var item in CurrentSeries.AttachedAnimeSeriesInfo.Episodes)
             {
                 var obj = new SelectableEpisodeInfo() { Data = item, IsSelected = true };
                 if (offline != null)
-                    if (offline.Episodes.Any(p => p.EpisodeID == item.EpisodeID))
+                    if (offline.Episodes.Any(p => p.EpisodeID == item.EpisodeID && p.AvailableOffline == true))
                         obj.IsSelected = false;
 
                 obj.SelectedIndexChanged += async (s, e) =>
@@ -433,6 +447,7 @@ namespace UniversalAnimeDownloader.ViewModels
             }
 
 
+            ManualSelectEpisodeOnDownloaded = false;
             SourceControl = new AnimeSourceControl(value);
         }
 
