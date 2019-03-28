@@ -181,7 +181,7 @@
                             <Button
                                 Grid.Column="6"
                                 Margin="0,0,10,0"
-                                Command="{Binding DownloadAnimeCommand}">
+                                Command="{Binding PlayAllButtonCommand}">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="auto" />

@@ -79,6 +79,11 @@ namespace UADAPI
         public string Name { get; set; }
 
         /// <summary>
+        /// The slug of this episode
+        /// </summary>
+        public string Slug { get; set; }
+
+        /// <summary>
         /// This will define how to sort the episde list
         /// </summary>
         public int Index { get; set; }
@@ -118,6 +123,11 @@ namespace UADAPI
         /// The name of this anime series
         /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// The slug of this anime
+        /// </summary>
+        public string Slug { get; set; }
 
         /// <summary>
         /// The ID of this anime series in the remote host

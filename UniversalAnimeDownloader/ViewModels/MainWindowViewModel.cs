@@ -106,42 +106,23 @@ namespace UniversalAnimeDownloader.ViewModels
         public Brush BadgeBackgroundBrush => NotifycationBadgeCount == 0 ? new SolidColorBrush(Colors.Transparent) : Application.Current.FindResource("PrimaryHueDarkBrush") as Brush;
         public Visibility BadgeContentVisibility { get => NotifycationBadgeCount == 0 ? Visibility.Collapsed : Visibility.Visible; }
 
-        #region These properties / fields dedicated to message dialog
-        private string _MessageTitle = "Message Title";
-        public string MessageTitle
+
+        private MessageDialogViewModel _MessageDialogViewModel = new MessageDialogViewModel();
+        public MessageDialogViewModel MessageDialogViewModel
         {
             get
             {
-                return _MessageTitle;
+                return _MessageDialogViewModel;
             }
             set
             {
-                if (_MessageTitle != value)
+                if (_MessageDialogViewModel != value)
                 {
-                    _MessageTitle = value;
+                    _MessageDialogViewModel = value;
                     OnPropertyChanged();
                 }
             }
         }
-
-        private string _MessageText = "Message Text ...";
-        public string MessageText
-        {
-            get
-            {
-                return _MessageText;
-            }
-            set
-            {
-                if (_MessageText != value)
-                {
-                    _MessageText = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-        #endregion
-
         #endregion
 
         public bool IsDark { get; set; }

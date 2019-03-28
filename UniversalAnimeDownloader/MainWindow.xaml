@@ -370,7 +370,7 @@
             <materialDesign:DialogHost
                 CloseOnClickAway="False"
                 DialogTheme="Inherit"
-                IsOpen="True">
+                IsOpen="{Binding MessageDialogViewModel.IsDialogOpen}">
                 <materialDesign:DialogHost.DialogContent>
                     <Grid
                         Width="600"
@@ -385,10 +385,10 @@
                         <TextBlock
                             VerticalAlignment="Center"
                             FontWeight="SemiBold"
-                            Text="{Binding MessageTitle}" />
+                            Text="{Binding MessageDialogViewModel.MessageTitle}" />
                         <TextBlock
                             Grid.Row="2"
-                            Text="{Binding MessageText}"
+                            Text="{Binding MessageDialogViewModel.MessageText}"
                             TextWrapping="WrapWithOverflow" />
 
                         <Grid Grid.Row="3">
@@ -399,12 +399,32 @@
                                 <ColumnDefinition Width="75" />
                             </Grid.ColumnDefinitions>
 
-                            <Button Grid.Column="1" Content="OK" />
+                            <Button
+                                Grid.Column="1"
+                                Command="{Binding MessageDialogViewModel.ActionButtonCommand}"
+                                CommandParameter="OK"
+                                Content="OK"
+                                Visibility="{Binding MessageDialogViewModel.OKButtonVisibility}" />
+                            <Button
+                                Grid.Column="1"
+                                Command="{Binding MessageDialogViewModel.ActionButtonCommand}"
+                                CommandParameter="Yes"
+                                Content="Yes"
+                                Visibility="{Binding MessageDialogViewModel.YesButtonVisibility}" />
                             <Button
                                 Grid.Column="3"
-                                Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"
+                                Command="{Binding MessageDialogViewModel.ActionButtonCommand}"
+                                CommandParameter="Cancel"
                                 Content="Cancel"
-                                Style="{StaticResource MaterialDesignFlatButton}" />
+                                Style="{StaticResource MaterialDesignFlatButton}"
+                                Visibility="{Binding MessageDialogViewModel.CancelVisibility}" />
+                            <Button
+                                Grid.Column="3"
+                                Command="{Binding MessageDialogViewModel.ActionButtonCommand}"
+                                CommandParameter="No"
+                                Content="No"
+                                Visibility="{Binding MessageDialogViewModel.NoButtonVisibility}" />
+
                         </Grid>
                     </Grid>
                 </materialDesign:DialogHost.DialogContent>

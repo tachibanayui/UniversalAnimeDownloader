@@ -89,6 +89,7 @@
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MessageDialog.cs" />
     <Compile Include="MiscClass.cs" />
     <Compile Include="LifeSpanObservableCollection.cs" />
     <Compile Include="UcContentPages\AllAnimeTab.xaml.cs">
@@ -126,8 +127,10 @@
     <Compile Include="ViewModels\AllAnimeTabViewModel.cs" />
     <Compile Include="ViewModels\AnimeDetailsViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ButtonActionEventArgs.cs" />
     <Compile Include="ViewModels\DownloadCenterViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="ViewModels\MessageDialogViewModel.cs" />
     <Compile Include="ViewModels\MyAnimeLibraryViewModel.cs" />
     <Compile Include="ViewModels\NotifycationPanelViewModel.cs" />
     <Compile Include="ViewModels\OfflineAnimeDetailViewModel.cs" />

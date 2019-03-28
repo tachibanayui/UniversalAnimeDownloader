@@ -660,6 +660,32 @@ namespace UADAPI
                 Error = new EventHandler<ErrorEventArgs>((s, e) => e.ErrorContext.Handled = true),
                 TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Full,
             };
+
+            if(File.Exists(AttachedManager.AttachedAnimeSeriesInfo.ManagerFileLocation))
+            {
+                string fileContent = File.ReadAllText(AttachedManager.AttachedAnimeSeriesInfo.ManagerFileLocation);
+                var oldManager = JsonConvert.DeserializeObject<AnimeSeriesInfo>(fileContent, jsonSetting);
+
+                //Update the episode list
+                int missingEpisodeCount = AttachedManager.AttachedAnimeSeriesInfo.Episodes.Count - oldManager.Episodes.Count;
+                for (int i = 0; i < missingEpisodeCount; i++)
+                    oldManager.Episodes.Add(AttachedManager.AttachedAnimeSeriesInfo.Episodes[oldManager.Episodes.Count + i]);
+
+                //Change the episode downloaded before
+                foreach (var item in EpisodeToDownload)
+                {
+                    int index = oldManager.Episodes.FindIndex(p => p.EpisodeID == item.EpisodeID);
+                    if (index != -1)
+                        oldManager.Episodes[index] = item;
+                }
+
+                string modifiedManagerFileContent = JsonConvert.SerializeObject(oldManager, jsonSetting);
+                File.WriteAllText(AttachedManager.AttachedAnimeSeriesInfo.ManagerFileLocation, modifiedManagerFileContent);
+                return;
+            }
+            
+            
+
             string managerFileContent = JsonConvert.SerializeObject(AttachedManager.AttachedAnimeSeriesInfo, jsonSetting);
             File.WriteAllText(AttachedManager.AttachedAnimeSeriesInfo.ManagerFileLocation, managerFileContent);
         }
