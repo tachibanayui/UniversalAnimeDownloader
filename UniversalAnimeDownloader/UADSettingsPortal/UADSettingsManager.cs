@@ -4,12 +4,16 @@ using System;
 using System.IO;
 using System.Windows;
 using System.Windows.Media.Animation;
+using UniversalAnimeDownloader.ViewModels;
 
 namespace UniversalAnimeDownloader.UADSettingsPortal
 {
-    static class UADSettingsManager
+    class UADSettingsManager : BaseViewModel
     {
-        public static void Init()
+        private static UADSettingsManager _Ins;
+        public static UADSettingsManager Instance { get { if (_Ins == null) _Ins = new UADSettingsManager(); return _Ins; }  }
+
+        public void Init()
         {
             if (CurrentSettings == null)
             {
@@ -34,7 +38,19 @@ namespace UniversalAnimeDownloader.UADSettingsPortal
             }
 
         }
-        public static UADSettingsData CurrentSettings { get; set; }
 
+        private UADSettingsData _CurrentSettings;
+        public UADSettingsData CurrentSettings
+        {
+            get => _CurrentSettings;
+            set
+            {
+                if(_CurrentSettings != value)
+                {
+                    _CurrentSettings = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
     }
 }

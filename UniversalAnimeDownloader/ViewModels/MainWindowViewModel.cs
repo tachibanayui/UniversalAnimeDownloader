@@ -27,6 +27,7 @@ namespace UniversalAnimeDownloader.ViewModels
         public ICommand GoBackNavigationCommand { get; set; }
         public ICommand GoForwardNavigationCommand { get; set; }
         public ICommand ResetNotifyBadgeCommand { get; set; }
+        public ICommand BlackOverlayMouseDownCommand { get; set; }
 
         public ICommand NavigateCommand { get; set; }
 
@@ -146,17 +147,16 @@ namespace UniversalAnimeDownloader.ViewModels
 
         public MainWindowViewModel()
         {
-            UADSettingsManager.Init();
-            string notificationString = UADSettingsManager.CurrentSettings.Notification;
+            string notificationString = UADSettingsManager.Instance.CurrentSettings.Notification;
             NotificationManager.Deserialize(notificationString);
-            string downloadString = UADSettingsManager.CurrentSettings.Download;
+            string downloadString = UADSettingsManager.Instance.CurrentSettings.Download;
             DownloadManager.Deserialize(downloadString);
-            DownloadManager.Instances.CollectionChanged += (s,e) => UADSettingsManager.CurrentSettings.Download = DownloadManager.Serialize();
-            NotificationManager.ItemRemoved += (s,e) => UADSettingsManager.CurrentSettings.Notification = NotificationManager.Serialize();
+            DownloadManager.Instances.CollectionChanged += (s,e) => UADSettingsManager.Instance.CurrentSettings.Download = DownloadManager.Serialize();
+            NotificationManager.ItemRemoved += (s,e) => UADSettingsManager.Instance.CurrentSettings.Notification = NotificationManager.Serialize();
             NotificationManager.ItemAdded += (s, e) =>
             {
                 NotifycationBadgeCount++;
-                try { UADSettingsManager.CurrentSettings.Notification = NotificationManager.Serialize(); } catch { }
+                try { UADSettingsManager.Instance.CurrentSettings.Notification = NotificationManager.Serialize(); } catch { }
             };
 
             //NotificationManager.Add(new NotificationItem() { Title = "Test notification", Detail = "This is a test notification!", ShowActionButton = true, ActionButtonContent = "Click here!", ButtonAction = new Action(() => { MessageBox.Show("Test"); }) });
@@ -181,27 +181,8 @@ namespace UniversalAnimeDownloader.ViewModels
             });
             MinimizeWindowCommand = new RelayCommand<Window>(p => true, p => p.WindowState = WindowState.Minimized);
             DragMoveWindowCommand = new RelayCommand<Window>(p => true, p => p.DragMove());
-            ToggleNavSideBarCommand = new RelayCommand<Window>(p => true, p =>
-            {
-                if (p != null)
-                {
-                    ScrollViewer scroll = (p.Content as Grid).Children[3] as ScrollViewer;
-                    Rectangle fadeOverlay = (p.Content as Grid).Children[2] as Rectangle;
-
-                    DoubleAnimation transitionAnim = new DoubleAnimation(scroll.Width, 255, TimeSpan.FromSeconds(0.5)) { DecelerationRatio = 0.1, EasingFunction = new BackEase() { EasingMode = EasingMode.EaseOut } };
-
-                    DoubleAnimation opacityAnim = new DoubleAnimation(fadeOverlay.Opacity, 0.5, TimeSpan.FromSeconds(0.5)) { DecelerationRatio = 0.1 };
-
-                    if (!IsExpandSidePanel)
-                    {
-                        transitionAnim.To = 65;
-                        opacityAnim.To = 0;
-                    }
-
-                    scroll.BeginAnimation(FrameworkElement.WidthProperty, transitionAnim);
-                    fadeOverlay.BeginAnimation(UIElement.OpacityProperty, opacityAnim);
-                }
-            });
+            ToggleNavSideBarCommand = new RelayCommand<Window>(p => true, AnimateMenuBar);
+            BlackOverlayMouseDownCommand = new RelayCommand<Rectangle>(p => p.IsHitTestVisible = true, p => { IsExpandSidePanel = !IsExpandSidePanel; AnimateMenuBar(Window.GetWindow(p)); });
             DeleteSearchBoxCommand = new RelayCommand<TextBox>(p => true, p => p.Clear());
             CheckForEnterKeyCommand = new RelayCommand<TextBox>(p => true, p =>
             {
@@ -231,6 +212,27 @@ namespace UniversalAnimeDownloader.ViewModels
 
             NavigateCommand = new RelayCommand<string>(p => true, NavigateProcess);
             CheckForAnimeSeriesUpdate();
+        }
+
+        private void AnimateMenuBar(Window p)
+        {
+            if (p != null)
+            {
+                ScrollViewer scroll = (p.Content as Grid).Children[3] as ScrollViewer;
+                Rectangle fadeOverlay = (p.Content as Grid).Children[2] as Rectangle;
+
+                DoubleAnimation transitionAnim = new DoubleAnimation(scroll.Width, 255, TimeSpan.FromSeconds(0.5)) { DecelerationRatio = 0.1, EasingFunction = new BackEase() { EasingMode = EasingMode.EaseOut } };
+
+                DoubleAnimation opacityAnim = new DoubleAnimation(fadeOverlay.Opacity, 0.5, TimeSpan.FromSeconds(0.5)) { DecelerationRatio = 0.1 };
+
+                if (!IsExpandSidePanel)
+                {
+                    transitionAnim.To = 65;
+                    opacityAnim.To = 0;
+                }
+                scroll.BeginAnimation(FrameworkElement.WidthProperty, transitionAnim);
+                fadeOverlay.BeginAnimation(UIElement.OpacityProperty, opacityAnim);
+            }
         }
 
         private async void CheckForAnimeSeriesUpdate()

@@ -4,7 +4,8 @@
     xmlns:animations="clr-namespace:UniversalAnimeDownloader.Animations"
     xmlns:converters="clr-namespace:MaterialDesignThemes.Wpf.Converters;assembly=MaterialDesignThemes.Wpf"
     xmlns:local="clr-namespace:UniversalAnimeDownloader.DefinedResources"
-    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:vwp="clr-namespace:WpfToolkit.Controls;assembly=VirtualizingWrapPanel">
     <Style
         x:Key="MaterialDesignActionFlatButton"
         BasedOn="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
@@ -47,6 +48,15 @@
         <Setter Property="FontWeight" Value="Normal" />
         <Setter Property="TextWrapping" Value="Wrap" />
     </Style>
+
+    <ItemsPanelTemplate x:Key="WrapPanelItemPanel">
+        <WrapPanel />
+    </ItemsPanelTemplate>
+
+    <ItemsPanelTemplate x:Key="VirtualizingWrapPanelItemPanel">
+        <vwp:VirtualizingWrapPanel />
+    </ItemsPanelTemplate>
+
 
     <Style x:Key="listViewEpisodeBaseTemplate" TargetType="ListView">
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />

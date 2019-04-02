@@ -7,8 +7,10 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Controls;
 using UADAPI;
 using UniversalAnimeDownloader.ViewModels;
+using WpfToolkit.Controls;
 
 namespace UniversalAnimeDownloader.UADSettingsPortal
 {
@@ -148,6 +150,13 @@ namespace UniversalAnimeDownloader.UADSettingsPortal
                 if (_UseVirtalizingWrapPanel != value)
                 {
                     _UseVirtalizingWrapPanel = value;
+                    //Change the ItemsPanel
+                    ItemsPanelTemplate appliedPanel = null;
+                    if (value)
+                        appliedPanel = Application.Current.FindResource("VirtualizingWrapPanelItemPanel") as ItemsPanelTemplate;
+                    else
+                        appliedPanel = Application.Current.FindResource("WrapPanelItemPanel") as ItemsPanelTemplate;
+                    (Application.Current.FindResource("AllAnimeTabViewModel") as AllAnimeTabViewModel).AnimeCardPanel = appliedPanel;
                     OnPropertyChanged();
                 }
             }

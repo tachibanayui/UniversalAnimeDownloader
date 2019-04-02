@@ -190,69 +190,46 @@
             <materialDesign:Transitioner
                 materialDesign:TransitionAssist.DisableTransitions="{Binding DisableAnimation}"
                 AutoApplyTransitionOrigins="True"
+                ItemsSource="{Binding Pages}"
                 SelectedIndex="{Binding TransisionerIndex}">
-                <materialDesign:TransitionerSlide
-                    Background="{DynamicResource MaterialDesignPaper}"
-                    ClipToBounds="True"
-                    Foreground="{DynamicResource MaterialDesignBody}">
-                    <materialDesign:TransitionerSlide.OpeningEffects>
-                        <materialDesign:TransitionEffect Kind="SlideInFromBottom" Duration="0:0:0.5" />
-                    </materialDesign:TransitionerSlide.OpeningEffects>
-                    <pages:AllAnimeTab />
-                </materialDesign:TransitionerSlide>
-                <materialDesign:TransitionerSlide
-                    Background="{DynamicResource MaterialDesignPaper}"
-                    ClipToBounds="True"
-                    Foreground="{DynamicResource MaterialDesignBody}">
-                    <materialDesign:TransitionerSlide.OpeningEffects>
-                        <materialDesign:TransitionEffect Kind="SlideInFromBottom" Duration="0:0:0.5" />
-                    </materialDesign:TransitionerSlide.OpeningEffects>
-                    <pages:AnimeDetails />
-                </materialDesign:TransitionerSlide>
-                <materialDesign:TransitionerSlide
-                    Background="{DynamicResource MaterialDesignPaper}"
-                    ClipToBounds="True"
-                    Foreground="{DynamicResource MaterialDesignBody}">
-                    <materialDesign:TransitionerSlide.OpeningEffects>
-                        <materialDesign:TransitionEffect Kind="SlideInFromBottom" Duration="0:0:0.5" />
-                    </materialDesign:TransitionerSlide.OpeningEffects>
-                    <pages:DownloadCenter />
-                </materialDesign:TransitionerSlide>
-                <materialDesign:TransitionerSlide
-                    Background="{DynamicResource MaterialDesignPaper}"
-                    ClipToBounds="True"
-                    Foreground="{DynamicResource MaterialDesignBody}">
-                    <materialDesign:TransitionerSlide.OpeningEffects>
-                        <materialDesign:TransitionEffect Kind="SlideInFromBottom" Duration="0:0:0.5" />
-                    </materialDesign:TransitionerSlide.OpeningEffects>
-                    <pages:MyAnimeLibrary />
-                </materialDesign:TransitionerSlide>
-                <materialDesign:TransitionerSlide
-                    Background="{DynamicResource MaterialDesignPaper}"
-                    ClipToBounds="True"
-                    Foreground="{DynamicResource MaterialDesignBody}">
-                    <materialDesign:TransitionerSlide.OpeningEffects>
-                        <materialDesign:TransitionEffect Kind="SlideInFromBottom" Duration="0:0:0.5" />
-                    </materialDesign:TransitionerSlide.OpeningEffects>
-                    <pages:OfflineAnimeDetail />
-                </materialDesign:TransitionerSlide>
-                <materialDesign:TransitionerSlide
-                    Background="{DynamicResource MaterialDesignPaper}"
-                    ClipToBounds="True"
-                    Foreground="{DynamicResource MaterialDesignBody}">
-                    <materialDesign:TransitionerSlide.OpeningEffects>
-                        <materialDesign:TransitionEffect Kind="SlideInFromBottom" Duration="0:0:0.5" />
-                    </materialDesign:TransitionerSlide.OpeningEffects>
-                    <pages:UADSettings />
-                </materialDesign:TransitionerSlide>
+                <materialDesign:Transitioner.ItemContainerStyle>
+                    <Style BasedOn="{StaticResource {x:Type materialDesign:TransitionerSlide}}" TargetType="materialDesign:TransitionerSlide">
+                        <Setter Property="Background" Value="{DynamicResource MaterialDesignPaper}" />
+                        <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}" />
+                        <Setter Property="ClipToBounds" Value="True" />
+                        <Setter Property="OpeningEffect">
+                            <Setter.Value>
+                                <materialDesign:TransitionEffect Kind="SlideInFromBottom" Duration="0:0:0.5" />
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </materialDesign:Transitioner.ItemContainerStyle>
             </materialDesign:Transitioner>
         </Grid>
 
         <Rectangle
+            x:Name="recBlackOverlay"
             Grid.Row="2"
             Fill="Black"
-            IsHitTestVisible="False"
-            Opacity="0" />
+            Opacity="0">
+            <Rectangle.Style>
+                <Style TargetType="Rectangle">
+                    <Style.Triggers>
+                        <Trigger Property="Opacity" Value="1">
+                            <Setter Property="IsHitTestVisible" Value="True" />
+                        </Trigger>
+                        <Trigger Property="Opacity" Value="0">
+                            <Setter Property="IsHitTestVisible" Value="False" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Rectangle.Style>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseLeftButtonDown">
+                    <i:InvokeCommandAction Command="{Binding BlackOverlayMouseDownCommand}" CommandParameter="{Binding ElementName=recBlackOverlay}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </Rectangle>
 
         <ScrollViewer
             Grid.Row="1"

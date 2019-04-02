@@ -103,14 +103,10 @@
             Grid.Row="1"
             ex:ListBoxExtensions.ScrollChangedCommand="{Binding AnimeListScrollingCommand}"
             ex:ListBoxExtensions.ScrollChangedCommandParameter="{Binding ElementName=animeList}"
+            ItemsPanel="{Binding AnimeCardPanel, Mode=OneWay}"
             ItemsSource="{Binding AnimeInfos, IsAsync=True}"
             VirtualizingStackPanel.IsVirtualizing="True"
             VirtualizingStackPanel.VirtualizationMode="Recycling">
-            <ListBox.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel />
-                </ItemsPanelTemplate>
-            </ListBox.ItemsPanel>
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <materialDesign:Card

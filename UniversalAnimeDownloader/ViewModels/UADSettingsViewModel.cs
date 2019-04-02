@@ -18,22 +18,24 @@ namespace UniversalAnimeDownloader.ViewModels
         #endregion
 
 
-        public UADSettingsData SettingData => UADSettingsManager.CurrentSettings;
+        public UADSettingsData SettingData { get; set; }
         public PaletteHelper Helper { get; set; }
         public IList<Swatch> Swatches { get; }
 
         public UADSettingsViewModel()
         {
+            UADSettingsManager.Instance.Init();
+            SettingData = UADSettingsManager.Instance.CurrentSettings;
             Swatches = new SwatchesProvider().Swatches.ToList();
             Helper = new PaletteHelper();
 
-            ApplyAccentCommand = new RelayCommand<Swatch>(p => true, p => UADSettingsManager.CurrentSettings.AccentColorTheme = p);
-            ApplyPrimaryCommand = new RelayCommand<Swatch>(p => true, p => UADSettingsManager.CurrentSettings.PrimaryColorTheme = p);
+            ApplyAccentCommand = new RelayCommand<Swatch>(p => true, p => UADSettingsManager.Instance.CurrentSettings.AccentColorTheme = p);
+            ApplyPrimaryCommand = new RelayCommand<Swatch>(p => true, p => UADSettingsManager.Instance.CurrentSettings.PrimaryColorTheme = p);
             ApplyFramerateCommand = new RelayCommand<double>(p => true, p => SettingData.AnimationFrameRate = (int)p);
         }
 
-        public void OnShow() => UADSettingsManager.CurrentSettings.Save();
+        public void OnShow() => UADSettingsManager.Instance.CurrentSettings.Save();
 
-        public void OnHide() => UADSettingsManager.CurrentSettings.Save();
+        public void OnHide() => UADSettingsManager.Instance.CurrentSettings.Save();
     }
 }
