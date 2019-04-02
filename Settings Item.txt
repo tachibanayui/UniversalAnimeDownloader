@@ -1,0 +1,5 @@
+- Performance setting.
+	"You can enable/disable animation, transistion to improve performance"
+	+ Animation fps
+	+ Disable animation
+	+ Use virtualizing warp panel for anime list (decrease appearance, increase performance)

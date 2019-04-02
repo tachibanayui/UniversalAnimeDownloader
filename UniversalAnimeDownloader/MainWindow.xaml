@@ -13,6 +13,7 @@
     Title="MainWindow"
     Width="800"
     Height="450"
+    materialDesign:TransitionAssist.DisableTransitions="{Binding DisableAnimation}"
     AllowsTransparency="True"
     Background="{DynamicResource MaterialDesignPaper}"
     DataContext="{StaticResource MainWindowViewModel}"
@@ -186,7 +187,10 @@
             Grid.Row="1"
             Grid.Column="1"
             Margin="70,5,5,5">
-            <materialDesign:Transitioner AutoApplyTransitionOrigins="True" SelectedIndex="{Binding TransisionerIndex}">
+            <materialDesign:Transitioner
+                materialDesign:TransitionAssist.DisableTransitions="{Binding DisableAnimation}"
+                AutoApplyTransitionOrigins="True"
+                SelectedIndex="{Binding TransisionerIndex}">
                 <materialDesign:TransitionerSlide
                     Background="{DynamicResource MaterialDesignPaper}"
                     ClipToBounds="True"
@@ -232,6 +236,15 @@
                     </materialDesign:TransitionerSlide.OpeningEffects>
                     <pages:OfflineAnimeDetail />
                 </materialDesign:TransitionerSlide>
+                <materialDesign:TransitionerSlide
+                    Background="{DynamicResource MaterialDesignPaper}"
+                    ClipToBounds="True"
+                    Foreground="{DynamicResource MaterialDesignBody}">
+                    <materialDesign:TransitionerSlide.OpeningEffects>
+                        <materialDesign:TransitionEffect Kind="SlideInFromBottom" Duration="0:0:0.5" />
+                    </materialDesign:TransitionerSlide.OpeningEffects>
+                    <pages:UADSettings />
+                </materialDesign:TransitionerSlide>
             </materialDesign:Transitioner>
         </Grid>
 
@@ -248,7 +261,7 @@
             HorizontalScrollBarVisibility="Disabled"
             VerticalScrollBarVisibility="Hidden">
             <Grid>
-                <Rectangle Fill="{StaticResource MaterialDesignPaper}" />
+                <Rectangle Fill="{DynamicResource MaterialDesignPaper}" />
                 <StackPanel>
                     <Button
                         Height="75"
@@ -351,6 +364,8 @@
                     <Button
                         Height="75"
                         HorizontalContentAlignment="Left"
+                        Command="{Binding NavigateCommand}"
+                        CommandParameter="UADSettings"
                         Style="{StaticResource MaterialDesignFlatButton}">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -432,4 +447,3 @@
         </Grid>
     </Grid>
 </Window>
-

@@ -214,7 +214,7 @@
                                                 </TextBlock>
                                                 <TextBlock Grid.Column="2">
                                                     <Run Text="Progress:" />
-                                                    <Run Text="{Binding CompletedEpisodeCount}" /><Run Text="/" /><Run Text="{Binding EpisodeToDownload.Count, Mode=OneWay}" />
+                                                    <Run Text="{Binding CompletedEpisodeCount}" /><Run Text="/" /><Run Text="{Binding EpisodeToDownloadCount, Mode=OneWay}" />
                                                 </TextBlock>
                                             </Grid>
                                         </Grid>

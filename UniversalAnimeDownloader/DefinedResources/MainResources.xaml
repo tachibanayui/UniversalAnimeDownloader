@@ -11,5 +11,5 @@
     <vm:NotifycationPanelViewModel x:Key="NotifycationPanelViewModel" />
     <vm:MyAnimeLibraryViewModel x:Key="MyAnimeLibraryViewModel" />
     <vm:OfflineAnimeDetailViewModel x:Key="OfflineAnimeDetailViewModel" />
-    <materialDesgin:PaletteHelper x:Key="PaletteHelper" />
+    <vm:UADSettingsViewModel x:Key="UADSettingViewModel" />
 </ResourceDictionary>

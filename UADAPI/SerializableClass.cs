@@ -1,4 +1,5 @@
-﻿using SegmentDownloader.Core;
+﻿using Newtonsoft.Json;
+using SegmentDownloader.Core;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -384,6 +385,7 @@ namespace UADAPI
         }
 
         private ObservableCollection<Segment> _Segments = new ObservableCollection<Segment>();
+        [JsonIgnore]
         public ObservableCollection<Segment> Segments
         {
             get

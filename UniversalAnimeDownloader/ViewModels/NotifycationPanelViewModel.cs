@@ -13,13 +13,13 @@ namespace UniversalAnimeDownloader.ViewModels
     {
         public ICommand InvokeActionButton { get; set; }
         public ICommand RemoveNotificationItem { get; set; }
+        public ICommand ClearCommand { get; set; }
 
         public NotifycationPanelViewModel()
         {
-            InvokeActionButton = new RelayCommand<Button>(p => true, p => (p.DataContext as NotificationItem).ButtonAction.BeginInvoke(BtnActionCallBack, (p.DataContext as NotificationItem).ButtonAction));
+            InvokeActionButton = new RelayCommand<Button>(p => true, async p => await (p.DataContext as NotificationItem).InvokeAsync());
             RemoveNotificationItem = new RelayCommand<Button>(p => true, p => NotificationManager.Remove(p.DataContext as NotificationItem));
+            ClearCommand = new RelayCommand<object>(p => true, p => NotificationManager.RemoveAll());
         }
-
-        private void BtnActionCallBack(IAsyncResult ar) => (ar.AsyncState as Action).EndInvoke(ar);
     }
 }

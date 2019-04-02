@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using UADAPI;
+using UniversalAnimeDownloader.UADSettingsPortal;
 
 namespace UniversalAnimeDownloader.ViewModels
 {
@@ -206,8 +207,10 @@ namespace UniversalAnimeDownloader.ViewModels
 
                     await CurrentSeries.GetEpisodes(selectedIDList);
                     SourceControl.PreferedQuality = string.IsNullOrEmpty(SelectedQuality) ? "480p" : SelectedQuality;
-                    SourceControl.DownloadAnimeByIndexes(selectedIndexList);
+                    var downloader = SourceControl.DownloadAnimeByIndexes(selectedIndexList);
                     DownloadButtonString = "Downloading...";
+                    UADSettingsManager.CurrentSettings.Download = DownloadManager.Serialize();
+                    downloader.EpisodeDownloadCompleted += (s,e) => UADSettingsManager.CurrentSettings.Download = DownloadManager.Serialize();
                 }
             });
             OfflineVerionCommand = new RelayCommand<object>(p => true, p =>

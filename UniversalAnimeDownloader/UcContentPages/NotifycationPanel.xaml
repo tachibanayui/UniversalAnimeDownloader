@@ -29,6 +29,7 @@
                         <ColumnDefinition Width="20" />
                         <ColumnDefinition Width="10" />
                         <ColumnDefinition />
+                        <ColumnDefinition Width="125" />
                     </Grid.ColumnDefinitions>
                     <materialDesign:PackIcon Kind="Bell" Style="{StaticResource AutoSizeIconPack}" />
                     <TextBlock
@@ -37,6 +38,25 @@
                         FontSize="{DynamicResource Heading3}"
                         FontWeight="SemiBold"
                         Text="Notification" />
+                    <Button
+                        Grid.Column="3"
+                        VerticalContentAlignment="Center"
+                        Command="{Binding ClearCommand}"
+                        Style="{StaticResource MaterialDesignFlatButton}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="35" />
+                                <ColumnDefinition Width="5" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <materialDesign:PackIcon Kind="Close" Style="{StaticResource AutoSizeIconPack}" />
+                            <TextBlock
+                                Grid.Column="2"
+                                VerticalAlignment="Center"
+                                Foreground="{StaticResource MaterialDesignBody}"
+                                Text="Clear" />
+                        </Grid>
+                    </Button>
                 </Grid>
             </GroupBox.Header>
             <Grid>

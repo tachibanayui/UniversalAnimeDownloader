@@ -9,5 +9,6 @@ namespace UniversalAnimeDownloader
     interface IPageContent
     {
         void OnShow();
+        void OnHide();
     }
 }

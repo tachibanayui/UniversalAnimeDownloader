@@ -10,9 +10,8 @@ using System.Net;
 using System.Reflection;
 using System.Threading.Tasks;
 using UADAPI.PlatformSpecific;
-using ResourceLocation = SegmentDownloader.Core.ResourceLocation;
 using ErrorEventArgs = Newtonsoft.Json.Serialization.ErrorEventArgs;
-using System.Runtime.Serialization.Formatters;
+using ResourceLocation = SegmentDownloader.Core.ResourceLocation;
 
 namespace UADAPI
 {
@@ -55,12 +54,13 @@ namespace UADAPI
         /// </summary>
         /// <param name="episodeIndexes">Anime indexes</param>
         /// <param name="isSelective">If user select to download selective this series, return false when download all, download missing episdes, update</param>
-        public void DownloadAnimeByIndexes(List<int> episodeIndexes, bool isSelective = true)
+        public DownloadInstance DownloadAnimeByIndexes(List<int> episodeIndexes, bool isSelective = true)
         {
             CurrentAnimeSeries.AttachedAnimeSeriesInfo.IsSelectiveDownload = isSelective;
             var instance = DownloadManager.CreateNewDownloadInstance(CurrentAnimeSeries, episodeIndexes, PreferedQuality, true);
             NotificationManager.Add(new NotificationItem() { Title = "Download started!", Detail = $"{instance.AttachedManager.AttachedAnimeSeriesInfo.Name} has been started!. Prefer quality: {instance.PreferedQuality}" });
             instance.FinishedDownloading += FinishedDownloading;
+            return instance;
         }
 
 
@@ -101,7 +101,7 @@ namespace UADAPI
                     await CurrentAnimeSeries.GetEpisodes(new List<int>() { item.EpisodeID });
                 }
             }
-            if(episodesIndex.Count != 0)
+            if (episodesIndex.Count != 0)
             {
                 DownloadAnimeByIndexes(episodesIndex, false);
                 return true;
@@ -127,8 +127,10 @@ namespace UADAPI
 
                 foreach (var item2 in info.FilmSources.Keys)
                 {
-                    if(File.Exists(info.FilmSources[item2].LocalFile.ToString()))
+                    if (File.Exists(info.FilmSources[item2].LocalFile.ToString()))
+                    {
                         File.Delete(info.FilmSources[item2].LocalFile.ToString());
+                    }
                 }
             }
         }
@@ -221,7 +223,7 @@ namespace UADAPI
         /// <summary>
         /// Use to deserialize
         /// </summary>
-        public string ModTypeString { get;set; }
+        public string ModTypeString { get; set; }
     }
 
     /// <summary>
@@ -244,7 +246,7 @@ namespace UADAPI
         /// <summary>
         /// Number of segment to download
         /// </summary>
-        public static int SegmentCount { get; set; } = 8;
+        public static int SegmentCount { get; set; } = 5;
 
         public static TimeSpan ReportInterval { get; set; } = TimeSpan.FromSeconds(0.5);
 
@@ -254,10 +256,7 @@ namespace UADAPI
 
         public static DownloadInstance CreateNewDownloadInstance(IAnimeSeriesManager manager, List<int> episodeId, string quality, bool startNow = true)
         {
-            if (!IsRegisterProtocol)
-            {
-                RegisterProtocol();
-            }
+            RegisterProtocol();
 
             if (manager.AttachedAnimeSeriesInfo == null)
             {
@@ -270,7 +269,28 @@ namespace UADAPI
             }
 
             DownloadInstance ins = new DownloadInstance() { AttachedManager = manager, EpisodeId = episodeId, PreferedQuality = quality };
-            Instances.Add(ins);
+
+            for (int i = Instances.Count - 1; i >= 0; i--)
+            {
+                var tmp = Instances[i];
+                if (i + 1 == Instances.Count)
+                {
+                    Instances.Add(tmp);
+                }
+                else
+                {
+                    Instances[i + 1] = tmp;
+                }
+            }
+
+            if (Instances.Count == 0)
+            {
+                Instances.Add(ins);
+            }
+            else
+            {
+                Instances[0] = ins;
+            }
 
             if (startNow == true)
             {
@@ -290,18 +310,50 @@ namespace UADAPI
         {
             foreach (DownloadInstance item in Instances)
             {
-                item.Cancel();
-                Instances.Remove(item);
+                if (item.State == UADDownloaderState.Working)
+                {
+                    item.Cancel();
+                }
             }
+
+            Instances.Clear();
         }
 
         private static void RegisterProtocol()
         {
-            ProtocolProviderFactory.RegisterProtocolHandler("http", typeof(HttpProtocolProvider));
-            ProtocolProviderFactory.RegisterProtocolHandler("https", typeof(HttpProtocolProvider));
-            ProtocolProviderFactory.RegisterProtocolHandler("ftp", typeof(FtpProtocolProvider));
+            if (!IsRegisterProtocol)
+            {
+                ProtocolProviderFactory.RegisterProtocolHandler("http", typeof(HttpProtocolProvider));
+                ProtocolProviderFactory.RegisterProtocolHandler("https", typeof(HttpProtocolProvider));
+                ProtocolProviderFactory.RegisterProtocolHandler("ftp", typeof(FtpProtocolProvider));
+                IsRegisterProtocol = true;
+            }
+        }
 
-            IsRegisterProtocol = true;
+        public static string Serialize() => JsonConvert.SerializeObject(Instances);
+
+        public static void Deserialize(string value)
+        {
+            RegisterProtocol();
+            if (value != null)
+            {
+                var jsonSetting = new JsonSerializerSettings()
+                {
+                    Error = new EventHandler<ErrorEventArgs>((s, e) => e.ErrorContext.Handled = true),
+                    TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Full,
+                };
+                var tmpIns = JsonConvert.DeserializeObject<ObservableCollection<DownloadInstance>>(value, jsonSetting);
+                foreach (var item in tmpIns)
+                {
+                    item.IsInstanceFromSerialzation = true;
+                    if (item.State == UADDownloaderState.Working)
+                    {
+                        item.State = UADDownloaderState.Paused;
+                    }
+                }
+
+                Instances = new ObservableCollection<DownloadInstance>(tmpIns);
+            }
         }
     }
 
@@ -314,12 +366,16 @@ namespace UADAPI
         /// <summary>
         /// The information about this anime series
         /// </summary>
+        [JsonConverter(typeof(Converters.IAnimeSeriesManagerDeserializer))]
         public IAnimeSeriesManager AttachedManager { get; set; }
+        //For serializer
+        public AnimeSeriesInfo Info { get; set; }
         public List<int> EpisodeId { get; set; }
         public string PreferedQuality { get; set; }
         public List<EpisodeInfo> EpisodeToDownload { get; private set; } = new List<EpisodeInfo>();
         private bool IsCompletedDownloading { get; set; } = false;
-
+        [JsonIgnore]
+        public bool IsInstanceFromSerialzation { get; set; }
 
         #region BindableProperty
         private int _CompletedEpisodeCount;
@@ -338,6 +394,25 @@ namespace UADAPI
                 }
             }
         }
+
+        private int _EpisodeToDownloadCount;
+        public int EpisodeToDownloadCount
+        {
+            get
+            {
+                return _EpisodeToDownloadCount;
+            }
+            set
+            {
+                if (_EpisodeToDownloadCount != value)
+                {
+                    _EpisodeToDownloadCount = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+
 
         private UADDownloaderState _State = UADDownloaderState.NotStarted;
         public UADDownloaderState State
@@ -376,6 +451,8 @@ namespace UADAPI
                 throw new InvalidOperationException("Download is already cancel, please create a new download instance");
             }
 
+
+
             GetEpisodeToDownload();
 
             if (string.IsNullOrEmpty(AttachedManager.AttachedAnimeSeriesInfo.AnimeSeriesSavedDirectory))
@@ -388,7 +465,7 @@ namespace UADAPI
                 Directory.CreateDirectory(AttachedManager.AttachedAnimeSeriesInfo.AnimeSeriesSavedDirectory);
             }
 
-            await Task.Run(async() => await DownloadEpisodes());
+            await Task.Run(async () => await DownloadEpisodes());
             await DownloadThumbnail();
             await CheckOfflineEpiodeAvaiblity();
             CreateManagerFile();
@@ -531,10 +608,13 @@ namespace UADAPI
                         case "User-Agent":
                             request.UserAgent = headers.GetValues(item)[0];
                             break;
+                        case "Method":
+                            request.Method = headers.GetValues(item)[0];
+                            break;
                         case "Proxy-Connection":
                             break;
                         default:
-                            hds.Add(item, headers.GetValues("item")[0]);
+                            hds.Add(item, headers.GetValues(item)[0]);
                             break;
                     }
                 }
@@ -545,23 +625,66 @@ namespace UADAPI
             return request;
         }
 
-        private async Task DownloadEpisodes()
+        private async Task DownloadEpisodes(int startAt = 0)
         {
-            foreach (EpisodeInfo item in EpisodeToDownload)
+            for (int i = startAt; i < EpisodeToDownload.Count; i++)
             {
+                EpisodeInfo item = EpisodeToDownload[i];
                 MediaSourceInfo source = await GetSource(item.FilmSources, PreferedQuality);
                 CompletedEpisodeCount++;
 
                 if (string.IsNullOrEmpty(source.LocalFile))
-                    source.LocalFile = $"{AttachedManager.AttachedAnimeSeriesInfo.AnimeSeriesSavedDirectory}{item.EpisodeID}-{item.Index}-{item.Name}.mp4";
+                {
+                    source.LocalFile = $"{AttachedManager.AttachedAnimeSeriesInfo.AnimeSeriesSavedDirectory}{item.EpisodeID}-{item.Index}-{item.Name.RemoveInvalidChar()}.mp4";
+                }
+
                 if (File.Exists(source.LocalFile))
+                {
                     File.Delete(source.LocalFile);
+                }
+
                 source.IsFinishedRequesting = false;
 
                 try
                 {
                     if (!string.IsNullOrEmpty(source.Url))
                     {
+                        //Test for expired link
+                        bool renewUrl = false;
+                        while (!renewUrl)
+                        {
+                            try
+                            {
+                                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(source.Url);
+                                AddHeader(request, source.Headers);
+                                using (HttpWebResponse resp = (HttpWebResponse)await request.GetResponseAsync())
+                                {
+                                    renewUrl = true;
+                                }
+                            }
+                            catch (Exception e)
+                            {
+                                var newUrl = (await AttachedManager.GetEpisodes(new List<int>() { item.EpisodeID })).FirstOrDefault();
+                                if (newUrl != null)
+                                {
+                                    EpisodeToDownload[i] = newUrl;
+                                    item = EpisodeToDownload[i];
+                                    source = await GetSource(item.FilmSources, PreferedQuality);
+                                    if (string.IsNullOrEmpty(source.LocalFile))
+                                    {
+                                        source.LocalFile = $"{AttachedManager.AttachedAnimeSeriesInfo.AnimeSeriesSavedDirectory}{item.EpisodeID}-{item.Index}-{item.Name.RemoveInvalidChar()}.mp4";
+                                    }
+
+                                    if (File.Exists(source.LocalFile))
+                                    {
+                                        File.Delete(source.LocalFile);
+                                    }
+
+                                    source.IsFinishedRequesting = false;
+                                }
+                            }
+                        }
+
                         var downloader = SegmentDownloader.Core.DownloadManager.Instance.Add(
                         ResourceLocation.FromURL(source.Url.ToString()), null, source.LocalFile, DownloadManager.SegmentCount, false, source.Headers);
 
@@ -599,6 +722,11 @@ namespace UADAPI
                         IsCompletedDownloading = false;
                         while (!IsCompletedDownloading)
                         {
+                            if (downloader.State == DownloaderState.EndedWithError)
+                            {
+                                throw new Exception("Failed downloading");
+                            }
+
                             if (State == UADDownloaderState.Canceled)
                             {
                                 SegmentDownloader.Core.DownloadManager.Instance.RemoveDownload(downloader);
@@ -650,17 +778,23 @@ namespace UADAPI
         {
             int index = DownloadManager.PresetQuality.IndexOf(preferedQuality);
             if (index < 0)
+            {
                 return null;
+            }
 
             for (int i = index; i >= 0; i--)
             {
                 var result = await AttachedManager.GetCommonQuality(filmSources, DownloadManager.PresetQuality[i]);
                 if (result != null)
+                {
                     return result;
+                }
             }
 
             foreach (var item in filmSources.Keys)
+            {
                 return filmSources[item];
+            }
 
             return null;
         }
@@ -673,7 +807,7 @@ namespace UADAPI
                 TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Full,
             };
 
-            if(File.Exists(AttachedManager.AttachedAnimeSeriesInfo.ManagerFileLocation))
+            if (File.Exists(AttachedManager.AttachedAnimeSeriesInfo.ManagerFileLocation))
             {
                 string fileContent = File.ReadAllText(AttachedManager.AttachedAnimeSeriesInfo.ManagerFileLocation);
                 var oldManager = JsonConvert.DeserializeObject<AnimeSeriesInfo>(fileContent, jsonSetting);
@@ -681,22 +815,26 @@ namespace UADAPI
                 //Update the episode list
                 int missingEpisodeCount = AttachedManager.AttachedAnimeSeriesInfo.Episodes.Count - oldManager.Episodes.Count;
                 for (int i = 0; i < missingEpisodeCount; i++)
+                {
                     oldManager.Episodes.Add(AttachedManager.AttachedAnimeSeriesInfo.Episodes[oldManager.Episodes.Count + i]);
+                }
 
                 //Change the episode downloaded before
                 foreach (var item in EpisodeToDownload)
                 {
                     int index = oldManager.Episodes.FindIndex(p => p.EpisodeID == item.EpisodeID);
                     if (index != -1)
+                    {
                         oldManager.Episodes[index] = item;
+                    }
                 }
 
                 string modifiedManagerFileContent = JsonConvert.SerializeObject(oldManager, jsonSetting);
                 File.WriteAllText(AttachedManager.AttachedAnimeSeriesInfo.ManagerFileLocation, modifiedManagerFileContent);
                 return;
             }
-            
-            
+
+
 
             string managerFileContent = JsonConvert.SerializeObject(AttachedManager.AttachedAnimeSeriesInfo, jsonSetting);
             File.WriteAllText(AttachedManager.AttachedAnimeSeriesInfo.ManagerFileLocation, managerFileContent);
@@ -708,7 +846,8 @@ namespace UADAPI
         /// <returns></returns>
         private async Task CheckOfflineEpiodeAvaiblity()
         {
-            await Task.Run(() => {
+            await Task.Run(() =>
+            {
                 //Check if all episode is present -> mark IsSelectiveDownload to false;
                 AttachedManager.AttachedAnimeSeriesInfo.IsSelectiveDownload = AttachedManager.AttachedAnimeSeriesInfo.Episodes.All(f => f.AvailableOffline) ? false : true;
             });
@@ -747,7 +886,7 @@ namespace UADAPI
 
         private void AssignDirectory()
         {
-            AttachedManager.AttachedAnimeSeriesInfo.AnimeSeriesSavedDirectory = DownloadManager.DownloadDirectory + AttachedManager.AttachedAnimeSeriesInfo.AnimeID.ToString() + "-" + AttachedManager.AttachedAnimeSeriesInfo.Name + "\\";
+            AttachedManager.AttachedAnimeSeriesInfo.AnimeSeriesSavedDirectory = DownloadManager.DownloadDirectory + AttachedManager.AttachedAnimeSeriesInfo.AnimeID.ToString() + "-" + AttachedManager.AttachedAnimeSeriesInfo.Name.RemoveInvalidChar() + "\\";
             AttachedManager.AttachedAnimeSeriesInfo.ManagerFileLocation = AttachedManager.AttachedAnimeSeriesInfo.AnimeSeriesSavedDirectory + "Manager.json";
 
 
@@ -786,6 +925,8 @@ namespace UADAPI
                     EpisodeToDownload.Add(info);
                 }
             }
+
+            EpisodeToDownloadCount = EpisodeToDownload.Count;
         }
 
         /// <summary>
@@ -812,6 +953,33 @@ namespace UADAPI
             }
 
             State = UADDownloaderState.Working;
+            if (IsInstanceFromSerialzation)
+            {
+                RestartFromSerialzation();
+            }
+        }
+
+        private async void RestartFromSerialzation()
+        {
+            var index = EpisodeToDownload.FindIndex(p => p.EpisodeDownloadState.EpisodeDownloadState == EpisodeDownloadState.Downloading);
+            if (index == -1)
+            {
+                index = 0;
+            }
+
+            GetEpisodeToDownload();
+
+            CompletedEpisodeCount--;
+            await DownloadEpisodes(index);
+            await DownloadThumbnail();
+            await CheckOfflineEpiodeAvaiblity();
+            CreateManagerFile();
+            if (State != UADDownloaderState.Canceled)
+            {
+                State = UADDownloaderState.Finished;
+            }
+
+            OnFinishedDownloading();
         }
 
         /// <summary>
@@ -841,7 +1009,28 @@ namespace UADAPI
         public static ObservableCollection<NotificationItem> Notifications { get; private set; } = new ObservableCollection<NotificationItem>();
         public static void Add(NotificationItem item)
         {
-            Notifications.Add(item);
+            for (int i = Notifications.Count - 1; i >= 0; i--)
+            {
+                var tmp = Notifications[i];
+                if (i + 1 == Notifications.Count)
+                {
+                    Notifications.Add(tmp);
+                }
+                else
+                {
+                    Notifications[i + 1] = tmp;
+                }
+            }
+
+            if (Notifications.Count == 0)
+            {
+                Notifications.Add(item);
+            }
+            else
+            {
+                Notifications[0] = item;
+            }
+
             OnItemAdded(item);
         }
         public static void Remove(NotificationItem item)
@@ -859,6 +1048,27 @@ namespace UADAPI
             var item = Notifications[index];
             Notifications.Remove(item);
             OnItemRemoved(item);
+        }
+        public static void RemoveAll()
+        {
+            Notifications.Clear();
+            OnItemRemoved(null);
+        }
+
+
+        public static string Serialize() => JsonConvert.SerializeObject(Notifications);
+
+        public static void Deserialize(string value)
+        {
+            if (value != null)
+            {
+                var tmp = JsonConvert.DeserializeObject<ObservableCollection<NotificationItem>>(value);
+                Notifications = new ObservableCollection<NotificationItem>(tmp);
+            }
+            else
+            {
+                Notifications = new ObservableCollection<NotificationItem>();
+            }
         }
 
         public static event EventHandler<NotificationEventArgs> ItemAdded;
@@ -885,10 +1095,27 @@ namespace UADAPI
         /// The string will be placed in the button. Can be null or empty
         /// </summary>
         public string ActionButtonContent { get; set; }
+
         /// <summary>
-        /// THe callback if the user click the button, Can be null
+        /// Will be invoke if user click the button, Method must be public 
+        /// <para>Format: {Type in full name} Example: UADEx.HelperClass</para>
+        /// <para>You should create a static class for any method link to this property, Nested class is not avaible</para>
         /// </summary>
-        public Action ButtonAction { get; set; } = () => { };
+        public string ButtonActionStringClass { get; set; }
+        /// <summary>
+        /// Will be invoke if user click the button. Method must be public 
+        /// <para>Format: {Method name without bracket} Example: CreateMethod</para>
+        /// <para>You should create a static class for any method link to this property, Nested class is not avaible</para>
+        /// </summary>
+        public string ButtonActionStringMethod { get; set; }
+
+        public async Task InvokeAsync()
+        {
+            return;
+            var type = Type.GetType(ButtonActionStringClass);
+            var method = type.GetMethod(ButtonActionStringMethod);
+            await Task.Run(() => method.Invoke(null, null));
+        }
     }
 
 
@@ -1066,24 +1293,10 @@ namespace UADAPI
             return true;
         }
 
-        private static void SaveCacheToFile(string saveLocation)
-        {
-            string content = JsonConvert.SerializeObject(HistoricalRequests);
-            if (File.Exists(saveLocation))
-            {
-                File.Delete(saveLocation);
-            }
+        private static void Serialize() => JsonConvert.SerializeObject(HistoricalRequests);
 
-            File.WriteAllText(saveLocation, content);
-        }
-
-        private static void LoadCacheFromFile(string saveLocation)
-        {
-            string content = File.ReadAllText(saveLocation);
-            HistoricalRequests = JsonConvert.DeserializeObject<List<RequestCacheItem>>(content);
-        }
+        private static void Deserialize(string value) => HistoricalRequests = JsonConvert.DeserializeObject<List<RequestCacheItem>>(value);
     }
-
 
     /// <summary>
     /// This class is provide option for UAD. 

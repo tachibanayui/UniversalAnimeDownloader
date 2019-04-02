@@ -1,8 +1,6 @@
 ﻿using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -10,6 +8,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using UADAPI;
+using UniversalAnimeDownloader.UADSettingsPortal;
 
 namespace UniversalAnimeDownloader.ViewModels
 {
@@ -31,7 +30,6 @@ namespace UniversalAnimeDownloader.ViewModels
 
         public ICommand NavigateCommand { get; set; }
 
-        public ICommand TestCommand { get; set; }
         #endregion
 
         #region BindableProperties
@@ -125,17 +123,43 @@ namespace UniversalAnimeDownloader.ViewModels
                 }
             }
         }
+
+        private bool _DisableAnimation;
+        public bool DisableAnimation
+        {
+            get
+            {
+                return _DisableAnimation;
+            }
+            set
+            {
+                if (_DisableAnimation != value)
+                {
+                    _DisableAnimation = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+
         #endregion
 
-        public bool IsDark { get; set; }
         public MainWindowViewModel()
         {
-            NotificationManager.ItemAdded += (s, e) => NotifycationBadgeCount++;
-            //NotificationManager.Add(new NotificationItem() { Title = "Test notification", Detail = "This is a test notification!", ShowActionButton = true, ActionButtonContent = "Click here!", ButtonAction = new Action(() => { MessageBox.Show("Test"); }) });
-            //NotificationManager.Add(new NotificationItem() { Title = "Test notification", Detail = "This is a test notification!", ShowActionButton = false, ActionButtonContent = "Click here!", ButtonAction = new Action(() => { MessageBox.Show("Test"); }) });
-            //NotificationManager.Add(new NotificationItem() { Title = "Test notification", Detail = "This is a test notification!", ShowActionButton = true, ActionButtonContent = "Click here!", ButtonAction = new Action(() => { MessageBox.Show("Test"); }) });
-            //NotificationManager.Add(new NotificationItem() { Title = "Test notification", Detail = "This is a test notification!", ShowActionButton = true, ActionButtonContent = "Click here!", ButtonAction = new Action(() => { MessageBox.Show("Test"); }) });
+            UADSettingsManager.Init();
+            string notificationString = UADSettingsManager.CurrentSettings.Notification;
+            NotificationManager.Deserialize(notificationString);
+            string downloadString = UADSettingsManager.CurrentSettings.Download;
+            DownloadManager.Deserialize(downloadString);
+            DownloadManager.Instances.CollectionChanged += (s,e) => UADSettingsManager.CurrentSettings.Download = DownloadManager.Serialize();
+            NotificationManager.ItemRemoved += (s,e) => UADSettingsManager.CurrentSettings.Notification = NotificationManager.Serialize();
+            NotificationManager.ItemAdded += (s, e) =>
+            {
+                NotifycationBadgeCount++;
+                try { UADSettingsManager.CurrentSettings.Notification = NotificationManager.Serialize(); } catch { }
+            };
 
+            //NotificationManager.Add(new NotificationItem() { Title = "Test notification", Detail = "This is a test notification!", ShowActionButton = true, ActionButtonContent = "Click here!", ButtonAction = new Action(() => { MessageBox.Show("Test"); }) });
 
             CloseWindowCommand = new RelayCommand<object>(p => true, p => Application.Current.Shutdown());
             ChangeWindowStateCommand = new RelayCommand<Button>(p => true, p =>
@@ -205,16 +229,11 @@ namespace UniversalAnimeDownloader.ViewModels
             ResetNotifyBadgeCommand = new RelayCommand<object>(p => true, p => NotifycationBadgeCount = 0);
 
             NavigateCommand = new RelayCommand<string>(p => true, NavigateProcess);
-
-            TestCommand = new RelayCommand<object>(p => true, p => { (Application.Current.FindResource("PaletteHelper") as PaletteHelper).SetLightDark(!IsDark); IsDark = !IsDark; NotificationManager.Add(new NotificationItem() { Title = "Test" }); });
-
-
             CheckForAnimeSeriesUpdate();
         }
 
         private async void CheckForAnimeSeriesUpdate()
         {
-            NotificationManager.Add(new NotificationItem() { Title = "Check for anime updates", Detail = "We will search through your anime library to find new episode for you, please wait patiently..." });
             var offlineList = (Application.Current.FindResource("MyAnimeLibraryViewModel") as MyAnimeLibraryViewModel).NoDelayAnimeLib;
             int updatedSeries = 0;
             for (int i = 0; i < offlineList.Count; i++)
@@ -224,11 +243,12 @@ namespace UniversalAnimeDownloader.ViewModels
                 manager.AttachedAnimeSeriesInfo = item;
                 AnimeSourceControl source = new AnimeSourceControl(manager);
                 if (await source.Update())
+                {
                     updatedSeries++;
+                }
             }
 
             NotificationManager.Add(new NotificationItem() { Title = "Check for anime updates completed", Detail = $"Found {updatedSeries} anime series need to updated out of {offlineList.Count} in your library. See download center for mode detail." });
-
         }
 
         public void NavigateProcess(string pageName)
@@ -253,16 +273,22 @@ namespace UniversalAnimeDownloader.ViewModels
                     case "AnimeDetails":
                         pageIndex = 1;
                         break;
+                    case "UADSettings":
+                        pageIndex = 5;
+                        break;
                     default:
                         break;
                 }
 
                 if (pageIndex != -1)
                 {
+                    if (Pages[TransisionerIndex].DataContext is IPageContent cont)
+                    {
+                        cont.OnHide();
+                    }
                     TransisionerIndex = pageIndex;
                     MiscClass.NavigationHelper.AddNavigationHistory(pageIndex);
-                    var pageContent = Pages[pageIndex].DataContext as IPageContent;
-                    if (pageContent != null)
+                    if (Pages[pageIndex].DataContext is IPageContent pageContent)
                     {
                         pageContent.OnShow();
                     }
@@ -278,7 +304,8 @@ namespace UniversalAnimeDownloader.ViewModels
             new UcContentPages.AnimeDetails(),
             new UcContentPages.DownloadCenter(),
             new UcContentPages.MyAnimeLibrary(),
-            new UcContentPages.OfflineAnimeDetail()
+            new UcContentPages.OfflineAnimeDetail(),
+            new UcContentPages.UADSettings()
         };
     }
 }

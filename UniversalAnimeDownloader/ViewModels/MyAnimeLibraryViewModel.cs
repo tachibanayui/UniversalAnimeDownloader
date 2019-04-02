@@ -72,5 +72,10 @@ namespace UniversalAnimeDownloader.ViewModels
         public void OnShow()
         {
         }
+
+        public void OnHide()
+        {
+            
+        }
     }
 }

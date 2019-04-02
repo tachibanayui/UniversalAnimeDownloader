@@ -74,14 +74,7 @@ namespace UniversalAnimeDownloader.ViewModels
                     if (item.State == UADDownloaderState.Paused)
                         item.Resume();
             });
-            RemoveAllCommand = new RelayCommand<Button>(p => true, p =>
-            {
-                foreach (var item in DownloadManager.Instances)
-                    if (item.State == UADDownloaderState.Working)
-                        item.Cancel();
-
-                DownloadManager.Instances.Clear();
-            });
+            RemoveAllCommand = new RelayCommand<Button>(p => true, p => DownloadManager.DeleteAllDownloadProcess());
         }
 
         private bool CanPauseCancelButtonExcute(Button p)

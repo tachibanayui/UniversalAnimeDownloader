@@ -13,7 +13,7 @@ namespace UniversalAnimeDownloader
         public static NavigationTrack NavigationHelper { get; set; } = new NavigationTrack();
         public static List<string> PresetQuality { get; set; } = new List<string>
         {
-            "144p", "288p", "360p", "480p", "720p", "1080p", "1440p (2k)", "2160p (4k)", "Best possible", "Worse possible"
+            "144p", "288p", "360p", "480p", "720p", "1080p", "1440p", "2160p", "Best possible", "Worse possible"
         };
 
         public static event EventHandler<SearchEventArgs> UserSearched;
@@ -196,6 +196,15 @@ namespace UniversalAnimeDownloader
         {
             History.Clear();
             _Position = -1;
+        }
+    }
+
+
+    public class InvokeMethod
+    {
+        public void Test()
+        {
+            MessageBox.Show("YSyy");
         }
     }
 }

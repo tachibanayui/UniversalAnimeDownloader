@@ -342,7 +342,11 @@ namespace UniversalAnimeDownloader.ViewModels
             OverlayActiityIndicatorVisibility = Visibility.Collapsed;
         }
 
-        public async void OnShow()
+        public void OnShow()
+        {
+        }
+
+        public void OnHide()
         {
         }
     }
