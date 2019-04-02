@@ -210,6 +210,7 @@ namespace UniversalAnimeDownloader.ViewModels
                     if (p.Text.Contains("\n") || p.Text.Contains("\r"))
                     {
                         p.Text = p.Text.Trim('\r', '\n');
+                        p.CaretIndex = p.Text.Length;
                         MiscClass.OnUserSearched(this, p.Text);
                     }
                 }

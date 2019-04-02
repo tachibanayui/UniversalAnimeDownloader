@@ -26,13 +26,12 @@
             <RowDefinition />
         </Grid.RowDefinitions>
         <materialDesign:Card
-            Height="150"
+            Height="100"
             Margin="10,5,10,0"
             materialDesign:ShadowAssist.ShadowDepth="Depth3"
             UniformCornerRadius="10">
             <Grid Margin="5">
                 <Grid.RowDefinitions>
-                    <RowDefinition />
                     <RowDefinition />
                     <RowDefinition />
                 </Grid.RowDefinitions>
@@ -41,7 +40,6 @@
                     FontSize="{DynamicResource Heading2}"
                     Text="Browse all anime " />
                 <TextBlock
-                    Grid.Row="1"
                     VerticalAlignment="Bottom"
                     FontSize="{DynamicResource Heading2}"
                     Text="Filter: " />

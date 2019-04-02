@@ -48,7 +48,7 @@
                             <RowDefinition />
                         </Grid.RowDefinitions>
                         <materialDesign:PackIcon Kind="PlaylistRemove" Style="{StaticResource AutoSizeIconPack}" />
-                        <TextBlock Style="{StaticResource DownloadMenuCenterTextBlock}" Text="Remove download history" />
+                        <TextBlock Style="{StaticResource DownloadMenuCenterTextBlock}" Text="Remove history" />
                     </Grid>
                 </Button>
                 <Button
@@ -64,7 +64,7 @@
                             <RowDefinition />
                         </Grid.RowDefinitions>
                         <materialDesign:PackIcon Kind="Cancel" Style="{StaticResource AutoSizeIconPack}" />
-                        <TextBlock Style="{StaticResource DownloadMenuCenterTextBlock}" Text="Cancel all download" />
+                        <TextBlock Style="{StaticResource DownloadMenuCenterTextBlock}" Text="Cancel all" />
                     </Grid>
                 </Button>
                 <Button
@@ -80,7 +80,7 @@
                             <RowDefinition />
                         </Grid.RowDefinitions>
                         <materialDesign:PackIcon Kind="Pause" Style="{StaticResource AutoSizeIconPack}" />
-                        <TextBlock Style="{StaticResource DownloadMenuCenterTextBlock}" Text="Pause all download" />
+                        <TextBlock Style="{StaticResource DownloadMenuCenterTextBlock}" Text="Pause all" />
                     </Grid>
                 </Button>
                 <Button
@@ -96,7 +96,7 @@
                             <RowDefinition />
                         </Grid.RowDefinitions>
                         <materialDesign:PackIcon Kind="Play" Style="{StaticResource AutoSizeIconPack}" />
-                        <TextBlock Style="{StaticResource DownloadMenuCenterTextBlock}" Text="Resume all download" />
+                        <TextBlock Style="{StaticResource DownloadMenuCenterTextBlock}" Text="Resume all" />
                     </Grid>
                 </Button>
             </Grid>

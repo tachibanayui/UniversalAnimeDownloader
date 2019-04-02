@@ -3,11 +3,13 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
 using UADAPI;
 
@@ -22,12 +24,24 @@ namespace UniversalAnimeDownloader.ViewModels
         public ICommand ShowAnimeDetailCommand { get; set; }
         #endregion
 
+        #region Fields / Properties
+        public string LastSearchedKeyWord { get; set; }
+        #endregion
+
 
         public DelayedObservableCollection<AnimeSeriesInfo> AnimeLibrary { get; set; } = new DelayedObservableCollection<AnimeSeriesInfo>();
         public List<AnimeSeriesInfo> NoDelayAnimeLib { get; } = new List<AnimeSeriesInfo>();
 
         public MyAnimeLibraryViewModel()
         {
+            MiscClass.UserSearched += (s, e) =>
+            {
+                LastSearchedKeyWord = e.Keyword;
+                ICollectionView view = CollectionViewSource.GetDefaultView(AnimeLibrary);
+                view.Filter += SearchAnimeLibrary;
+                view.Refresh();
+            };
+
             ReloadAnimeLibrary(true);
             ReloadAnimeLibrary(false);
 
@@ -39,6 +53,14 @@ namespace UniversalAnimeDownloader.ViewModels
                 manager.AttachedAnimeSeriesInfo = p;
                 (Application.Current.FindResource("OfflineAnimeDetailViewModel") as OfflineAnimeDetailViewModel).CurrentSeries = manager;
             });
+        }
+
+        private bool SearchAnimeLibrary(object obj)
+        {
+            if (string.IsNullOrEmpty(LastSearchedKeyWord))
+                return true;
+            else
+                return (obj as AnimeSeriesInfo).Name.ToLower().Contains(LastSearchedKeyWord.ToLower());
         }
 
         private async Task ReloadAnimeLibrary(bool isRealtimeList)
