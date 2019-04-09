@@ -1181,7 +1181,7 @@ namespace UADAPI
                 if (max > 0)
                     clacFrom = offset % max;
 
-                return await querier.GetAnime(offset, count);
+                return await querier.GetAnime(clacFrom, count);
             }
 
             List<GenreItemInterest> interest = new List<GenreItemInterest>();
