@@ -38,6 +38,7 @@ namespace UniversalAnimeDownloader.ViewModels
         public OfflineAnimeDetailViewModel()
         {
             CopyDescriptionCommand = new RelayCommand<object>(p => true, p => Clipboard.SetText(CurrentSeries.AttachedAnimeSeriesInfo.Description ?? ""));
+            
             PlayAllButtonCommand = new RelayCommand<object>(p => true, async p => {
                 var a = await MessageDialog.ShowAsync("Test", "ajdadjoasd", MessageDialogButton.OKCancelButton);
                 var b = await MessageDialog.ShowAsync("Test", "12e12e", MessageDialogButton.YesNoButton);

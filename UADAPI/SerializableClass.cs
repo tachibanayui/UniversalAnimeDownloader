@@ -131,6 +131,11 @@ namespace UADAPI
         public string Slug { get; set; }
 
         /// <summary>
+        /// Views
+        /// </summary>
+        public int Views { get; set; }
+
+        /// <summary>
         /// The ID of this anime series in the remote host
         /// </summary>
         public int AnimeID { get; set; }

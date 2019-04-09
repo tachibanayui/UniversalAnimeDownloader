@@ -1119,7 +1119,179 @@ namespace UADAPI
     }
 
 
-    
+    public class UserInterestMananger
+    {
+        public static List<ModGenresInterests> UserInterest { get; set; } = new List<ModGenresInterests>();
+
+        public static async Task AddInterest(string queryModFullname, GenreItem genre)
+        {
+            if (string.IsNullOrEmpty(queryModFullname))
+                return;
+
+            //Check if the mod is already define in the list
+            var mod = UserInterest.FirstOrDefault(f => f.QueryModFullName == queryModFullname);
+            if(mod == null)
+            {
+                mod = new ModGenresInterests();
+                mod.QueryModFullName = queryModFullname;
+                mod.GenresInterest = new List<GenreItemInterest>();
+                var querier = ApiHelpper.CreateQueryAnimeObjectByClassName(queryModFullname);
+                var genres = await querier.GetAnimeGenres();
+                foreach (var item in genres)
+                    mod.GenresInterest.Add(new GenreItemInterest() { Genre = item, DownloadCount = 0 });
+
+                UserInterest.Add(mod);
+            }
+
+            //check if the last download genres is not the same as this download
+            if(mod.FirstRecentDownload != null)
+            {
+                if(genre.Name != mod.FirstRecentDownload.Name)
+                {
+                    mod.ThirdRecentDownload = mod.SecondRecentDownload;
+                    mod.SecondRecentDownload = mod.FirstRecentDownload;
+                    mod.FirstRecentDownload = genre;
+                }
+            }
+
+            var interest = mod.GenresInterest.FirstOrDefault(f => f.Genre.Name == genre.Name);
+            //Add if the interest in not found in our list
+            if(interest == null)
+            {
+                var newInterest = new GenreItemInterest();
+                newInterest.Genre = new GenreItem() { Name = genre.Name, ID = genre.ID, Slug = genre.Slug };
+                newInterest.DownloadCount = 0;
+
+                mod.GenresInterest.Add(newInterest);
+                interest = newInterest;
+            }
+
+            interest.DownloadCount++;
+        }
+
+        public static async Task<List<AnimeSeriesInfo>> GetSuggestion(string queryModFullname, int offset, int count)
+        {
+            var mod = UserInterest.FirstOrDefault(f => f.QueryModFullName == queryModFullname);
+            var querier = ApiHelpper.CreateQueryAnimeObjectByClassName(queryModFullname);
+            var rand = new Random();
+            if(mod == null)
+            {
+                int clacFrom = offset;
+                var max = await querier.GetSearchLimit(string.Empty, false);
+                if (max > 0)
+                    clacFrom = offset % max;
+
+                return await querier.GetAnime(offset, count);
+            }
+
+            List<GenreItemInterest> interest = new List<GenreItemInterest>();
+
+            //Get total genres download
+            int totaGenreDownload = 0;
+            for (int i = 0; i < mod.GenresInterest.Count; i++)
+            {
+                totaGenreDownload += mod.GenresInterest[i].DownloadCount;
+                var thisGenres = mod.GenresInterest[i].Genre;
+                interest.Add(new GenreItemInterest() { Genre = new GenreItem() { Name = thisGenres.Name, ID = thisGenres.ID, Slug = thisGenres.Slug}});
+            }
+
+            //Calcuate pool quantites
+            for (int i = 0; i < interest.Count; i++)
+            {
+                int bonus = 0;
+                if (mod.FirstRecentDownload != null)
+                    if (mod.FirstRecentDownload.Name == interest[i].Genre.Name)
+                        bonus += 15;
+                if (mod.SecondRecentDownload != null)
+                    if (mod.SecondRecentDownload.Name == interest[i].Genre.Name)
+                        bonus += 10;
+                if (mod.ThirdRecentDownload != null)
+                    if (mod.ThirdRecentDownload.Name == interest[i].Genre.Name)
+                        bonus += 5;
+
+                interest[i].DownloadCount = (int)Math.Ceiling((mod.GenresInterest[i].DownloadCount / (double)totaGenreDownload + bonus) / 10d);
+            }
+
+
+            List<AnimeSeriesInfo> info = new List<AnimeSeriesInfo>();
+            //Get the anime series
+            while(info.Count < count)
+            {
+                for (int i = 0; i < interest.Count; i++)
+                {
+                    //get the anime pool
+                    var calcFrom = offset;
+                    var maxOffset = await querier.GetSearchLimit(interest[i].Genre.Slug, false);
+                    var poolCount = interest[i].DownloadCount * 10;
+
+                    if (maxOffset > 0)
+                        calcFrom = offset % (maxOffset - count);
+
+                    var pool = await querier.GetAnime(calcFrom, poolCount);
+                    for (int j = 0; j < poolCount; j++)
+                    {
+                        AnimeSeriesInfo first = null;
+                        AnimeSeriesInfo second = null;
+                        AnimeSeriesInfo third = null;
+
+                        for (int k = j * 10; k < (j + 1) * 10; k++)
+                        {
+                            if (first == null)
+                                pool[k] = first;
+                            else if (first.Views < pool[k].Views)
+                            {
+                                third = second;
+                                second = first;
+                                first = pool[k];
+                            }
+                            else if (second == null)
+                                second = pool[k];
+                            else if (second.Views < pool[k].Views)
+                            {
+                                third = second;
+                                second = pool[k];
+                            }
+                            else if (third == null)
+                                third = pool[k];
+                            else if (third.Views < pool[k].Views)
+                                third = pool[k];
+                        }
+
+                        switch (rand.Next(1,3))
+                        {
+                            case 1:
+                                info.Add(first);
+                                break;
+                            case 2:
+                                info.Add(second);
+                                break;
+                            default:
+                                info.Add(third);
+                                break;
+                        }
+                    }
+                }
+            }
+
+            return info.Shuffle().ToList().GetRange(0, count);
+        }
+    }
+
+    public class ModGenresInterests
+    {
+        public string QueryModFullName { get; set; }
+        public List<GenreItemInterest> GenresInterest { get; set; }
+
+        public GenreItem FirstRecentDownload { get; set; } = null;
+        public GenreItem SecondRecentDownload { get; set; } = null;
+        public GenreItem ThirdRecentDownload { get; set; } = null;
+    }
+
+    public class GenreItemInterest
+    {
+        public GenreItem Genre { get; set; }
+        public int DownloadCount { get; set; }
+    }
 
 
     /// <summary>

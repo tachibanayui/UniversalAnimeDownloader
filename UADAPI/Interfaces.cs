@@ -52,6 +52,15 @@ namespace UADAPI
         /// <param name="id">the id of the anime</param>
         /// <returns></returns>
         Task<AnimeSeriesInfo> GetAnimeByID(int id);
+
+
+        /// <summary>
+        /// Get the search limit that <c>IQueryAnimeSeries.GetAnimes()</c> can satisfy
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <param name="isSeason"></param>
+        /// <returns></returns>
+        Task<int> GetSearchLimit(string arg, bool isSeason);
     }
 
     public interface IAnimeSeriesManager
