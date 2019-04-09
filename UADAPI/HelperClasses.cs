@@ -1175,6 +1175,7 @@ namespace UADAPI
             }
 
             interest.DownloadCount++;
+            LastSuggestion = null;
         }
 
         public static async Task<List<AnimeSeriesInfo>> GetSuggestion(string queryModFullname, int offset, int count)
