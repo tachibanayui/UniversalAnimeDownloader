@@ -1125,6 +1125,8 @@ namespace UADAPI
     {
         public static List<ModGenresInterests> UserInterest { get; set; } = new List<ModGenresInterests>();
 
+        public static List<AnimeSeriesInfo> LastSuggestion { get; set; }
+
         public static async Task AddInterest(string queryModFullname, GenreItem genre)
         {
             if (string.IsNullOrEmpty(queryModFullname))
@@ -1294,6 +1296,9 @@ namespace UADAPI
                 }
             }
             var res = info.Shuffle().ToList();
+
+            LastSuggestion = res;
+
             if (res.Count > count)
                 return res.GetRange(0, count);
             else

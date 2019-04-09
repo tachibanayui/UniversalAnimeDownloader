@@ -17,6 +17,7 @@ namespace UniversalAnimeDownloader.ViewModels
         #region Commands
         public ICommand RefreshCommand { get; set; }
         public ICommand ShowAnimeDetailCommand { get; set; }
+        public ICommand AnimeListScrollingCommand { get; set; }
         // public ICommand OverlayNoInternetVisibility { get; set; }
         #endregion
 
@@ -128,20 +129,40 @@ namespace UniversalAnimeDownloader.ViewModels
 
             SelectedQueryModIndex = 0;
             RefreshCommand = new RelayCommand<object>(p => true, async (p) => await LoadSuggestedAnime(Rand.Next(1, 1000000), 50));
+            AnimeListScrollingCommand = new RelayCommand<object>(p =>
+            {
+                if (p != null)
+                {
+                    ScrollViewer scr = MiscClass.FindVisualChild<ScrollViewer>(p as ListBox);
+                    return scr.VerticalOffset > scr.ScrollableHeight - 100 && !IsLoadOngoing && scr.ScrollableHeight != 0;
+                }
+                else
+                {
+                    return false;
+                }
+            }, async (p) =>
+            {
+                await LoadSuggestedAnime(SuggestedAnimeInfos.Count, 50, false);
+            });
 
             InitAnimeList();
         }
 
         private async void InitAnimeList()
         {
-            try
+            if(UserInterestMananger.LastSuggestion != null)
+                await SuggestedAnimeInfos.AddRange(UserInterestMananger.LastSuggestion, LoadAnimeCancelToken.Token);
+            else
             {
-                await LoadSuggestedAnime(0, 50);
-            }
-            catch (Exception e)
-            {
-                ShowErrorOcuredOverlay(e);
-                //Add an error in UADAPI.OutputLogHelper class
+                try
+                {
+                    await LoadSuggestedAnime(0, 50);
+                }
+                catch (Exception e)
+                {
+                    ShowErrorOcuredOverlay(e);
+                    //Add an error in UADAPI.OutputLogHelper class
+                }
             }
         }
 
