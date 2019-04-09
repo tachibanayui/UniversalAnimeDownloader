@@ -352,7 +352,9 @@ namespace UADAPI
                     }
                 }
 
-                Instances = new ObservableCollection<DownloadInstance>(tmpIns);
+                Instances.Clear();
+                foreach (var item in tmpIns)
+                    Instances.Add(item);
             }
         }
     }
