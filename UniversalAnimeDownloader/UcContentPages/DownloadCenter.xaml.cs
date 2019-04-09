@@ -13,8 +13,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-using UADAPI;
-
 namespace UniversalAnimeDownloader.UcContentPages
 {
     /// <summary>
@@ -25,11 +23,6 @@ namespace UniversalAnimeDownloader.UcContentPages
         public DownloadCenter()
         {
             InitializeComponent();
-            DownloadManager.Instances.CollectionChanged += (s, e) =>
-            {
-                ListView lst = s as ListView;
-
-            };
         }
     }
 }

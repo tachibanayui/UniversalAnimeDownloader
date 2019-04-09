@@ -197,7 +197,22 @@ namespace UniversalAnimeDownloader.UADSettingsPortal
             }
         }
 
-
+        private string _UserInterest;
+        public string UserInterest
+        {
+            get
+            {
+                return _UserInterest;
+            }
+            set
+            {
+                if (_UserInterest != value)
+                {
+                    _UserInterest = value;
+                    Save();
+                }
+            }
+        }
 
 
         public event PropertyChangedEventHandler PropertyChanged;

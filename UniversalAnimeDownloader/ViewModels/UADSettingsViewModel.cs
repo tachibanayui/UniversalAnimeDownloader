@@ -24,7 +24,6 @@ namespace UniversalAnimeDownloader.ViewModels
 
         public UADSettingsViewModel()
         {
-            UADSettingsManager.Instance.Init();
             SettingData = UADSettingsManager.Instance.CurrentSettings;
             Swatches = new SwatchesProvider().Swatches.ToList();
             Helper = new PaletteHelper();

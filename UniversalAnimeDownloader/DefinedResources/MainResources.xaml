@@ -5,6 +5,7 @@
     xmlns:materialDesgin="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:vm="clr-namespace:UniversalAnimeDownloader.ViewModels">
     <vm:MainWindowViewModel x:Key="MainWindowViewModel" />
+    <vm:AnimeSuggestionViewModel x:Key="AnimeSuggestionViewModel" />
     <vm:AllAnimeTabViewModel x:Key="AllAnimeTabViewModel" />
     <vm:AnimeDetailsViewModel x:Key="AnimeDetailsViewModel" />
     <vm:DownloadCenterViewModel x:Key="DownloadCenterViewModel" />
@@ -12,5 +13,4 @@
     <vm:MyAnimeLibraryViewModel x:Key="MyAnimeLibraryViewModel" />
     <vm:OfflineAnimeDetailViewModel x:Key="OfflineAnimeDetailViewModel" />
     <vm:UADSettingsViewModel x:Key="UADSettingViewModel" />
-    <vm:AnimeSuggestionViewModel x:Key="AnimeSuggestionViewModel" />
 </ResourceDictionary>

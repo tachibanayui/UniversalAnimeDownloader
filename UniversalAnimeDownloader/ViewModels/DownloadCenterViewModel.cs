@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
 using UADAPI;
+using UniversalAnimeDownloader.UADSettingsPortal;
 
 namespace UniversalAnimeDownloader.ViewModels
 {
@@ -42,11 +43,13 @@ namespace UniversalAnimeDownloader.ViewModels
                     (grd.Children[0] as PackIcon).Kind = PackIconKind.Pause;
                     (grd.Children[1] as TextBlock).Text = "Pause Download";
                 }
+                UADSettingsManager.Instance.CurrentSettings.Download = DownloadManager.Serialize();
             });
             CancelDownloadCommand = new RelayCommand<Button>(CanPauseCancelButtonExcute, p =>
             {
                 var data = p.DataContext as DownloadInstance;
                 data.Cancel();
+                UADSettingsManager.Instance.CurrentSettings.Download = DownloadManager.Serialize();
             });
             RemoveFromListCommand = new RelayCommand<Button>(p => true, p =>
             {
@@ -55,26 +58,34 @@ namespace UniversalAnimeDownloader.ViewModels
                     data.Cancel();
 
                 DownloadManager.Instances.Remove(data);
+                UADSettingsManager.Instance.CurrentSettings.Download = DownloadManager.Serialize();
             });
             CancelAllCommand = new RelayCommand<Button>(p => true, p =>
             {
                 foreach (var item in DownloadManager.Instances)
                     if (item.State == UADDownloaderState.Working)
                         item.Cancel();
+                UADSettingsManager.Instance.CurrentSettings.Download = DownloadManager.Serialize();
             });
             PauseAllCommand = new RelayCommand<Button>(p => true, p =>
             {
                 foreach (var item in DownloadManager.Instances)
                     if (item.State == UADDownloaderState.Working)
                         item.Pause();
+                UADSettingsManager.Instance.CurrentSettings.Download = DownloadManager.Serialize();
             });
             ResumeAllCommand = new RelayCommand<Button>(p => true, p =>
             {
                 foreach (var item in DownloadManager.Instances)
                     if (item.State == UADDownloaderState.Paused)
                         item.Resume();
+                UADSettingsManager.Instance.CurrentSettings.Download = DownloadManager.Serialize();
             });
-            RemoveAllCommand = new RelayCommand<Button>(p => true, p => DownloadManager.DeleteAllDownloadProcess());
+            RemoveAllCommand = new RelayCommand<Button>(p => true, p => 
+            {
+                DownloadManager.DeleteAllDownloadProcess();
+                UADSettingsManager.Instance.CurrentSettings.Download = DownloadManager.Serialize();
+            });
         }
 
         private bool CanPauseCancelButtonExcute(Button p)

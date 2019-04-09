@@ -11,7 +11,15 @@ namespace UniversalAnimeDownloader.UADSettingsPortal
     class UADSettingsManager : BaseViewModel
     {
         private static UADSettingsManager _Ins;
-        public static UADSettingsManager Instance { get { if (_Ins == null) _Ins = new UADSettingsManager(); return _Ins; }  }
+        public static UADSettingsManager Instance
+        {
+            get
+            {
+                if (_Ins == null)
+                    _Ins = new UADSettingsManager();
+                return _Ins;
+            }
+        }
 
         public void Init()
         {

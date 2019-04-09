@@ -1146,15 +1146,19 @@ namespace UADAPI
             }
 
             //check if the last download genres is not the same as this download
-            if(mod.FirstRecentDownload != null)
+            if(mod.RecentDownloads.Count > 0)
             {
-                if(genre.Name != mod.FirstRecentDownload.Name)
+                mod.RecentDownloads.Add(mod.RecentDownloads[mod.RecentDownloads.Count - 1]);
+                for (int i = mod.RecentDownloads.Count - 2; i > 0; i--)
                 {
-                    mod.ThirdRecentDownload = mod.SecondRecentDownload;
-                    mod.SecondRecentDownload = mod.FirstRecentDownload;
-                    mod.FirstRecentDownload = genre;
+                    mod.RecentDownloads[i] = mod.RecentDownloads[i - 1];
                 }
+                mod.RecentDownloads[0] = genre;
+                if (mod.RecentDownloads.Count > 15)
+                    mod.RecentDownloads = mod.RecentDownloads.GetRange(0, 15);
             }
+            else
+                mod.RecentDownloads.Add(genre);
 
             var interest = mod.GenresInterest.FirstOrDefault(f => f.Genre.Name == genre.Name);
             //Add if the interest in not found in our list
@@ -1181,7 +1185,7 @@ namespace UADAPI
                 int clacFrom = offset;
                 var max = await querier.GetSearchLimit(string.Empty, false);
                 if (max > 0)
-                    clacFrom = offset % max;
+                    clacFrom = clacFrom * rand.Next(1, 100) % max;
 
                 return await querier.GetAnime(clacFrom, count);
             }
@@ -1201,81 +1205,112 @@ namespace UADAPI
             for (int i = 0; i < interest.Count; i++)
             {
                 int bonus = 0;
-                if (mod.FirstRecentDownload != null)
-                    if (mod.FirstRecentDownload.Name == interest[i].Genre.Name)
-                        bonus += 15;
-                if (mod.SecondRecentDownload != null)
-                    if (mod.SecondRecentDownload.Name == interest[i].Genre.Name)
-                        bonus += 10;
-                if (mod.ThirdRecentDownload != null)
-                    if (mod.ThirdRecentDownload.Name == interest[i].Genre.Name)
-                        bonus += 5;
+                for (int j = 0; j < mod.RecentDownloads.Count; j++)
+                {
+                    if (mod.RecentDownloads[j] != null)
+                    {
+                        if (mod.RecentDownloads[j].Name == interest[i].Genre.Name)
+                        {
+                            bonus = 15 - j;
+                            break;
+                        }
+                    }
+                }
 
                 interest[i].DownloadCount = (int)Math.Ceiling((mod.GenresInterest[i].DownloadCount / (double)totaGenreDownload + bonus) / 10d);
             }
 
 
             List<AnimeSeriesInfo> info = new List<AnimeSeriesInfo>();
+            int retryCount = 0;
             //Get the anime series
-            while(info.Count < count)
+            while(info.Count < count && retryCount < 3)
             {
-                for (int i = 0; i < interest.Count; i++)
+                try
                 {
-                    //get the anime pool
-                    var calcFrom = offset;
-                    var maxOffset = await querier.GetSearchLimit(interest[i].Genre.Slug, false);
-                    var poolCount = interest[i].DownloadCount * 10;
-
-                    if (maxOffset > 0)
-                        calcFrom = offset % (maxOffset - count);
-
-                    var pool = await querier.GetAnime(calcFrom, poolCount);
-                    for (int j = 0; j < poolCount; j++)
+                    for (int i = 0; i < interest.Count; i++)
                     {
-                        AnimeSeriesInfo first = null;
-                        AnimeSeriesInfo second = null;
-                        AnimeSeriesInfo third = null;
+                        //get the anime pool
+                        var calcFrom = offset + 1;
+                        var maxOffset = await querier.GetSearchLimit(interest[i].Genre.Slug, false);
+                        var poolCount = interest[i].DownloadCount * 10;
 
-                        for (int k = j * 10; k < (j + 1) * 10; k++)
-                        {
-                            if (first == null)
-                                pool[k] = first;
-                            else if (first.Views < pool[k].Views)
-                            {
-                                third = second;
-                                second = first;
-                                first = pool[k];
-                            }
-                            else if (second == null)
-                                second = pool[k];
-                            else if (second.Views < pool[k].Views)
-                            {
-                                third = second;
-                                second = pool[k];
-                            }
-                            else if (third == null)
-                                third = pool[k];
-                            else if (third.Views < pool[k].Views)
-                                third = pool[k];
-                        }
+                        if (maxOffset > 0)
+                            calcFrom = calcFrom * rand.Next(1, 100) % (maxOffset - count);
 
-                        switch (rand.Next(1,3))
+                        var pool = await querier.GetAnime(calcFrom, poolCount, string.Empty, interest[i].Genre.Slug);
+                        for (int j = 0; j < poolCount / 10; j++)
                         {
-                            case 1:
-                                info.Add(first);
-                                break;
-                            case 2:
-                                info.Add(second);
-                                break;
-                            default:
-                                info.Add(third);
-                                break;
+                            AnimeSeriesInfo first = null;
+                            AnimeSeriesInfo second = null;
+                            AnimeSeriesInfo third = null;
+
+                            for (int k = j * 10; k < (j + 1) * 10; k++)
+                            {
+                                if (first == null)
+                                    first = pool[k];
+                                else if (first.Views < pool[k].Views)
+                                {
+                                    third = second;
+                                    second = first;
+                                    first = pool[k];
+                                }
+                                else if (second == null)
+                                    second = pool[k];
+                                else if (second.Views < pool[k].Views)
+                                {
+                                    third = second;
+                                    second = pool[k];
+                                }
+                                else if (third == null)
+                                    third = pool[k];
+                                else if (third.Views < pool[k].Views)
+                                    third = pool[k];
+                            }
+
+                            AnimeSeriesInfo choosen = null;
+
+                            switch (rand.Next(1, 3))
+                            {
+                                case 1:
+                                    choosen = first;
+                                    break;
+                                case 2:
+                                    choosen = second;
+                                    break;
+                                default:
+                                    choosen = third;
+                                    break;
+                            }
+
+                            if (info.FindIndex(p => p.Name == choosen.Name) == -1)
+                                info.Add(choosen);
                         }
                     }
                 }
+                catch
+                {
+                    retryCount++;
+                }
             }
+            var res = info.Shuffle().ToList();
+            if (res.Count > count)
+                return res.GetRange(0, count);
+            else
+                return res;
 
-            return info.Shuffle().ToList().GetRange(0, count);
+        }
+
+        public static string Serialize() => JsonConvert.SerializeObject(UserInterest);
+
+        public static void Deserialize(string val)
+        {
+            if(!string.IsNullOrEmpty(val))
+            {
+                var tmp = JsonConvert.DeserializeObject<List<ModGenresInterests>>(val);
+                UserInterest.Clear();
+                UserInterest.AddRange(tmp);
+            }
         }
     }
 
@@ -1284,9 +1319,7 @@ namespace UADAPI
         public string QueryModFullName { get; set; }
         public List<GenreItemInterest> GenresInterest { get; set; }
 
-        public GenreItem FirstRecentDownload { get; set; } = null;
-        public GenreItem SecondRecentDownload { get; set; } = null;
-        public GenreItem ThirdRecentDownload { get; set; } = null;
+        public List<GenreItem> RecentDownloads { get; set; } = new List<GenreItem>();
     }
 
     public class GenreItemInterest

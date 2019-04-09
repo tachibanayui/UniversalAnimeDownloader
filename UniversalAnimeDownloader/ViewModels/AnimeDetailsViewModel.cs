@@ -209,6 +209,9 @@ namespace UniversalAnimeDownloader.ViewModels
                     SourceControl.PreferedQuality = string.IsNullOrEmpty(SelectedQuality) ? "480p" : SelectedQuality;
                     var downloader = SourceControl.DownloadAnimeByIndexes(selectedIndexList);
                     DownloadButtonString = "Downloading...";
+                    foreach (var item in CurrentSeries.AttachedAnimeSeriesInfo.Genres)
+                        await UserInterestMananger.AddInterest(CurrentSeries.RelativeQueryInfo.ModTypeString, item);
+                    UADSettingsManager.Instance.CurrentSettings.UserInterest = UserInterestMananger.Serialize();
                     UADSettingsManager.Instance.CurrentSettings.Download = DownloadManager.Serialize();
                     downloader.EpisodeDownloadCompleted += (s,e) => UADSettingsManager.Instance.CurrentSettings.Download = DownloadManager.Serialize();
                 }

@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using UADAPI;
+using UniversalAnimeDownloader.UADSettingsPortal;
 
 namespace UniversalAnimeDownloader.ViewModels
 {
@@ -120,6 +121,11 @@ namespace UniversalAnimeDownloader.ViewModels
 
         public AnimeSuggestionViewModel()
         {
+            ApiHelpper.LoadAssembly();
+            UADSettingsManager.Instance.Init();
+            string userInterestString = UADSettingsManager.Instance.CurrentSettings.UserInterest;
+            UserInterestMananger.Deserialize(userInterestString);
+
             SelectedQueryModIndex = 0;
             RefreshCommand = new RelayCommand<object>(p => true, async (p) => await LoadSuggestedAnime(Rand.Next(1, 1000000), 50));
 
