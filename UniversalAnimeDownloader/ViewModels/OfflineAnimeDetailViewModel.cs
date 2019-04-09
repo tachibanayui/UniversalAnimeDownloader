@@ -13,6 +13,7 @@ namespace UniversalAnimeDownloader.ViewModels
         public ICommand WatchEpisodeCommand { get; set; }
         public ICommand OnlineVersionCommand { get; set; }
         public ICommand PlayAllButtonCommand { get; set; }
+        public ICommand CopyDescriptionCommand { get; set; }
         #endregion
 
         #region BindableProperties
@@ -36,6 +37,7 @@ namespace UniversalAnimeDownloader.ViewModels
 
         public OfflineAnimeDetailViewModel()
         {
+            CopyDescriptionCommand = new RelayCommand<object>(p => true, p => Clipboard.SetText(CurrentSeries.AttachedAnimeSeriesInfo.Description ?? ""));
             PlayAllButtonCommand = new RelayCommand<object>(p => true, async p => {
                 var a = await MessageDialog.ShowAsync("Test", "ajdadjoasd", MessageDialogButton.OKCancelButton);
                 var b = await MessageDialog.ShowAsync("Test", "12e12e", MessageDialogButton.YesNoButton);
