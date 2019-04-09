@@ -113,7 +113,7 @@ namespace UniversalAnimeDownloader.UADSettingsPortal
                 if (_DisableAnimation != value)
                 {
                     _DisableAnimation = value;
-                    try { (Application.Current.FindResource("MainWindowViewModel") as MainWindowViewModel).DisableAnimation = value; } catch { }
+                    //try { (Application.Current.FindResource("MainWindowViewModel") as MainWindowViewModel).DisableAnimation = value; } catch { }
                     OnPropertyChanged();
                 }
             }
@@ -157,6 +157,8 @@ namespace UniversalAnimeDownloader.UADSettingsPortal
                     else
                         appliedPanel = Application.Current.FindResource("WrapPanelItemPanel") as ItemsPanelTemplate;
                     (Application.Current.FindResource("AllAnimeTabViewModel") as AllAnimeTabViewModel).AnimeCardPanel = appliedPanel;
+                    (Application.Current.FindResource("AnimeDetailsViewModel") as AnimeDetailsViewModel).AnimeCardPanel = appliedPanel;
+                    (Application.Current.FindResource("MyAnimeLibraryViewModel") as MyAnimeLibraryViewModel).AnimeCardPanel = appliedPanel;
                     OnPropertyChanged();
                 }
             }

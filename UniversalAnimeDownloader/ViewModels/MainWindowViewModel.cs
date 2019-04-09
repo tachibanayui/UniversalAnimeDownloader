@@ -183,7 +183,7 @@ namespace UniversalAnimeDownloader.ViewModels
             DragMoveWindowCommand = new RelayCommand<Window>(p => true, p => p.DragMove());
             ToggleNavSideBarCommand = new RelayCommand<Window>(p => true, AnimateMenuBar);
             BlackOverlayMouseDownCommand = new RelayCommand<Rectangle>(p => p.IsHitTestVisible = true, p => { IsExpandSidePanel = !IsExpandSidePanel; AnimateMenuBar(Window.GetWindow(p)); });
-            DeleteSearchBoxCommand = new RelayCommand<TextBox>(p => true, p => p.Clear());
+            DeleteSearchBoxCommand = new RelayCommand<TextBox>(p => true, p => { p.Clear(); MiscClass.OnUserSearched(this, p.Text); });
             CheckForEnterKeyCommand = new RelayCommand<TextBox>(p => true, p =>
             {
                 if (p != null)
@@ -267,22 +267,22 @@ namespace UniversalAnimeDownloader.ViewModels
                         pageIndex = 0;
                         break;
                     case "MyAnimeLibrary":
-                        pageIndex = 3;
+                        pageIndex = 4;
                         break;
                     case "DownloadCenter":
-                        pageIndex = 2;
+                        pageIndex = 3;
                         break;
                     case "OfflineAnimeDetail":
-                        pageIndex = 4;
+                        pageIndex = 5;
                         break;
                     case "AnimeDetails":
                         pageIndex = 1;
                         break;
                     case "UADSettings":
-                        pageIndex = 5;
+                        pageIndex = 6;
                         break;
                     case "AnimeSuggestion":
-                        pageIndex = 6;
+                        pageIndex = 2;
                         break;
                     default:
                         break;
@@ -310,11 +310,11 @@ namespace UniversalAnimeDownloader.ViewModels
         {
             new UcContentPages.AllAnimeTab(),
             new UcContentPages.AnimeDetails(),
+            new UcContentPages.AnimeSuggestion(),
             new UcContentPages.DownloadCenter(),
             new UcContentPages.MyAnimeLibrary(),
             new UcContentPages.OfflineAnimeDetail(),
             new UcContentPages.UADSettings(),
-            new UcContentPages.AnimeSuggestion()
         };
     }
 }

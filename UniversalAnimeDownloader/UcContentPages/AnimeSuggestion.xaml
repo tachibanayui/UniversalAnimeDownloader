@@ -160,7 +160,7 @@
                                 </materialDesign:Card>
                             </ToolTip>
                         </materialDesign:Card.ToolTip>
-                        <Button Command="{x:Static materialDesign:Transitioner.MoveNextCommand}">
+                        <Button Command="{x:Static materialDesign:Transitioner.MovePreviousCommand}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="Click">
                                     <i:InvokeCommandAction Command="{Binding DataContext.ShowAnimeDetailCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:AnimeSuggestion}}}" CommandParameter="{Binding}" />

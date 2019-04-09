@@ -74,7 +74,7 @@
         <ListBox
             x:Name="animeList"
             Grid.Row="1"
-            ItemsPanel="{DynamicResource AnimeCardContainer}"
+            ItemsPanel="{Binding AnimeCardPanel, Mode=OneWay}"
             ItemsSource="{Binding AnimeLibrary}">
             <ListBox.ItemTemplate>
                 <DataTemplate>

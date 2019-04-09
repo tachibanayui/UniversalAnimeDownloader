@@ -1,11 +1,9 @@
-﻿using UniversalAnimeDownloader.UADSettingsPortal;
-
-using UADAPI;
-using System.Windows.Input;
-using System.Collections.Generic;
-using MaterialDesignColors;
-using System.Linq;
+﻿using MaterialDesignColors;
 using MaterialDesignThemes.Wpf;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Input;
+using UniversalAnimeDownloader.UADSettingsPortal;
 
 namespace UniversalAnimeDownloader.ViewModels
 {
@@ -18,13 +16,35 @@ namespace UniversalAnimeDownloader.ViewModels
         #endregion
 
 
-        public UADSettingsData SettingData { get; set; }
+        private UADSettingsData _SettingData;
+        public UADSettingsData SettingData
+        {
+            get
+            {
+                if(_SettingData == null)
+                {
+                    UADSettingsManager.Instance.Init();
+                    _SettingData = UADSettingsManager.Instance.CurrentSettings;
+                }
+
+                return _SettingData;
+            }
+            set
+            {
+                if (_SettingData != value)
+                {
+                    _SettingData = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public PaletteHelper Helper { get; set; }
         public IList<Swatch> Swatches { get; }
 
         public UADSettingsViewModel()
         {
-            SettingData = UADSettingsManager.Instance.CurrentSettings;
+            //SettingData = UADSettingsManager.Instance.CurrentSettings;
             Swatches = new SwatchesProvider().Swatches.ToList();
             Helper = new PaletteHelper();
 

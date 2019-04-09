@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using UADAPI;
@@ -31,6 +32,23 @@ namespace UniversalAnimeDownloader.ViewModels
 
         public DelayedObservableCollection<AnimeSeriesInfo> AnimeLibrary { get; set; } = new DelayedObservableCollection<AnimeSeriesInfo>();
         public List<AnimeSeriesInfo> NoDelayAnimeLib { get; } = new List<AnimeSeriesInfo>();
+
+        private ItemsPanelTemplate _AnimeCardPanel = Application.Current.FindResource("WrapPanelItemPanel") as ItemsPanelTemplate;
+        public ItemsPanelTemplate AnimeCardPanel
+        {
+            get
+            {
+                return _AnimeCardPanel;
+            }
+            set
+            {
+                if (_AnimeCardPanel != value)
+                {
+                    _AnimeCardPanel = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         public MyAnimeLibraryViewModel()
         {

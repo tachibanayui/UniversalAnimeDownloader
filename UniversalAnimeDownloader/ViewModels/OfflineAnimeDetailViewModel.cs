@@ -1,6 +1,8 @@
-﻿using System.Diagnostics;
+﻿using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
 using UADAPI;
 using UniversalAnimeDownloader.UcContentPages;
@@ -37,6 +39,17 @@ namespace UniversalAnimeDownloader.ViewModels
 
         public OfflineAnimeDetailViewModel()
         {
+            MiscClass.UserSearched += (s, e) =>
+            {
+                ICollectionView view = CollectionViewSource.GetDefaultView(_CurrentSeries.AttachedAnimeSeriesInfo.Episodes);
+                view.Filter = (p) =>
+                {
+                    var info = p as EpisodeInfo;
+                    return info.Name.ToLower().Contains(e.Keyword.ToLower());
+                };
+                view.Refresh();
+            };
+
             CopyDescriptionCommand = new RelayCommand<object>(p => true, p => Clipboard.SetText(CurrentSeries.AttachedAnimeSeriesInfo.Description ?? ""));
             
             PlayAllButtonCommand = new RelayCommand<object>(p => true, async p => {

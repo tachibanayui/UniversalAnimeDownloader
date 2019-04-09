@@ -142,7 +142,19 @@ namespace UniversalAnimeDownloader.ViewModels
                 }
             }, async (p) =>
             {
-                await LoadSuggestedAnime(SuggestedAnimeInfos.Count, 50, false);
+                await LoadSuggestedAnime(Rand.Next(1,1000000), 50, false);
+            });
+
+            ShowAnimeDetailCommand = new RelayCommand<AnimeSeriesInfo>(p => true, async (p) =>
+            {
+                if (p != null)
+                {
+                    MiscClass.NavigationHelper.AddNavigationHistory(1);
+                    IAnimeSeriesManager manager = ApiHelpper.CreateAnimeSeriesManagerObjectByClassName(p.ModInfo.ModTypeString);
+                    manager.AttachedAnimeSeriesInfo = p;
+                    await manager.GetPrototypeEpisodes();
+                    (Application.Current.FindResource("AnimeDetailsViewModel") as AnimeDetailsViewModel).CurrentSeries = manager;
+                }
             });
 
             InitAnimeList();
@@ -181,6 +193,7 @@ namespace UniversalAnimeDownloader.ViewModels
                         LoadAnimeCancelToken = new CancellationTokenSource();
 
                         var animes = await UserInterestMananger.GetSuggestion(Querier.GetType().FullName, offset, count);
+                        UADSettingsManager.Instance.CurrentSettings.UserInterest = UserInterestMananger.Serialize();
 
                         if (clearPreviousCard)
                         {

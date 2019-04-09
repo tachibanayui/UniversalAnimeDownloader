@@ -1235,59 +1235,61 @@ namespace UADAPI
                     {
                         //get the anime pool
                         var calcFrom = offset + 1;
-                        var maxOffset = await querier.GetSearchLimit(interest[i].Genre.Slug, false);
                         var poolCount = interest[i].DownloadCount * 10;
 
-                        if (maxOffset > 0)
-                            calcFrom = calcFrom * rand.Next(1, 100) % (maxOffset - count);
-
-                        var pool = await querier.GetAnime(calcFrom, poolCount, string.Empty, interest[i].Genre.Slug);
-                        for (int j = 0; j < poolCount / 10; j++)
+                        if(poolCount != 0)
                         {
-                            AnimeSeriesInfo first = null;
-                            AnimeSeriesInfo second = null;
-                            AnimeSeriesInfo third = null;
-
-                            for (int k = j * 10; k < (j + 1) * 10; k++)
+                            var maxOffset = await querier.GetSearchLimit(interest[i].Genre.Slug, false);
+                            if (maxOffset > 0)
+                                calcFrom = calcFrom * rand.Next(1, 100) % (maxOffset - count);
+                            var pool = await querier.GetAnime(calcFrom, poolCount, string.Empty, interest[i].Genre.Slug);
+                            for (int j = 0; j < poolCount / 10; j++)
                             {
-                                if (first == null)
-                                    first = pool[k];
-                                else if (first.Views < pool[k].Views)
+                                AnimeSeriesInfo first = null;
+                                AnimeSeriesInfo second = null;
+                                AnimeSeriesInfo third = null;
+
+                                for (int k = j * 10; k < (j + 1) * 10; k++)
                                 {
-                                    third = second;
-                                    second = first;
-                                    first = pool[k];
+                                    if (first == null)
+                                        first = pool[k];
+                                    else if (first.Views < pool[k].Views)
+                                    {
+                                        third = second;
+                                        second = first;
+                                        first = pool[k];
+                                    }
+                                    else if (second == null)
+                                        second = pool[k];
+                                    else if (second.Views < pool[k].Views)
+                                    {
+                                        third = second;
+                                        second = pool[k];
+                                    }
+                                    else if (third == null)
+                                        third = pool[k];
+                                    else if (third.Views < pool[k].Views)
+                                        third = pool[k];
                                 }
-                                else if (second == null)
-                                    second = pool[k];
-                                else if (second.Views < pool[k].Views)
+
+                                AnimeSeriesInfo choosen = null;
+
+                                switch (rand.Next(1, 3))
                                 {
-                                    third = second;
-                                    second = pool[k];
+                                    case 1:
+                                        choosen = first;
+                                        break;
+                                    case 2:
+                                        choosen = second;
+                                        break;
+                                    default:
+                                        choosen = third;
+                                        break;
                                 }
-                                else if (third == null)
-                                    third = pool[k];
-                                else if (third.Views < pool[k].Views)
-                                    third = pool[k];
+
+                                if (info.FindIndex(p => p.Name == choosen.Name) == -1)
+                                    info.Add(choosen);
                             }
-
-                            AnimeSeriesInfo choosen = null;
-
-                            switch (rand.Next(1, 3))
-                            {
-                                case 1:
-                                    choosen = first;
-                                    break;
-                                case 2:
-                                    choosen = second;
-                                    break;
-                                default:
-                                    choosen = third;
-                                    break;
-                            }
-
-                            if (info.FindIndex(p => p.Name == choosen.Name) == -1)
-                                info.Add(choosen);
                         }
                     }
                 }

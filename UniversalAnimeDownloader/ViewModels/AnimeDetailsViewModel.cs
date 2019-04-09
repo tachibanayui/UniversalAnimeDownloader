@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using UADAPI;
@@ -154,6 +157,23 @@ namespace UniversalAnimeDownloader.ViewModels
                 }
             }
         }
+
+        private ItemsPanelTemplate _AnimeCardPanel = Application.Current.FindResource("WrapPanelItemPanel") as ItemsPanelTemplate;
+        public ItemsPanelTemplate AnimeCardPanel
+        {
+            get
+            {
+                return _AnimeCardPanel;
+            }
+            set
+            {
+                if (_AnimeCardPanel != value)
+                {
+                    _AnimeCardPanel = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
         #endregion
 
         #region Commands
@@ -165,7 +185,6 @@ namespace UniversalAnimeDownloader.ViewModels
         public ICommand OfflineVerionCommand { get; set; }
         #endregion
 
-
         #region Properties
         public Task TempTask { get; set; }
         public bool isDoneStringSeleting { get; set; } = true;
@@ -174,6 +193,17 @@ namespace UniversalAnimeDownloader.ViewModels
 
         public AnimeDetailsViewModel()
         {
+            MiscClass.UserSearched += (s, e) => 
+            {
+                ICollectionView view = CollectionViewSource.GetDefaultView(EpisodeInfo);
+                view.Filter = (p) =>
+                {
+                    var info = p as SelectableEpisodeInfo;
+                    return info.Data.Name.ToLower().Contains(e.Keyword.ToLower());
+                };
+                view.Refresh();
+            };
+
             CopyDescriptionCommand = new RelayCommand<object>(p => true, p => Clipboard.SetText(CurrentSeries.AttachedAnimeSeriesInfo.Description ?? ""));
             WatchEpisodeOnline = new RelayCommand<SelectableEpisodeInfo>(p => true, async (p) =>
             {
@@ -183,7 +213,7 @@ namespace UniversalAnimeDownloader.ViewModels
                     Process.Start(episodeDetail.FilmSources[episodeDetail.FilmSources.Keys.ToList()[0]].Url);
                 }
             });
-            SelectedEpisodeCommand = new RelayCommand<TextBox>(p => true, p => { TempTask = SelectEpisodeIndex(p); });
+            SelectedEpisodeCommand = new RelayCommand<TextBox>(p => true, p => {TempTask = SelectEpisodeIndex(p); });
             DownloadAnimeCommand = new RelayCommand<object>(p => true, async p =>
             {
                 MessageDialogResult result = 0;
@@ -400,7 +430,7 @@ namespace UniversalAnimeDownloader.ViewModels
             {
                 if (downloader.AttachedManager.ModInfo.ModTypeString.Contains(value.AttachedAnimeSeriesInfo.ModInfo.ModTypeString))
                 {
-                    DownloadButtonString = "Downloading";
+                    DownloadButtonString = "Downloading...";
                     IsDownloadButtonStringEnable = false;
                     IsFlipperFliped = false;
                     OfflineNavigationButtonVisibility = Visibility.Collapsed;
@@ -433,7 +463,9 @@ namespace UniversalAnimeDownloader.ViewModels
                 var obj = new SelectableEpisodeInfo() { Data = item, IsSelected = true };
                 if (offline != null)
                     if (offline.Episodes.Any(p => p.EpisodeID == item.EpisodeID && p.AvailableOffline == true))
+                    {
                         obj.IsSelected = false;
+                    }                                
 
                 obj.SelectedIndexChanged += async (s, e) =>
                 {
@@ -454,6 +486,13 @@ namespace UniversalAnimeDownloader.ViewModels
 
 
             ManualSelectEpisodeOnDownloaded = false;
+
+            if(EpisodeInfo.Count == 0)
+            {
+                DownloadButtonString = "This series is release yet";
+                IsDownloadButtonStringEnable = false;
+            }
+
             SourceControl = new AnimeSourceControl(value);
         }
 
