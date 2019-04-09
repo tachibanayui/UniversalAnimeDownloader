@@ -16,7 +16,7 @@ namespace UniversalAnimeDownloader.ViewModels
         #region Commands
         public ICommand RefreshCommand { get; set; }
         public ICommand ShowAnimeDetailCommand { get; set; }
-       // public ICommand OverlayNoInternetVisibility { get; set; }
+        // public ICommand OverlayNoInternetVisibility { get; set; }
         #endregion
 
         #region Properties
@@ -121,7 +121,7 @@ namespace UniversalAnimeDownloader.ViewModels
         public AnimeSuggestionViewModel()
         {
             SelectedQueryModIndex = 0;
-            RefreshCommand = new RelayCommand<object>(p => true, async (p) => await LoadSuggestedAnime(Rand.Next(1,1000000), 50));
+            RefreshCommand = new RelayCommand<object>(p => true, async (p) => await LoadSuggestedAnime(Rand.Next(1, 1000000), 50));
 
             InitAnimeList();
         }

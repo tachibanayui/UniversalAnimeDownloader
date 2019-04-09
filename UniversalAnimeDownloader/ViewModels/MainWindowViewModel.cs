@@ -224,11 +224,13 @@ namespace UniversalAnimeDownloader.ViewModels
                 DoubleAnimation transitionAnim = new DoubleAnimation(scroll.Width, 255, TimeSpan.FromSeconds(0.5)) { DecelerationRatio = 0.1, EasingFunction = new BackEase() { EasingMode = EasingMode.EaseOut } };
 
                 DoubleAnimation opacityAnim = new DoubleAnimation(fadeOverlay.Opacity, 0.5, TimeSpan.FromSeconds(0.5)) { DecelerationRatio = 0.1 };
+                fadeOverlay.IsHitTestVisible = true;
 
                 if (!IsExpandSidePanel)
                 {
                     transitionAnim.To = 65;
                     opacityAnim.To = 0;
+                    fadeOverlay.IsHitTestVisible = false;
                 }
                 scroll.BeginAnimation(FrameworkElement.WidthProperty, transitionAnim);
                 fadeOverlay.BeginAnimation(UIElement.OpacityProperty, opacityAnim);
@@ -279,6 +281,9 @@ namespace UniversalAnimeDownloader.ViewModels
                     case "UADSettings":
                         pageIndex = 5;
                         break;
+                    case "AnimeSuggestion":
+                        pageIndex = 6;
+                        break;
                     default:
                         break;
                 }
@@ -308,7 +313,8 @@ namespace UniversalAnimeDownloader.ViewModels
             new UcContentPages.DownloadCenter(),
             new UcContentPages.MyAnimeLibrary(),
             new UcContentPages.OfflineAnimeDetail(),
-            new UcContentPages.UADSettings()
+            new UcContentPages.UADSettings(),
+            new UcContentPages.AnimeSuggestion()
         };
     }
 }

@@ -101,6 +101,9 @@
     <Compile Include="UcContentPages\AnimeDetails.xaml.cs">
       <DependentUpon>AnimeDetails.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UcContentPages\AnimeSuggestion.xaml.cs">
+      <DependentUpon>AnimeSuggestion.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UcContentPages\DownloadCenter.xaml.cs">
       <DependentUpon>DownloadCenter.xaml</DependentUpon>
     </Compile>
@@ -135,6 +138,7 @@
     <Compile Include="ValueConverters\UADDownloaderStateToIconKindConverter.cs" />
     <Compile Include="ViewModels\AllAnimeTabViewModel.cs" />
     <Compile Include="ViewModels\AnimeDetailsViewModel.cs" />
+    <Compile Include="ViewModels\AnimeSuggestionViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ButtonActionEventArgs.cs" />
     <Compile Include="ViewModels\DownloadCenterViewModel.cs" />
@@ -169,6 +173,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UcContentPages\AnimeDetails.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UcContentPages\AnimeSuggestion.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
