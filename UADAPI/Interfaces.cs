@@ -18,6 +18,11 @@ namespace UADAPI
         string RemoteHost { get; set; }
 
         /// <summary>
+        /// This will define do this mod support gt popular anime. If false, <c>IQueryAnimeSeries.GetFeaturedAnime()</c> will not be called 
+        /// </summary>
+        bool SupportGetPopularSeries { get; set; }
+
+        /// <summary>
         /// Your modification such as Name, Version, Description,...
         /// </summary>
         ModificatorInformation ModInfo { get; set; }
@@ -33,6 +38,14 @@ namespace UADAPI
         /// <param name="season">Optional filter: Search anime in the requested season</param>
         /// <returns>Search result: Contain list of requested anime series information</returns>
         Task<List<AnimeSeriesInfo>> GetAnime(int offset, int count, string search = null, string animeGenres = null, string season = null);
+
+        /// <summary>
+        /// Get the anime that popular at the moment
+        /// </summary>
+        /// <param name="offset">The offset of this anime at the remote host</param>
+        /// <param name="count">How many anime series will be requested</param>
+        /// <returns></returns>
+        Task<List<AnimeSeriesInfo>> GetFeaturedAnime(int offset, int count);
 
         /// <summary>
         /// Get all the anime genres define at the remote host

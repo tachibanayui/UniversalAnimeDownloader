@@ -284,6 +284,9 @@ namespace UniversalAnimeDownloader.ViewModels
                     case "AnimeSuggestion":
                         pageIndex = 2;
                         break;
+                    case "FeaturedAnime":
+                        pageIndex = 7;
+                        break;
                     default:
                         break;
                 }
@@ -315,6 +318,7 @@ namespace UniversalAnimeDownloader.ViewModels
             new UcContentPages.MyAnimeLibrary(),
             new UcContentPages.OfflineAnimeDetail(),
             new UcContentPages.UADSettings(),
+            new UcContentPages.FeaturedAnime(),
         };
     }
 }

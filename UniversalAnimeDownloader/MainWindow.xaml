@@ -247,6 +247,8 @@
                     <Button
                         Height="75"
                         HorizontalContentAlignment="Left"
+                        Command="{Binding NavigateCommand}"
+                        CommandParameter="FeaturedAnime"
                         Style="{StaticResource MaterialDesignFlatButton}">
                         <Grid>
                             <Grid.ColumnDefinitions>

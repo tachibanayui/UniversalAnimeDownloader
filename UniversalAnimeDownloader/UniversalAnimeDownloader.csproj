@@ -107,6 +107,9 @@
     <Compile Include="UcContentPages\DownloadCenter.xaml.cs">
       <DependentUpon>DownloadCenter.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UcContentPages\FeaturedAnime.xaml.cs">
+      <DependentUpon>FeaturedAnime.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UcContentPages\MyAnimeLibrary.xaml.cs">
       <DependentUpon>MyAnimeLibrary.xaml</DependentUpon>
     </Compile>
@@ -142,6 +145,7 @@
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ButtonActionEventArgs.cs" />
     <Compile Include="ViewModels\DownloadCenterViewModel.cs" />
+    <Compile Include="ViewModels\FeaturedAnimeViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\MessageDialogViewModel.cs" />
     <Compile Include="ViewModels\MyAnimeLibraryViewModel.cs" />
@@ -181,6 +185,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UcContentPages\DownloadCenter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UcContentPages\FeaturedAnime.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

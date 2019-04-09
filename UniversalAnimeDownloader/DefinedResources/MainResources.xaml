@@ -7,6 +7,7 @@
     <vm:MainWindowViewModel x:Key="MainWindowViewModel" />
     <vm:AnimeSuggestionViewModel x:Key="AnimeSuggestionViewModel" />
     <vm:AllAnimeTabViewModel x:Key="AllAnimeTabViewModel" />
+    <vm:FeaturedAnimeViewModel x:Key="FeaturedAnimeViewModel" />
     <vm:AnimeDetailsViewModel x:Key="AnimeDetailsViewModel" />
     <vm:DownloadCenterViewModel x:Key="DownloadCenterViewModel" />
     <vm:NotifycationPanelViewModel x:Key="NotifycationPanelViewModel" />
