@@ -162,8 +162,8 @@ namespace UniversalAnimeDownloader.ViewModels
 
         private async void InitAnimeList()
         {
-            if(UserInterestMananger.LastSuggestion != null)
-                await SuggestedAnimeInfos.AddRange(UserInterestMananger.LastSuggestion, LoadAnimeCancelToken.Token);
+            if(UserInterestMananger.Data.LastSuggestion != null)
+                await SuggestedAnimeInfos.AddRange(UserInterestMananger.Data.LastSuggestion, LoadAnimeCancelToken.Token);
             else
             {
                 try
@@ -189,7 +189,7 @@ namespace UniversalAnimeDownloader.ViewModels
                     OverlayActiityIndicatorVisibility = Visibility.Visible;
                     if (Querier != null)
                     {
-                        LoadAnimeCancelToken.Cancel();
+                        LoadAnimeCancelToken?.Cancel();
                         LoadAnimeCancelToken = new CancellationTokenSource();
 
                         var animes = await UserInterestMananger.GetSuggestion(Querier.GetType().FullName, offset, count);

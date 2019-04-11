@@ -30,6 +30,7 @@ namespace UniversalAnimeDownloader
                 token.ThrowIfCancellationRequested();
                 await Task.Delay(DelayInterval);
             }
+            OnCollectionReallyChanged();
         }
 
         public void RemoveAll()
@@ -49,6 +50,8 @@ namespace UniversalAnimeDownloader
                 Items.RemoveAt(0);
                 await Task.Delay(DelayInterval);
             }
+
+            OnCollectionReallyChanged();
         }
 
         public async Task AddAndWait(T item)
@@ -56,7 +59,11 @@ namespace UniversalAnimeDownloader
             Items.Add(item);
             OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item));
             await Task.Delay(DelayInterval);
+            OnCollectionReallyChanged();
         }
 
+
+        public event EventHandler<EventArgs> CollectionReallyChanged;
+        private void OnCollectionReallyChanged() => CollectionReallyChanged?.Invoke(this, EventArgs.Empty);
     }
 }

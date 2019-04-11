@@ -210,7 +210,13 @@ namespace UniversalAnimeDownloader.ViewModels
                     (Application.Current.FindResource("AnimeDetailsViewModel") as AnimeDetailsViewModel).CurrentSeries = manager;
                 }
             });
-            MiscClass.UserSearched += async (s, e) => { SearchAnime = e.Keyword; await LoadAnime(0, 50); };
+            MiscClass.UserSearched += async (s, e) => 
+            {
+                if (MiscClass.NavigationHelper.Current != 0)
+                    return;
+                SearchAnime = e.Keyword;
+                await LoadAnime(0, 50);
+            };
 
             ApiHelpper.LoadAssembly();
             AnimeInfos = new DelayedObservableCollection<AnimeSeriesInfo>();
@@ -248,7 +254,7 @@ namespace UniversalAnimeDownloader.ViewModels
                     OverlayActiityIndicatorVisibility = Visibility.Visible;
                     if (Querier != null)
                     {
-                        LoadAnimeCancelToken.Cancel();
+                        LoadAnimeCancelToken?.Cancel();
                         LoadAnimeCancelToken = new CancellationTokenSource();
                         string strGenres = string.Empty;
                         string strSeason = string.Empty;

@@ -163,7 +163,7 @@
                         <Button Command="{x:Static materialDesign:Transitioner.MovePreviousCommand}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="Click">
-                                    <i:InvokeCommandAction Command="{Binding DataContext.ShowAnimeDetailCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:AnimeSuggestion}}}" CommandParameter="{Binding}" />
+                                    <i:InvokeCommandAction Command="{Binding DataContext.ShowAnimeDetailCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:FeaturedAnime}}}" CommandParameter="{Binding}" />
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                             <Button.Style>
@@ -327,7 +327,7 @@
             </Grid>
 
 
-            <Grid x:Name="overlayNotSupported" Visibility="{Binding OverlayNotSupported, IsAsync=True, FallbackValue=Collapsed}">
+            <Grid x:Name="overlayNotSupported" Visibility="{Binding OverlayNotSupported, IsAsync=True, FallbackValue=Collasped}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                     <ColumnDefinition Width="1.65*" />

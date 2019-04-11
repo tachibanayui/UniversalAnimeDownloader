@@ -1121,11 +1121,18 @@ namespace UADAPI
     }
 
 
+    public class UserInterestData
+    {
+        public List<ModGenresInterests> UserInterest { get; set; } = new List<ModGenresInterests>();
+
+        public DateTime LastSuggestionTime { get; set; }
+
+        public List<AnimeSeriesInfo> LastSuggestion { get; set; }
+    }
+
     public class UserInterestMananger
     {
-        public static List<ModGenresInterests> UserInterest { get; set; } = new List<ModGenresInterests>();
-
-        public static List<AnimeSeriesInfo> LastSuggestion { get; set; }
+        public static UserInterestData Data { get; set; } = new UserInterestData();
 
         public static async Task AddInterest(string queryModFullname, GenreItem genre)
         {
@@ -1133,7 +1140,7 @@ namespace UADAPI
                 return;
 
             //Check if the mod is already define in the list
-            var mod = UserInterest.FirstOrDefault(f => f.QueryModFullName == queryModFullname);
+            var mod = Data.UserInterest.FirstOrDefault(f => f.QueryModFullName == queryModFullname);
             if(mod == null)
             {
                 mod = new ModGenresInterests();
@@ -1144,7 +1151,7 @@ namespace UADAPI
                 foreach (var item in genres)
                     mod.GenresInterest.Add(new GenreItemInterest() { Genre = item, DownloadCount = 0 });
 
-                UserInterest.Add(mod);
+                Data.UserInterest.Add(mod);
             }
 
             //check if the last download genres is not the same as this download
@@ -1175,12 +1182,12 @@ namespace UADAPI
             }
 
             interest.DownloadCount++;
-            LastSuggestion = null;
+            Data.LastSuggestion = null;
         }
 
         public static async Task<List<AnimeSeriesInfo>> GetSuggestion(string queryModFullname, int offset, int count)
         {
-            var mod = UserInterest.FirstOrDefault(f => f.QueryModFullName == queryModFullname);
+            var mod = Data.UserInterest.FirstOrDefault(f => f.QueryModFullName == queryModFullname);
             var querier = ApiHelpper.CreateQueryAnimeObjectByClassName(queryModFullname);
             var rand = new Random();
             if(mod == null)
@@ -1190,7 +1197,9 @@ namespace UADAPI
                 if (max > 0)
                     clacFrom = clacFrom * rand.Next(1, 100) % max;
 
-                return await querier.GetAnime(clacFrom, count);
+                var ress = await querier.GetAnime(clacFrom, count);
+                Data.LastSuggestion = ress;
+                return ress;
             }
 
             List<GenreItemInterest> interest = new List<GenreItemInterest>();
@@ -1300,7 +1309,7 @@ namespace UADAPI
             }
             var res = info.Shuffle().ToList();
 
-            LastSuggestion = res;
+            Data.LastSuggestion = res;
 
             if (res.Count > count)
                 return res.GetRange(0, count);
@@ -1309,15 +1318,20 @@ namespace UADAPI
 
         }
 
-        public static string Serialize() => JsonConvert.SerializeObject(UserInterest);
+        public static string Serialize() => JsonConvert.SerializeObject(Data);
 
         public static void Deserialize(string val)
         {
-            if(!string.IsNullOrEmpty(val))
+            var jsonSetting = new JsonSerializerSettings()
             {
-                var tmp = JsonConvert.DeserializeObject<List<ModGenresInterests>>(val);
-                UserInterest.Clear();
-                UserInterest.AddRange(tmp);
+                Error = new EventHandler<ErrorEventArgs>((s, e) => e.ErrorContext.Handled = true),
+                TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Full,
+            };
+
+            if (!string.IsNullOrEmpty(val))
+            {
+                var tmp = JsonConvert.DeserializeObject<UserInterestData>(val, jsonSetting);
+                Data = tmp;
             }
         }
     }
@@ -1379,7 +1393,7 @@ namespace UADAPI
             }
 
             int retryCount = 0;
-
+            Exception lastError = null;
             while (retryCount < retryLim)
             {
                 try
@@ -1417,12 +1431,13 @@ namespace UADAPI
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.ToString());
+                    await Task.Delay(3000);
+                    lastError = e;
                     retryCount++;
                 }
             }
 
-            throw new InvalidOperationException("Failed to get the requested data!");
+            throw new InvalidOperationException("Failed to get the requested data!" + url, lastError);
         }
 
         private static HttpWebRequest AddHeader(HttpWebRequest request, WebHeaderCollection headers)

@@ -232,6 +232,8 @@
                     <Button
                         Height="75"
                         HorizontalContentAlignment="Left"
+                        Command="{Binding NavigateCommand}"
+                        CommandParameter="Explore"
                         Style="{StaticResource MaterialDesignFlatButton}">
                         <Grid>
                             <Grid.ColumnDefinitions>

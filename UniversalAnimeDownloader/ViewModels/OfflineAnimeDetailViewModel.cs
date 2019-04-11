@@ -41,6 +41,8 @@ namespace UniversalAnimeDownloader.ViewModels
         {
             MiscClass.UserSearched += (s, e) =>
             {
+                if (MiscClass.NavigationHelper.Current != 5)
+                    return;
                 ICollectionView view = CollectionViewSource.GetDefaultView(_CurrentSeries.AttachedAnimeSeriesInfo.Episodes);
                 view.Filter = (p) =>
                 {

@@ -118,7 +118,7 @@ namespace UniversalAnimeDownloader.ViewModels
             }
         }
 
-        private Visibility _OverlayNotSupported;
+        private Visibility _OverlayNotSupported = Visibility.Collapsed;
         public Visibility OverlayNotSupported
         {
             get
@@ -141,9 +141,8 @@ namespace UniversalAnimeDownloader.ViewModels
 
         public FeaturedAnimeViewModel()
         {
-
             SelectedQueryModIndex = 0;
-            RefreshCommand = new RelayCommand<object>(p => true, async (p) => await LoadSuggestedAnime(0, 50));
+            RefreshCommand = new RelayCommand<object>(p => true, async (p) => await LoadFeaturedAnime(0, 50));
             AnimeListScrollingCommand = new RelayCommand<object>(p =>
             {
                 if (p != null)
@@ -157,7 +156,7 @@ namespace UniversalAnimeDownloader.ViewModels
                 }
             }, async (p) =>
             {
-                await LoadSuggestedAnime(SuggestedAnimeInfos.Count, 50, false);
+                await LoadFeaturedAnime(SuggestedAnimeInfos.Count, 50, false);
             });
 
             ShowAnimeDetailCommand = new RelayCommand<AnimeSeriesInfo>(p => true, async (p) =>
@@ -177,15 +176,15 @@ namespace UniversalAnimeDownloader.ViewModels
 
         private async void InitAnimeList()
         {
-            if (UserInterestMananger.LastSuggestion != null)
+            if (UserInterestMananger.Data.LastSuggestion != null)
             {
-                await SuggestedAnimeInfos.AddRange(UserInterestMananger.LastSuggestion, LoadAnimeCancelToken.Token);
+                await SuggestedAnimeInfos.AddRange(UserInterestMananger.Data.LastSuggestion, LoadAnimeCancelToken.Token);
             }
             else
             {
                 try
                 {
-                    await LoadSuggestedAnime(0, 50);
+                    await LoadFeaturedAnime(0, 50);
                 }
                 catch (Exception e)
                 {
@@ -195,48 +194,53 @@ namespace UniversalAnimeDownloader.ViewModels
             }
         }
 
-        private async Task LoadSuggestedAnime(int offset, int count, bool clearPreviousCard = true)
+        private async Task LoadFeaturedAnime(int offset, int count, bool clearPreviousCard = true)
         {
-            IsLoadOngoing = true;
-            try
+            if (Querier.SupportGetPopularSeries)
             {
-                if (ApiHelpper.CheckForInternetConnection())
+                HideNotSupportedOverlay();
+                IsLoadOngoing = true;
+                try
                 {
-                    HideAllOverlay();
-                    OverlayActiityIndicatorVisibility = Visibility.Visible;
-                    if (Querier != null)
+                    if (ApiHelpper.CheckForInternetConnection())
                     {
-                        LoadAnimeCancelToken.Cancel();
-                        LoadAnimeCancelToken = new CancellationTokenSource();
-
-                        var animes = await UserInterestMananger.GetSuggestion(Querier.GetType().FullName, offset, count);
-                        UADSettingsManager.Instance.CurrentSettings.UserInterest = UserInterestMananger.Serialize();
-
-                        if (clearPreviousCard)
+                        HideAllOverlay();
+                        OverlayActiityIndicatorVisibility = Visibility.Visible;
+                        if (Querier != null)
                         {
-                            SuggestedAnimeInfos.RemoveAll();
+                            LoadAnimeCancelToken?.Cancel();
+                            LoadAnimeCancelToken = new CancellationTokenSource();
+
+                            var animes = await Querier.GetFeaturedAnime(offset, count);
+
+                            if (clearPreviousCard)
+                            {
+                                SuggestedAnimeInfos.RemoveAll();
+                            }
+                            try
+                            {
+                                await SuggestedAnimeInfos.AddRange(animes, LoadAnimeCancelToken.Token);
+                            }
+                            catch { }
                         }
-                        try
-                        {
-                            await SuggestedAnimeInfos.AddRange(animes, LoadAnimeCancelToken.Token);
-                        }
-                        catch { }
+                        HideAllOverlay();
                     }
-                    HideAllOverlay();
+                    else
+                    {
+                        HideAllOverlay();
+                        ShowNoInternetOverlay();
+                    }
                 }
-                else
+                catch (Exception e)
                 {
+                    //Add a error message in UADAPI.OutputLogHelper class
                     HideAllOverlay();
-                    ShowNoInternetOverlay();
+                    ShowErrorOcuredOverlay(e);
                 }
+                IsLoadOngoing = false;
             }
-            catch (Exception e)
-            {
-                //Add a error message in UADAPI.OutputLogHelper class
-                HideAllOverlay();
-                ShowErrorOcuredOverlay(e);
-            }
-            IsLoadOngoing = false;
+            else
+                ShowNotSupportedOverlay();
         }
 
         private void HideAllOverlay()
@@ -293,6 +297,6 @@ namespace UniversalAnimeDownloader.ViewModels
             OverlayNotSupported = Visibility.Visible;
         }
 
-        private void HideNotSupportedOverlay() => OverlayNotSupported = Visibility.Visible;
+        private void HideNotSupportedOverlay() => OverlayNotSupported = Visibility.Collapsed;
     }
 }

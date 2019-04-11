@@ -84,6 +84,7 @@
     </ApplicationDefinition>
     <Compile Include="Animations\ExpanderDoubleAnimation.cs" />
     <Compile Include="Animations\GridLengthAnimation.cs" />
+    <Compile Include="Behaviour\BubbleScrollEvent.cs" />
     <Compile Include="DelayedObservableCollection.cs" />
     <Compile Include="Extensions\ListBoxExtensions.cs" />
     <Compile Include="IPageContent.cs" />
@@ -106,6 +107,9 @@
     </Compile>
     <Compile Include="UcContentPages\DownloadCenter.xaml.cs">
       <DependentUpon>DownloadCenter.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UcContentPages\Explore.xaml.cs">
+      <DependentUpon>Explore.xaml</DependentUpon>
     </Compile>
     <Compile Include="UcContentPages\FeaturedAnime.xaml.cs">
       <DependentUpon>FeaturedAnime.xaml</DependentUpon>
@@ -145,6 +149,7 @@
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ButtonActionEventArgs.cs" />
     <Compile Include="ViewModels\DownloadCenterViewModel.cs" />
+    <Compile Include="ViewModels\ExploreViewModel.cs" />
     <Compile Include="ViewModels\FeaturedAnimeViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\MessageDialogViewModel.cs" />
@@ -185,6 +190,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UcContentPages\DownloadCenter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UcContentPages\Explore.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -245,9 +254,6 @@
       <Project>{2E485D50-DFAB-4755-BCE5-2389D51B31CC}</Project>
       <Name>UADAPI</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="template\styles\main.css" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

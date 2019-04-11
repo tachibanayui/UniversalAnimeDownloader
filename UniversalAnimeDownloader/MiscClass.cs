@@ -164,6 +164,7 @@ namespace UniversalAnimeDownloader
         public List<int> History { get; } = new List<int>();
         public bool CanGoBack { get => _Position > 0; }
         public bool CanGoForward { get => _Position < History.Count - 1; }
+        public int Current { get; private set; }
 
         public void RemoveFromAt(int index)
         {
@@ -178,23 +179,27 @@ namespace UniversalAnimeDownloader
             _Position++;
             RemoveFromAt(_Position);
             History.Add(pageIndex);
+            Current = pageIndex;
         }
 
         public int Back()
         {
             _Position--;
+            Current = History[_Position];
             return History[_Position];
         }
 
         public int Forward()
         {
             _Position++;
+            Current = History[_Position];
             return History[_Position];
         }
 
         public void Reset()
         {
             History.Clear();
+            Current = -1;
             _Position = -1;
         }
     }

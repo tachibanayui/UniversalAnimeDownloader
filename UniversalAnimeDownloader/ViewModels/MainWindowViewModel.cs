@@ -287,6 +287,9 @@ namespace UniversalAnimeDownloader.ViewModels
                     case "FeaturedAnime":
                         pageIndex = 7;
                         break;
+                    case "Explore":
+                        pageIndex = 8;
+                        break;
                     default:
                         break;
                 }
@@ -319,6 +322,7 @@ namespace UniversalAnimeDownloader.ViewModels
             new UcContentPages.OfflineAnimeDetail(),
             new UcContentPages.UADSettings(),
             new UcContentPages.FeaturedAnime(),
+            new UcContentPages.Explore()
         };
     }
 }
