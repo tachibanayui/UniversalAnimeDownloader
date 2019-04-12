@@ -178,7 +178,6 @@ namespace UADAPI
         #endregion
     }
 
-
     /// <summary>
     /// Contain information abuot the modification or extractor
     /// </summary>
@@ -358,7 +357,6 @@ namespace UADAPI
             }
         }
     }
-
 
     /// <summary>
     /// A class the handle downloading videos and create required files for UAD to recognize
@@ -1120,7 +1118,6 @@ namespace UADAPI
         }
     }
 
-
     public class UserInterestData
     {
         public List<ModGenresInterests> UserInterest { get; set; } = new List<ModGenresInterests>();
@@ -1349,7 +1346,6 @@ namespace UADAPI
         public GenreItem Genre { get; set; }
         public int DownloadCount { get; set; }
     }
-
 
     /// <summary>
     /// A HttpWebRequest that cache the result

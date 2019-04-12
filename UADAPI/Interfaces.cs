@@ -18,7 +18,7 @@ namespace UADAPI
         string RemoteHost { get; set; }
 
         /// <summary>
-        /// This will define do this mod support gt popular anime. If false, <c>IQueryAnimeSeries.GetFeaturedAnime()</c> will not be called 
+        /// This will define do this mod support gt popular anime. If false, <see cref="GetFeaturedAnime"/> will not be called 
         /// </summary>
         bool SupportGetPopularSeries { get; set; }
 
