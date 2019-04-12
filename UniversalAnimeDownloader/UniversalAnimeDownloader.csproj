@@ -91,6 +91,7 @@
     <Compile Include="Animations\ExpanderDoubleAnimation.cs" />
     <Compile Include="Animations\GridLengthAnimation.cs" />
     <Compile Include="Behaviour\BubbleScrollEvent.cs" />
+    <Compile Include="CustomControls\CarouselPanel.cs" />
     <Compile Include="DelayedObservableCollection.cs" />
     <Compile Include="Extensions\ListBoxExtensions.cs" />
     <Compile Include="IPageContent.cs" />
@@ -146,6 +147,7 @@
     <Compile Include="ValueConverters\HtmlTagToColoredTextConverter.cs" />
     <Compile Include="ValueConverters\MediaSourceInfoToImageSource.cs" />
     <Compile Include="ValueConverters\NullOrEmpltyStringToVisibilityValueConverter.cs" />
+    <Compile Include="ValueConverters\ReferenceEqualValueConverter.cs" />
     <Compile Include="ValueConverters\SmallerThanParameterToVisibilityConverter.cs" />
     <Compile Include="ValueConverters\TypeToStringConverter.cs" />
     <Compile Include="ValueConverters\UADDownloaderStateToIconKindConverter.cs" />
@@ -182,6 +184,10 @@
     <Page Include="MainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="UcContentPages\AllAnimeTab.xaml">
       <SubType>Designer</SubType>

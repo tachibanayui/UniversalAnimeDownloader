@@ -20,7 +20,6 @@
     <valueConverter:UADDownloaderStateToStringConverter x:Key="UADDownloaderStateToStringConverter" />
     <valueConverter:SmallerThanParameterToVisibilityConverter x:Key="SmallerThanParameterToVisibilityConverter" />
     <valueConverter:AnimeSeriesStorageStateToIconVisibilityConverter x:Key="AnimeSeriesStorageStateToIconVisibilityConverter" />
-
     <sys:Double x:Key="Heading1">36</sys:Double>
     <sys:Double x:Key="Heading2">24</sys:Double>
     <sys:Double x:Key="Heading3">18</sys:Double>
