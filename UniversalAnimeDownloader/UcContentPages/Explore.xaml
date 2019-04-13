@@ -3,8 +3,10 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:behaviour="clr-namespace:UniversalAnimeDownloader.Behaviour"
+    xmlns:customControl="clr-namespace:UniversalAnimeDownloader.CustomControls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:ex="clr-namespace:UniversalAnimeDownloader.Extensions"
+    xmlns:html="clr-namespace:TheArtOfDev.HtmlRenderer.WPF;assembly=HtmlRenderer.WPF"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:local="clr-namespace:UniversalAnimeDownloader.UcContentPages"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
@@ -29,7 +31,64 @@
             HorizontalScrollBarVisibility="Disabled"
             VerticalScrollBarVisibility="Visible">
             <VirtualizingStackPanel>
-                <!--  Carosel here  -->
+                <customControl:CarouselPanel Height="400" SlideItemsSource="{Binding CarouselAnimeList}">
+                    <customControl:CarouselPanel.SlideItemTemplate>
+                        <DataTemplate>
+                            <Button
+                                Command="{Binding DataContext.ShowAnimeDetailCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:Explore}}}"
+                                CommandParameter="{Binding}"
+                                Style="{StaticResource NoDecorationButton}">
+                                <Grid
+                                    TextElement.FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
+                                    TextElement.FontSize="14"
+                                    TextElement.FontWeight="Medium"
+                                    TextElement.Foreground="{DynamicResource MaterialDesignBody}">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition Height="auto" />
+                                    </Grid.RowDefinitions>
+                                    <Image
+                                        Grid.RowSpan="2"
+                                        Source="{Binding Thumbnail.Url}"
+                                        Stretch="UniformToFill" />
+                                    <Grid Grid.Row="1" Margin="25">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="45" />
+                                            <RowDefinition Height="35" />
+                                            <RowDefinition Height="auto" MaxHeight="70" />
+                                        </Grid.RowDefinitions>
+                                        <TextBlock
+                                            FontSize="{DynamicResource Heading1}"
+                                            FontWeight="SemiBold"
+                                            Text="{Binding Name}"
+                                            ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}" />
+                                        <TextBlock Grid.Row="1" ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}">
+                                            <Run Text="Genres:" />
+                                            <Run Text="{Binding Genres, Converter={StaticResource GenreItemListToStringConverter}}" />
+                                        </TextBlock>
+                                        <html:HtmlPanel
+                                            x:Name="htmlDes"
+                                            Grid.Row="2"
+                                            Background="Transparent"
+                                            Text="{Binding Description, Converter={StaticResource HtmlTagToColoredTextConverter}}">
+                                            <html:HtmlPanel.ToolTip>
+                                                <ToolTip>
+                                                    <Grid>
+                                                        <html:HtmlPanel
+                                                            Width="500"
+                                                            Height="300"
+                                                            Text="{Binding Description}" />
+                                                    </Grid>
+                                                </ToolTip>
+                                            </html:HtmlPanel.ToolTip>
+                                        </html:HtmlPanel>
+
+                                    </Grid>
+                                </Grid>
+                            </Button>
+                        </DataTemplate>
+                    </customControl:CarouselPanel.SlideItemTemplate>
+                </customControl:CarouselPanel>
 
                 <Grid Margin="10,5">
                     <Grid.RowDefinitions>

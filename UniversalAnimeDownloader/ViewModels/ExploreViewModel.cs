@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -15,11 +16,13 @@ namespace UniversalAnimeDownloader.ViewModels
     {
         public ICommand NavigateGetMoreCommand { get; set; }
         public ICommand LoadedCommand { get; set; }
+        public ICommand ShowAnimeDetailCommand { get; set; }
 
         public IQueryAnimeSeries Querier { get; set; }
 
         public DelayedObservableCollection<AnimeSeriesInfo> FeaturedAnimeList { get; set; } = new DelayedObservableCollection<AnimeSeriesInfo>();
         public DelayedObservableCollection<AnimeSeriesInfo> SuggestedAnimeList { get; set; } = new DelayedObservableCollection<AnimeSeriesInfo>();
+        public ObservableCollection<AnimeSeriesInfo> CarouselAnimeList { get; set; } = new DelayedObservableCollection<AnimeSeriesInfo>();
         public CancellationTokenSource LoadFeaturedAnimeCancelToken { get; set; } = new CancellationTokenSource();
         public CancellationTokenSource LoadSuggestedAnimeCancelToken { get; set; } = new CancellationTokenSource();
 
@@ -32,6 +35,15 @@ namespace UniversalAnimeDownloader.ViewModels
                     (Application.Current.FindResource("MainWindowViewModel") as MainWindowViewModel).NavigateProcess("FeaturedAnime");
                 else if (p == "Suggestion")
                     (Application.Current.FindResource("MainWindowViewModel") as MainWindowViewModel).NavigateProcess("AnimeSuggestion");
+            });
+
+            ShowAnimeDetailCommand = new RelayCommand<AnimeSeriesInfo>(p => true,async p => 
+            {
+                IAnimeSeriesManager manager = ApiHelpper.CreateAnimeSeriesManagerObjectByClassName(p.ModInfo.ModTypeString);
+                manager.AttachedAnimeSeriesInfo = p;
+                await manager.GetPrototypeEpisodes();
+                (Application.Current.FindResource("AnimeDetailsViewModel") as AnimeDetailsViewModel).CurrentSeries = manager;
+                (Application.Current.FindResource("MainWindowViewModel") as MainWindowViewModel).NavigateProcess("AnimeDetails");
             });
         }
 
@@ -51,9 +63,14 @@ namespace UniversalAnimeDownloader.ViewModels
                 LoadFeaturedAnimeCancelToken?.Cancel();
                 LoadFeaturedAnimeCancelToken = new CancellationTokenSource();
                 FeaturedAnimeList.RemoveAll();
+                CarouselAnimeList.Clear();
                 try
                 {
-                    await FeaturedAnimeList.AddRange(featureInfo.Where((f, i) => i < 10).ToList(), LoadFeaturedAnimeCancelToken.Token);
+                    for (int i = 0; i < 6; i++)
+                    {
+                        CarouselAnimeList.Add(featureInfo[i]);
+                    }
+                    await FeaturedAnimeList.AddRange(featureInfo.Where((f, i) => i > 6 &&  i < 18).ToList(), LoadFeaturedAnimeCancelToken.Token);
                 }
                 catch { }
             };

@@ -14,6 +14,19 @@
         <Setter Property="BorderBrush" Value="Transparent" />
     </Style>
 
+    <Style x:Key="NoDecorationButton" TargetType="Button">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid>
+                        <Rectangle Fill="{DynamicResource MaterialDesignPaper}" Opacity="0.005" />
+                        <ContentPresenter Content="{TemplateBinding Content}" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style x:Key="SideBarNavIcon" TargetType="materialDesign:PackIcon">
         <Setter Property="Width" Value="{DynamicResource Heading2}" />
         <Setter Property="Height" Value="{DynamicResource Heading2}" />
@@ -310,4 +323,6 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+
 </ResourceDictionary>
