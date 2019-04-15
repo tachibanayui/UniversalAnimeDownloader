@@ -248,7 +248,7 @@ namespace UniversalAnimeDownloader.ViewModels
             IsLoadOngoing = true;
             try
             {
-                if (ApiHelpper.CheckForInternetConnection())
+                if (await ApiHelpper.CheckForInternetConnection())
                 {
                     HideAllOverlay();
                     OverlayActiityIndicatorVisibility = Visibility.Visible;

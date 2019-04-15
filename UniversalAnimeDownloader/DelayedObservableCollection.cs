@@ -30,6 +30,7 @@ namespace UniversalAnimeDownloader
                 token.ThrowIfCancellationRequested();
                 await Task.Delay(DelayInterval);
             }
+            OnPropertyChanged(new PropertyChangedEventArgs("Count"));
             OnCollectionReallyChanged();
         }
 
@@ -39,7 +40,6 @@ namespace UniversalAnimeDownloader
             {
                 Items.RemoveAt(0);
             }
-
             OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
@@ -50,7 +50,6 @@ namespace UniversalAnimeDownloader
                 Items.RemoveAt(0);
                 await Task.Delay(DelayInterval);
             }
-
             OnCollectionReallyChanged();
         }
 

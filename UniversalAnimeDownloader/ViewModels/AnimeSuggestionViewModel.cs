@@ -149,7 +149,6 @@ namespace UniversalAnimeDownloader.ViewModels
             {
                 if (p != null)
                 {
-                    MiscClass.NavigationHelper.AddNavigationHistory(1);
                     IAnimeSeriesManager manager = ApiHelpper.CreateAnimeSeriesManagerObjectByClassName(p.ModInfo.ModTypeString);
                     manager.AttachedAnimeSeriesInfo = p;
                     await manager.GetPrototypeEpisodes();
@@ -183,7 +182,7 @@ namespace UniversalAnimeDownloader.ViewModels
             IsLoadOngoing = true;
             try
             {
-                if (ApiHelpper.CheckForInternetConnection())
+                if (await ApiHelpper.CheckForInternetConnection())
                 {
                     HideAllOverlay();
                     OverlayActiityIndicatorVisibility = Visibility.Visible;

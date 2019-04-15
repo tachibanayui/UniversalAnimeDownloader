@@ -103,17 +103,26 @@
     <Compile Include="LifeSpanObservableCollection.cs" />
     <Compile Include="UADSettingsPortal\UADSettingsData.cs" />
     <Compile Include="UADSettingsPortal\UADSettingsManager.cs" />
+    <Compile Include="UcContentPages\ActivityIndicator.xaml.cs">
+      <DependentUpon>ActivityIndicator.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UcContentPages\AllAnimeTab.xaml.cs">
       <DependentUpon>AllAnimeTab.xaml</DependentUpon>
     </Compile>
     <Compile Include="UcContentPages\AnimeDetails.xaml.cs">
       <DependentUpon>AnimeDetails.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UcContentPages\AnimeItemCard.xaml.cs">
+      <DependentUpon>AnimeItemCard.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UcContentPages\AnimeSuggestion.xaml.cs">
       <DependentUpon>AnimeSuggestion.xaml</DependentUpon>
     </Compile>
     <Compile Include="UcContentPages\DownloadCenter.xaml.cs">
       <DependentUpon>DownloadCenter.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UcContentPages\ErrorOccuredOverlay.xaml.cs">
+      <DependentUpon>ErrorOccuredOverlay.xaml</DependentUpon>
     </Compile>
     <Compile Include="UcContentPages\Explore.xaml.cs">
       <DependentUpon>Explore.xaml</DependentUpon>
@@ -124,8 +133,14 @@
     <Compile Include="UcContentPages\MyAnimeLibrary.xaml.cs">
       <DependentUpon>MyAnimeLibrary.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UcContentPages\NoInternetConnectionOverlay.xaml.cs">
+      <DependentUpon>NoInternetConnectionOverlay.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UcContentPages\NotifycationPanel.xaml.cs">
       <DependentUpon>NotifycationPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UcContentPages\NotSupportedOverlay.xaml.cs">
+      <DependentUpon>NotSupportedOverlay.xaml</DependentUpon>
     </Compile>
     <Compile Include="UcContentPages\OfflineAnimeDetail.xaml.cs">
       <DependentUpon>OfflineAnimeDetail.xaml</DependentUpon>
@@ -133,11 +148,15 @@
     <Compile Include="UcContentPages\Palette.xaml.cs">
       <DependentUpon>Palette.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UcContentPages\ShowMoreAnimeCard.xaml.cs">
+      <DependentUpon>ShowMoreAnimeCard.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UcContentPages\UADSettings.xaml.cs">
       <DependentUpon>UADSettings.xaml</DependentUpon>
     </Compile>
     <Compile Include="ValueConverters\AnimeSeriesStorageStateToIconVisibilityConverter.cs" />
     <Compile Include="ValueConverters\AutomatedUnitConversionFromByteConverter.cs" />
+    <Compile Include="ValueConverters\GreaterThanParameterToVisibilityConverter.cs" />
     <Compile Include="ValueConverters\InvertableBoolToVisibilityConverter.cs" />
     <Compile Include="ValueConverters\DateTimeToStringConverter.cs" />
     <Compile Include="ValueConverters\EpisodeDownloadStateToPackIconKindConverter.cs" />
@@ -189,6 +208,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="UcContentPages\ActivityIndicator.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UcContentPages\AllAnimeTab.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -197,11 +220,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UcContentPages\AnimeItemCard.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UcContentPages\AnimeSuggestion.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UcContentPages\DownloadCenter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UcContentPages\ErrorOccuredOverlay.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -217,7 +248,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UcContentPages\NoInternetConnectionOverlay.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UcContentPages\NotifycationPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UcContentPages\NotSupportedOverlay.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -226,6 +265,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UcContentPages\Palette.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UcContentPages\ShowMoreAnimeCard.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

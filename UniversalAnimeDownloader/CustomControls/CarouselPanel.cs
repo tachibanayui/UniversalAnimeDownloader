@@ -257,6 +257,8 @@ namespace UniversalAnimeDownloader.CustomControls
         }
         private void NextSlide(object sender, EventArgs e)
         {
+            if (((System.Collections.ObjectModel.Collection<UADAPI.AnimeSeriesInfo>)SlideItemsSource).Count == 0)
+                return;
             if (_slider != null)
             {
                 var max = _slider.Items.Count;

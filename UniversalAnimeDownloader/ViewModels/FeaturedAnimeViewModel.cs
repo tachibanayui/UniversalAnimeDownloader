@@ -163,11 +163,11 @@ namespace UniversalAnimeDownloader.ViewModels
             {
                 if (p != null)
                 {
-                    MiscClass.NavigationHelper.AddNavigationHistory(1);
                     IAnimeSeriesManager manager = ApiHelpper.CreateAnimeSeriesManagerObjectByClassName(p.ModInfo.ModTypeString);
                     manager.AttachedAnimeSeriesInfo = p;
                     await manager.GetPrototypeEpisodes();
                     (Application.Current.FindResource("AnimeDetailsViewModel") as AnimeDetailsViewModel).CurrentSeries = manager;
+                    (Application.Current.FindResource("MainWindowViewModel") as MainWindowViewModel).NavigateProcess("AnimeDetails");
                 }
             });
 
@@ -202,7 +202,7 @@ namespace UniversalAnimeDownloader.ViewModels
                 IsLoadOngoing = true;
                 try
                 {
-                    if (ApiHelpper.CheckForInternetConnection())
+                    if (await ApiHelpper.CheckForInternetConnection())
                     {
                         HideAllOverlay();
                         OverlayActiityIndicatorVisibility = Visibility.Visible;

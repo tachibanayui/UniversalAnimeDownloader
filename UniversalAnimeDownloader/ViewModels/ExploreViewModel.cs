@@ -31,6 +31,7 @@ namespace UniversalAnimeDownloader.ViewModels
             LoadedCommand = new RelayCommand<object>(p => true, Init);
             NavigateGetMoreCommand = new RelayCommand<string>(p => true, p =>
             {
+
                 if (p == "Featured")
                     (Application.Current.FindResource("MainWindowViewModel") as MainWindowViewModel).NavigateProcess("FeaturedAnime");
                 else if (p == "Suggestion")
@@ -94,7 +95,7 @@ namespace UniversalAnimeDownloader.ViewModels
             {
                 try
                 {
-                    if (ApiHelpper.CheckForInternetConnection())
+                    if (await ApiHelpper.CheckForInternetConnection())
                     {
                         if (Querier != null)
                         {
@@ -116,7 +117,7 @@ namespace UniversalAnimeDownloader.ViewModels
         {
             try
             {
-                if (ApiHelpper.CheckForInternetConnection())
+                if (await ApiHelpper.CheckForInternetConnection())
                 {
                     if (Querier != null)
                     {

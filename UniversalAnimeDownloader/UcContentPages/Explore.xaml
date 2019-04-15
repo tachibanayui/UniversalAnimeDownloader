@@ -11,6 +11,7 @@
     xmlns:local="clr-namespace:UniversalAnimeDownloader.UcContentPages"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:pages="clr-namespace:UniversalAnimeDownloader.UcContentPages"
     d:DesignHeight="450"
     d:DesignWidth="800"
     Background="{DynamicResource MaterialDesignPaper}"
@@ -26,69 +27,71 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Grid>
-        <ScrollViewer
-            x:Name="oof2"
-            HorizontalScrollBarVisibility="Disabled"
-            VerticalScrollBarVisibility="Visible">
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible">
             <VirtualizingStackPanel>
-                <customControl:CarouselPanel Height="400" SlideItemsSource="{Binding CarouselAnimeList}">
-                    <customControl:CarouselPanel.SlideItemTemplate>
-                        <DataTemplate>
-                            <Button
-                                Command="{Binding DataContext.ShowAnimeDetailCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:Explore}}}"
-                                CommandParameter="{Binding}"
-                                Style="{StaticResource NoDecorationButton}">
-                                <Grid
-                                    TextElement.FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
-                                    TextElement.FontSize="14"
-                                    TextElement.FontWeight="Medium"
-                                    TextElement.Foreground="{DynamicResource MaterialDesignBody}">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition />
-                                        <RowDefinition Height="auto" />
-                                    </Grid.RowDefinitions>
-                                    <Image
-                                        Grid.RowSpan="2"
-                                        Source="{Binding Thumbnail.Url}"
-                                        Stretch="UniformToFill" />
-                                    <Grid Grid.Row="1" Margin="25">
+                <Grid>
+                    <customControl:CarouselPanel Height="400" SlideItemsSource="{Binding CarouselAnimeList}">
+                        <customControl:CarouselPanel.SlideItemTemplate>
+                            <DataTemplate>
+                                <Button
+                                    Command="{Binding DataContext.ShowAnimeDetailCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:Explore}}}"
+                                    CommandParameter="{Binding}"
+                                    Style="{StaticResource NoDecorationButton}">
+                                    <Grid
+                                        TextElement.FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
+                                        TextElement.FontSize="14"
+                                        TextElement.FontWeight="Medium"
+                                        TextElement.Foreground="{DynamicResource MaterialDesignBody}">
                                         <Grid.RowDefinitions>
-                                            <RowDefinition Height="45" />
-                                            <RowDefinition Height="35" />
-                                            <RowDefinition Height="auto" MaxHeight="70" />
+                                            <RowDefinition />
+                                            <RowDefinition Height="auto" />
                                         </Grid.RowDefinitions>
-                                        <TextBlock
-                                            FontSize="{DynamicResource Heading1}"
-                                            FontWeight="SemiBold"
-                                            Text="{Binding Name}"
-                                            ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}" />
-                                        <TextBlock Grid.Row="1" ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}">
-                                            <Run Text="Genres:" />
-                                            <Run Text="{Binding Genres, Converter={StaticResource GenreItemListToStringConverter}}" />
-                                        </TextBlock>
-                                        <html:HtmlPanel
-                                            x:Name="htmlDes"
-                                            Grid.Row="2"
-                                            Background="Transparent"
-                                            Text="{Binding Description, Converter={StaticResource HtmlTagToColoredTextConverter}}">
-                                            <html:HtmlPanel.ToolTip>
-                                                <ToolTip>
-                                                    <Grid>
-                                                        <html:HtmlPanel
-                                                            Width="500"
-                                                            Height="300"
-                                                            Text="{Binding Description}" />
-                                                    </Grid>
-                                                </ToolTip>
-                                            </html:HtmlPanel.ToolTip>
-                                        </html:HtmlPanel>
+                                        <Image
+                                            Grid.RowSpan="2"
+                                            Source="{Binding Thumbnail.Url}"
+                                            Stretch="UniformToFill" />
+                                        <Grid Grid.Row="1" Margin="25">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="45" />
+                                                <RowDefinition Height="35" />
+                                                <RowDefinition Height="auto" MaxHeight="70" />
+                                            </Grid.RowDefinitions>
+                                            <TextBlock
+                                                FontSize="{DynamicResource Heading1}"
+                                                FontWeight="SemiBold"
+                                                Text="{Binding Name}"
+                                                ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}" />
+                                            <TextBlock Grid.Row="1" ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}">
+                                                <Run Text="Genres:" />
+                                                <Run Text="{Binding Genres, Converter={StaticResource GenreItemListToStringConverter}}" />
+                                            </TextBlock>
+                                            <html:HtmlPanel
+                                                x:Name="htmlDes"
+                                                Grid.Row="2"
+                                                Background="Transparent"
+                                                Text="{Binding Description, Converter={StaticResource HtmlTagToColoredTextConverter}}">
+                                                <html:HtmlPanel.ToolTip>
+                                                    <ToolTip>
+                                                        <Grid>
+                                                            <html:HtmlPanel
+                                                                Width="500"
+                                                                Height="300"
+                                                                Text="{Binding Description}" />
+                                                        </Grid>
+                                                    </ToolTip>
+                                                </html:HtmlPanel.ToolTip>
+                                            </html:HtmlPanel>
 
+                                        </Grid>
                                     </Grid>
-                                </Grid>
-                            </Button>
-                        </DataTemplate>
-                    </customControl:CarouselPanel.SlideItemTemplate>
-                </customControl:CarouselPanel>
+                                </Button>
+                            </DataTemplate>
+                        </customControl:CarouselPanel.SlideItemTemplate>
+                    </customControl:CarouselPanel>
+
+                    <pages:ActivityIndicator Visibility="{Binding CarouselAnimeList.Count, IsAsync=True, FallbackValue=0, ConverterParameter=1, Converter={StaticResource SmallerThanParameterToVisibilityConverter}}" />
+                </Grid>
+
 
                 <Grid Margin="10,5">
                     <Grid.RowDefinitions>
@@ -117,237 +120,19 @@
                                     </ListBox.ItemsPanel>
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
-                                            <materialDesign:Card
-                                                Width="200"
-                                                Height="300"
-                                                Margin="5"
-                                                UniformCornerRadius="5">
-                                                <materialDesign:Card.Style>
-                                                    <Style TargetType="materialDesign:Card">
-                                                        <Style.Triggers>
-                                                            <EventTrigger RoutedEvent="Loaded">
-                                                                <BeginStoryboard>
-                                                                    <Storyboard>
-                                                                        <DoubleAnimation
-                                                                            Storyboard.TargetProperty="Opacity"
-                                                                            From="0"
-                                                                            To="1"
-                                                                            Duration="0:0:0.25" />
-                                                                    </Storyboard>
-                                                                </BeginStoryboard>
-                                                            </EventTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </materialDesign:Card.Style>
-                                                <materialDesign:Card.ToolTip>
-                                                    <ToolTip
-                                                        Background="Transparent"
-                                                        ToolTipService.BetweenShowDelay="1500"
-                                                        ToolTipService.HasDropShadow="True"
-                                                        ToolTipService.InitialShowDelay="1500"
-                                                        ToolTipService.Placement="Mouse"
-                                                        ToolTipService.ShowDuration="60000">
-                                                        <materialDesign:Card
-                                                            Width="400"
-                                                            Height="250"
-                                                            ToolTipService.ShowDuration="600000">
-                                                            <Grid>
-                                                                <Grid.ColumnDefinitions>
-                                                                    <ColumnDefinition />
-                                                                    <ColumnDefinition />
-                                                                </Grid.ColumnDefinitions>
-                                                                <Image Margin="10" Source="{Binding Thumbnail, Converter={StaticResource MediaSourceInfoToImageSourceConverter}, IsAsync=True}" />
-                                                                <Grid Grid.Column="1" Margin="5">
-                                                                    <Grid.RowDefinitions>
-                                                                        <RowDefinition Height="48" />
-                                                                        <RowDefinition Height="72" />
-                                                                        <RowDefinition />
-                                                                        <RowDefinition Height="48" />
-                                                                    </Grid.RowDefinitions>
-                                                                    <Grid.Resources>
-                                                                        <Style TargetType="TextBlock">
-                                                                            <Setter Property="Margin" Value="5" />
-                                                                            <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}" />
-                                                                            <Setter Property="TextTrimming" Value="CharacterEllipsis" />
-                                                                            <Setter Property="TextWrapping" Value="WrapWithOverflow" />
-                                                                        </Style>
-                                                                    </Grid.Resources>
-                                                                    <TextBlock>
-                                                                        <Run Text="Title: " />
-                                                                        <Run Text="{Binding Name, IsAsync=True, FallbackValue=Loading}" />
-                                                                    </TextBlock>
-                                                                    <TextBlock Grid.Row="1">
-                                                                        <Run Text="Genres: " />
-                                                                        <Run Text="{Binding Genres, Converter={StaticResource GenreItemListToStringConverter}, IsAsync=True, FallbackValue=Loading}" />
-                                                                    </TextBlock>
-                                                                    <TextBlock Grid.Row="2">
-                                                                        <Run Text="Description: " />
-                                                                        <Run Text="{Binding Description, IsAsync=True, FallbackValue=Loading}" />
-                                                                    </TextBlock>
-                                                                    <TextBlock
-                                                                        Grid.Row="3"
-                                                                        FontSize="12"
-                                                                        Text="Click the card view to see more." />
-                                                                </Grid>
-                                                            </Grid>
-                                                        </materialDesign:Card>
-                                                    </ToolTip>
-                                                </materialDesign:Card.ToolTip>
-                                                <Button Command="{x:Static materialDesign:Transitioner.MoveNextCommand}">
-                                                    <i:Interaction.Triggers>
-                                                        <i:EventTrigger EventName="Click">
-                                                            <i:InvokeCommandAction Command="{Binding DataContext.ShowAnimeDetailCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:Explore}}}" CommandParameter="{Binding}" />
-                                                        </i:EventTrigger>
-                                                    </i:Interaction.Triggers>
-                                                    <Button.Style>
-                                                        <Style TargetType="Button">
-                                                            <Setter Property="Template">
-                                                                <Setter.Value>
-                                                                    <ControlTemplate TargetType="Button">
-                                                                        <ContentPresenter Content="{TemplateBinding Content}" />
-                                                                    </ControlTemplate>
-                                                                </Setter.Value>
-                                                            </Setter>
-                                                        </Style>
-                                                    </Button.Style>
-                                                    <Grid
-                                                        TextElement.FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
-                                                        TextElement.FontSize="14"
-                                                        TextElement.FontWeight="Medium"
-                                                        TextElement.Foreground="{DynamicResource MaterialDesignBody}">
-                                                        <Grid.RowDefinitions>
-                                                            <RowDefinition />
-                                                            <RowDefinition />
-                                                        </Grid.RowDefinitions>
-                                                        <Image
-                                                            Margin="5"
-                                                            Source="{Binding Thumbnail, Converter={StaticResource MediaSourceInfoToImageSourceConverter}, IsAsync=True}"
-                                                            Stretch="UniformToFill" />
-                                                        <Grid
-                                                            Grid.Row="1"
-                                                            Width="25"
-                                                            Height="25"
-                                                            Margin="10"
-                                                            HorizontalAlignment="Right"
-                                                            VerticalAlignment="Bottom">
-                                                            <materialDesign:PackIcon
-                                                                Kind="Book"
-                                                                Style="{StaticResource AutoSizeIconPack}"
-                                                                ToolTip="This anime can be watch offline"
-                                                                Visibility="{Binding ., Converter={StaticResource AnimeSeriesStorageStateToIconVisibilityConverter}, ConverterParameter=Offline, IsAsync=True}" />
-                                                        </Grid>
-
-                                                        <Grid Grid.Row="1">
-                                                            <Grid.RowDefinitions>
-                                                                <RowDefinition Height="35" />
-                                                                <RowDefinition />
-                                                            </Grid.RowDefinitions>
-                                                            <TextBlock
-                                                                Margin="5"
-                                                                VerticalAlignment="Center"
-                                                                FontWeight="SemiBold"
-                                                                Text="{Binding Name, IsAsync=True, FallbackValue=Loading}"
-                                                                TextTrimming="CharacterEllipsis" />
-                                                            <TextBlock
-                                                                Grid.Row="1"
-                                                                Margin="5"
-                                                                Text="{Binding Genres, Converter={StaticResource GenreItemListToStringConverter}, IsAsync=True, FallbackValue=Loading}"
-                                                                TextTrimming="WordEllipsis"
-                                                                TextWrapping="WrapWithOverflow" />
-                                                        </Grid>
-                                                    </Grid>
-
-                                                </Button>
-                                            </materialDesign:Card>
+                                            <pages:AnimeItemCard AnimeCardCommand="{Binding DataContext.ShowAnimeDetailCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:Explore}}}" />
                                         </DataTemplate>
                                     </ListBox.ItemTemplate>
                                 </ListBox>
 
-                                <materialDesign:Card
-                                    Width="200"
-                                    Height="300"
-                                    Margin="5"
-                                    VerticalAlignment="Center"
-                                    UniformCornerRadius="5">
-                                    <materialDesign:Card.Style>
-                                        <Style TargetType="materialDesign:Card">
-                                            <Style.Triggers>
-                                                <EventTrigger RoutedEvent="Loaded">
-                                                    <BeginStoryboard>
-                                                        <Storyboard>
-                                                            <DoubleAnimation
-                                                                Storyboard.TargetProperty="Opacity"
-                                                                From="0"
-                                                                To="1"
-                                                                Duration="0:0:0.25" />
-                                                        </Storyboard>
-                                                    </BeginStoryboard>
-                                                </EventTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </materialDesign:Card.Style>
-                                    <Button>
-                                        <i:Interaction.Triggers>
-                                            <i:EventTrigger EventName="Click">
-                                                <i:InvokeCommandAction Command="{Binding DataContext.NavigateGetMoreCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:Explore}}}" CommandParameter="Featured" />
-                                            </i:EventTrigger>
-                                        </i:Interaction.Triggers>
-                                        <Button.Style>
-                                            <Style TargetType="Button">
-                                                <Setter Property="Template">
-                                                    <Setter.Value>
-                                                        <ControlTemplate TargetType="Button">
-                                                            <ContentPresenter Content="{TemplateBinding Content}" />
-                                                        </ControlTemplate>
-                                                    </Setter.Value>
-                                                </Setter>
-                                            </Style>
-                                        </Button.Style>
-                                        <Grid
-                                            TextElement.FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
-                                            TextElement.FontSize="14"
-                                            TextElement.FontWeight="Medium"
-                                            TextElement.Foreground="{DynamicResource MaterialDesignBody}">
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition />
-                                                <RowDefinition />
-                                            </Grid.RowDefinitions>
-                                            <Rectangle
-                                                Grid.RowSpan="2"
-                                                Fill="{DynamicResource MaterialDesignBody}"
-                                                Opacity="0.0005" />
-                                            <materialDesign:PackIcon
-                                                Margin="5"
-                                                Kind="PlusCircleOutline"
-                                                Style="{StaticResource AutoSizeIconPack}" />
-
-                                            <Grid Grid.Row="1">
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition Height="35" />
-                                                    <RowDefinition />
-                                                </Grid.RowDefinitions>
-                                                <TextBlock
-                                                    Margin="5"
-                                                    VerticalAlignment="Center"
-                                                    FontWeight="SemiBold"
-                                                    Text="Click here for more"
-                                                    TextTrimming="CharacterEllipsis" />
-                                                <TextBlock
-                                                    Grid.Row="1"
-                                                    Margin="5"
-                                                    Text="We always got more for you to explore"
-                                                    TextTrimming="WordEllipsis"
-                                                    TextWrapping="WrapWithOverflow" />
-                                            </Grid>
-                                        </Grid>
-                                    </Button>
-                                </materialDesign:Card>
+                                <pages:ShowMoreAnimeCard AnimeCardCommand="{Binding DataContext.NavigateGetMoreCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:Explore}}}" AnimeCardCommandParameter="Featured" />
                             </StackPanel>
 
                             <i:Interaction.Behaviors>
                                 <behaviour:BubbleScrollEvent />
                             </i:Interaction.Behaviors>
                         </ScrollViewer>
+                        <pages:ActivityIndicator Visibility="{Binding FeaturedAnimeList.Count, IsAsync=True, FallbackValue=0, ConverterParameter=1, Converter={StaticResource SmallerThanParameterToVisibilityConverter}}" />
                     </Grid>
                 </Grid>
 
@@ -377,238 +162,19 @@
                                     </ListBox.ItemsPanel>
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
-                                            <materialDesign:Card
-                                                Width="200"
-                                                Height="300"
-                                                Margin="5"
-                                                UniformCornerRadius="5">
-                                                <materialDesign:Card.Style>
-                                                    <Style TargetType="materialDesign:Card">
-                                                        <Style.Triggers>
-                                                            <EventTrigger RoutedEvent="Loaded">
-                                                                <BeginStoryboard>
-                                                                    <Storyboard>
-                                                                        <DoubleAnimation
-                                                                            Storyboard.TargetProperty="Opacity"
-                                                                            From="0"
-                                                                            To="1"
-                                                                            Duration="0:0:0.25" />
-                                                                    </Storyboard>
-                                                                </BeginStoryboard>
-                                                            </EventTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </materialDesign:Card.Style>
-                                                <materialDesign:Card.ToolTip>
-                                                    <ToolTip
-                                                        Background="Transparent"
-                                                        ToolTipService.BetweenShowDelay="1500"
-                                                        ToolTipService.HasDropShadow="True"
-                                                        ToolTipService.InitialShowDelay="1500"
-                                                        ToolTipService.Placement="Mouse"
-                                                        ToolTipService.ShowDuration="60000">
-                                                        <materialDesign:Card
-                                                            Width="400"
-                                                            Height="250"
-                                                            ToolTipService.ShowDuration="600000">
-                                                            <Grid>
-                                                                <Grid.ColumnDefinitions>
-                                                                    <ColumnDefinition />
-                                                                    <ColumnDefinition />
-                                                                </Grid.ColumnDefinitions>
-                                                                <Image Margin="10" Source="{Binding Thumbnail, Converter={StaticResource MediaSourceInfoToImageSourceConverter}, IsAsync=True}" />
-                                                                <Grid Grid.Column="1" Margin="5">
-                                                                    <Grid.RowDefinitions>
-                                                                        <RowDefinition Height="48" />
-                                                                        <RowDefinition Height="72" />
-                                                                        <RowDefinition />
-                                                                        <RowDefinition Height="48" />
-                                                                    </Grid.RowDefinitions>
-                                                                    <Grid.Resources>
-                                                                        <Style TargetType="TextBlock">
-                                                                            <Setter Property="Margin" Value="5" />
-                                                                            <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}" />
-                                                                            <Setter Property="TextTrimming" Value="CharacterEllipsis" />
-                                                                            <Setter Property="TextWrapping" Value="WrapWithOverflow" />
-                                                                        </Style>
-                                                                    </Grid.Resources>
-                                                                    <TextBlock>
-                                                                        <Run Text="Title: " />
-                                                                        <Run Text="{Binding Name, IsAsync=True, FallbackValue=Loading}" />
-                                                                    </TextBlock>
-                                                                    <TextBlock Grid.Row="1">
-                                                                        <Run Text="Genres: " />
-                                                                        <Run Text="{Binding Genres, Converter={StaticResource GenreItemListToStringConverter}, IsAsync=True, FallbackValue=Loading}" />
-                                                                    </TextBlock>
-                                                                    <TextBlock Grid.Row="2">
-                                                                        <Run Text="Description: " />
-                                                                        <Run Text="{Binding Description, IsAsync=True, FallbackValue=Loading}" />
-                                                                    </TextBlock>
-                                                                    <TextBlock
-                                                                        Grid.Row="3"
-                                                                        FontSize="12"
-                                                                        Text="Click the card view to see more." />
-                                                                </Grid>
-                                                            </Grid>
-                                                        </materialDesign:Card>
-                                                    </ToolTip>
-                                                </materialDesign:Card.ToolTip>
-                                                <Button Command="{x:Static materialDesign:Transitioner.MoveNextCommand}">
-                                                    <i:Interaction.Triggers>
-                                                        <i:EventTrigger EventName="Click">
-                                                            <i:InvokeCommandAction Command="{Binding DataContext.ShowAnimeDetailCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:Explore}}}" CommandParameter="{Binding}" />
-                                                        </i:EventTrigger>
-                                                    </i:Interaction.Triggers>
-                                                    <Button.Style>
-                                                        <Style TargetType="Button">
-                                                            <Setter Property="Template">
-                                                                <Setter.Value>
-                                                                    <ControlTemplate TargetType="Button">
-                                                                        <ContentPresenter Content="{TemplateBinding Content}" />
-                                                                    </ControlTemplate>
-                                                                </Setter.Value>
-                                                            </Setter>
-                                                        </Style>
-                                                    </Button.Style>
-                                                    <Grid
-                                                        TextElement.FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
-                                                        TextElement.FontSize="14"
-                                                        TextElement.FontWeight="Medium"
-                                                        TextElement.Foreground="{DynamicResource MaterialDesignBody}">
-                                                        <Grid.RowDefinitions>
-                                                            <RowDefinition />
-                                                            <RowDefinition />
-                                                        </Grid.RowDefinitions>
-                                                        <Image
-                                                            Margin="5"
-                                                            Source="{Binding Thumbnail, Converter={StaticResource MediaSourceInfoToImageSourceConverter}, IsAsync=True}"
-                                                            Stretch="UniformToFill" />
-                                                        <Grid
-                                                            Grid.Row="1"
-                                                            Width="25"
-                                                            Height="25"
-                                                            Margin="10"
-                                                            HorizontalAlignment="Right"
-                                                            VerticalAlignment="Bottom">
-                                                            <materialDesign:PackIcon
-                                                                Kind="Book"
-                                                                Style="{StaticResource AutoSizeIconPack}"
-                                                                ToolTip="This anime can be watch offline"
-                                                                Visibility="{Binding ., Converter={StaticResource AnimeSeriesStorageStateToIconVisibilityConverter}, ConverterParameter=Offline, IsAsync=True}" />
-                                                        </Grid>
-
-                                                        <Grid Grid.Row="1">
-                                                            <Grid.RowDefinitions>
-                                                                <RowDefinition Height="35" />
-                                                                <RowDefinition />
-                                                            </Grid.RowDefinitions>
-                                                            <TextBlock
-                                                                Margin="5"
-                                                                VerticalAlignment="Center"
-                                                                FontWeight="SemiBold"
-                                                                Text="{Binding Name, IsAsync=True, FallbackValue=Loading}"
-                                                                TextTrimming="CharacterEllipsis" />
-                                                            <TextBlock
-                                                                Grid.Row="1"
-                                                                Margin="5"
-                                                                Text="{Binding Genres, Converter={StaticResource GenreItemListToStringConverter}, IsAsync=True, FallbackValue=Loading}"
-                                                                TextTrimming="WordEllipsis"
-                                                                TextWrapping="WrapWithOverflow" />
-                                                        </Grid>
-                                                    </Grid>
-
-                                                </Button>
-                                            </materialDesign:Card>
+                                            <pages:AnimeItemCard AnimeCardCommand="{Binding DataContext.ShowAnimeDetailCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:Explore}}}" />
                                         </DataTemplate>
                                     </ListBox.ItemTemplate>
                                 </ListBox>
 
-                                <materialDesign:Card
-                                    Width="200"
-                                    Height="300"
-                                    Margin="5"
-                                    VerticalAlignment="Center"
-                                    UniformCornerRadius="5">
-                                    <materialDesign:Card.Style>
-                                        <Style TargetType="materialDesign:Card">
-                                            <Style.Triggers>
-                                                <EventTrigger RoutedEvent="Loaded">
-                                                    <BeginStoryboard>
-                                                        <Storyboard>
-                                                            <DoubleAnimation
-                                                                Storyboard.TargetProperty="Opacity"
-                                                                From="0"
-                                                                To="1"
-                                                                Duration="0:0:0.25" />
-                                                        </Storyboard>
-                                                    </BeginStoryboard>
-                                                </EventTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </materialDesign:Card.Style>
-                                    <Button>
-                                        <i:Interaction.Triggers>
-                                            <i:EventTrigger EventName="Click">
-                                                <i:InvokeCommandAction Command="{Binding DataContext.NavigateGetMoreCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:Explore}}}" CommandParameter="Featured" />
-                                            </i:EventTrigger>
-                                        </i:Interaction.Triggers>
-                                        <Button.Style>
-                                            <Style TargetType="Button">
-                                                <Setter Property="Template">
-                                                    <Setter.Value>
-                                                        <ControlTemplate TargetType="Button">
-                                                            <ContentPresenter Content="{TemplateBinding Content}" />
-                                                        </ControlTemplate>
-                                                    </Setter.Value>
-                                                </Setter>
-                                            </Style>
-                                        </Button.Style>
-                                        <Grid
-                                            TextElement.FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
-                                            TextElement.FontSize="14"
-                                            TextElement.FontWeight="Medium"
-                                            TextElement.Foreground="{DynamicResource MaterialDesignBody}">
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition />
-                                                <RowDefinition />
-                                            </Grid.RowDefinitions>
-                                            <Rectangle
-                                                Grid.RowSpan="2"
-                                                Fill="{DynamicResource MaterialDesignBody}"
-                                                Opacity="0.0005" />
-
-                                            <materialDesign:PackIcon
-                                                Margin="5"
-                                                Kind="PlusCircleOutline"
-                                                Style="{StaticResource AutoSizeIconPack}" />
-
-                                            <Grid Grid.Row="1">
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition Height="35" />
-                                                    <RowDefinition />
-                                                </Grid.RowDefinitions>
-                                                <TextBlock
-                                                    Margin="5"
-                                                    VerticalAlignment="Center"
-                                                    FontWeight="SemiBold"
-                                                    Text="Click here for more"
-                                                    TextTrimming="CharacterEllipsis" />
-                                                <TextBlock
-                                                    Grid.Row="1"
-                                                    Margin="5"
-                                                    Text="We always got more for you to explore"
-                                                    TextTrimming="WordEllipsis"
-                                                    TextWrapping="WrapWithOverflow" />
-                                            </Grid>
-                                        </Grid>
-                                    </Button>
-                                </materialDesign:Card>
+                                <pages:ShowMoreAnimeCard AnimeCardCommand="{Binding DataContext.NavigateGetMoreCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:Explore}}}" AnimeCardCommandParameter="Suggestion" />
                             </StackPanel>
 
                             <i:Interaction.Behaviors>
                                 <behaviour:BubbleScrollEvent />
                             </i:Interaction.Behaviors>
                         </ScrollViewer>
+                        <pages:ActivityIndicator Visibility="{Binding SuggestedAnimeList.Count, IsAsync=True, FallbackValue=0, ConverterParameter=1, Converter={StaticResource SmallerThanParameterToVisibilityConverter}}" />
                     </Grid>
                 </Grid>
             </VirtualizingStackPanel>

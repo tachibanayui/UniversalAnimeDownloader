@@ -1736,12 +1736,12 @@ namespace UADAPI
         /// 
         /// </summary>
         /// <returns>Is internet connection avaible</returns>
-        public static bool CheckForInternetConnection()
+        public static async Task<bool> CheckForInternetConnection()
         {
             try
             {
                 using (var client = new WebClient())
-                using (client.OpenRead("http://clients3.google.com/generate_204"))
+                using (await client.OpenReadTaskAsync("http://clients3.google.com/generate_204"))
                 {
                     return true;
                 }

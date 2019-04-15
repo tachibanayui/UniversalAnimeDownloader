@@ -3,6 +3,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:animations="clr-namespace:UniversalAnimeDownloader.Animations"
     xmlns:converters="clr-namespace:MaterialDesignThemes.Wpf.Converters;assembly=MaterialDesignThemes.Wpf"
+    xmlns:ex="clr-namespace:UniversalAnimeDownloader.Extensions"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:local="clr-namespace:UniversalAnimeDownloader.DefinedResources"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:vwp="clr-namespace:WpfToolkit.Controls;assembly=VirtualizingWrapPanel">
@@ -19,7 +21,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
                     <Grid>
-                        <Rectangle Fill="{DynamicResource MaterialDesignPaper}" Opacity="0.005" />
+                        <Rectangle Fill="{DynamicResource MaterialDesignPaper}" Opacity="0.001" />
                         <ContentPresenter Content="{TemplateBinding Content}" />
                     </Grid>
                 </ControlTemplate>
@@ -324,5 +326,17 @@
         </Setter>
     </Style>
 
-
+    <Style
+        x:Key="floatingHintCbx"
+        BasedOn="{StaticResource MaterialDesignFloatingHintComboBox}"
+        TargetType="ComboBox">
+        <Setter Property="Margin" Value="10,0" />
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel />
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>
