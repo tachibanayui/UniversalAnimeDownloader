@@ -4,10 +4,12 @@ using SegmentDownloader.Protocol;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using UADAPI.PlatformSpecific;
 using ErrorEventArgs = Newtonsoft.Json.Serialization.ErrorEventArgs;
@@ -1530,7 +1532,7 @@ namespace UADAPI
     /// <summary>
     /// This class is provide option for UAD. 
     /// </summary>
-    public static class ApiHelpper
+    public class ApiHelpper
     {
         /// <summary>
         /// Indicate if the modification binary file (*.dll) is loaded
@@ -1731,6 +1733,7 @@ namespace UADAPI
         {
             return false;
         }
+
 
         /// <summary>
         /// 

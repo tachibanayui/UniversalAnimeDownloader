@@ -98,7 +98,7 @@
         </ListBox>
 
         <Grid x:Name="overlayContainer" Grid.Row="1">
-            <page:NoInternetConnectionOverlay Visibility="{Binding OverlayNoInternetVisibility, IsAsync=True, FallbackValue=Collapsed}" />
+            <page:NoInternetConnectionOverlay ReloadButtonCommand="{Binding SearchAnimeCommand}" Visibility="{Binding OverlayNoInternetVisibility, IsAsync=True, FallbackValue=Collapsed}" />
             <page:ErrorOccuredOverlay Visibility="{Binding OverlayErrorOccuredVisibility, IsAsync=True, FallbackValue=Collapsed}" />
             <page:ActivityIndicator Visibility="{Binding OverlayActiityIndicatorVisibility, IsAsync=True, FallbackValue=Collapsed}" />
         </Grid>

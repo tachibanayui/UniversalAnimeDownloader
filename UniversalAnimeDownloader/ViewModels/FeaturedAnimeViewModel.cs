@@ -194,7 +194,7 @@ namespace UniversalAnimeDownloader.ViewModels
             }
         }
 
-        private async Task LoadFeaturedAnime(int offset, int count, bool clearPreviousCard = true)
+        public async Task LoadFeaturedAnime(int offset, int count, bool clearPreviousCard = true)
         {
             if (Querier.SupportGetPopularSeries)
             {

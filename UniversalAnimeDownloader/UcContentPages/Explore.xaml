@@ -27,6 +27,7 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Grid>
+        <Grid.Resources />
         <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible">
             <VirtualizingStackPanel>
                 <Grid>
@@ -125,7 +126,7 @@
                                     </ListBox.ItemTemplate>
                                 </ListBox>
 
-                                <pages:ShowMoreAnimeCard AnimeCardCommand="{Binding DataContext.NavigateGetMoreCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:Explore}}}" AnimeCardCommandParameter="Featured" />
+                                <pages:ShowMoreAnimeCard AnimeCardCommand="{Binding DataContext.NavigateGetMoreCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:Explore}}}" AnimeCardCommandParameter="FeaturedAnime" />
                             </StackPanel>
 
                             <i:Interaction.Behaviors>
@@ -167,7 +168,7 @@
                                     </ListBox.ItemTemplate>
                                 </ListBox>
 
-                                <pages:ShowMoreAnimeCard AnimeCardCommand="{Binding DataContext.NavigateGetMoreCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:Explore}}}" AnimeCardCommandParameter="Suggestion" />
+                                <pages:ShowMoreAnimeCard AnimeCardCommand="{Binding DataContext.NavigateGetMoreCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:Explore}}}" AnimeCardCommandParameter="AnimeSuggestion" />
                             </StackPanel>
 
                             <i:Interaction.Behaviors>
@@ -177,7 +178,29 @@
                         <pages:ActivityIndicator Visibility="{Binding SuggestedAnimeList.Count, IsAsync=True, FallbackValue=0, ConverterParameter=1, Converter={StaticResource SmallerThanParameterToVisibilityConverter}}" />
                     </Grid>
                 </Grid>
+
+                <Button
+                    Margin="10,0"
+                    Command="{Binding DataContext.NavigateGetMoreCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:Explore}}}"
+                    CommandParameter="AllAnimeTab">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="35" />
+                            <ColumnDefinition Width="10" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+                        <materialDesign:PackIcon Kind="Link" Style="{StaticResource AutoSizeIconPack}" />
+                        <TextBlock
+                            Grid.Column="2"
+                            VerticalAlignment="Center"
+                            Text="Is that not you looking for? Click here to enter all anime tab!" />
+                    </Grid>
+                </Button>
             </VirtualizingStackPanel>
         </ScrollViewer>
+
+        <Grid x:Name="overlayContainer">
+            <pages:NoInternetConnectionOverlay ReloadButtonCommand="{Binding ReloadCommand}" Visibility="{Binding OverlayNoInternetVisibility, IsAsync=True, FallbackValue=Collapsed}" />
+        </Grid>
     </Grid>
 </UserControl>

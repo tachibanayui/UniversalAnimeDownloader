@@ -243,7 +243,7 @@ namespace UniversalAnimeDownloader.ViewModels
             }
         }
 
-        private async Task LoadAnime(int offset, int count, bool clearPreviousCard = true)
+        public async Task LoadAnime(int offset, int count, bool clearPreviousCard = true)
         {
             IsLoadOngoing = true;
             try
