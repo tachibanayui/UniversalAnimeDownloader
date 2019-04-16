@@ -151,6 +151,9 @@
     <Compile Include="UcContentPages\ShowMoreAnimeCard.xaml.cs">
       <DependentUpon>ShowMoreAnimeCard.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UcContentPages\UADMediaPlayer.xaml.cs">
+      <DependentUpon>UADMediaPlayer.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UcContentPages\UADSettings.xaml.cs">
       <DependentUpon>UADSettings.xaml</DependentUpon>
     </Compile>
@@ -269,6 +272,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UcContentPages\ShowMoreAnimeCard.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UcContentPages\UADMediaPlayer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

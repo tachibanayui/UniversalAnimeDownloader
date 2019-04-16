@@ -9,6 +9,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using UADAPI;
 using UniversalAnimeDownloader.UADSettingsPortal;
+using UniversalAnimeDownloader.UcContentPages;
 
 namespace UniversalAnimeDownloader.ViewModels
 {
@@ -28,6 +29,8 @@ namespace UniversalAnimeDownloader.ViewModels
         public ICommand GoForwardNavigationCommand { get; set; }
         public ICommand ResetNotifyBadgeCommand { get; set; }
         public ICommand BlackOverlayMouseDownCommand { get; set; }
+        public ICommand OpenUADMediaPlayerCommand { get; set; }
+        public ICommand MinimizeUADMediaPlayer { get; set; }
 
         public ICommand NavigateCommand { get; set; }
 
@@ -142,6 +145,58 @@ namespace UniversalAnimeDownloader.ViewModels
             }
         }
 
+        private AnimeSeriesInfo _UADMediaPlayerPlaylist;
+        public AnimeSeriesInfo UADMediaPlayerPlaylist
+        {
+            get
+            {
+                return _UADMediaPlayerPlaylist;
+            }
+            set
+            {
+                if (_UADMediaPlayerPlaylist != value)
+                {
+                    _UADMediaPlayerPlaylist = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private MediaPlayerState _UADMediaPlayerState = MediaPlayerState.Stop;
+        public MediaPlayerState UADMediaPlayerState
+        {
+            get
+            {
+                return _UADMediaPlayerState;
+            }
+            set
+            {
+                if (_UADMediaPlayerState != value)
+                {
+                    _UADMediaPlayerState = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private Visibility _UADMediaPlayerVisibility = Visibility.Collapsed;
+        public Visibility UADMediaPlayerVisibility
+        {
+            get
+            {
+                return _UADMediaPlayerVisibility;
+            }
+            set
+            {
+                if (_UADMediaPlayerVisibility != value)
+                {
+                    _UADMediaPlayerVisibility = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+
 
         #endregion
 
@@ -151,8 +206,8 @@ namespace UniversalAnimeDownloader.ViewModels
             NotificationManager.Deserialize(notificationString);
             string downloadString = UADSettingsManager.Instance.CurrentSettings.Download;
             DownloadManager.Deserialize(downloadString);
-            DownloadManager.Instances.CollectionChanged += (s,e) => UADSettingsManager.Instance.CurrentSettings.Download = DownloadManager.Serialize();
-            NotificationManager.ItemRemoved += (s,e) => UADSettingsManager.Instance.CurrentSettings.Notification = NotificationManager.Serialize();
+            DownloadManager.Instances.CollectionChanged += (s, e) => UADSettingsManager.Instance.CurrentSettings.Download = DownloadManager.Serialize();
+            NotificationManager.ItemRemoved += (s, e) => UADSettingsManager.Instance.CurrentSettings.Notification = NotificationManager.Serialize();
             NotificationManager.ItemAdded += (s, e) =>
             {
                 NotifycationBadgeCount++;
@@ -209,6 +264,8 @@ namespace UniversalAnimeDownloader.ViewModels
             });
             GoForwardNavigationCommand = new RelayCommand<object>(p => MiscClass.NavigationHelper.CanGoForward, p => TransisionerIndex = MiscClass.NavigationHelper.Forward());
             ResetNotifyBadgeCommand = new RelayCommand<object>(p => true, p => NotifycationBadgeCount = 0);
+            OpenUADMediaPlayerCommand = new RelayCommand<UADMediaPlayer>(p => p.Playlist != null, p => p.Visibility = Visibility.Visible);
+            MinimizeUADMediaPlayer = new RelayCommand<UADMediaPlayer>(p => true, p => )
 
             NavigateCommand = new RelayCommand<string>(p => true, NavigateProcess);
             CheckForAnimeSeriesUpdate();
