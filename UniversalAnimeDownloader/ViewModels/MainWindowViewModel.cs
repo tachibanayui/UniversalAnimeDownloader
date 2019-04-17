@@ -8,6 +8,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using UADAPI;
+using UniversalAnimeDownloader.MediaPlayer;
 using UniversalAnimeDownloader.UADSettingsPortal;
 
 namespace UniversalAnimeDownloader.ViewModels
@@ -29,10 +30,10 @@ namespace UniversalAnimeDownloader.ViewModels
         public ICommand ResetNotifyBadgeCommand { get; set; }
         public ICommand BlackOverlayMouseDownCommand { get; set; }
         public ICommand OpenUADMediaPlayerCommand { get; set; }
-        public ICommand MinimizeUADMediaPlayer { get; set; }
+        public ICommand ChangeWindowStateRequestCommand { get; set; }
+        public ICommand UADMediaPlayerClosedCommand { get; set; }
 
         public ICommand NavigateCommand { get; set; }
-
         #endregion
 
         #region BindableProperties
@@ -164,6 +165,10 @@ namespace UniversalAnimeDownloader.ViewModels
 
         #endregion
 
+        #region Fields and Properties
+        public bool IsPlayButtonEnable { get; set; }
+        #endregion
+
         public MainWindowViewModel()
         {
             string notificationString = UADSettingsManager.Instance.CurrentSettings.Notification;
@@ -229,7 +234,29 @@ namespace UniversalAnimeDownloader.ViewModels
             GoForwardNavigationCommand = new RelayCommand<object>(p => MiscClass.NavigationHelper.CanGoForward, p => TransisionerIndex = MiscClass.NavigationHelper.Forward());
             ResetNotifyBadgeCommand = new RelayCommand<object>(p => true, p => NotifycationBadgeCount = 0);
             NavigateCommand = new RelayCommand<string>(p => true, NavigateProcess);
+            ChangeWindowStateRequestCommand = new RelayCommand<RequestingWindowStateEventArgs>(p => true, ChangeUADMediaPlayerWindowState);
+            OpenUADMediaPlayerCommand = new RelayCommand<object>(p => IsPlayButtonEnable, p => UADMediaPlayerVisibility = Visibility.Visible);
+            UADMediaPlayerClosedCommand = new RelayCommand<object>(p => true, p => { UADMediaPlayerVisibility = Visibility.Collapsed; IsPlayButtonEnable = false; });
             CheckForAnimeSeriesUpdate();
+        }
+
+        private void ChangeUADMediaPlayerWindowState(RequestingWindowStateEventArgs obj)
+        {
+            switch (obj.RequestState)
+            {
+                case WindowState.Normal:
+                    Application.Current.MainWindow.WindowState = WindowState.Normal;
+                    break;
+                case WindowState.Maximized:
+                    Application.Current.MainWindow.WindowState = WindowState.Maximized;
+                    break;
+                case WindowState.Minimized:
+                    UADMediaPlayerVisibility = Visibility.Collapsed;
+                    IsPlayButtonEnable = true;
+                    break;
+                default:
+                    break;
+            }
         }
 
         private void AnimateMenuBar(Window p)

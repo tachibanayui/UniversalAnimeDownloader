@@ -430,7 +430,16 @@
             Background="Black"
             Opacity="0"
             Visibility="{Binding UADMediaPlayerVisibility}">
-            <media:UADMediaPlayer />
+            <media:UADMediaPlayer>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="RequestWindowState">
+                        <cmd:EventToCommand Command="{Binding ChangeWindowStateRequestCommand}" PassEventArgsToCommand="True" />
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="UADMediaPlayerClosed">
+                        <cmd:EventToCommand Command="{Binding UADMediaPlayerClosedCommand}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </media:UADMediaPlayer>
         </Grid>
 
         <!--<pages:UADMediaPlayer

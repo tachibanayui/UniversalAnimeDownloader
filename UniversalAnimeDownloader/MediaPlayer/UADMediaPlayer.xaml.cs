@@ -143,7 +143,6 @@ namespace UniversalAnimeDownloader.MediaPlayer
             (Content as FrameworkElement).DataContext = VM;
             mediaPlayer.Source = VideoUri;
             mediaPlayer.Play();
-            Loaded += (s, e) => AssignProperty();
             isControllerVisible = true;
             //var t = Application.Current.Resources["applicationTaskbarPopup"] as TaskbarIcon;
             string tt = AppDomain.CurrentDomain.BaseDirectory + "unnamed.ico";
@@ -157,6 +156,51 @@ namespace UniversalAnimeDownloader.MediaPlayer
                 (btnFullScreenToggle.Content as PackIcon).Kind = PackIconKind.ArrowCollapse;
             }
             strokeThicknessSlider.Value = UADSettingsManager.Instance.CurrentSettings.PrimaryBurshThickness;
+        }
+
+
+        private void Event_MediaPlayerHostLoaded(object sender, RoutedEventArgs e)
+        {
+            //Change the fullsrceen icon when the host window state changed
+            AssignProperty();
+            var hostWindow = Window.GetWindow(this);
+            var winState = hostWindow.WindowState;
+            switch (winState)
+            {
+                case WindowState.Normal:
+                    (btnFullScreenToggle.Content as PackIcon).Kind = PackIconKind.ArrowExpand;
+                    (controlBarMaximize.Content as PackIcon).Kind = PackIconKind.WindowMaximize;
+                    break;
+                case WindowState.Minimized:
+                    break;
+                case WindowState.Maximized:
+                    (btnFullScreenToggle.Content as PackIcon).Kind = PackIconKind.ArrowCollapse;
+                    (controlBarMaximize.Content as PackIcon).Kind = PackIconKind.WindowRestore;
+                    break;
+                default:
+                    break;
+            }
+
+            hostWindow.StateChanged += (s, ee) =>
+            {
+                var state = (s as Window).WindowState;
+                switch (state)
+                {
+                    case WindowState.Normal:
+                        (btnFullScreenToggle.Content as PackIcon).Kind = PackIconKind.ArrowExpand;
+                        (controlBarMaximize.Content as PackIcon).Kind = PackIconKind.WindowMaximize;
+                        break;
+                    case WindowState.Minimized:
+                        break;
+                    case WindowState.Maximized:
+                        (btnFullScreenToggle.Content as PackIcon).Kind = PackIconKind.ArrowCollapse;
+                        (controlBarMaximize.Content as PackIcon).Kind = PackIconKind.WindowRestore;
+                        break;
+                    default:
+                        break;
+                }
+            };
+             
         }
 
         private async void HideControllerTimeout(int timeoutID)
@@ -266,15 +310,28 @@ namespace UniversalAnimeDownloader.MediaPlayer
         {
             mediaPlayer.Position = MiscClass.MutiplyTimeSpan(MediaDuration, seekSlider.Value);
             isSeekSliderLocked = false;
+            Focus();
         }
 
         private void LockSeekSlider(object sender, MouseButtonEventArgs e) => isSeekSliderLocked = true;
 
-        private void VolumnChange(object sender, RoutedEventArgs e) => VolumeChanger.IsOpen = true;
+        private void VolumnChange(object sender, RoutedEventArgs e)
+        {
+            VolumeChanger.IsOpen = true;
+            Focus();
+        }
 
-        private void CloseVolumePopup(object sender, MouseEventArgs e) => VolumeChanger.IsOpen = false;
+        private void CloseVolumePopup(object sender, MouseEventArgs e)
+        {
+            VolumeChanger.IsOpen = false;
+            Focus();
+        }
 
-        private void ChangeWindowState(object sender, RoutedEventArgs e) => ChangeWindowState();
+        private void ChangeWindowState(object sender, RoutedEventArgs e)
+        {
+            ChangeWindowState();
+            Focus();
+        }
 
         private void ChangeWindowState()
         {
@@ -667,9 +724,19 @@ namespace UniversalAnimeDownloader.MediaPlayer
 
 
         public event EventHandler<RequestingWindowStateEventArgs> RequestWindowState;
+        public event EventHandler<EventArgs> UADMediaPlayerClosed;
         public event EventHandler<RequestWindowIconChangeEventArgs> RequestIconChange;
 
-        public void OnRequestWindowState(WindowState state) => RequestWindowState?.Invoke(this, new RequestingWindowStateEventArgs() { RequestState = state });
-        public void OnRequestIconChange(Uri iconLocation) => RequestIconChange?.Invoke(this, new RequestWindowIconChangeEventArgs() { IconLocation = iconLocation });
+        protected virtual void OnRequestWindowState(WindowState state) => RequestWindowState?.Invoke(this, new RequestingWindowStateEventArgs() { RequestState = state });
+        protected virtual void OnRequestIconChange(Uri iconLocation) => RequestIconChange?.Invoke(this, new RequestWindowIconChangeEventArgs() { IconLocation = iconLocation });
+        protected virtual void OnUADMediaPlayerClosed() => UADMediaPlayerClosed?.Invoke(this, EventArgs.Empty);
+
+        private void Event_WindowMinimize(object sender, RoutedEventArgs e) => OnRequestWindowState(WindowState.Minimized);
+
+        private void Event_UADMediaPlayerClosed(object sender, RoutedEventArgs e)
+        {
+            mediaPlayer.Stop();
+            OnUADMediaPlayerClosed();
+        }
     }
 }

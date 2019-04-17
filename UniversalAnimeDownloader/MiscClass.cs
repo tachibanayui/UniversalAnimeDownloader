@@ -131,8 +131,11 @@ namespace UniversalAnimeDownloader
             _Player.VideoUri = new Uri(loc);
             _Player.AnimeThumbnail = new BitmapImage(new Uri(img));
             _Player.VM.UpdateBindings();
+            (_Player.Parent as Grid).Opacity = 0;
+            _Player.Focus();
             _Ins.UADMediaPlayerVisibility = Visibility.Visible;
             MiscClass.FadeInAnimation(_Player.Parent as Grid, TimeSpan.FromSeconds(.5), true, new EventHandler(PlayMedia));
+            _Player.Focus();
         }
 
         private static void PlayMedia(object sender, EventArgs e)

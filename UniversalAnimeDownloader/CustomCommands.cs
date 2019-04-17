@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace UniversalAnimeDownloader
 {
-    static class CustomCommands
+    public static class CustomCommands
     {
         public static RoutedUICommand ScreenBlockerHotkey = new RoutedUICommand("ScreenBlockerHotKey", "ScreenBlockerHotKey", typeof(CustomCommands),
             new InputGestureCollection()
