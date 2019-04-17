@@ -139,6 +139,7 @@ namespace UniversalAnimeDownloader
         {
             (_Player.Parent as Grid).IsHitTestVisible = true;
             _Player.mediaPlayer.Play();
+            _Player.Focus();
         }
 
         private static void NullCheck()

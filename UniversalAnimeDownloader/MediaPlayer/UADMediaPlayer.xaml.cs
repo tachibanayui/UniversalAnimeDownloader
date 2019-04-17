@@ -234,7 +234,7 @@ namespace UniversalAnimeDownloader.MediaPlayer
                 mediaPlayer.Play();
                 pkIcon.Kind = PackIconKind.Pause;
                 MiscClass.FadeOutAnimation(grdFilmProperty, TimeSpan.FromSeconds(0.25), false);
-                PointAnimation animation = new PointAnimation(new Point(0, .5), TimeSpan.FromSeconds(0.25));
+                PointAnimation animation = new PointAnimation(controllerBackgroundGradient.EndPoint, new Point(0, .5), TimeSpan.FromSeconds(0.25));
                 controllerBackgroundGradient.BeginAnimation(LinearGradientBrush.EndPointProperty, animation);
             }
             isPlaying = !isPlaying;

@@ -106,8 +106,8 @@
                     </Rectangle.RenderTransform>
                     <Rectangle.Fill>
                         <LinearGradientBrush x:Name="controllerBackgroundGradient" EndPoint="0,.5">
-                            <GradientStop Offset="0" Color="Black" />
                             <GradientStop Offset="1" Color="#00000000" />
+                            <GradientStop Offset="0" Color="Black" />
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
