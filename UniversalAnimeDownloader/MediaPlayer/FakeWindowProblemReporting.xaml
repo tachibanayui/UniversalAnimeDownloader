@@ -1,0 +1,50 @@
+﻿<Window
+    x:Class="UniversalAnimeDownloader.MediaPlayer.FakeWindowProblemReporting"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Program"
+    Width="530"
+    Height="180"
+    Icon="pack://application:,,,/Resources/WinDefaultIcon.png"
+    ResizeMode="NoResize"
+    Topmost="True"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
+    <Grid>
+        <StackPanel Margin="10">
+            <TextBlock
+                FontSize="18"
+                Foreground="#005ACE"
+                Text="Program is not responding" />
+            <TextBlock
+                Margin="0,10,0,0"
+                FontSize="18"
+                Foreground="Black"
+                Text="Hang on while Windows reports the problem to Microsoft..." />
+            <ProgressBar
+                Height="15"
+                Margin="0,10,0,0"
+                IsIndeterminate="True"
+                Style="{x:Null}" />
+        </StackPanel>
+        <StatusBar
+            Height="50"
+            VerticalAlignment="Bottom"
+            FlowDirection="RightToLeft">
+            <Button
+                Margin="10,0,10,0"
+                HorizontalAlignment="Right"
+                Click="Button_Click"
+                Style="{x:Null}">
+                <TextBlock
+                    FontSize="24"
+                    Style="{x:Null}"
+                    Text="Cancel" />
+            </Button>
+        </StatusBar>
+
+
+    </Grid>
+</Window>

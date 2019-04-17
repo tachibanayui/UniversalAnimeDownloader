@@ -53,10 +53,10 @@ namespace UniversalAnimeDownloader.ViewModels
             };
 
             CopyDescriptionCommand = new RelayCommand<object>(p => true, p => Clipboard.SetText(CurrentSeries.AttachedAnimeSeriesInfo.Description ?? ""));
-            
-            PlayAllButtonCommand = new RelayCommand<object>(p => true, async p => {
-                UADMediaPlayerHelper.Playlist = CurrentSeries.AttachedAnimeSeriesInfo;
-                UADMediaPlayerHelper.Play();
+
+            PlayAllButtonCommand = new RelayCommand<object>(p => true, async p =>
+            {
+                UADMediaPlayerHelper.Play(@"F:\Test.mp4", "Oof","Test oof", @"E:\Pictures\Anime\a - Copy.png");
             });
 
             WatchEpisodeCommand = new RelayCommand<EpisodeInfo>(p => p.AvailableOffline, p =>

@@ -9,7 +9,6 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using UADAPI;
 using UniversalAnimeDownloader.UADSettingsPortal;
-using UniversalAnimeDownloader.UcContentPages;
 
 namespace UniversalAnimeDownloader.ViewModels
 {
@@ -145,40 +144,6 @@ namespace UniversalAnimeDownloader.ViewModels
             }
         }
 
-        private AnimeSeriesInfo _UADMediaPlayerPlaylist;
-        public AnimeSeriesInfo UADMediaPlayerPlaylist
-        {
-            get
-            {
-                return _UADMediaPlayerPlaylist;
-            }
-            set
-            {
-                if (_UADMediaPlayerPlaylist != value)
-                {
-                    _UADMediaPlayerPlaylist = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        private MediaPlayerState _UADMediaPlayerState = MediaPlayerState.Stop;
-        public MediaPlayerState UADMediaPlayerState
-        {
-            get
-            {
-                return _UADMediaPlayerState;
-            }
-            set
-            {
-                if (_UADMediaPlayerState != value)
-                {
-                    _UADMediaPlayerState = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
         private Visibility _UADMediaPlayerVisibility = Visibility.Collapsed;
         public Visibility UADMediaPlayerVisibility
         {
@@ -195,7 +160,6 @@ namespace UniversalAnimeDownloader.ViewModels
                 }
             }
         }
-
 
 
         #endregion
@@ -264,9 +228,6 @@ namespace UniversalAnimeDownloader.ViewModels
             });
             GoForwardNavigationCommand = new RelayCommand<object>(p => MiscClass.NavigationHelper.CanGoForward, p => TransisionerIndex = MiscClass.NavigationHelper.Forward());
             ResetNotifyBadgeCommand = new RelayCommand<object>(p => true, p => NotifycationBadgeCount = 0);
-            OpenUADMediaPlayerCommand = new RelayCommand<UADMediaPlayer>(p => p.Playlist != null, p => p.Visibility = Visibility.Visible);
-            MinimizeUADMediaPlayer = new RelayCommand<UADMediaPlayer>(p => true, p => )
-
             NavigateCommand = new RelayCommand<string>(p => true, NavigateProcess);
             CheckForAnimeSeriesUpdate();
         }

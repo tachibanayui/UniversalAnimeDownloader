@@ -1,0 +1,52 @@
+﻿<Window
+    x:Class="UniversalAnimeDownloader.MediaPlayer.FakeNotRespondingDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Programs"
+    Width="375"
+    Height="200"
+    Closing="CancelClose"
+    Icon="pack://application:,,,/Resources/WinDefaultIcon.png"
+    ResizeMode="NoResize"
+    Topmost="True"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
+    <StackPanel Margin="10">
+        <StackPanel.Resources>
+            <Style TargetType="TextBlock">
+                <Setter Property="Foreground" Value="Black" />
+            </Style>
+            <Style BasedOn="{StaticResource MaterialDesignFlatButton}" TargetType="Button">
+                <Setter Property="HorizontalContentAlignment" Value="Left" />
+                <Setter Property="Height" Value="35" />
+            </Style>
+        </StackPanel.Resources>
+        <TextBlock
+            FontSize="18"
+            Foreground="#005ACE"
+            Text="Program is not responding" />
+        <TextBlock Margin="0,10,0,0" Text="If you close the program, you might lose information." />
+        <Button Margin="0,25,0,0" Click="Button_Click">
+            <StackPanel Orientation="Horizontal">
+                <Image Source="pack://application:,,,/Resources/WinArrow.png" />
+                <TextBlock
+                    Margin="10,0,0,0"
+                    FontSize="18"
+                    Foreground="#0090EC"
+                    Text="Close the program" />
+            </StackPanel>
+        </Button>
+        <Button Height="35" Click="Button_Click_1">
+            <StackPanel Orientation="Horizontal">
+                <Image Source="pack://application:,,,/Resources/WinArrow.png" />
+                <TextBlock
+                    Margin="10,0,0,0"
+                    FontSize="18"
+                    Foreground="#0090EC"
+                    Text="Wait for the program to respond" />
+            </StackPanel>
+        </Button>
+    </StackPanel>
+</Window>

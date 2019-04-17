@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Media.Imaging;
 using UADAPI;
+using UniversalAnimeDownloader.MediaPlayer;
 using UniversalAnimeDownloader.UcContentPages;
 using UniversalAnimeDownloader.ViewModels;
 
@@ -107,12 +110,45 @@ namespace UniversalAnimeDownloader
         }
         public static double GetTimeSpanRatio(TimeSpan a, TimeSpan b) => a.TotalMilliseconds / b.TotalMilliseconds;
 
+        public static void CancelCloseWindow(object sender, CancelEventArgs e) => e.Cancel = true;
+
         static MiscClass()
         {
             NavigationHelper.AddNavigationHistory(0);
         }
     }
 
+    public class UADMediaPlayerHelper
+    {
+        private static MainWindowViewModel _Ins;
+        private static UADMediaPlayer _Player;
+
+        public static void Play(string loc, string name, string detail, string img)
+        {
+            NullCheck();
+            _Player.Title = name;
+            _Player.SubbedTitle = detail;
+            _Player.VideoUri = new Uri(loc);
+            _Player.AnimeThumbnail = new BitmapImage(new Uri(img));
+            _Player.VM.UpdateBindings();
+            _Ins.UADMediaPlayerVisibility = Visibility.Visible;
+            MiscClass.FadeInAnimation(_Player.Parent as Grid, TimeSpan.FromSeconds(.5), true, new EventHandler(PlayMedia));
+        }
+
+        private static void PlayMedia(object sender, EventArgs e)
+        {
+            (_Player.Parent as Grid).IsHitTestVisible = true;
+            _Player.mediaPlayer.Play();
+        }
+
+        private static void NullCheck()
+        {
+            if (_Ins == null)
+                _Ins = Application.Current.FindResource("MainWindowViewModel") as MainWindowViewModel;
+            if (_Player == null)
+                _Player = MiscClass.FindVisualChild<UADMediaPlayer>(Application.Current.MainWindow) as UADMediaPlayer;
+        }
+    }
 
     public class SearchEventArgs : EventArgs
     {
@@ -228,54 +264,7 @@ namespace UniversalAnimeDownloader
             _Position = -1;
         }
     }
-    public static class UADMediaPlayerHelper
-    {
-        private static MainWindowViewModel _Ins;
-        private static UADMediaPlayer _Player;
-
-        public static AnimeSeriesInfo Playlist
-        {
-            get
-            {
-                if (_Ins == null)
-                    _Ins = Application.Current.FindResource("MainWindowViewModel") as MainWindowViewModel;
-                return _Ins.UADMediaPlayerPlaylist;
-            }
-            set
-            {
-                if (_Ins == null)
-                    _Ins = Application.Current.FindResource("MainWindowViewModel") as MainWindowViewModel;
-                _Ins.UADMediaPlayerPlaylist = value;
-            }
-        }
-
-        public static void Play()
-        {
-            if (_Ins == null)
-                _Ins = Application.Current.FindResource("MainWindowViewModel") as MainWindowViewModel;
-
-            _Ins.UADMediaPlayerState = MediaPlayerState.Play;
-            _Ins.UADMediaPlayerVisibility = Visibility.Visible;
-        }
-
-        public static void Pause()
-        {
-            if (_Ins == null)
-                _Ins = Application.Current.FindResource("MainWindowViewModel") as MainWindowViewModel;
-
-            _Ins.UADMediaPlayerState = MediaPlayerState.Pause;
-        }
-
-        public static void Stop()
-        {
-            if (_Ins == null)
-                _Ins = Application.Current.FindResource("MainWindowViewModel") as MainWindowViewModel;
-
-            _Ins.UADMediaPlayerState = MediaPlayerState.Stop;
-        }
-
-    }
-
+    
     public class InvokeMethod
     {
         public void Test()
