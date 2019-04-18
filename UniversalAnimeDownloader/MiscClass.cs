@@ -268,12 +268,35 @@ namespace UniversalAnimeDownloader
             _Position = -1;
         }
     }
-    
-    public class InvokeMethod
+
+    public static class PresetColors
     {
-        public void Test()
+        public static Color[] Colors = new Color[]
         {
-            MessageBox.Show("YSyy");
-        }
+            Color.FromRgb(244,43,36),
+            Color.FromRgb(0xE9,0x1E,63),
+            Color.FromRgb(0x9C,27,0xB0),
+            Color.FromRgb(67,0x3A,0xB7),
+            Color.FromRgb(0x3F,51,0xB5),
+            Color.FromRgb(21,96,0xF3),
+            Color.FromRgb(21,96,0xF3),
+            Color.FromRgb(00,0xBC,0xD4),
+            Color.FromRgb(00,96,88),
+            Color.FromRgb(0x4C,0xAF,50),
+            Color.FromRgb(0x8B,0xC3,0x4A),
+            Color.FromRgb(0xCD,0xDC,39),
+            Color.FromRgb(0xFF,0xEB,0x3B),
+            Color.FromRgb(0xFF,0xC1,07),
+            Color.FromRgb(0xFF,98,00),
+            Color.FromRgb(0xFF,57,22),
+            Color.FromRgb(79,55,48),
+            Color.FromRgb(0x9E,0x9E,0x9E),
+            Color.FromRgb(60,0x7D,0x8B),
+        };
+
+        private static Random rand = new Random();
+
+        public static Color GetRandomColor() => Colors[rand.Next(0, Colors.Length)];
     }
+    
 }

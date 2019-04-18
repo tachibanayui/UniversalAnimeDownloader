@@ -207,6 +207,7 @@
     <Compile Include="ValueConverters\EpisodeDownloadStateToVisibilityConverter.cs" />
     <Compile Include="ValueConverters\GenreItemListToStringConverter.cs" />
     <Compile Include="ValueConverters\HtmlTagToColoredTextConverter.cs" />
+    <Compile Include="ValueConverters\MatchIndexToRandomSolidColorBrushConverter.cs" />
     <Compile Include="ValueConverters\MediaSourceInfoToImageSource.cs" />
     <Compile Include="ValueConverters\NullOrEmpltyStringToVisibilityValueConverter.cs" />
     <Compile Include="ValueConverters\ReferenceEqualValueConverter.cs" />

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Ink;
 using System.Windows.Media;
@@ -125,9 +121,13 @@ namespace UniversalAnimeDownloader.MediaPlayer
             get
             {
                 if (UADSettingsManager.Instance.CurrentSettings.IsSneakyWatcherEnabled && UADSettingsManager.Instance.CurrentSettings.IsSneakyWatcherBorderEnabled)
+                {
                     return 2;
+                }
                 else
+                {
                     return 0;
+                }
             }
         }
 
@@ -136,9 +136,13 @@ namespace UniversalAnimeDownloader.MediaPlayer
             get
             {
                 if (UADSettingsManager.Instance.CurrentSettings.IsSneakyWatcherEnabled)
+                {
                     return true;
+                }
                 else
+                {
                     return false;
+                }
             }
         }
 
@@ -151,9 +155,13 @@ namespace UniversalAnimeDownloader.MediaPlayer
             get
             {
                 if (!string.IsNullOrEmpty(UADSettingsManager.Instance.CurrentSettings.BlockerImageLocation))
+                {
                     return new BitmapImage(new Uri(UADSettingsManager.Instance.CurrentSettings.BlockerImageLocation));
+                }
                 else
+                {
                     return new BitmapImage();
+                }
             }
         }
 
@@ -165,6 +173,25 @@ namespace UniversalAnimeDownloader.MediaPlayer
             MediaElementVolume = UADSettingsManager.Instance.CurrentSettings.PlaybackVolume / 100;
             InkCanvasVisibility = Visibility.Collapsed;
         }
+
+        private int _SidePanelTabIndex = 0;
+        public int SidePanelTabIndex
+        {
+            get
+            {
+                return _SidePanelTabIndex;
+            }
+            set
+            {
+                if (_SidePanelTabIndex != value)
+                {
+                    _SidePanelTabIndex = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+
 
         public void UpdateBindings()
         {

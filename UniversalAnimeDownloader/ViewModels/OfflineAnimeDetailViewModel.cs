@@ -56,7 +56,7 @@ namespace UniversalAnimeDownloader.ViewModels
 
             PlayAllButtonCommand = new RelayCommand<object>(p => true, p =>
             {
-                UADMediaPlayerHelper.Play(CurrentSeries.AttachedAnimeSeriesInfo, 1);
+                UADMediaPlayerHelper.Play(CurrentSeries.AttachedAnimeSeriesInfo);
             });
 
             WatchEpisodeCommand = new RelayCommand<EpisodeInfo>(p => p.AvailableOffline, p =>

@@ -4,10 +4,12 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:extk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    xmlns:html="clr-namespace:TheArtOfDev.HtmlRenderer.WPF;assembly=HtmlRenderer.WPF"
     xmlns:local="clr-namespace:UniversalAnimeDownloader.MediaPlayer"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:proj="clr-namespace:UniversalAnimeDownloader"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
     d:DesignHeight="450"
     d:DesignWidth="800"
     Focusable="True"
@@ -16,7 +18,7 @@
     MouseDown="FocusToThis"
     TextElement.FontSize="14"
     TextElement.FontWeight="Medium"
-    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    TextElement.Foreground="White"
     mc:Ignorable="d">
     <UserControl.CommandBindings>
         <CommandBinding
@@ -119,6 +121,180 @@
                         <materialDesign:PackIcon Kind="WindowClose" />
                     </Button>
                 </Grid>
+
+                <Grid
+                    Grid.RowSpan="3"
+                    Width="350"
+                    HorizontalAlignment="Right">
+                    <Rectangle Fill="#2D2D30" />
+                    <Grid Margin="5">
+                        <Grid.Resources>
+                            <sys:Int32 x:Key="Zero">0</sys:Int32>
+                            <sys:Int32 x:Key="One">1</sys:Int32>
+                        </Grid.Resources>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="50" />
+                                <ColumnDefinition Width="50" />
+                                <ColumnDefinition Width="10" />
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="1">
+                                <Rectangle Height="10" VerticalAlignment="Top">
+                                    <Rectangle.Fill>
+                                        <MultiBinding Converter="{StaticResource MatchIndexToRandomSolidColorBrushConverter}">
+                                            <Binding Path="SidePanelTabIndex" />
+                                            <Binding Source="{StaticResource Zero}" />
+                                        </MultiBinding>
+                                    </Rectangle.Fill>
+                                </Rectangle>
+                                <Button Click="Event_OpenPlayListTab" Style="{StaticResource FlatControlBtn}">
+                                    <materialDesign:PackIcon Foreground="White" Kind="PlaylistPlay" />
+                                </Button>
+                            </Grid>
+                            <Grid Grid.Column="2">
+                                <Rectangle Height="10" VerticalAlignment="Top">
+                                    <Rectangle.Fill>
+                                        <MultiBinding Converter="{StaticResource MatchIndexToRandomSolidColorBrushConverter}">
+                                            <Binding Path="SidePanelTabIndex" />
+                                            <Binding Source="{StaticResource One}" />
+                                        </MultiBinding>
+                                    </Rectangle.Fill>
+                                </Rectangle>
+                                <Button Click="Event_OpenInfoTab" Style="{StaticResource FlatControlBtn}">
+                                    <materialDesign:PackIcon Foreground="White" Kind="InformationOutline" />
+                                </Button>
+                            </Grid>
+                        </Grid>
+                        <Separator Margin="15,0" VerticalAlignment="Bottom" />
+                        <Grid Grid.Row="1">
+                            <Grid.Visibility>
+                                <MultiBinding Converter="{StaticResource MatchIndexToVisibilityConverter}">
+                                    <Binding Path="SidePanelTabIndex" />
+                                    <Binding Source="{StaticResource Zero}" />
+                                </MultiBinding>
+                            </Grid.Visibility>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="auto" />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <TextBlock
+                                Grid.Row="0"
+                                HorizontalAlignment="Right"
+                                FontSize="{DynamicResource Heading2}"
+                                Text="Playlist " />
+                            <TextBox
+                                Grid.Row="1"
+                                materialDesign:HintAssist.Hint="Search episodes:"
+                                Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                            <ListView
+                                Grid.Row="2"
+                                AlternationCount="100"
+                                ItemsSource="{Binding Playlist.Episodes, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:UADMediaPlayer}}"
+                                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                ScrollViewer.VerticalScrollBarVisibility="Visible"
+                                Style="{StaticResource listViewEpisodeBaseTemplate}">
+                                <ListView.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel />
+                                    </ItemsPanelTemplate>
+                                </ListView.ItemsPanel>
+
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Button Click="Event_EpisodeSelected">
+                                            <Button.Style>
+                                                <Style TargetType="Button">
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate TargetType="Button">
+                                                                <ContentPresenter Content="{TemplateBinding Content}" />
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </Button.Style>
+
+                                            <Grid Height="36" Margin="2">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="10" />
+                                                    <ColumnDefinition Width="auto" />
+                                                    <ColumnDefinition Width="10" />
+                                                    <ColumnDefinition />
+                                                </Grid.ColumnDefinitions>
+
+                                                <Rectangle>
+                                                    <Rectangle.Fill>
+                                                        <MultiBinding Converter="{StaticResource MatchIndexToRandomSolidColorBrushConverter}">
+                                                            <Binding Path="PlayIndex" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=local:UADMediaPlayer}" />
+                                                            <Binding Path="(ItemsControl.AlternationIndex)" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=ListViewItem}" />
+                                                        </MultiBinding>
+                                                    </Rectangle.Fill>
+                                                </Rectangle>
+
+                                                <Image
+                                                    Grid.Column="1"
+                                                    Width="64"
+                                                    Height="36"
+                                                    Source="{Binding Thumbnail, Converter={StaticResource MediaSourceInfoToImageSourceConverter}}"
+                                                    Stretch="UniformToFill" />
+
+                                                <Grid Grid.Column="3">
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition />
+                                                        <RowDefinition />
+                                                    </Grid.RowDefinitions>
+                                                    <TextBlock Foreground="White" Text="{Binding Name}" />
+                                                    <TextBlock
+                                                        Grid.Row="1"
+                                                        Foreground="Red"
+                                                        Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListViewItem}}"
+                                                        Visibility="{Binding AvailableOffline, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}" />
+                                                </Grid>
+                                            </Grid>
+                                        </Button>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListView>
+                        </Grid>
+
+                        <Grid Grid.Row="1">
+                            <Grid.Visibility>
+                                <MultiBinding Converter="{StaticResource MatchIndexToVisibilityConverter}">
+                                    <Binding Path="SidePanelTabIndex" />
+                                    <Binding Source="{StaticResource One}" />
+                                </MultiBinding>
+                            </Grid.Visibility>
+                            <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible">
+                                <StackPanel Margin="10">
+                                    <Image
+                                        Width="340"
+                                        Height="191"
+                                        Source="{Binding Playlist.Thumbnail, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:UADMediaPlayer}, Converter={StaticResource MediaSourceInfoToImageSourceConverter}}" />
+                                    <TextBlock
+                                        Margin="0,10,0,0"
+                                        Text="{Binding Playlist.Name, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:UADMediaPlayer}}"
+                                        TextWrapping="Wrap" />
+                                    <TextBlock Margin="0,10,0,0">
+                                        <Run Text="Genres: " />
+                                        <Run Text="{Binding Playlist.Genres, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:UADMediaPlayer}, Converter={StaticResource GenreItemListToStringConverter}}" />
+                                    </TextBlock>
+                                    <TextBlock Margin="0,10,0,0" Text="Description" />
+                                    <html:HtmlPanel
+                                        Background="Transparent"
+                                        Foreground="White"
+                                        Text="{Binding Playlist.Description, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:UADMediaPlayer}, Converter={StaticResource HtmlTagToColoredTextConverter}}" />
+                                </StackPanel>
+                            </ScrollViewer>
+                        </Grid>
+                    </Grid>
+                </Grid>
+
                 <Grid x:Name="controller" Grid.Row="2">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="2*" />
@@ -220,7 +396,7 @@
                             Grid.Row="1"
                             HorizontalAlignment="Center"
                             Orientation="Horizontal">
-                            <Button Style="{StaticResource FlatControlBtn}" Click="Event_Previous">
+                            <Button Click="Event_Previous" Style="{StaticResource FlatControlBtn}">
                                 <materialDesign:PackIcon Foreground="{DynamicResource MaterialDesignBody}" Kind="SkipBackward" />
                             </Button>
                             <Button Click="Back10Sec" Style="{StaticResource FlatControlBtn}">
@@ -235,7 +411,7 @@
                             <Button Click="Forward30Sec" Style="{StaticResource FlatControlBtn}">
                                 <materialDesign:PackIcon Foreground="{DynamicResource MaterialDesignBody}" Kind="StepForward" />
                             </Button>
-                            <Button Style="{StaticResource FlatControlBtn}" Click="Event_Next">
+                            <Button Click="Event_Next" Style="{StaticResource FlatControlBtn}">
                                 <materialDesign:PackIcon Foreground="{DynamicResource MaterialDesignBody}" Kind="SkipForward" />
                             </Button>
                         </StackPanel>
@@ -321,8 +497,8 @@
                                     </Button>
                                 </StackPanel>
                             </materialDesign:PopupBox>
-                            <Button Style="{StaticResource FlatControlBtn}">
-                                <materialDesign:PackIcon Foreground="{DynamicResource MaterialDesignBody}" Kind="DotsHorizontal" />
+                            <Button Click="OpenDetailSidePanel" Style="{StaticResource FlatControlBtn}">
+                                <materialDesign:PackIcon Foreground="{DynamicResource MaterialDesignBody}" Kind="PlaylistPlay" />
                             </Button>
                         </StackPanel>
                     </Grid>
@@ -398,6 +574,7 @@
                         </Border>
                     </Popup>
                 </Grid>
+
                 <Canvas
                     x:Name="drawingContainer"
                     Grid.RowSpan="3"

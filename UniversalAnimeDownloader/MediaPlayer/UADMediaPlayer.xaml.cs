@@ -58,13 +58,18 @@ namespace UniversalAnimeDownloader.MediaPlayer
             }
         }
 
+        private bool isSidePanelOpen;
+        public bool IsSidePanelOpen
+        {
+            get { return isSidePanelOpen; }
+            set { isSidePanelOpen = value; }
+        }
+
+       
         public FakeNotRespondingDialog FakeHost { get; set; }
         #endregion
 
         #region Dependency Properties
-
-
-
         public int PlayIndex
         {
             get { return (int)GetValue(PlayIndexProperty); }
@@ -845,6 +850,8 @@ namespace UniversalAnimeDownloader.MediaPlayer
             mediaPlayer.Stop();
             Previous();
             mediaPlayer.Play();
+            PackIcon pkIcon = btnPlayPause.Content as PackIcon;
+            pkIcon.Kind = PackIconKind.Pause;
         }
 
         private void Event_Next(object sender, RoutedEventArgs e)
@@ -852,10 +859,24 @@ namespace UniversalAnimeDownloader.MediaPlayer
             mediaPlayer.Stop();
             Next();
             mediaPlayer.Play();
+            PackIcon pkIcon = btnPlayPause.Content as PackIcon;
+            pkIcon.Kind = PackIconKind.Pause;
         }
 
         public void Previous() => PlayIndex = GetNearestEpisode(this, true, true);
 
         public void Next() => PlayIndex = GetNearestEpisode(this, true, false);
+
+        private void OpenDetailSidePanel(object sender, RoutedEventArgs e) => IsSidePanelOpen = !IsSidePanelOpen;
+
+        private void Event_EpisodeSelected(object sender, RoutedEventArgs e)
+        {
+            var info = sender as Button;
+            PlayIndex = Playlist.Episodes.FindIndex(p => p == info.DataContext);
+        }
+
+        private void Event_OpenPlayListTab(object sender, RoutedEventArgs e) => VM.SidePanelTabIndex = 0;
+
+        private void Event_OpenInfoTab(object sender, RoutedEventArgs e) => VM.SidePanelTabIndex = 1;
     }
 }
