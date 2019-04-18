@@ -123,13 +123,13 @@ namespace UniversalAnimeDownloader
         private static MainWindowViewModel _Ins;
         private static UADMediaPlayer _Player;
 
-        public static void Play(string loc, string name, string detail, string img)
+        public static void Play(AnimeSeriesInfo info, int index = 0)
         {
             NullCheck();
-            _Player.Title = name;
-            _Player.SubbedTitle = detail;
-            _Player.VideoUri = new Uri(loc);
-            _Player.AnimeThumbnail = new BitmapImage(new Uri(img));
+            _Player.Playlist = info;
+            if (index != 0)
+                _Player.PlayIndex = index;
+
             _Player.VM.UpdateBindings();
             (_Player.Parent as Grid).Opacity = 0;
             _Player.Focus();

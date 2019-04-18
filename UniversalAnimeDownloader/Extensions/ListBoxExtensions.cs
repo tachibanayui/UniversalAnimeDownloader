@@ -15,7 +15,7 @@ namespace UniversalAnimeDownloader.Extensions
             "ScrollChangedCommand", typeof(ICommand), typeof(ListBoxExtensions),
             new PropertyMetadata(default(ICommand), OnScrollChangedCommandChanged));
 
-        
+
 
 
 
@@ -72,7 +72,7 @@ namespace UniversalAnimeDownloader.Extensions
             if (dataGrid != null)
             {
                 ICommand command = GetScrollChangedCommand(dataGrid);
-                if(command.CanExecute(GetScrollChangedCommandParameter(dataGrid)))
+                if (command.CanExecute(GetScrollChangedCommandParameter(dataGrid)))
                     command.Execute(GetScrollChangedCommandParameter(dataGrid));
             }
         }
@@ -88,4 +88,5 @@ namespace UniversalAnimeDownloader.Extensions
         }
 
     }
+
 }

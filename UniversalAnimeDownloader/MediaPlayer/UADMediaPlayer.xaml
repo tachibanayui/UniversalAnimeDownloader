@@ -220,7 +220,7 @@
                             Grid.Row="1"
                             HorizontalAlignment="Center"
                             Orientation="Horizontal">
-                            <Button Style="{StaticResource FlatControlBtn}">
+                            <Button Style="{StaticResource FlatControlBtn}" Click="Event_Previous">
                                 <materialDesign:PackIcon Foreground="{DynamicResource MaterialDesignBody}" Kind="SkipBackward" />
                             </Button>
                             <Button Click="Back10Sec" Style="{StaticResource FlatControlBtn}">
@@ -235,7 +235,7 @@
                             <Button Click="Forward30Sec" Style="{StaticResource FlatControlBtn}">
                                 <materialDesign:PackIcon Foreground="{DynamicResource MaterialDesignBody}" Kind="StepForward" />
                             </Button>
-                            <Button Style="{StaticResource FlatControlBtn}">
+                            <Button Style="{StaticResource FlatControlBtn}" Click="Event_Next">
                                 <materialDesign:PackIcon Foreground="{DynamicResource MaterialDesignBody}" Kind="SkipForward" />
                             </Button>
                         </StackPanel>

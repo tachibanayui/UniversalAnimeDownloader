@@ -17,6 +17,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using UADAPI;
 using UniversalAnimeDownloader.Animations;
 using UniversalAnimeDownloader.UADSettingsPortal;
 
@@ -62,20 +63,68 @@ namespace UniversalAnimeDownloader.MediaPlayer
 
         #region Dependency Properties
 
-        
 
+
+        public int PlayIndex
+        {
+            get { return (int)GetValue(PlayIndexProperty); }
+            set { SetValue(PlayIndexProperty, value); }
+        }
+        public static readonly DependencyProperty PlayIndexProperty =
+            DependencyProperty.Register("PlayIndex", typeof(int), typeof(UADMediaPlayer), new PropertyMetadata(-1, UpdateMediaElementSource));
+
+        private static void UpdateMediaElementSource(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var ins = d as UADMediaPlayer;
+            //To-do: Do something to notify user
+            if ((int)e.NewValue == -1)
+                return;
+
+            if(ins.Playlist.Episodes[(int)e.NewValue].FilmSources == null)
+            {
+                ins.Next();
+                return;
+            }
+
+            var source = ins.Playlist.Episodes[(int)e.NewValue].FilmSources.Where(p => !string.IsNullOrEmpty(p.Value.LocalFile));
+            if (source.Count() != 0)
+            {
+                ins.VideoUri = new Uri(source.First().Value.LocalFile);
+                var episodeInfo = ins.Playlist.Episodes[(int)e.NewValue];
+                
+                string localThumbnailSrc = episodeInfo.Thumbnail.LocalFile;
+                if (!string.IsNullOrEmpty(localThumbnailSrc))
+                    ins.AnimeThumbnail = new BitmapImage(new Uri(localThumbnailSrc));
+                else
+                    ins.AnimeThumbnail = new BitmapImage(new Uri(episodeInfo.Thumbnail.Url));
+                ins.Title = ins.Playlist.Name;
+                ins.SubbedTitle = episodeInfo.Name;
+            }
+            else
+                ins.Next();
+        }
+
+        public AnimeSeriesInfo Playlist
+        {
+            get { return (AnimeSeriesInfo)GetValue(PlaylistProperty); }
+            set { SetValue(PlaylistProperty, value); }
+        }
+        public static readonly DependencyProperty PlaylistProperty =
+            DependencyProperty.Register("Playlist", typeof(AnimeSeriesInfo), typeof(UADMediaPlayer), new PropertyMetadata(PreparePlayList));
+
+        private Uri _VideoUri;
         public Uri VideoUri
         {
-            get { return (Uri)GetValue(VideoUriProperty); }
+            get => _VideoUri;
             set
             {
-                SetValue(VideoUriProperty, value);
-                mediaPlayer.Source = value;
-                Focus();
+                if(_VideoUri != value)
+                {
+                    _VideoUri = value;
+                    mediaPlayer.Source = value;
+                }
             }
         }
-        public static readonly DependencyProperty VideoUriProperty =
-            DependencyProperty.Register("VideoUri", typeof(Uri), typeof(UADMediaPlayer), new PropertyMetadata());
 
         public Thickness CaptureOffset
         {
@@ -137,6 +186,53 @@ namespace UniversalAnimeDownloader.MediaPlayer
         public static readonly DependencyProperty SubbedTitleProperty =
             DependencyProperty.Register("SubbedTitle", typeof(string), typeof(UADMediaPlayer), new PropertyMetadata("Description"));
         #endregion
+
+        private static void PreparePlayList(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var ins = d as UADMediaPlayer;
+            ins.mediaPlayer.Stop();
+            ins.PlayIndex = 0;
+            ins.PlayIndex = GetNearestEpisode(ins, false, false);
+        }
+
+        /// <summary>
+        /// Get the nearestt episode
+        /// </summary>
+        /// <param name="media">The <see cref="UADMediaPlayer"/> instance to search</param>
+        /// <param name="skipCurrent">Skip the current index by +1 or -1 the index</param>
+        /// <param name="isBack">Search in forward or backward order</param>
+        /// <returns>The index of the <see cref="AnimeSeriesInfo.Episodes"/> in the currnt <see cref="UADMediaPlayer"/> insntance </returns>
+        public static int GetNearestEpisode(UADMediaPlayer media, bool skipCurrent, bool isBack)
+        {
+            if (media.Playlist == null)
+                return -1;
+            EpisodeInfo episode = null;
+            int currentIndex = media.PlayIndex;
+            if (skipCurrent)
+                if (isBack)
+                    currentIndex = currentIndex == 0 ? media.Playlist.Episodes.Count - 1 : currentIndex - 1;
+                else
+                    currentIndex = currentIndex == media.Playlist.Episodes.Count - 1 ? 0 : currentIndex + 1;
+
+            do
+            {
+                episode = media.Playlist.Episodes[currentIndex];
+                if (episode != null)
+                {
+                    if (episode.AvailableOffline)
+                        return currentIndex;
+                }
+
+                if (isBack)
+                    currentIndex = currentIndex < 1 ? media.Playlist.Episodes.Count - 1 : currentIndex - 1;
+                else
+                    currentIndex = media.Playlist.Episodes.Count - 1 > currentIndex ? currentIndex + 1 : 0;
+            } while (currentIndex != media.PlayIndex);
+            if (skipCurrent)
+                return media.PlayIndex;
+            else
+                return -1;
+        }
 
         public bool isPlaying = true;
         public UADMediaPlayer()
@@ -743,5 +839,23 @@ namespace UniversalAnimeDownloader.MediaPlayer
             mediaPlayer.Stop();
             OnUADMediaPlayerClosed();
         }
+
+        private void Event_Previous(object sender, RoutedEventArgs e)
+        {
+            mediaPlayer.Stop();
+            Previous();
+            mediaPlayer.Play();
+        }
+
+        private void Event_Next(object sender, RoutedEventArgs e)
+        {
+            mediaPlayer.Stop();
+            Next();
+            mediaPlayer.Play();
+        }
+
+        public void Previous() => PlayIndex = GetNearestEpisode(this, true, true);
+
+        public void Next() => PlayIndex = GetNearestEpisode(this, true, false);
     }
 }
