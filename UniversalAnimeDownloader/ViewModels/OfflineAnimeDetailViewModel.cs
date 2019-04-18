@@ -56,7 +56,7 @@ namespace UniversalAnimeDownloader.ViewModels
 
             PlayAllButtonCommand = new RelayCommand<object>(p => true, async p =>
             {
-                UADMediaPlayerHelper.Play(@"F:\Test.mp4", "Oof","Test oof", @"E:\Pictures\Anime\a - Copy.png");
+                UADMediaPlayerHelper.Play(/*@"F:\Test.mp4"*/  @"https://s101.imacdn.com/vg/2019/03/14/6176_132456.mp4?hash=Ysb9lU0CD5R0JbUFcxfibw&expire=1555535727&title=[VuiGhe.Net] Iriya No Sora Ufo No Natsu - Tap 2 (480p)", "Oof","Test oof", @"E:\Pictures\Anime\a - Copy.png");
             });
 
             WatchEpisodeCommand = new RelayCommand<EpisodeInfo>(p => p.AvailableOffline, p =>

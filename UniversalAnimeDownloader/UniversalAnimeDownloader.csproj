@@ -115,6 +115,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Animations\BrushAnimation.cs" />
     <Compile Include="Animations\ExpanderDoubleAnimation.cs" />
     <Compile Include="Animations\GridLengthAnimation.cs" />
     <Compile Include="Behaviour\BubbleScrollEvent.cs" />

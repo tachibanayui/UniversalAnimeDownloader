@@ -17,6 +17,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using UniversalAnimeDownloader.Animations;
 using UniversalAnimeDownloader.UADSettingsPortal;
 
 namespace UniversalAnimeDownloader.MediaPlayer
@@ -60,6 +61,9 @@ namespace UniversalAnimeDownloader.MediaPlayer
         #endregion
 
         #region Dependency Properties
+
+        
+
         public Uri VideoUri
         {
             get { return (Uri)GetValue(VideoUriProperty); }
@@ -137,12 +141,10 @@ namespace UniversalAnimeDownloader.MediaPlayer
         public bool isPlaying = true;
         public UADMediaPlayer()
         {
-            //SettingsManager.Current = SettingsManager.Current;
             VM = new UADPlayerViewModel();
             InitializeComponent();
             (Content as FrameworkElement).DataContext = VM;
             mediaPlayer.Source = VideoUri;
-            mediaPlayer.Play();
             isControllerVisible = true;
             //var t = Application.Current.Resources["applicationTaskbarPopup"] as TaskbarIcon;
             string tt = AppDomain.CurrentDomain.BaseDirectory + "unnamed.ico";
@@ -252,34 +254,37 @@ namespace UniversalAnimeDownloader.MediaPlayer
 
         private void PlayPauseButton_Click(object sender, RoutedEventArgs e) => PlayPauseMedia();
 
-        private void Command_PlayPauseMedia(object sender, ExecutedRoutedEventArgs e)
+        private async void Command_PlayPauseMedia(object sender, ExecutedRoutedEventArgs e)
         {
-            PlayPauseMedia();
+            await PlayPauseMedia();
             MiscClass.FadeInAnimation(controller, TimeSpan.FromSeconds(.5), false);
             controller.IsHitTestVisible = true;
             IsControllerVisible = true;
         }
 
-        private void PlayPauseMedia()
+        private async Task PlayPauseMedia()
         {
             PackIcon pkIcon = btnPlayPause.Content as PackIcon;
 
             if (isPlaying)
             {
-                mediaPlayer.Pause();
                 pkIcon.Kind = PackIconKind.Play;
                 MiscClass.FadeInAnimation(grdFilmProperty, TimeSpan.FromSeconds(0.25), false);
                 PointAnimation animation = new PointAnimation(new Point(0, 1), TimeSpan.FromSeconds(0.25));
-                controllerBackgroundGradient.BeginAnimation(LinearGradientBrush.EndPointProperty, animation);
+                controllerMask.BeginAnimation(LinearGradientBrush.EndPointProperty, animation);
 
+                mediaPlayer.Pause();
             }
             else
             {
-                mediaPlayer.Play();
                 pkIcon.Kind = PackIconKind.Pause;
                 MiscClass.FadeOutAnimation(grdFilmProperty, TimeSpan.FromSeconds(0.25), false);
-                PointAnimation animation = new PointAnimation(controllerBackgroundGradient.EndPoint, new Point(0, .5), TimeSpan.FromSeconds(0.25));
-                controllerBackgroundGradient.BeginAnimation(LinearGradientBrush.EndPointProperty, animation);
+
+                PointAnimation animation = new PointAnimation(new Point(0, .5), TimeSpan.FromSeconds(0.25));
+                controllerMask.BeginAnimation(LinearGradientBrush.EndPointProperty, animation);
+
+                await Task.Delay(260);
+                mediaPlayer.Play();
             }
             isPlaying = !isPlaying;
         }
