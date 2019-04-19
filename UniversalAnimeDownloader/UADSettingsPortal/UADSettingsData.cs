@@ -179,6 +179,7 @@ namespace UniversalAnimeDownloader.UADSettingsPortal
                 if (preferedPlayer != value)
                 {
                     preferedPlayer = value;
+                    OnPropertyChanged();
                     Save();
                 }
             }
@@ -193,6 +194,7 @@ namespace UniversalAnimeDownloader.UADSettingsPortal
                 if (playMediaFullScreen != value)
                 {
                     playMediaFullScreen = value;
+                    OnPropertyChanged();
                     Save();
                 }
             }
@@ -207,6 +209,7 @@ namespace UniversalAnimeDownloader.UADSettingsPortal
                 if (playbackVolume != value)
                 {
                     playbackVolume = value;
+                    OnPropertyChanged();
                     Save();
                 }
             }
@@ -221,6 +224,7 @@ namespace UniversalAnimeDownloader.UADSettingsPortal
                 if (isDrawingEnabled != value)
                 {
                     isDrawingEnabled = value;
+                    OnPropertyChanged();
                     Save();
                 }
             }
@@ -235,6 +239,7 @@ namespace UniversalAnimeDownloader.UADSettingsPortal
                 if (isSneakyWatherEnabled != value)
                 {
                     isSneakyWatherEnabled = value;
+                    OnPropertyChanged();
                     Save();
                 }
             }
@@ -250,6 +255,7 @@ namespace UniversalAnimeDownloader.UADSettingsPortal
                 if (isSneakyWatcherBorderEnabled != value)
                 {
                     isSneakyWatcherBorderEnabled = value;
+                    OnPropertyChanged();
                     Save();
                 }
             }
@@ -265,6 +271,7 @@ namespace UniversalAnimeDownloader.UADSettingsPortal
                 if (primaryPenColor != value)
                 {
                     primaryPenColor = value;
+                    OnPropertyChanged();
                     Save();
                 }
             }
@@ -279,6 +286,7 @@ namespace UniversalAnimeDownloader.UADSettingsPortal
                 if (primaryBurshThickness != value)
                 {
                     primaryBurshThickness = value;
+                    OnPropertyChanged();
                     Save();
                 }
             }
@@ -294,6 +302,7 @@ namespace UniversalAnimeDownloader.UADSettingsPortal
                 if (secondaryPenColor != value)
                 {
                     secondaryPenColor = value;
+                    OnPropertyChanged();
                     Save();
                 }
             }
@@ -308,6 +317,7 @@ namespace UniversalAnimeDownloader.UADSettingsPortal
                 if (secondaryBurshThickness != value)
                 {
                     secondaryBurshThickness = value;
+                    OnPropertyChanged();
                     Save();
                 }
             }
@@ -322,6 +332,7 @@ namespace UniversalAnimeDownloader.UADSettingsPortal
                 if (highlighterPenColor != value)
                 {
                     highlighterPenColor = value;
+                    OnPropertyChanged();
                     Save();
                 }
             }
@@ -336,6 +347,7 @@ namespace UniversalAnimeDownloader.UADSettingsPortal
                 if (highlighterBurshThickness != value)
                 {
                     highlighterBurshThickness = value;
+                    OnPropertyChanged();
                     Save();
                 }
             }
@@ -361,6 +373,7 @@ namespace UniversalAnimeDownloader.UADSettingsPortal
                         enumNumber -= 14;
 
                     CustomCommands.ScreenBlockerHotkey.InputGestures[0] = new KeyGesture((Key)enumNumber, ModifierKeys.Control);
+                    OnPropertyChanged();
                     Save();
                 }
             }
@@ -382,6 +395,7 @@ namespace UniversalAnimeDownloader.UADSettingsPortal
                         enumNumber -= 14;
 
                     CustomCommands.FakeAppCrashHotkey.InputGestures[0] = new KeyGesture((Key)enumNumber, ModifierKeys.Control);
+                    OnPropertyChanged();
                     Save();
                 }
             }
@@ -403,6 +417,7 @@ namespace UniversalAnimeDownloader.UADSettingsPortal
                         enumNumber -= 14;
 
                     CustomCommands.BackgroundPlayerHotkey.InputGestures[0] = new KeyGesture((Key)enumNumber, ModifierKeys.Control);
+                    OnPropertyChanged();
                     Save();
                 }
             }
@@ -418,6 +433,7 @@ namespace UniversalAnimeDownloader.UADSettingsPortal
                 if (isPauseWhenSneakyWatcherActive != value)
                 {
                     isPauseWhenSneakyWatcherActive = value;
+                    OnPropertyChanged();
                     Save();
                 }
             }
@@ -432,6 +448,7 @@ namespace UniversalAnimeDownloader.UADSettingsPortal
                 if (blockerColor != value)
                 {
                     blockerColor = value;
+                    OnPropertyChanged();
                     Save();
                 }
             }
@@ -440,12 +457,13 @@ namespace UniversalAnimeDownloader.UADSettingsPortal
         private bool isBlockerImageEnabled = false;
         public bool IsBlockerImageEnabled
         {
-            get { return isBlockerImageEnabled; }
+            get{ return isBlockerImageEnabled; }
             set
             {
                 if (isBlockerImageEnabled != value)
                 {
                     isBlockerImageEnabled = value;
+                    OnPropertyChanged();
                     Save();
                 }
             }
@@ -460,6 +478,7 @@ namespace UniversalAnimeDownloader.UADSettingsPortal
                 if (blockerImageLocation != value)
                 {
                     blockerImageLocation = value;
+                    OnPropertyChanged();
                     Save();
                 }
             }
@@ -474,6 +493,7 @@ namespace UniversalAnimeDownloader.UADSettingsPortal
                 if (blockerStretchMode != value)
                 {
                     blockerStretchMode = value;
+                    OnPropertyChanged();
                     Save();
                 }
             }
@@ -488,6 +508,7 @@ namespace UniversalAnimeDownloader.UADSettingsPortal
                 if (makeWindowTopMost != value)
                 {
                     makeWindowTopMost = value;
+                    OnPropertyChanged();
                     Save();
                 }
             }
@@ -502,6 +523,7 @@ namespace UniversalAnimeDownloader.UADSettingsPortal
                 if (disableAltF4 != value)
                 {
                     disableAltF4 = value;
+                    OnPropertyChanged();
                     Save();
                 }
             }
@@ -516,6 +538,7 @@ namespace UniversalAnimeDownloader.UADSettingsPortal
                 if (isEnableMasterPassword != value)
                 {
                     isEnableMasterPassword = value;
+                    OnPropertyChanged();
                     Save();
                 }
             }
@@ -530,6 +553,7 @@ namespace UniversalAnimeDownloader.UADSettingsPortal
                 if (sneakyWatcherMasterPassword != value)
                 {
                     sneakyWatcherMasterPassword = value;
+                    OnPropertyChanged();
                     Save();
                 }
             }
@@ -544,6 +568,7 @@ namespace UniversalAnimeDownloader.UADSettingsPortal
                 if (isRandomizePasswordBox != value)
                 {
                     isRandomizePasswordBox = value;
+                    OnPropertyChanged();
                     Save();
                 }
             }
@@ -558,6 +583,7 @@ namespace UniversalAnimeDownloader.UADSettingsPortal
                 if (changeAppIconWhenSneakyWatcherActive != value)
                 {
                     changeAppIconWhenSneakyWatcherActive = value;
+                    OnPropertyChanged();
                     Save();
                 }
             }

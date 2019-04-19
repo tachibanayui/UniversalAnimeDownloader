@@ -8,7 +8,10 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:materialDesignColors="clr-namespace:MaterialDesignColors;assembly=MaterialDesignColors"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    d:DesignHeight="450"
+    xmlns:uad="clr-namespace:UniversalAnimeDownloader"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    x:Name="SettingUIHost"
+    d:DesignHeight="4500"
     d:DesignWidth="800"
     Background="{DynamicResource MaterialDesignPaper}"
     DataContext="{StaticResource UADSettingViewModel}"
@@ -17,6 +20,11 @@
     TextElement.FontWeight="Medium"
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     mc:Ignorable="d">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding HostLoadedCommand}" CommandParameter="{Binding ElementName=SettingUIHost}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <Grid>
         <TextBlock
             HorizontalAlignment="Right"
@@ -226,6 +234,462 @@
                     <Grid>
                         <materialDesign:Card>
                             <Grid Margin="5">
+                                <TextBlock FontSize="{DynamicResource Heading3}" Text="Playback" />
+                                <VirtualizingStackPanel Margin="0,30,0,0">
+                                    <Grid>
+                                        <ComboBox
+                                            materialDesign:HintAssist.Hint="Prefered Media Player"
+                                            ItemsSource="{x:Static uad:MiscClass.MediaPlayerOptions}"
+                                            SelectedValue="{Binding SettingData.PreferedPlayer, Converter={StaticResource StringToPlayerTypeConverter}}"
+                                            Style="{StaticResource floatingHintCbx}"
+                                            ToolTip="Change your video player. You can choose the built-in player shipped with UAD or an external program of your choice such as VLC, WMP, Movie and TV." />
+                                    </Grid>
+                                    <Grid>
+                                        <CheckBox Content="Always play video in fullscreen" IsChecked="{Binding SettingData.PlayMediaFullScreen}" />
+                                    </Grid>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="10" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock VerticalAlignment="Bottom" Text="Playback volume: " />
+                                        <Slider
+                                            Grid.Column="2"
+                                            Maximum="100"
+                                            Minimum="0"
+                                            Style="{StaticResource MaterialDesignDiscreteSlider}"
+                                            Value="{Binding SettingData.PlaybackVolume}" />
+                                    </Grid>
+                                    <VirtualizingStackPanel Margin="5">
+                                        <Grid>
+                                            <TextBlock
+                                                FontSize="{DynamicResource Heading3}"
+                                                Text="On-screen drawing: "
+                                                ToolTip="On-screen drawing allows you to draw over the playback video" />
+                                        </Grid>
+
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="auto" />
+                                                <RowDefinition />
+                                            </Grid.RowDefinitions>
+                                            <CheckBox
+                                                x:Name="cbxOnscreenDrawing"
+                                                Margin="-2,0,2,0"
+                                                Content="Enable on-screen drawing"
+                                                IsChecked="{Binding SettingData.IsDrawingEnabled}" />
+                                            <VirtualizingStackPanel Grid.Row="1" IsEnabled="{Binding ElementName=cbxOnscreenDrawing, Path=IsChecked}">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="auto" />
+                                                        <ColumnDefinition Width="10" />
+                                                        <ColumnDefinition />
+                                                    </Grid.ColumnDefinitions>
+                                                    <Button
+                                                        Width="170"
+                                                        Height="75"
+                                                        HorizontalAlignment="Left"
+                                                        HorizontalContentAlignment="Stretch"
+                                                        VerticalContentAlignment="Stretch"
+                                                        Command="{Binding ChooseColorCommand}"
+                                                        CommandParameter="Primary"
+                                                        Style="{StaticResource MaterialDesignFlatButton}">
+                                                        <Rectangle Fill="{Binding SettingData.PrimaryPenColor, Converter={StaticResource ColorToSolidColorBrushConverter}}" />
+                                                    </Button>
+                                                    <TextBlock
+                                                        Grid.Column="2"
+                                                        VerticalAlignment="Center"
+                                                        FontSize="{DynamicResource Heading2}"
+                                                        Text="Primary Pen Brush" />
+                                                </Grid>
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="auto" />
+                                                        <ColumnDefinition Width="10" />
+                                                        <ColumnDefinition />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock
+                                                        VerticalAlignment="Bottom"
+                                                        FontSize="{DynamicResource Heading3}"
+                                                        Text="Primary Brush Thickness: " />
+                                                    <Slider
+                                                        Grid.Column="2"
+                                                        Maximum="100"
+                                                        Minimum="5"
+                                                        Style="{StaticResource MaterialDesignDiscreteSlider}"
+                                                        Value="{Binding SettingData.PrimaryBurshThickness, FallbackValue=20}" />
+                                                </Grid>
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="auto" />
+                                                        <ColumnDefinition Width="10" />
+                                                        <ColumnDefinition />
+                                                    </Grid.ColumnDefinitions>
+                                                    <Button
+                                                        Width="170"
+                                                        Height="75"
+                                                        HorizontalAlignment="Left"
+                                                        HorizontalContentAlignment="Stretch"
+                                                        VerticalContentAlignment="Stretch"
+                                                        Command="{Binding ChooseColorCommand}"
+                                                        CommandParameter="Secondary"
+                                                        Style="{StaticResource MaterialDesignFlatButton}">
+                                                        <Rectangle Fill="{Binding SettingData.SecondaryPenColor, Converter={StaticResource ColorToSolidColorBrushConverter}}" />
+                                                    </Button>
+                                                    <TextBlock
+                                                        Grid.Column="2"
+                                                        VerticalAlignment="Center"
+                                                        FontSize="{DynamicResource Heading2}"
+                                                        Text="Secondary Pen Brush" />
+                                                </Grid>
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="auto" />
+                                                        <ColumnDefinition Width="10" />
+                                                        <ColumnDefinition />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock
+                                                        VerticalAlignment="Bottom"
+                                                        FontSize="{DynamicResource Heading3}"
+                                                        Text="Secondary Brush Thickness: " />
+                                                    <Slider
+                                                        Grid.Column="2"
+                                                        Maximum="100"
+                                                        Minimum="5"
+                                                        Style="{StaticResource MaterialDesignDiscreteSlider}"
+                                                        Value="{Binding SettingData.SecondaryBurshThickness, FallbackValue=20}" />
+                                                </Grid>
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="auto" />
+                                                        <ColumnDefinition Width="10" />
+                                                        <ColumnDefinition />
+                                                    </Grid.ColumnDefinitions>
+                                                    <Button
+                                                        Width="170"
+                                                        Height="75"
+                                                        HorizontalAlignment="Left"
+                                                        HorizontalContentAlignment="Stretch"
+                                                        VerticalContentAlignment="Stretch"
+                                                        Command="{Binding ChooseColorCommand}"
+                                                        CommandParameter="Highlight"
+                                                        Style="{StaticResource MaterialDesignFlatButton}">
+                                                        <Rectangle Fill="{Binding SettingData.HighlighterPenColor, Converter={StaticResource ColorToSolidColorBrushConverter}}" />
+                                                    </Button>
+                                                    <TextBlock
+                                                        Grid.Column="2"
+                                                        VerticalAlignment="Center"
+                                                        FontSize="{DynamicResource Heading2}"
+                                                        Text="Highlighter Brush" />
+                                                </Grid>
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="auto" />
+                                                        <ColumnDefinition Width="10" />
+                                                        <ColumnDefinition />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock
+                                                        VerticalAlignment="Bottom"
+                                                        FontSize="{DynamicResource Heading3}"
+                                                        Text="Highlighter Brush Thickness: " />
+                                                    <Slider
+                                                        Grid.Column="2"
+                                                        Maximum="100"
+                                                        Minimum="5"
+                                                        Style="{StaticResource MaterialDesignDiscreteSlider}"
+                                                        Value="{Binding SettingData.HighlighterBurshThickness, FallbackValue=20}" />
+                                                </Grid>
+                                            </VirtualizingStackPanel>
+                                        </Grid>
+
+                                        <Grid Margin="0,25,0,0">
+                                            <TextBlock
+                                                FontSize="{DynamicResource Heading3}"
+                                                Text="Sneaky Watcher:"
+                                                ToolTip="Sneaky Watcher is a UAD add-on to hide and disguise the playback to trick your boss, parents or teachers." />
+                                        </Grid>
+
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="auto" />
+                                                <RowDefinition Height="10" />
+                                                <RowDefinition />
+                                            </Grid.RowDefinitions>
+                                            <CheckBox Content="Enable sneaky watcher" IsChecked="{Binding SettingData.IsSneakyWatcherEnabled}" />
+                                            <StackPanel Grid.Row="2">
+                                                <Grid>
+                                                    <CheckBox Content="Toggle orange border to indicate Sneaky Watcher" IsChecked="{Binding SettingData.IsSneakyWatcherBorderEnabled}" />
+                                                </Grid>
+
+                                                <Grid>
+                                                    <TextBox
+                                                        materialDesign:HintAssist.Hint="Master Password:"
+                                                        FontSize="{DynamicResource Heading3}"
+                                                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                                        Text="{Binding SettingData.SneakyWatcherMasterPassword}"
+                                                        ToolTip="Password is required when you try to inactivate the Sneaky Watcher" />
+                                                </Grid>
+
+                                                <CheckBox
+                                                    Margin="0,10,0,0"
+                                                    Content="Enable Master Password"
+                                                    IsChecked="{Binding SettingData.IsEnableMasterPassword}" />
+                                                <CheckBox
+                                                    Margin="0,10,0,0"
+                                                    Content="Randomize text in password textbox"
+                                                    IsChecked="{Binding SettingData.IsRandomizePasswordBox}" />
+                                                <CheckBox
+                                                    Margin="0,10,0,0"
+                                                    Content="Change app icon when Sneaky Watcher is activated"
+                                                    IsChecked="{Binding SettingData.ChangeAppIconWhenSneakyWatcherActive}" />
+                                                <CheckBox
+                                                    Margin="0,10,0,0"
+                                                    Content="Pause video when Sneaky Watcher is activated"
+                                                    IsChecked="{Binding SettingData.IsPauseWhenSneakyWactherActive}" />
+                                            </StackPanel>
+                                        </Grid>
+
+                                        <Grid>
+                                            <TextBlock
+                                                FontSize="{DynamicResource Heading3}"
+                                                Text="Screen blocker"
+                                                ToolTip="Block your video playback with an image or a solid color when you press a special key" />
+                                        </Grid>
+
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="auto" />
+                                                <ColumnDefinition />
+                                                <ColumnDefinition Width="auto" />
+                                                <ColumnDefinition Width="100" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <TextBlock
+                                                VerticalAlignment="Center"
+                                                FontSize="{DynamicResource Heading3}"
+                                                Text="Toggle Key: " />
+                                            <TextBlock
+                                                Grid.Column="2"
+                                                VerticalAlignment="Center"
+                                                FontSize="{DynamicResource Heading3}"
+                                                Text="Ctrl + " />
+                                            <Border
+                                                x:Name="BlockerKeyBox"
+                                                Grid.Column="3"
+                                                Background="Black"
+                                                BorderBrush="White"
+                                                BorderThickness="1">
+                                                <Grid Margin="0,0,0,0">
+                                                    <TextBlock
+                                                        HorizontalAlignment="Center"
+                                                        VerticalAlignment="Center"
+                                                        FontSize="{DynamicResource Heading3}"
+                                                        Text="{Binding SettingData.BlockerToggleHotKeys}" />
+                                                    <Button
+                                                        Width="{Binding ActualWidth, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Border}}}"
+                                                        Command="{Binding ChooseKeyCommand}"
+                                                        CommandParameter="Blocker"
+                                                        Style="{StaticResource MaterialDesignFlatButton}" />
+                                                </Grid>
+                                            </Border>
+                                        </Grid>
+                                        <Grid>
+                                            <TextBlock FontSize="{DynamicResource Heading3}" Text="Blocker Content:" />
+                                        </Grid>
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding SettingData.IsBlockerImageEnabled, FallbackValue='I dont know'}" />
+                                            <RadioButton
+                                                x:Name="rdbSolid"
+                                                Content="Solid Color"
+                                                IsChecked="{Binding SettingData.IsBlockerImageEnabled, Converter={StaticResource InvertedBoolConverter}}" />
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="auto" />
+                                                    <ColumnDefinition Width="10" />
+                                                    <ColumnDefinition />
+                                                </Grid.ColumnDefinitions>
+                                                <Button
+                                                    Width="170"
+                                                    Height="75"
+                                                    HorizontalAlignment="Left"
+                                                    HorizontalContentAlignment="Stretch"
+                                                    VerticalContentAlignment="Stretch"
+                                                    Command="{Binding ChooseColorCommand}"
+                                                    CommandParameter="Blocker"
+                                                    IsEnabled="{Binding ElementName=rdbSolid, Path=IsChecked}"
+                                                    Style="{StaticResource MaterialDesignFlatButton}">
+                                                    <Rectangle Fill="{Binding SettingData.BlockerColor, Converter={StaticResource ColorToSolidColorBrushConverter}}" />
+                                                </Button>
+                                                <TextBlock
+                                                    Grid.Column="2"
+                                                    VerticalAlignment="Center"
+                                                    FontSize="{DynamicResource Heading2}"
+                                                    Text="Blocker Color" />
+                                            </Grid>
+                                            <RadioButton
+                                                x:Name="rdbImage"
+                                                Content="Image"
+                                                IsChecked="{Binding SettingData.IsBlockerImageEnabled}" />
+                                            <StackPanel IsEnabled="{Binding ElementName=rdbImage, Path=IsChecked}">
+                                                <Border
+                                                    Width="360"
+                                                    Height="200"
+                                                    HorizontalAlignment="Left"
+                                                    BorderBrush="{DynamicResource MaterialDesignBody}"
+                                                    BorderThickness="1">
+                                                    <Image
+                                                        x:Name="imgPreviewImage"
+                                                        Source="{Binding SettingData.BlockerImageLocation}"
+                                                        Stretch="{Binding SettingData.BlockerStretchMode}" />
+                                                </Border>
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition />
+                                                        <ColumnDefinition Width="60" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBox
+                                                        x:Name="txbBlockerImageLocation"
+                                                        materialDesign:HintAssist.Hint="Image Location:"
+                                                        FontSize="{DynamicResource Heading3}"
+                                                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                                        Text="{Binding SettingData.BlockerImageLocation}" />
+                                                    <Button
+                                                        Grid.Column="1"
+                                                        Width="50"
+                                                        Command="{Binding OpenFileDialogCommand}"
+                                                        CommandParameter="BlockerImage">
+                                                        <materialDesign:PackIcon Kind="File" />
+                                                    </Button>
+                                                </Grid>
+                                                <ComboBox
+                                                    x:Name="stretchMode"
+                                                    materialDesign:HintAssist.Hint="Stretch Mode: "
+                                                    FontSize="{DynamicResource Heading3}"
+                                                    ItemsSource="{x:Static uad:MiscClass.StretchString}"
+                                                    SelectedItem="{Binding SettingData.BlockerStretchMode, Mode=OneWay}"
+                                                    Style="{StaticResource MaterialDesignFloatingHintComboBox}">
+                                                    <i:Interaction.Triggers>
+                                                        <i:EventTrigger EventName="SelectionChanged">
+                                                            <i:InvokeCommandAction Command="{Binding StretchModeChangedCommand}" CommandParameter="{Binding ElementName=stretchMode}" />
+                                                        </i:EventTrigger>
+                                                    </i:Interaction.Triggers>
+                                                    <ComboBox.ItemsPanel>
+                                                        <ItemsPanelTemplate>
+                                                            <VirtualizingStackPanel />
+                                                        </ItemsPanelTemplate>
+                                                    </ComboBox.ItemsPanel>
+                                                </ComboBox>
+                                            </StackPanel>
+                                        </StackPanel>
+                                        <Grid>
+                                            <TextBlock
+                                                FontSize="{DynamicResource Heading3}"
+                                                Text="Fake App-Crash"
+                                                ToolTip="This feature will make a fake crash dialog message and add a white overlay screen. If you click close the program, a fake window error report will pop up and you can't close the fake dialog unless you press the unique key" />
+                                        </Grid>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="auto" />
+                                                <ColumnDefinition />
+                                                <ColumnDefinition Width="auto" />
+                                                <ColumnDefinition Width="100" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <TextBlock
+                                                VerticalAlignment="Center"
+                                                FontSize="{DynamicResource Heading3}"
+                                                Text="Toggle Key: " />
+                                            <TextBlock
+                                                Grid.Column="2"
+                                                VerticalAlignment="Center"
+                                                FontSize="{DynamicResource Heading3}"
+                                                Text="Ctrl + " />
+                                            <Border
+                                                x:Name="FakeAppCrashKeyBox"
+                                                Grid.Column="3"
+                                                Background="Black"
+                                                BorderBrush="White"
+                                                BorderThickness="1">
+                                                <Grid Margin="0,0,0,0">
+                                                    <TextBlock
+                                                        HorizontalAlignment="Center"
+                                                        VerticalAlignment="Center"
+                                                        FontSize="{DynamicResource Heading3}"
+                                                        Text="{Binding SettingData.AppCrashToggleHotKeys}" />
+                                                    <Button
+                                                        Width="{Binding ActualWidth, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Border}}}"
+                                                        Command="{Binding ChooseKeyCommand}"
+                                                        CommandParameter="FakeCrash"
+                                                        Style="{StaticResource MaterialDesignFlatButton}" />
+
+                                                </Grid>
+                                            </Border>
+
+                                        </Grid>
+                                        <CheckBox
+                                            Margin="0,10,0,0"
+                                            Content="Make Window Top Most"
+                                            IsChecked="{Binding SettingData.MakeWindowTopMost}" />
+                                        <CheckBox
+                                            Margin="0,10,0,0"
+                                            Content="Disable Alt+F4"
+                                            IsChecked="{Binding SettingData.DisableAltF4}" />
+                                        <Grid>
+                                            <TextBlock
+                                                FontSize="{DynamicResource Heading3}"
+                                                Text="Background Player"
+                                                ToolTip="Make video window disappear to the taskbar icon" />
+                                        </Grid>
+
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="auto" />
+                                                <ColumnDefinition />
+                                                <ColumnDefinition Width="auto" />
+                                                <ColumnDefinition Width="100" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <TextBlock
+                                                VerticalAlignment="Center"
+                                                FontSize="{DynamicResource Heading3}"
+                                                Text="Toggle Key: " />
+                                            <TextBlock
+                                                Grid.Column="2"
+                                                VerticalAlignment="Center"
+                                                FontSize="{DynamicResource Heading3}"
+                                                Text="Ctrl + " />
+                                            <Border
+                                                x:Name="BGPlayerKeyBox"
+                                                Grid.Column="3"
+                                                Background="Black"
+                                                BorderBrush="White"
+                                                BorderThickness="1">
+                                                <Grid Margin="0,0,0,0">
+                                                    <TextBlock
+                                                        HorizontalAlignment="Center"
+                                                        VerticalAlignment="Center"
+                                                        FontSize="{DynamicResource Heading3}"
+                                                        Text="{Binding SettingData.AppCrashToggleHotKeys}" />
+                                                    <Button
+                                                        Width="{Binding ActualWidth, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Border}}}"
+                                                        Command="{Binding ChooseKeyCommand}"
+                                                        CommandParameter="Background"
+                                                        Style="{StaticResource MaterialDesignFlatButton}" />
+
+                                                </Grid>
+                                            </Border>
+
+                                        </Grid>
+                                    </VirtualizingStackPanel>
+                                </VirtualizingStackPanel>
+                            </Grid>
+                        </materialDesign:Card>
+                    </Grid>
+
+                    <Grid>
+                        <materialDesign:Card>
+                            <Grid Margin="5">
                                 <TextBlock FontSize="{DynamicResource Heading3}" Text="Performance" />
                                 <VirtualizingStackPanel Margin="0,30,0,0">
                                     <Grid>
@@ -258,6 +722,9 @@
                                     <Grid>
                                         <CheckBox Content=" Use virtualizing warp panel for anime list (decrease appearance, increase performance)" IsChecked="{Binding SettingData.UseVirtalizingWrapPanel}" />
                                     </Grid>
+                                    <Grid>
+                                        <CheckBox Content=" Only fetch anime series when their host page are show" IsChecked="{Binding SettingData.UseVirtalizingWrapPanel}" />
+                                    </Grid>
                                 </VirtualizingStackPanel>
                             </Grid>
                         </materialDesign:Card>
@@ -265,5 +732,81 @@
                 </VirtualizingStackPanel>
             </ScrollViewer>
         </Grid>
+        <materialDesign:DialogHost
+            x:Name="colorPicker"
+            CloseOnClickAway="True"
+            DialogTheme="Inherit"
+            IsOpen="{Binding IsColorPickerOpen}">
+            <materialDesign:DialogHost.DialogContent>
+                <Grid Width="400" Height="300">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
+                    <xctk:ColorCanvas
+                        x:Name="colorConvas"
+                        Background="Transparent"
+                        Foreground="White" />
+                    <Grid Grid.Row="1" VerticalAlignment="Bottom">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="10" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <Button
+                            Grid.Column="1"
+                            Command="{Binding ColorPickerDialogClosingCommand}"
+                            Content="Cancel"
+                            Style="{StaticResource MaterialDesignFlatButton}" />
+                        <Button
+                            Grid.Column="3"
+                            Command="{Binding ApplyColorCommand}"
+                            CommandParameter="{Binding ElementName=colorConvas}"
+                            Content="OK" />
+                    </Grid>
+                </Grid>
+            </materialDesign:DialogHost.DialogContent>
+        </materialDesign:DialogHost>
+
+        <materialDesign:DialogHost
+            x:Name="keyBinder"
+            CloseOnClickAway="True"
+            DialogTheme="Inherit"
+            IsOpen="{Binding IsKeyInputOpen}">
+            <materialDesign:DialogHost.DialogContent>
+                <Grid
+                    Width="300"
+                    Height="200"
+                    Margin="5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="10" />
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
+                    <TextBlock FontSize="{DynamicResource Heading2}" Text="Choose a key: " />
+                    <TextBox
+                        x:Name="keyInput"
+                        Grid.Row="2"
+                        Text="{Binding KeyInputText}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="TextChanged">
+                                <i:InvokeCommandAction Command="{Binding ValidateKeyCommand}" CommandParameter="{Binding ElementName=keyInput}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </TextBox>
+                    <Grid Grid.Row="4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="3" Content="Cancel" />
+                    </Grid>
+                </Grid>
+            </materialDesign:DialogHost.DialogContent>
+        </materialDesign:DialogHost>
     </Grid>
 </UserControl>

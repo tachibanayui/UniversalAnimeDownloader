@@ -32,6 +32,7 @@ namespace UniversalAnimeDownloader.ViewModels
         public ICommand OpenUADMediaPlayerCommand { get; set; }
         public ICommand ChangeWindowStateRequestCommand { get; set; }
         public ICommand UADMediaPlayerClosedCommand { get; set; }
+        public ICommand WindowStateChangedCommand { get; set; }
 
         public ICommand NavigateCommand { get; set; }
         #endregion
@@ -237,7 +238,17 @@ namespace UniversalAnimeDownloader.ViewModels
             ChangeWindowStateRequestCommand = new RelayCommand<RequestingWindowStateEventArgs>(p => true, ChangeUADMediaPlayerWindowState);
             OpenUADMediaPlayerCommand = new RelayCommand<object>(p => IsPlayButtonEnable, p => UADMediaPlayerVisibility = Visibility.Visible);
             UADMediaPlayerClosedCommand = new RelayCommand<object>(p => true, p => { UADMediaPlayerVisibility = Visibility.Collapsed; IsPlayButtonEnable = false; });
+            WindowStateChangedCommand = new RelayCommand<Window>(p => true, WindowStateChangedAction);
             CheckForAnimeSeriesUpdate();
+        }
+
+        private void WindowStateChangedAction(Window obj)
+        {
+            //When user use full screen, we apply a 7 uniform margin to the MainWindow content (Grid) to avoid some UIElement offscreen
+            if (obj.WindowState == WindowState.Maximized)
+                (obj.Content as Grid).Margin = new Thickness(7);
+            else if (obj.WindowState == WindowState.Normal)
+                (obj.Content as Grid).Margin = new Thickness(0);
         }
 
         private void ChangeUADMediaPlayerWindowState(RequestingWindowStateEventArgs obj)

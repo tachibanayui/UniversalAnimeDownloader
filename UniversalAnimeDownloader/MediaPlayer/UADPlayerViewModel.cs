@@ -27,7 +27,11 @@ namespace UniversalAnimeDownloader.MediaPlayer
 
         public double PlayerVolume
         {
-            get { return UADSettingsManager.Instance.CurrentSettings.PlaybackVolume; }
+            get
+            {
+                MediaElementVolume = UADSettingsManager.Instance.CurrentSettings.PlaybackVolume / 100;
+                return UADSettingsManager.Instance.CurrentSettings.PlaybackVolume;
+            }
             set
             {
                 if (UADSettingsManager.Instance.CurrentSettings.PlaybackVolume != value)
@@ -88,7 +92,7 @@ namespace UniversalAnimeDownloader.MediaPlayer
 
         public DrawingAttributes PrimaryPen
         {
-            get { return new DrawingAttributes() { Color = UADSettingsManager.Instance.CurrentSettings.PrimaryPenColor, Width = UADSettingsManager.Instance.CurrentSettings.PrimaryBurshThickness, Height = UADSettingsManager.Instance.CurrentSettings.PrimaryBurshThickness }; }
+            get {return new DrawingAttributes() { Color = UADSettingsManager.Instance.CurrentSettings.PrimaryPenColor, Width = UADSettingsManager.Instance.CurrentSettings.PrimaryBurshThickness, Height = UADSettingsManager.Instance.CurrentSettings.PrimaryBurshThickness }; }
             set
             {
                 UADSettingsManager.Instance.CurrentSettings.PrimaryBurshThickness = value.Height;

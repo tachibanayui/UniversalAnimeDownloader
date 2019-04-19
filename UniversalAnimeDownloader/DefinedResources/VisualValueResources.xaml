@@ -23,6 +23,9 @@
     <valueConverter:GreaterThanParameterToVisibilityConverter x:Key="GreaterThanParameterToVisibilityConverter" />
     <valueConverter:MatchIndexToRandomSolidColorBrushConverter x:Key="MatchIndexToRandomSolidColorBrushConverter" />
     <valueConverter:MatchIndexToVisibilityConverter x:Key="MatchIndexToVisibilityConverter" />
+    <valueConverter:StringToPlayerTypeConverter x:Key="StringToPlayerTypeConverter" />
+    <valueConverter:ColorToSolidColorBrushConverter x:Key="ColorToSolidColorBrushConverter" />
+    <valueConverter:InvertedBoolConverter x:Key="InvertedBoolConverter" />
 
     <sys:Double x:Key="Heading1">36</sys:Double>
     <sys:Double x:Key="Heading2">24</sys:Double>

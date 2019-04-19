@@ -123,8 +123,9 @@
                 </Grid>
 
                 <Grid
+                    x:Name="sideBar"
                     Grid.RowSpan="3"
-                    Width="350"
+                    Width="0"
                     HorizontalAlignment="Right">
                     <Rectangle Fill="#2D2D30" />
                     <Grid Margin="5">
@@ -192,75 +193,79 @@
                                 Grid.Row="1"
                                 materialDesign:HintAssist.Hint="Search episodes:"
                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
-                            <ListView
+                            <ScrollViewer
                                 Grid.Row="2"
-                                AlternationCount="100"
-                                ItemsSource="{Binding Playlist.Episodes, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:UADMediaPlayer}}"
-                                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                ScrollViewer.VerticalScrollBarVisibility="Visible"
-                                Style="{StaticResource listViewEpisodeBaseTemplate}">
-                                <ListView.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <StackPanel />
-                                    </ItemsPanelTemplate>
-                                </ListView.ItemsPanel>
+                                HorizontalScrollBarVisibility="Disabled"
+                                VerticalScrollBarVisibility="Visible">
+                                <ListView
+                                    AlternationCount="{Binding Playlist.Episodes.Count, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:UADMediaPlayer}}"
+                                    ItemsSource="{Binding Playlist.Episodes, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:UADMediaPlayer}}"
+                                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                    ScrollViewer.VerticalScrollBarVisibility="Visible"
+                                    Style="{StaticResource listViewEpisodeBaseTemplate}">
+                                    <ListView.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel />
+                                        </ItemsPanelTemplate>
+                                    </ListView.ItemsPanel>
 
-                                <ListBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <Button Click="Event_EpisodeSelected">
-                                            <Button.Style>
-                                                <Style TargetType="Button">
-                                                    <Setter Property="Template">
-                                                        <Setter.Value>
-                                                            <ControlTemplate TargetType="Button">
-                                                                <ContentPresenter Content="{TemplateBinding Content}" />
-                                                            </ControlTemplate>
-                                                        </Setter.Value>
-                                                    </Setter>
-                                                </Style>
-                                            </Button.Style>
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Button Click="Event_EpisodeSelected">
+                                                <Button.Style>
+                                                    <Style TargetType="Button">
+                                                        <Setter Property="Template">
+                                                            <Setter.Value>
+                                                                <ControlTemplate TargetType="Button">
+                                                                    <ContentPresenter Content="{TemplateBinding Content}" />
+                                                                </ControlTemplate>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                </Button.Style>
 
-                                            <Grid Height="36" Margin="2">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="10" />
-                                                    <ColumnDefinition Width="auto" />
-                                                    <ColumnDefinition Width="10" />
-                                                    <ColumnDefinition />
-                                                </Grid.ColumnDefinitions>
+                                                <Grid Height="36" Margin="2">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="10" />
+                                                        <ColumnDefinition Width="auto" />
+                                                        <ColumnDefinition Width="10" />
+                                                        <ColumnDefinition />
+                                                    </Grid.ColumnDefinitions>
 
-                                                <Rectangle>
-                                                    <Rectangle.Fill>
-                                                        <MultiBinding Converter="{StaticResource MatchIndexToRandomSolidColorBrushConverter}">
-                                                            <Binding Path="PlayIndex" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=local:UADMediaPlayer}" />
-                                                            <Binding Path="(ItemsControl.AlternationIndex)" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=ListViewItem}" />
-                                                        </MultiBinding>
-                                                    </Rectangle.Fill>
-                                                </Rectangle>
+                                                    <Rectangle>
+                                                        <Rectangle.Fill>
+                                                            <MultiBinding Converter="{StaticResource MatchIndexToRandomSolidColorBrushConverter}">
+                                                                <Binding Path="PlayIndex" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=local:UADMediaPlayer}" />
+                                                                <Binding Path="(ItemsControl.AlternationIndex)" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=ListViewItem}" />
+                                                            </MultiBinding>
+                                                        </Rectangle.Fill>
+                                                    </Rectangle>
 
-                                                <Image
-                                                    Grid.Column="1"
-                                                    Width="64"
-                                                    Height="36"
-                                                    Source="{Binding Thumbnail, Converter={StaticResource MediaSourceInfoToImageSourceConverter}}"
-                                                    Stretch="UniformToFill" />
+                                                    <Image
+                                                        Grid.Column="1"
+                                                        Width="64"
+                                                        Height="36"
+                                                        Source="{Binding Thumbnail, Converter={StaticResource MediaSourceInfoToImageSourceConverter}}"
+                                                        Stretch="UniformToFill" />
 
-                                                <Grid Grid.Column="3">
-                                                    <Grid.RowDefinitions>
-                                                        <RowDefinition />
-                                                        <RowDefinition />
-                                                    </Grid.RowDefinitions>
-                                                    <TextBlock Foreground="White" Text="{Binding Name}" />
-                                                    <TextBlock
-                                                        Grid.Row="1"
-                                                        Foreground="Red"
-                                                        Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListViewItem}}"
-                                                        Visibility="{Binding AvailableOffline, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}" />
+                                                    <Grid Grid.Column="3">
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition />
+                                                            <RowDefinition />
+                                                        </Grid.RowDefinitions>
+                                                        <TextBlock Foreground="White" Text="{Binding Name}" />
+                                                        <TextBlock
+                                                            Grid.Row="1"
+                                                            Foreground="Red"
+                                                            Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListViewItem}}"
+                                                            Visibility="{Binding AvailableOffline, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}" />
+                                                    </Grid>
                                                 </Grid>
-                                            </Grid>
-                                        </Button>
-                                    </DataTemplate>
-                                </ListBox.ItemTemplate>
-                            </ListView>
+                                            </Button>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListView>
+                            </ScrollViewer>
                         </Grid>
 
                         <Grid Grid.Row="1">
@@ -773,7 +778,6 @@
                                 </StackPanel>
                             </Grid>
                         </Border>
-
                     </Grid>
 
                     <StackPanel

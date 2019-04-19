@@ -40,6 +40,7 @@ namespace UniversalAnimeDownloader.MediaPlayer
         private string lastCapImgLocation;
         private int currentHideControllerTimeOutID;
         private DateTime LastClick;
+        public bool NoPlayableMedia { get; set; }
 
         public bool IsBackgroundPlayerActive { get; set; }
         public bool IsFakeCrashActive { get; set; }
@@ -58,11 +59,24 @@ namespace UniversalAnimeDownloader.MediaPlayer
             }
         }
 
-        private bool isSidePanelOpen;
+        private bool isSidePanelOpen = false;
         public bool IsSidePanelOpen
         {
-            get { return isSidePanelOpen; }
-            set { isSidePanelOpen = value; }
+            get => isSidePanelOpen;
+            set
+            {
+                if(isSidePanelOpen != value)
+                {
+                    DoubleAnimation transitionAnim = new DoubleAnimation(sideBar.Width, 350, TimeSpan.FromSeconds(0.5)) { DecelerationRatio = 0.1, EasingFunction = new QuarticEase() { EasingMode = EasingMode.EaseOut } };
+                    if (!value)
+                        transitionAnim.To = 0;
+
+                    sideBar.BeginAnimation(WidthProperty ,transitionAnim);
+
+                    isSidePanelOpen = value;
+                }
+                
+            }
         }
 
        
@@ -81,11 +95,13 @@ namespace UniversalAnimeDownloader.MediaPlayer
         private static void UpdateMediaElementSource(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var ins = d as UADMediaPlayer;
-            //To-do: Do something to notify user
             if ((int)e.NewValue == -1)
+            {
+                ins.NoPlayableMedia = true;
                 return;
+            }
 
-            if(ins.Playlist.Episodes[(int)e.NewValue].FilmSources == null)
+            if (ins.Playlist.Episodes[(int)e.NewValue].FilmSources == null)
             {
                 ins.Next();
                 return;
@@ -94,7 +110,7 @@ namespace UniversalAnimeDownloader.MediaPlayer
             var source = ins.Playlist.Episodes[(int)e.NewValue].FilmSources.Where(p => !string.IsNullOrEmpty(p.Value.LocalFile));
             if (source.Count() != 0)
             {
-                ins.VideoUri = new Uri(source.First().Value.LocalFile);
+                ins.VideoUri = new Uri(source.Last().Value.LocalFile);
                 var episodeInfo = ins.Playlist.Episodes[(int)e.NewValue];
                 
                 string localThumbnailSrc = episodeInfo.Thumbnail.LocalFile;
@@ -198,6 +214,12 @@ namespace UniversalAnimeDownloader.MediaPlayer
             ins.mediaPlayer.Stop();
             ins.PlayIndex = 0;
             ins.PlayIndex = GetNearestEpisode(ins, false, false);
+            if (UADSettingsManager.Instance.CurrentSettings.PlayMediaFullScreen)
+            {
+                ins.OnRequestWindowState(WindowState.Maximized);
+                (ins.btnFullScreenToggle.Content as PackIcon).Kind = PackIconKind.ArrowCollapse;
+            }
+            ins.strokeThicknessSlider.Value = UADSettingsManager.Instance.CurrentSettings.PrimaryBurshThickness;
         }
 
         /// <summary>
@@ -385,7 +407,7 @@ namespace UniversalAnimeDownloader.MediaPlayer
                 controllerMask.BeginAnimation(LinearGradientBrush.EndPointProperty, animation);
 
                 await Task.Delay(260);
-                mediaPlayer.Play();
+                Play();
             }
             isPlaying = !isPlaying;
         }
@@ -849,7 +871,7 @@ namespace UniversalAnimeDownloader.MediaPlayer
         {
             mediaPlayer.Stop();
             Previous();
-            mediaPlayer.Play();
+            Play();
             PackIcon pkIcon = btnPlayPause.Content as PackIcon;
             pkIcon.Kind = PackIconKind.Pause;
         }
@@ -858,7 +880,7 @@ namespace UniversalAnimeDownloader.MediaPlayer
         {
             mediaPlayer.Stop();
             Next();
-            mediaPlayer.Play();
+            Play();
             PackIcon pkIcon = btnPlayPause.Content as PackIcon;
             pkIcon.Kind = PackIconKind.Pause;
         }
@@ -878,5 +900,15 @@ namespace UniversalAnimeDownloader.MediaPlayer
         private void Event_OpenPlayListTab(object sender, RoutedEventArgs e) => VM.SidePanelTabIndex = 0;
 
         private void Event_OpenInfoTab(object sender, RoutedEventArgs e) => VM.SidePanelTabIndex = 1;
+
+        public async void Play()
+        {
+           
+
+            if (NoPlayableMedia)
+                await MessageDialog.ShowAsync("No playable media!", "We can't find any playable media of this series. You can switch to online version and download some episode.", MessageDialogButton.OKCancelButton);
+            else
+                mediaPlayer.Play();
+        }
     }
 }

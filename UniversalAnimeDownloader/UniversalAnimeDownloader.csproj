@@ -199,6 +199,7 @@
     </Compile>
     <Compile Include="ValueConverters\AnimeSeriesStorageStateToIconVisibilityConverter.cs" />
     <Compile Include="ValueConverters\AutomatedUnitConversionFromByteConverter.cs" />
+    <Compile Include="ValueConverters\ColorToSolidColorBrushConverter.cs" />
     <Compile Include="ValueConverters\GreaterThanParameterToVisibilityConverter.cs" />
     <Compile Include="ValueConverters\InvertableBoolToVisibilityConverter.cs" />
     <Compile Include="ValueConverters\DateTimeToStringConverter.cs" />
@@ -207,11 +208,13 @@
     <Compile Include="ValueConverters\EpisodeDownloadStateToVisibilityConverter.cs" />
     <Compile Include="ValueConverters\GenreItemListToStringConverter.cs" />
     <Compile Include="ValueConverters\HtmlTagToColoredTextConverter.cs" />
+    <Compile Include="ValueConverters\InvertedBoolConverter.cs" />
     <Compile Include="ValueConverters\MatchIndexToRandomSolidColorBrushConverter.cs" />
     <Compile Include="ValueConverters\MediaSourceInfoToImageSource.cs" />
     <Compile Include="ValueConverters\NullOrEmpltyStringToVisibilityValueConverter.cs" />
     <Compile Include="ValueConverters\ReferenceEqualValueConverter.cs" />
     <Compile Include="ValueConverters\SmallerThanParameterToVisibilityConverter.cs" />
+    <Compile Include="ValueConverters\StringToPlayerTypeConverter.cs" />
     <Compile Include="ValueConverters\TypeToStringConverter.cs" />
     <Compile Include="ValueConverters\UADDownloaderStateToIconKindConverter.cs" />
     <Compile Include="ViewModels\AllAnimeTabViewModel.cs" />

@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using UADAPI;
 using UniversalAnimeDownloader.MediaPlayer;
+using UniversalAnimeDownloader.UADSettingsPortal;
 using UniversalAnimeDownloader.UcContentPages;
 using UniversalAnimeDownloader.ViewModels;
 
@@ -21,6 +25,11 @@ namespace UniversalAnimeDownloader
         {
             "144p", "288p", "360p", "480p", "720p", "1080p", "1440p", "2160p", "Best possible", "Worse possible"
         };
+        public static List<string> MediaPlayerOptions { get; set; } = new List<string>
+        {
+            "External Media Player", "UAD Media Player"
+        };
+        public static string[] StretchString { get => Enum.GetNames(typeof(Stretch)); }
 
         public static event EventHandler<SearchEventArgs> UserSearched;
         public static void OnUserSearched(object sender, string searchKeyword) => UserSearched?.Invoke(sender, new SearchEventArgs(searchKeyword));
@@ -123,25 +132,41 @@ namespace UniversalAnimeDownloader
         private static MainWindowViewModel _Ins;
         private static UADMediaPlayer _Player;
 
-        public static void Play(AnimeSeriesInfo info, int index = 0)
+        public static async void Play(AnimeSeriesInfo info, int index = 0)
         {
-            NullCheck();
-            _Player.Playlist = info;
-            if (index != 0)
-                _Player.PlayIndex = index;
+            if(UADSettingsManager.Instance.CurrentSettings.PreferedPlayer == PlayerType.Embeded)
+            {
+                NullCheck();
+                _Player.Playlist = info;
+                if (index != 0)
+                    _Player.PlayIndex = index;
 
-            _Player.VM.UpdateBindings();
-            (_Player.Parent as Grid).Opacity = 0;
-            _Player.Focus();
-            _Ins.UADMediaPlayerVisibility = Visibility.Visible;
-            MiscClass.FadeInAnimation(_Player.Parent as Grid, TimeSpan.FromSeconds(.5), true, new EventHandler(PlayMedia));
-            _Player.Focus();
+                _Player.VM.UpdateBindings();
+                (_Player.Parent as Grid).Opacity = 0;
+                _Player.Focus();
+                _Ins.UADMediaPlayerVisibility = Visibility.Visible;
+                
+                MiscClass.FadeInAnimation(_Player.Parent as Grid, TimeSpan.FromSeconds(.5), true, new EventHandler(PlayMedia));
+                _Player.Focus();
+            }
+            else
+            {
+                var episode = info.Episodes[index];
+                if(episode.AvailableOffline)
+                {
+                    var source = episode.FilmSources.Where(p => !string.IsNullOrEmpty(p.Value.LocalFile));
+                    if(source.Count() != 0)
+                        try { Process.Start(source.Last().Value.LocalFile); return; } catch { };
+                }
+                await MessageDialog.ShowAsync("This episode is not avaible offline", "This episode is not avaible offline, you can download it by visiting online version. We also suggest you try our UAD Media Player. It pack with a ton of feature and support play all episode correctly", MessageDialogButton.OKCancelButton);
+            }
+            
         }
 
         private static void PlayMedia(object sender, EventArgs e)
         {
             (_Player.Parent as Grid).IsHitTestVisible = true;
-            _Player.mediaPlayer.Play();
+            _Player.Play();
             _Player.Focus();
         }
 

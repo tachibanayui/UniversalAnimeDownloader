@@ -12,7 +12,7 @@
     xmlns:media="clr-namespace:UniversalAnimeDownloader.MediaPlayer"
     xmlns:pages="clr-namespace:UniversalAnimeDownloader.UcContentPages"
     x:Name="mainWindow"
-    Title="MainWindow"
+    Title="Universal Anime Downloader"
     Width="800"
     Height="450"
     materialDesign:TransitionAssist.DisableTransitions="{Binding DisableAnimation}"
@@ -27,6 +27,11 @@
     WindowStartupLocation="CenterScreen"
     WindowStyle="None"
     mc:Ignorable="d">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="StateChanged">
+            <i:InvokeCommandAction Command="{Binding WindowStateChangedCommand}" CommandParameter="{Binding ElementName=mainWindow}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries />
@@ -359,6 +364,24 @@
             </Grid>
         </ScrollViewer>
 
+        <Grid
+            x:Name="uadMediaPlayer"
+            Grid.RowSpan="3"
+            Background="Black"
+            Opacity="0"
+            Visibility="{Binding UADMediaPlayerVisibility}">
+            <media:UADMediaPlayer>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="RequestWindowState">
+                        <cmd:EventToCommand Command="{Binding ChangeWindowStateRequestCommand}" PassEventArgsToCommand="True" />
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="UADMediaPlayerClosed">
+                        <cmd:EventToCommand Command="{Binding UADMediaPlayerClosedCommand}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </media:UADMediaPlayer>
+        </Grid>
+
         <Grid x:Name="overlay" Grid.Row="1">
             <materialDesign:DialogHost
                 CloseOnClickAway="False"
@@ -423,36 +446,5 @@
                 </materialDesign:DialogHost.DialogContent>
             </materialDesign:DialogHost>
         </Grid>
-
-        <Grid
-            x:Name="uadMediaPlayer"
-            Grid.RowSpan="3"
-            Background="Black"
-            Opacity="0"
-            Visibility="{Binding UADMediaPlayerVisibility}">
-            <media:UADMediaPlayer>
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="RequestWindowState">
-                        <cmd:EventToCommand Command="{Binding ChangeWindowStateRequestCommand}" PassEventArgsToCommand="True" />
-                    </i:EventTrigger>
-                    <i:EventTrigger EventName="UADMediaPlayerClosed">
-                        <cmd:EventToCommand Command="{Binding UADMediaPlayerClosedCommand}" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </media:UADMediaPlayer>
-        </Grid>
-
-        <!--<pages:UADMediaPlayer
-            x:Name="uadMediaPlayer"
-            Grid.RowSpan="3"
-            Playlist="{Binding UADMediaPlayerPlaylist}"
-            State="{Binding UADMediaPlayerState}"
-            Visibility="{Binding UADMediaPlayerVisibility, FallbackValue=Collapsed}">
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="RequestWindowState">
-                    <cmd:EventToCommand Command="{Binding MinimizeUADMediaPlayer}" PassEventArgsToCommand="True" />
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-        </pages:UADMediaPlayer>-->
     </Grid>
 </Window>
