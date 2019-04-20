@@ -2,6 +2,7 @@
     x:Class="UniversalAnimeDownloader.MediaPlayer.UADMediaPlayer"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:customControls="clr-namespace:UniversalAnimeDownloader.CustomControls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:extk="http://schemas.xceed.com/wpf/xaml/toolkit"
     xmlns:html="clr-namespace:TheArtOfDev.HtmlRenderer.WPF;assembly=HtmlRenderer.WPF"
@@ -144,32 +145,22 @@
                                 <ColumnDefinition Width="50" />
                                 <ColumnDefinition Width="10" />
                             </Grid.ColumnDefinitions>
-                            <Grid Grid.Column="1">
-                                <Rectangle Height="10" VerticalAlignment="Top">
-                                    <Rectangle.Fill>
-                                        <MultiBinding Converter="{StaticResource MatchIndexToRandomSolidColorBrushConverter}">
-                                            <Binding Path="SidePanelTabIndex" />
-                                            <Binding Source="{StaticResource Zero}" />
-                                        </MultiBinding>
-                                    </Rectangle.Fill>
-                                </Rectangle>
-                                <Button Click="Event_OpenPlayListTab" Style="{StaticResource FlatControlBtn}">
-                                    <materialDesign:PackIcon Foreground="White" Kind="PlaylistPlay" />
-                                </Button>
-                            </Grid>
-                            <Grid Grid.Column="2">
-                                <Rectangle Height="10" VerticalAlignment="Top">
-                                    <Rectangle.Fill>
-                                        <MultiBinding Converter="{StaticResource MatchIndexToRandomSolidColorBrushConverter}">
-                                            <Binding Path="SidePanelTabIndex" />
-                                            <Binding Source="{StaticResource One}" />
-                                        </MultiBinding>
-                                    </Rectangle.Fill>
-                                </Rectangle>
-                                <Button Click="Event_OpenInfoTab" Style="{StaticResource FlatControlBtn}">
-                                    <materialDesign:PackIcon Foreground="White" Kind="InformationOutline" />
-                                </Button>
-                            </Grid>
+                            <customControls:ColorfulTabDecorator
+                                Grid.Column="1"
+                                Clicked="Event_OpenPlayListTab"
+                                ControlTabIndex="0"
+                                CurrentTabIndex="{Binding SidePanelTabIndex}"
+                                TabMarkerDock="Top">
+                                <materialDesign:PackIcon Foreground="White" Kind="PlaylistPlay" />
+                            </customControls:ColorfulTabDecorator>
+                            <customControls:ColorfulTabDecorator
+                                Grid.Column="2"
+                                Clicked="Event_OpenInfoTab"
+                                ControlTabIndex="1"
+                                CurrentTabIndex="{Binding SidePanelTabIndex}"
+                                TabMarkerDock="Top">
+                                <materialDesign:PackIcon Foreground="White" Kind="InformationOutline" />
+                            </customControls:ColorfulTabDecorator>
                         </Grid>
                         <Separator Margin="15,0" VerticalAlignment="Bottom" />
                         <Grid Grid.Row="1">

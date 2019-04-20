@@ -24,10 +24,5 @@ namespace UniversalAnimeDownloader.UcContentPages
         {
             InitializeComponent();
         }
-
-        private void Event_ChangeKeyBinding(object sender, RoutedEventArgs e)
-        {
-
-        }
     }
 }

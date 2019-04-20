@@ -3,9 +3,12 @@ using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
+using UniversalAnimeDownloader.Behaviour;
 using UniversalAnimeDownloader.UADSettingsPortal;
 using Xceed.Wpf.Toolkit;
 
@@ -26,6 +29,8 @@ namespace UniversalAnimeDownloader.ViewModels
         public ICommand ApplyColorCommand { get; set; }
         public ICommand ValidateKeyCommand { get; set; }
         public ICommand BrowseFolderDialogCommand { get; set; }
+        public ICommand MainScrollChangedCommand { get; set; }
+        public ICommand AnimateSrcoll { get; set; }
         #endregion
 
         public bool IsHostLoaded { get; set; } = false;
@@ -100,6 +105,42 @@ namespace UniversalAnimeDownloader.ViewModels
             }
         }
 
+        private int _CurrentSettingIndex = 0;
+        public int CurrentSettingIndex
+        {
+            get
+            {
+                return _CurrentSettingIndex;
+            }
+            set
+            {
+                if (_CurrentSettingIndex != value)
+                {
+                    _CurrentSettingIndex = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private double _EndEmptySpaceHeight = 0;
+        public double EndEmptySpaceHeight
+        {
+            get
+            {
+                return _EndEmptySpaceHeight;
+            }
+            set
+            {
+                if (_EndEmptySpaceHeight != value)
+                {
+                    _EndEmptySpaceHeight = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+
+
         public PaletteHelper Helper { get; set; }
         public IList<Swatch> Swatches { get; }
 
@@ -118,6 +159,18 @@ namespace UniversalAnimeDownloader.ViewModels
                 IsHostLoaded = true;
                 var cbxStret = p.FindName("stretchMode") as ComboBox;
                 cbxStret.SelectedItem = SettingData.BlockerStretchMode.ToString("G");
+
+                Ins = p;
+
+                //Get the mainWindow SizeChanged
+                HostWindow = Window.GetWindow(p);
+                IndexChangeMark = HostWindow.Height / 2;
+                EndEmptySpaceHeight = HostWindow.Height / 4d * 3d - 100;
+                HostWindow.SizeChanged += (s, e) =>
+                {
+                    IndexChangeMark = e.NewSize.Height / 2d;
+                    EndEmptySpaceHeight = e.NewSize.Height / 4d * 3d - 100;
+                };
             });
             OpenFileDialogCommand = new RelayCommand<string>(p => true, p =>
             {
@@ -136,27 +189,27 @@ namespace UniversalAnimeDownloader.ViewModels
             StretchModeChangedCommand = new RelayCommand<ComboBox>(p => IsHostLoaded, p => SettingData.BlockerStretchMode = (Stretch)Enum.Parse(typeof(Stretch), p.SelectedItem.ToString()));
             ColorPickerDialogClosingCommand = new RelayCommand<object>(p => true, p => { });
             ChooseKeyCommand = new RelayCommand<string>(p => true, p => { CurrentObjectRequestKeyName = p; IsKeyInputOpen = true; });
-            ValidateKeyCommand = new RelayCommand<TextBox>(p => !string.IsNullOrEmpty(p.Text) , p =>
-            {
-                char current = p.Text.ToUpper()[0];
-                
-                switch (CurrentObjectRequestKeyName)
-                {
-                    case "Blocker":
-                        SettingData.BlockerToggleHotKeys = current;
-                        break;
-                    case "FakeCrash":
-                        SettingData.AppCrashToggleHotKeys = current;
-                        break;
-                    case "Background":
-                        SettingData.BgPlayerToggleHotKeys = current;
-                        break;
-                    default:
-                        break;
-                }
-                p.Clear();
-                IsKeyInputOpen = false;
-            });
+            ValidateKeyCommand = new RelayCommand<TextBox>(p => !string.IsNullOrEmpty(p.Text), p =>
+           {
+               char current = p.Text.ToUpper()[0];
+
+               switch (CurrentObjectRequestKeyName)
+               {
+                   case "Blocker":
+                       SettingData.BlockerToggleHotKeys = current;
+                       break;
+                   case "FakeCrash":
+                       SettingData.AppCrashToggleHotKeys = current;
+                       break;
+                   case "Background":
+                       SettingData.BgPlayerToggleHotKeys = current;
+                       break;
+                   default:
+                       break;
+               }
+               p.Clear();
+               IsKeyInputOpen = false;
+           });
             ChooseColorCommand = new RelayCommand<string>(p => string.IsNullOrEmpty(CurrentObjectRequestColorName), p =>
             {
                 CurrentObjectRequestColorName = p;
@@ -189,7 +242,7 @@ namespace UniversalAnimeDownloader.ViewModels
                 System.Windows.Forms.FolderBrowserDialog dialog = new System.Windows.Forms.FolderBrowserDialog();
                 dialog.ShowNewFolderButton = true;
                 var result = dialog.ShowDialog();
-                if(result == System.Windows.Forms.DialogResult.OK)
+                if (result == System.Windows.Forms.DialogResult.OK)
                 {
                     switch (p)
                     {
@@ -202,10 +255,84 @@ namespace UniversalAnimeDownloader.ViewModels
                         default:
                             break;
                     }
-                    
+
                 }
             });
+            MainScrollChangedCommand = new RelayCommand<ScrollViewer>(p => IsHostLoaded, MainScrollChangedAction);
+            AnimateSrcoll = new RelayCommand<string>(p => true, AnimateAction);
         }
+
+        private void AnimateAction(string obj)
+        {
+            int parsed = int.Parse(obj);
+            var scrViewer = Ins.FindName("mainScroll") as ScrollViewer;
+            double toValue = scrViewer.VerticalOffset + GetDistFromHostWindow(scrViewer, parsed) - 195;
+            DoubleAnimation anim = new DoubleAnimation(scrViewer.VerticalOffset, toValue, TimeSpan.FromSeconds(0.5)) { EasingFunction = new QuadraticEase() { EasingMode = EasingMode.EaseOut } };
+            scrViewer.BeginAnimation(ScrollAnimationBehavior.VerticalOffsetProperty, anim);
+        }
+
+
+        //Test feature
+        //This will take care the visual tab index will change if the control hit this height mark
+        public Window HostWindow { get; set; }
+        public UserControl Ins { get; set; }
+        public double IndexChangeMark { get; set; }
+
+        private double GetDistFromHostWindow(ScrollViewer obj, int index)
+        {
+            var currentTab = (obj.Content as VirtualizingStackPanel).Children[index];
+            return currentTab.TranslatePoint(new Point(0, 0), HostWindow).Y;
+        }
+
+        private void MainScrollChangedAction(ScrollViewer obj)
+        {
+            if (GetDistFromHostWindow(obj, CurrentSettingIndex) > IndexChangeMark)
+            {
+                //(Backward scroll)
+                CurrentSettingIndex--;
+                //If the scroll change to quickly (jump 1000 - 700) So a recursion is made to prevent wrong tab
+                GetPastTab(obj);
+            }
+            else
+            {
+                if (CurrentSettingIndex + 1 >= (obj.Content as VirtualizingStackPanel).Children.Count - 1)
+                    return;
+                if (GetDistFromHostWindow(obj, CurrentSettingIndex + 1) < IndexChangeMark)
+                {
+                    //(Forward scroll)
+                    CurrentSettingIndex++;
+                    //If the scroll change to quickly (jump 1000 - 700) So a recursion is made to prevent wrong tab
+                    GetNextTab(obj);
+                }
+            }
+        }
+
+        //Recursion to get the right tab
+        private void GetNextTab(ScrollViewer obj)
+        {
+            if (CurrentSettingIndex + 1 >= (obj.Content as VirtualizingStackPanel).Children.Count - 1)
+                return;
+            if (GetDistFromHostWindow(obj, CurrentSettingIndex + 1) < IndexChangeMark)
+            {
+                CurrentSettingIndex++;
+                GetNextTab(obj);
+            }
+        }
+
+        //Recursion to get the right tab
+        private void GetPastTab(ScrollViewer obj)
+        {
+            if (CurrentSettingIndex - 1 < 0)
+                return;
+            if (GetDistFromHostWindow(obj, CurrentSettingIndex) > IndexChangeMark)
+            {
+                CurrentSettingIndex--;
+                GetPastTab(obj);
+            }
+        }
+
+
+
 
         public void OnShow() => UADSettingsManager.Instance.CurrentSettings.Save();
 

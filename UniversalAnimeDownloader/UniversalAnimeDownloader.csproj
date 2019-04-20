@@ -118,9 +118,11 @@
     <Compile Include="Animations\BrushAnimation.cs" />
     <Compile Include="Animations\ExpanderDoubleAnimation.cs" />
     <Compile Include="Animations\GridLengthAnimation.cs" />
+    <Compile Include="Behaviour\AnimatedScrollViewer.cs" />
     <Compile Include="Behaviour\BubbleScrollEvent.cs" />
     <Compile Include="CustomCommands.cs" />
     <Compile Include="CustomControls\CarouselPanel.cs" />
+    <Compile Include="CustomControls\ColorfulTabDecorator.cs" />
     <Compile Include="DelayedObservableCollection.cs" />
     <Compile Include="Extensions\ListBoxExtensions.cs" />
     <Compile Include="IPageContent.cs" />

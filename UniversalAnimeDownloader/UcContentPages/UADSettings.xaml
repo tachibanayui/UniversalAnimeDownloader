@@ -2,6 +2,7 @@
     x:Class="UniversalAnimeDownloader.UcContentPages.UADSettings"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:customControl="clr-namespace:UniversalAnimeDownloader.CustomControls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:local="clr-namespace:UniversalAnimeDownloader.UcContentPages"
@@ -31,20 +32,92 @@
             FontSize="{DynamicResource Heading2}"
             Text="Settings" />
 
-        <Grid Margin="0,30,0,0">
+        <materialDesign:Card
+            Margin="0,50,20,0"
+            VerticalAlignment="Top"
+            UniformCornerRadius="10">
+            <Grid x:Name="settingTab" Height="75">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="75" />
+                    <ColumnDefinition Width="75" />
+                    <ColumnDefinition Width="75" />
+                    <ColumnDefinition Width="75" />
+                </Grid.ColumnDefinitions>
+                <TextBlock
+                    VerticalAlignment="Center"
+                    FontSize="{DynamicResource Heading1}"
+                    Text="Setting Section:" />
+                <customControl:ColorfulTabDecorator
+                    Grid.Column="1"
+                    ButtonCommand="{Binding AnimateSrcoll}"
+                    ButtonCommandParameter="0"
+                    ControlTabIndex="0"
+                    CurrentTabIndex="{Binding CurrentSettingIndex}"
+                    TabMarkerDock="Top">
+                    <materialDesign:PackIcon
+                        Margin="10"
+                        Kind="Settings"
+                        Style="{StaticResource AutoSizeIconPack}" />
+                </customControl:ColorfulTabDecorator>
+                <customControl:ColorfulTabDecorator
+                    Grid.Column="2"
+                    ButtonCommand="{Binding AnimateSrcoll}"
+                    ButtonCommandParameter="1"
+                    ControlTabIndex="1"
+                    CurrentTabIndex="{Binding CurrentSettingIndex}"
+                    TabMarkerDock="Top">
+                    <materialDesign:PackIcon
+                        Margin="10"
+                        Kind="Brush"
+                        Style="{StaticResource AutoSizeIconPack}" />
+                </customControl:ColorfulTabDecorator>
+                <customControl:ColorfulTabDecorator
+                    Grid.Column="3"
+                    ButtonCommand="{Binding AnimateSrcoll}"
+                    ButtonCommandParameter="2"
+                    ControlTabIndex="2"
+                    CurrentTabIndex="{Binding CurrentSettingIndex}"
+                    TabMarkerDock="Top">
+                    <materialDesign:PackIcon
+                        Margin="10"
+                        Kind="PlayBoxOutline"
+                        Style="{StaticResource AutoSizeIconPack}" />
+                </customControl:ColorfulTabDecorator>
+                <customControl:ColorfulTabDecorator
+                    Grid.Column="4"
+                    ButtonCommand="{Binding AnimateSrcoll}"
+                    ButtonCommandParameter="3"
+                    ControlTabIndex="3"
+                    CurrentTabIndex="{Binding CurrentSettingIndex}"
+                    TabMarkerDock="Top">
+                    <materialDesign:PackIcon
+                        Margin="10"
+                        Kind="ClockFast"
+                        Style="{StaticResource AutoSizeIconPack}" />
+                </customControl:ColorfulTabDecorator>
+            </Grid>
+        </materialDesign:Card>
+
+        <Grid Margin="0,125,0,0">
             <Grid.Resources>
                 <Style TargetType="Grid">
                     <Setter Property="Margin" Value="0,15,0,0" />
                 </Style>
             </Grid.Resources>
 
-            <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+            <ScrollViewer x:Name="mainScroll" HorizontalScrollBarVisibility="Disabled">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="ScrollChanged">
+                        <i:InvokeCommandAction Command="{Binding MainScrollChangedCommand}" CommandParameter="{Binding ElementName=mainScroll}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
                 <VirtualizingStackPanel>
-                    <Grid>
+                    <Grid x:Name="a">
                         <materialDesign:Card UniformCornerRadius="10">
                             <Grid Margin="5">
                                 <TextBlock FontSize="{DynamicResource Heading3}" Text="General Setting: " />
-                                <VirtualizingStackPanel Margin="0,30,0,0">
+                                <StackPanel Margin="0,30,0,0">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition />
@@ -123,17 +196,17 @@
                                             <materialDesign:PackIcon Kind="FileRestore" />
                                         </Button>
                                     </Grid>
-                                </VirtualizingStackPanel>
+                                </StackPanel>
                             </Grid>
 
                         </materialDesign:Card>
                     </Grid>
 
-                    <Grid>
+                    <Grid x:Name="b">
                         <materialDesign:Card>
                             <Grid Margin="5">
                                 <TextBlock FontSize="{DynamicResource Heading3}" Text="Appearance" />
-                                <VirtualizingStackPanel Margin="0,30,0,0">
+                                <StackPanel Margin="0,30,0,0">
                                     <Grid Margin="5">
                                         <Grid.Resources>
                                             <Style BasedOn="{StaticResource MaterialDesignFlatButton}" TargetType="Button">
@@ -249,7 +322,7 @@
                                             </Grid>
                                         </DockPanel>
                                     </Grid>
-                                </VirtualizingStackPanel>
+                                </StackPanel>
                             </Grid>
                         </materialDesign:Card>
                     </Grid>
@@ -258,7 +331,7 @@
                         <materialDesign:Card>
                             <Grid Margin="5">
                                 <TextBlock FontSize="{DynamicResource Heading3}" Text="Playback" />
-                                <VirtualizingStackPanel Margin="0,30,0,0">
+                                <StackPanel Margin="0,30,0,0">
                                     <Grid>
                                         <ComboBox
                                             materialDesign:HintAssist.Hint="Prefered Media Player"
@@ -284,7 +357,7 @@
                                             Style="{StaticResource MaterialDesignDiscreteSlider}"
                                             Value="{Binding SettingData.PlaybackVolume}" />
                                     </Grid>
-                                    <VirtualizingStackPanel Margin="5">
+                                    <StackPanel Margin="5">
                                         <Grid>
                                             <TextBlock
                                                 FontSize="{DynamicResource Heading3}"
@@ -302,7 +375,7 @@
                                                 Margin="-2,0,2,0"
                                                 Content="Enable on-screen drawing"
                                                 IsChecked="{Binding SettingData.IsDrawingEnabled}" />
-                                            <VirtualizingStackPanel Grid.Row="1" IsEnabled="{Binding ElementName=cbxOnscreenDrawing, Path=IsChecked}">
+                                            <StackPanel Grid.Row="1" IsEnabled="{Binding ElementName=cbxOnscreenDrawing, Path=IsChecked}">
                                                 <Grid>
                                                     <Grid.ColumnDefinitions>
                                                         <ColumnDefinition Width="auto" />
@@ -423,7 +496,7 @@
                                                         Style="{StaticResource MaterialDesignDiscreteSlider}"
                                                         Value="{Binding SettingData.HighlighterBurshThickness, FallbackValue=20}" />
                                                 </Grid>
-                                            </VirtualizingStackPanel>
+                                            </StackPanel>
                                         </Grid>
 
                                         <Grid Margin="0,25,0,0">
@@ -599,7 +672,7 @@
                                                     </i:Interaction.Triggers>
                                                     <ComboBox.ItemsPanel>
                                                         <ItemsPanelTemplate>
-                                                            <VirtualizingStackPanel />
+                                                            <StackPanel />
                                                         </ItemsPanelTemplate>
                                                     </ComboBox.ItemsPanel>
                                                 </ComboBox>
@@ -704,8 +777,8 @@
                                             </Border>
 
                                         </Grid>
-                                    </VirtualizingStackPanel>
-                                </VirtualizingStackPanel>
+                                    </StackPanel>
+                                </StackPanel>
                             </Grid>
                         </materialDesign:Card>
                     </Grid>
@@ -714,7 +787,7 @@
                         <materialDesign:Card>
                             <Grid Margin="5">
                                 <TextBlock FontSize="{DynamicResource Heading3}" Text="Performance" />
-                                <VirtualizingStackPanel Margin="0,30,0,0">
+                                <StackPanel Margin="0,30,0,0">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="auto" />
@@ -748,10 +821,12 @@
                                     <Grid>
                                         <CheckBox Content=" Only fetch anime series when their host page are show" IsChecked="{Binding SettingData.UseVirtalizingWrapPanel}" />
                                     </Grid>
-                                </VirtualizingStackPanel>
+                                </StackPanel>
                             </Grid>
                         </materialDesign:Card>
                     </Grid>
+
+                    <Grid x:Name="EndSpace" Height="{Binding EndEmptySpaceHeight}" />
                 </VirtualizingStackPanel>
             </ScrollViewer>
         </Grid>

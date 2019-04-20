@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:animations="clr-namespace:UniversalAnimeDownloader.Animations"
     xmlns:cmd="http://www.galasoft.ch/mvvmlight"
+    xmlns:customControl="clr-namespace:UniversalAnimeDownloader.CustomControls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:local="clr-namespace:UniversalAnimeDownloader"
@@ -11,6 +12,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:media="clr-namespace:UniversalAnimeDownloader.MediaPlayer"
     xmlns:pages="clr-namespace:UniversalAnimeDownloader.UcContentPages"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
     x:Name="mainWindow"
     Title="Universal Anime Downloader"
     Width="800"
@@ -240,12 +242,13 @@
             <Grid>
                 <Rectangle Fill="{DynamicResource MaterialDesignPaper}" />
                 <StackPanel>
-                    <Button
+                    <customControl:ColorfulTabDecorator
                         Height="75"
-                        HorizontalContentAlignment="Left"
-                        Command="{Binding NavigateCommand}"
-                        CommandParameter="Explore"
-                        Style="{StaticResource MaterialDesignFlatButton}">
+                        HorizontalAlignment="Left"
+                        ButtonCommand="{Binding NavigateCommand}"
+                        ButtonCommandParameter="Explore"
+                        ControlTabIndex="8"
+                        CurrentTabIndex="{Binding TransisionerIndex}">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="auto" />
@@ -255,14 +258,15 @@
                             <materialDesign:PackIcon Kind="Earth" Style="{StaticResource SideBarNavIcon}" />
                             <TextBlock Style="{StaticResource SideBarNavTextBlock}" Text="Explore" />
                         </Grid>
-                    </Button>
+                    </customControl:ColorfulTabDecorator>
 
-                    <Button
+                    <customControl:ColorfulTabDecorator
                         Height="75"
-                        HorizontalContentAlignment="Left"
-                        Command="{Binding NavigateCommand}"
-                        CommandParameter="FeaturedAnime"
-                        Style="{StaticResource MaterialDesignFlatButton}">
+                        HorizontalAlignment="Left"
+                        ButtonCommand="{Binding NavigateCommand}"
+                        ButtonCommandParameter="FeaturedAnime"
+                        ControlTabIndex="7"
+                        CurrentTabIndex="{Binding TransisionerIndex}">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="auto" />
@@ -272,14 +276,15 @@
                             <materialDesign:PackIcon Kind="Star" Style="{StaticResource SideBarNavIcon}" />
                             <TextBlock Style="{StaticResource SideBarNavTextBlock}" Text="Featured" />
                         </Grid>
-                    </Button>
+                    </customControl:ColorfulTabDecorator>
 
-                    <Button
+                    <customControl:ColorfulTabDecorator
                         Height="75"
-                        HorizontalContentAlignment="Left"
-                        Command="{Binding NavigateCommand}"
-                        CommandParameter="AnimeSuggestion"
-                        Style="{StaticResource MaterialDesignFlatButton}">
+                        HorizontalAlignment="Left"
+                        ButtonCommand="{Binding NavigateCommand}"
+                        ButtonCommandParameter="AnimeSuggestion"
+                        ControlTabIndex="2"
+                        CurrentTabIndex="{Binding TransisionerIndex}">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="auto" />
@@ -289,14 +294,15 @@
                             <materialDesign:PackIcon Kind="Account" Style="{StaticResource SideBarNavIcon}" />
                             <TextBlock Style="{StaticResource SideBarNavTextBlock}" Text="You may like" />
                         </Grid>
-                    </Button>
+                    </customControl:ColorfulTabDecorator>
 
-                    <Button
+                    <customControl:ColorfulTabDecorator
                         Height="75"
-                        HorizontalContentAlignment="Left"
-                        Command="{Binding NavigateCommand}"
-                        CommandParameter="AllAnimeTab"
-                        Style="{StaticResource MaterialDesignFlatButton}">
+                        HorizontalAlignment="Left"
+                        ButtonCommand="{Binding NavigateCommand}"
+                        ButtonCommandParameter="AllAnimeTab"
+                        ControlTabIndex="0"
+                        CurrentTabIndex="{Binding TransisionerIndex}">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="auto" />
@@ -306,16 +312,17 @@
                             <materialDesign:PackIcon Kind="FormatListBulleted" Style="{StaticResource SideBarNavIcon}" />
                             <TextBlock Style="{StaticResource SideBarNavTextBlock}" Text="All Anime" />
                         </Grid>
-                    </Button>
+                    </customControl:ColorfulTabDecorator>
 
                     <Separator Margin="10,0,10,0" />
 
-                    <Button
+                    <customControl:ColorfulTabDecorator
                         Height="75"
-                        HorizontalContentAlignment="Left"
-                        Command="{Binding NavigateCommand}"
-                        CommandParameter="MyAnimeLibrary"
-                        Style="{StaticResource MaterialDesignFlatButton}">
+                        HorizontalAlignment="Left"
+                        ButtonCommand="{Binding NavigateCommand}"
+                        ButtonCommandParameter="MyAnimeLibrary"
+                        ControlTabIndex="4"
+                        CurrentTabIndex="{Binding TransisionerIndex}">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="auto" />
@@ -325,14 +332,15 @@
                             <materialDesign:PackIcon Kind="Book" Style="{StaticResource SideBarNavIcon}" />
                             <TextBlock Style="{StaticResource SideBarNavTextBlock}" Text="My Anime Library" />
                         </Grid>
-                    </Button>
+                    </customControl:ColorfulTabDecorator>
 
-                    <Button
+                    <customControl:ColorfulTabDecorator
                         Height="75"
-                        HorizontalContentAlignment="Left"
-                        Command="{Binding NavigateCommand}"
-                        CommandParameter="DownloadCenter"
-                        Style="{StaticResource MaterialDesignFlatButton}">
+                        HorizontalAlignment="Left"
+                        ButtonCommand="{Binding NavigateCommand}"
+                        ButtonCommandParameter="DownloadCenter"
+                        ControlTabIndex="3"
+                        CurrentTabIndex="{Binding TransisionerIndex}">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="auto" />
@@ -342,7 +350,25 @@
                             <materialDesign:PackIcon Kind="CloudDownload" Style="{StaticResource SideBarNavIcon}" />
                             <TextBlock Style="{StaticResource SideBarNavTextBlock}" Text="Download Center" />
                         </Grid>
-                    </Button>
+                    </customControl:ColorfulTabDecorator>
+
+                    <customControl:ColorfulTabDecorator
+                        Height="75"
+                        HorizontalAlignment="Left"
+                        ButtonCommand="{Binding NavigateCommand}"
+                        ButtonCommandParameter="UADSettings"
+                        ControlTabIndex="6"
+                        CurrentTabIndex="{Binding TransisionerIndex}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="10" />
+                                <ColumnDefinition Width="auto" />
+                            </Grid.ColumnDefinitions>
+                            <materialDesign:PackIcon Kind="Settings" Style="{StaticResource SideBarNavIcon}" />
+                            <TextBlock Style="{StaticResource SideBarNavTextBlock}" Text="Settings" />
+                        </Grid>
+                    </customControl:ColorfulTabDecorator>
 
                     <Button
                         Height="75"
@@ -356,7 +382,7 @@
                                 <ColumnDefinition Width="10" />
                                 <ColumnDefinition Width="auto" />
                             </Grid.ColumnDefinitions>
-                            <materialDesign:PackIcon Kind="Settings" Style="{StaticResource SideBarNavIcon}" />
+                            <materialDesign:PackIcon Kind="InformationOutline" Style="{StaticResource SideBarNavIcon}" />
                             <TextBlock Style="{StaticResource SideBarNavTextBlock}" Text="Settings" />
                         </Grid>
                     </Button>
