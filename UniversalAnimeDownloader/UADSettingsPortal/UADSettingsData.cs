@@ -38,6 +38,25 @@ namespace UniversalAnimeDownloader.UADSettingsPortal
             }
         }
 
+        private string _ScreenShotLocation = AppDomain.CurrentDomain.BaseDirectory + "Screenshots\\";
+        public string ScreenShotLocation
+        {
+            get
+            {
+                return _ScreenShotLocation;
+            }
+            set
+            {
+                if (_ScreenShotLocation != value)
+                {
+                    _ScreenShotLocation = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+
+
         #endregion
 
         #region AppearanceSetting
@@ -368,9 +387,14 @@ namespace UniversalAnimeDownloader.UADSettingsPortal
                     blockerToggleHotKeys = value;
                     int enumNumber = value;
                     if (char.IsLetter(value))
+                    {
                         enumNumber -= 21;
+                    }
+
                     if (char.IsNumber(value))
+                    {
                         enumNumber -= 14;
+                    }
 
                     CustomCommands.ScreenBlockerHotkey.InputGestures[0] = new KeyGesture((Key)enumNumber, ModifierKeys.Control);
                     OnPropertyChanged();
@@ -390,9 +414,14 @@ namespace UniversalAnimeDownloader.UADSettingsPortal
                     appCrashToggleHotKeys = value;
                     int enumNumber = value;
                     if (char.IsLetter(value))
+                    {
                         enumNumber -= 21;
+                    }
+
                     if (char.IsNumber(value))
+                    {
                         enumNumber -= 14;
+                    }
 
                     CustomCommands.FakeAppCrashHotkey.InputGestures[0] = new KeyGesture((Key)enumNumber, ModifierKeys.Control);
                     OnPropertyChanged();
@@ -412,9 +441,14 @@ namespace UniversalAnimeDownloader.UADSettingsPortal
                     bgPlayerToggleHotKeys = value;
                     int enumNumber = value;
                     if (char.IsLetter(value))
+                    {
                         enumNumber -= 21;
+                    }
+
                     if (char.IsNumber(value))
+                    {
                         enumNumber -= 14;
+                    }
 
                     CustomCommands.BackgroundPlayerHotkey.InputGestures[0] = new KeyGesture((Key)enumNumber, ModifierKeys.Control);
                     OnPropertyChanged();
@@ -457,7 +491,7 @@ namespace UniversalAnimeDownloader.UADSettingsPortal
         private bool isBlockerImageEnabled = false;
         public bool IsBlockerImageEnabled
         {
-            get{ return isBlockerImageEnabled; }
+            get { return isBlockerImageEnabled; }
             set
             {
                 if (isBlockerImageEnabled != value)

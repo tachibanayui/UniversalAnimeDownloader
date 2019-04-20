@@ -163,14 +163,6 @@ namespace UniversalAnimeDownloader.MediaPlayer
         public static readonly DependencyProperty ShowWatermaskProperty =
             DependencyProperty.Register("ShowWatermask", typeof(bool), typeof(UADMediaPlayer), new PropertyMetadata(true));
 
-        public string ImageLibraryLocation
-        {
-            get { return (string)GetValue(ImageLibraryLocationProperty); }
-            set { SetValue(ImageLibraryLocationProperty, value); }
-        }
-        public static readonly DependencyProperty ImageLibraryLocationProperty =
-            DependencyProperty.Register("ImageLibraryLocation", typeof(string), typeof(UADMediaPlayer), new PropertyMetadata(string.Empty));
-
         public ImageSource AnimeThumbnail
         {
             get { return (ImageSource)GetValue(AnimeThumbnailProperty); }
@@ -675,12 +667,18 @@ namespace UniversalAnimeDownloader.MediaPlayer
         {
             colorSelector.Visibility = Visibility.Collapsed;
             drawingToolbox.Visibility = Visibility.Collapsed;
+            controller.Visibility = Visibility.Collapsed;
+            IsControllerVisible = false;
+            grdControlBar.Visibility = Visibility.Collapsed;
             if (ShowWatermask)
                 uadWatermark.Visibility = Visibility.Visible;
             await Task.Delay(10);
             await CaptureWindow();
             colorSelector.Visibility = Visibility.Visible;
+            controller.Visibility = Visibility.Visible;
             drawingToolbox.Visibility = Visibility.Visible;
+            IsControllerVisible = true;
+            grdControlBar.Visibility = Visibility.Visible;
             if (ShowWatermask)
                 uadWatermark.Visibility = Visibility.Collapsed;
             snackBar.IsActive = true;
@@ -688,29 +686,19 @@ namespace UniversalAnimeDownloader.MediaPlayer
 
         private async Task CaptureWindow()
         {
-            ////Capture
-            //var screenBound = System.Windows.Forms.Screen.PrimaryScreen.Bounds;
-            //var windowHost = Window.GetWindow(this);
-            //Point winLoc = new Point(windowHost.Left + CaptureOffset.Left, windowHost.Top + CaptureOffset.Top);
-            //Point winFin = new Point(windowHost.Width - CaptureOffset.Right, windowHost.Height - CaptureOffset.Bottom);
-            //await Task.Delay(50);
-            //var picture = MiscClass.CopyScreen(new System.Drawing.Rectangle((int)winLoc.X, (int)winLoc.Y, (int)winFin.X, (int)winFin.Y));
+            //Capture
+            var windowHost = Window.GetWindow(this);
+            await Task.Delay(50);
+            string fileName = "Captured Image " + DateTime.Now.ToLongDateString() + ", " + DateTime.Now.ToLongTimeString().Replace(':', '-') + ".png";
+            string fileLocation = System.IO.Path.Combine(UADSettingsManager.Instance.CurrentSettings.ScreenShotLocation, fileName);
+            if (!Directory.Exists(UADSettingsManager.Instance.CurrentSettings.ScreenShotLocation))
+                Directory.CreateDirectory(UADSettingsManager.Instance.CurrentSettings.ScreenShotLocation);
 
-            //capturedImg.Source = picture;
-            //showCapturedImg.Visibility = Visibility.Visible;
-            ////Save img
-            //string fileName = "Captured Image " + DateTime.Now.ToLongDateString() + ", " + DateTime.Now.ToLongTimeString().Replace(':', '-') + ".png";
-            //string fileLocation = System.IO.Path.Combine(ImageLibraryLocation, fileName);
+            var picture = MiscClass.SaveFrameworkElementToPng(this, (int)windowHost.Width, (int)windowHost.Height, fileLocation);
+            capturedImg.Source = picture;
+            showCapturedImg.Visibility = Visibility.Visible;
 
-            //if (!Directory.Exists(ImageLibraryLocation))
-            //    Directory.CreateDirectory(ImageLibraryLocation);
-            //FileStream fs = new FileStream(fileLocation, FileMode.Create);
-            //PngBitmapEncoder encoder = new PngBitmapEncoder();
-            //encoder.Frames.Add(BitmapFrame.Create(picture));
-            //encoder.Save(fs);
-            //fs.Close();
-
-            //lastCapImgLocation = fileLocation;
+            lastCapImgLocation = fileLocation;
         }
 
         private void ShowImageExternal(object sender, RoutedEventArgs e) => Process.Start(lastCapImgLocation);

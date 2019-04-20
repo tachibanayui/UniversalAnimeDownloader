@@ -51,8 +51,31 @@
                                             <ColumnDefinition Width="10" />
                                             <ColumnDefinition Width="75" />
                                         </Grid.ColumnDefinitions>
-                                        <TextBox materialDesign:HintAssist.Hint="Anime library location: " Text="{Binding SettingData.AnimeLibraryLocation}" />
-                                        <Button Grid.Column="2">
+                                        <TextBox
+                                            materialDesign:HintAssist.Hint="Anime library location: "
+                                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                            Text="{Binding SettingData.AnimeLibraryLocation}" />
+                                        <Button
+                                            Grid.Column="2"
+                                            Command="{Binding BrowseFolderDialogCommand}"
+                                            CommandParameter="AnimeLibrary">
+                                            <materialDesign:PackIcon Kind="FolderMove" />
+                                        </Button>
+                                    </Grid>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition />
+                                            <ColumnDefinition Width="10" />
+                                            <ColumnDefinition Width="75" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBox
+                                            materialDesign:HintAssist.Hint="Screenshot location: "
+                                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                            Text="{Binding SettingData.ScreenShotLocation}" />
+                                        <Button
+                                            Grid.Column="2"
+                                            Command="{Binding BrowseFolderDialogCommand}"
+                                            CommandParameter="Screenshots">
                                             <materialDesign:PackIcon Kind="FolderMove" />
                                         </Button>
                                     </Grid>

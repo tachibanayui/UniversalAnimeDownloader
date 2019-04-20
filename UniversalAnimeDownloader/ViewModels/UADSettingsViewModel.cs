@@ -25,6 +25,7 @@ namespace UniversalAnimeDownloader.ViewModels
         public ICommand ChooseKeyCommand { get; set; }
         public ICommand ApplyColorCommand { get; set; }
         public ICommand ValidateKeyCommand { get; set; }
+        public ICommand BrowseFolderDialogCommand { get; set; }
         #endregion
 
         public bool IsHostLoaded { get; set; } = false;
@@ -182,6 +183,27 @@ namespace UniversalAnimeDownloader.ViewModels
                 }
                 CurrentObjectRequestColorName = string.Empty;
                 IsColorPickerOpen = false;
+            });
+            BrowseFolderDialogCommand = new RelayCommand<string>(p => true, p =>
+            {
+                System.Windows.Forms.FolderBrowserDialog dialog = new System.Windows.Forms.FolderBrowserDialog();
+                dialog.ShowNewFolderButton = true;
+                var result = dialog.ShowDialog();
+                if(result == System.Windows.Forms.DialogResult.OK)
+                {
+                    switch (p)
+                    {
+                        case "AnimeLibrary":
+                            SettingData.AnimeLibraryLocation = dialog.SelectedPath;
+                            break;
+                        case "Screenshots":
+                            SettingData.ScreenShotLocation = dialog.SelectedPath;
+                            break;
+                        default:
+                            break;
+                    }
+                    
+                }
             });
         }
 
