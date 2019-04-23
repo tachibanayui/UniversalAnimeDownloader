@@ -185,43 +185,70 @@ namespace UniversalAnimeDownloader
     {
         private static MainWindowViewModel _Ins;
         private static UADMediaPlayer _Player;
+        private static OnlineUADMediaPlayer _OnlinePlayer;
 
-        public static async void Play(AnimeSeriesInfo info, int index = 0)
+        public static async void Play(AnimeSeriesInfo info, int index = 0, bool isOnline = false)
         {
             if(UADSettingsManager.Instance.CurrentSettings.PreferedPlayer == PlayerType.Embeded)
             {
                 NullCheck();
-                _Player.Playlist = info;
-                if (index != 0)
-                    _Player.PlayIndex = index;
+                UADMediaPlayer currentPlayer = null;
+                if (isOnline)
+                {
+                    currentPlayer = _OnlinePlayer;
+                    _Ins.UADMediaPlayerVisibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    currentPlayer = _Player;
+                    _Ins.UADOnlineMediaPlayerVisibility = Visibility.Collapsed;
+                }
 
-                _Player.VM.UpdateBindings();
-                (_Player.Parent as Grid).Opacity = 0;
-                _Player.Focus();
-                _Ins.UADMediaPlayerVisibility = Visibility.Visible;
+                currentPlayer.Playlist = info;
+                if (index != 0)
+                    currentPlayer.PlayIndex = index;
+
+                currentPlayer.VM.UpdateBindings();
+                (currentPlayer.Parent as Grid).Opacity = 0;
+                currentPlayer.Focus();
+                if(isOnline)
+                    _Ins.UADOnlineMediaPlayerVisibility = Visibility.Visible;
+                else
+                    _Ins.UADMediaPlayerVisibility = Visibility.Visible;
                 
-                MiscClass.FadeInAnimation(_Player.Parent as Grid, TimeSpan.FromSeconds(.5), true, new EventHandler(PlayMedia));
-                _Player.Focus();
+                MiscClass.FadeInAnimation(currentPlayer.Parent as Grid, TimeSpan.FromSeconds(.5), true, new EventHandler((s,e) => 
+                {
+                    (currentPlayer.Parent as Grid).IsHitTestVisible = true;
+                    currentPlayer.Play();
+                    currentPlayer.Focus();
+                }));
+                currentPlayer.Focus();
             }
             else
             {
                 var episode = info.Episodes[index];
-                if(episode.AvailableOffline)
+                var source = episode.FilmSources.Where(p => !string.IsNullOrEmpty(p.Value.LocalFile));
+
+                if (isOnline)
                 {
-                    var source = episode.FilmSources.Where(p => !string.IsNullOrEmpty(p.Value.LocalFile));
-                    if(source.Count() != 0)
-                        try { Process.Start(source.Last().Value.LocalFile); return; } catch { };
+                    var res = await MessageDialog.ShowAsync("Waring!", "Playing online using your broswer will likely be blocked by the server due to referer and origin policy. Do you still want to continue?", MessageDialogButton.YesNoButton);
+                    if (res == MessageDialogResult.Cancel)
+                        return;
+                    if (source.Count() != 0)
+                        try { Process.Start(source.Last().Value.Url); return; } catch { };
                 }
-                await MessageDialog.ShowAsync("This episode is not avaible offline", "This episode is not avaible offline, you can download it by visiting online version. We also suggest you try our UAD Media Player. It pack with a ton of feature and support play all episode correctly", MessageDialogButton.OKCancelButton);
+                else
+                {
+                    if (episode.AvailableOffline)
+                    {
+                        if (source.Count() != 0)
+                            try { Process.Start(source.Last().Value.LocalFile); return; } catch { };
+                    }
+                    await MessageDialog.ShowAsync("This episode is not avaible offline", "This episode is not avaible offline, you can download it by visiting online version. We also suggest you try our UAD Media Player. It pack with a ton of feature and support play all episode correctly", MessageDialogButton.OKCancelButton);
+                }
+                
             }
             
-        }
-
-        private static void PlayMedia(object sender, EventArgs e)
-        {
-            (_Player.Parent as Grid).IsHitTestVisible = true;
-            _Player.Play();
-            _Player.Focus();
         }
 
         private static void NullCheck()
@@ -229,7 +256,9 @@ namespace UniversalAnimeDownloader
             if (_Ins == null)
                 _Ins = Application.Current.FindResource("MainWindowViewModel") as MainWindowViewModel;
             if (_Player == null)
-                _Player = MiscClass.FindVisualChild<UADMediaPlayer>(Application.Current.MainWindow) as UADMediaPlayer;
+                _Player = MiscClass.FindVisualChild<UADMediaPlayer>(Application.Current.MainWindow);
+            if(_OnlinePlayer == null)
+                _OnlinePlayer = MiscClass.FindVisualChild<OnlineUADMediaPlayer>(Application.Current.MainWindow);
         }
     }
 

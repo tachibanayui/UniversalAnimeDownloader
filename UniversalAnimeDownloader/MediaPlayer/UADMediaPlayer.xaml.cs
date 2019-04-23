@@ -205,7 +205,6 @@ namespace UniversalAnimeDownloader.MediaPlayer
             var ins = d as UADMediaPlayer;
             ins.mediaPlayer.Stop();
             ins.PlayIndex = 0;
-            ins.PlayIndex = GetNearestEpisode(ins, false, false);
             if (UADSettingsManager.Instance.CurrentSettings.PlayMediaFullScreen)
             {
                 ins.OnRequestWindowState(WindowState.Maximized);
@@ -411,7 +410,7 @@ namespace UniversalAnimeDownloader.MediaPlayer
         private void mediaPlayer_MediaOpened(object sender, RoutedEventArgs e)
         {
             MediaDuration = mediaPlayer.NaturalDuration.TimeSpan;
-            txblMediaLength.Text = MediaDuration.ToString();
+            txblMediaLength.Text = MediaDuration.ToString(@"hh\:mm\:ss");
             UpdatePosition();
         }
 
@@ -889,7 +888,7 @@ namespace UniversalAnimeDownloader.MediaPlayer
 
         private void Event_OpenInfoTab(object sender, RoutedEventArgs e) => VM.SidePanelTabIndex = 1;
 
-        public async void Play()
+        public virtual async void Play()
         {
            
 

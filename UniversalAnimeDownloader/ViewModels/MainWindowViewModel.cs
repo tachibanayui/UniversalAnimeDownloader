@@ -163,6 +163,25 @@ namespace UniversalAnimeDownloader.ViewModels
             }
         }
 
+        private Visibility _UADOnlineMediaPlayerVisibility = Visibility.Collapsed;
+        public Visibility UADOnlineMediaPlayerVisibility
+        {
+            get
+            {
+                return _UADOnlineMediaPlayerVisibility;
+            }
+            set
+            {
+                if (_UADOnlineMediaPlayerVisibility != value)
+                {
+                    _UADOnlineMediaPlayerVisibility = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+
+
 
         #endregion
 
@@ -237,7 +256,14 @@ namespace UniversalAnimeDownloader.ViewModels
             NavigateCommand = new RelayCommand<string>(p => true, NavigateProcess);
             ChangeWindowStateRequestCommand = new RelayCommand<RequestingWindowStateEventArgs>(p => true, ChangeUADMediaPlayerWindowState);
             OpenUADMediaPlayerCommand = new RelayCommand<object>(p => IsPlayButtonEnable, p => UADMediaPlayerVisibility = Visibility.Visible);
-            UADMediaPlayerClosedCommand = new RelayCommand<object>(p => true, p => { UADMediaPlayerVisibility = Visibility.Collapsed; IsPlayButtonEnable = false; });
+            UADMediaPlayerClosedCommand = new RelayCommand<string>(p => true, p =>
+            {
+                if (p == "Offline")
+                    UADMediaPlayerVisibility = Visibility.Collapsed;
+                else
+                    UADOnlineMediaPlayerVisibility = Visibility.Collapsed;
+                IsPlayButtonEnable = false;
+            });
             WindowStateChangedCommand = new RelayCommand<Window>(p => true, WindowStateChangedAction);
             CheckForAnimeSeriesUpdate();
         }
@@ -246,9 +272,13 @@ namespace UniversalAnimeDownloader.ViewModels
         {
             //When user use full screen, we apply a 7 uniform margin to the MainWindow content (Grid) to avoid some UIElement offscreen
             if (obj.WindowState == WindowState.Maximized)
+            {
                 (obj.Content as Grid).Margin = new Thickness(7);
+            }
             else if (obj.WindowState == WindowState.Normal)
+            {
                 (obj.Content as Grid).Margin = new Thickness(0);
+            }
         }
 
         private void ChangeUADMediaPlayerWindowState(RequestingWindowStateEventArgs obj)

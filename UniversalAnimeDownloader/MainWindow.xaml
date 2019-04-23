@@ -402,10 +402,29 @@
                         <cmd:EventToCommand Command="{Binding ChangeWindowStateRequestCommand}" PassEventArgsToCommand="True" />
                     </i:EventTrigger>
                     <i:EventTrigger EventName="UADMediaPlayerClosed">
-                        <cmd:EventToCommand Command="{Binding UADMediaPlayerClosedCommand}" />
+                        <cmd:EventToCommand Command="{Binding UADMediaPlayerClosedCommand}" CommandParameter="Offline" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </media:UADMediaPlayer>
+        </Grid>
+
+
+        <Grid
+            x:Name="uadOnlineMediaPlayer"
+            Grid.RowSpan="3"
+            Background="Black"
+            Opacity="0"
+            Visibility="{Binding UADOnlineMediaPlayerVisibility}">
+            <media:OnlineUADMediaPlayer>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="RequestWindowState">
+                        <cmd:EventToCommand Command="{Binding ChangeWindowStateRequestCommand}" PassEventArgsToCommand="True" />
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="UADMediaPlayerClosed">
+                        <cmd:EventToCommand Command="{Binding UADMediaPlayerClosedCommand}" CommandParameter="Online" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </media:OnlineUADMediaPlayer>
         </Grid>
 
         <Grid x:Name="overlay" Grid.Row="1">

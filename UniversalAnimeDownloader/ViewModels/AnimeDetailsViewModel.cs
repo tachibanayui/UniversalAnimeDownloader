@@ -209,11 +209,13 @@ namespace UniversalAnimeDownloader.ViewModels
             CopyDescriptionCommand = new RelayCommand<object>(p => true, p => Clipboard.SetText(CurrentSeries.AttachedAnimeSeriesInfo.Description ?? ""));
             WatchEpisodeOnline = new RelayCommand<SelectableEpisodeInfo>(p => true, async (p) =>
             {
-                if (p != null)
-                {
-                    var episodeDetail = (await CurrentSeries.GetEpisodes(new List<int>() { p.Data.EpisodeID })).ToList()[0];
-                    Process.Start(episodeDetail.FilmSources[episodeDetail.FilmSources.Keys.ToList()[0]].Url);
-                }
+                UADMediaPlayerHelper.Play(CurrentSeries.AttachedAnimeSeriesInfo, 0, true);
+
+                //if (p != null)
+                //{
+                //    var episodeDetail = (await CurrentSeries.GetEpisodes(new List<int>() { p.Data.EpisodeID })).ToList()[0];
+                //    Process.Start(episodeDetail.FilmSources[episodeDetail.FilmSources.Keys.ToList()[0]].Url);
+                //}
             });
             SelectedEpisodeCommand = new RelayCommand<TextBox>(p => true, p => {TempTask = SelectEpisodeIndex(p); });
             DownloadAnimeCommand = new RelayCommand<object>(p => true, async p =>

@@ -139,6 +139,7 @@
     <Compile Include="MediaPlayer\FakeWindowProblemReporting.xaml.cs">
       <DependentUpon>FakeWindowProblemReporting.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MediaPlayer\OnlineUADMediaPlayer.cs" />
     <Compile Include="MediaPlayer\SneakyWatcherPasswordBox.xaml.cs">
       <DependentUpon>SneakyWatcherPasswordBox.xaml</DependentUpon>
     </Compile>
