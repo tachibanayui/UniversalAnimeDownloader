@@ -101,6 +101,11 @@ namespace UniversalAnimeDownloader.MediaPlayer
                 return;
             }
 
+            ins.NoPlayableMedia = false;
+            //Reset cause the playlist return null
+            if (ins.Playlist == null)
+                return;
+
             if (ins.Playlist.Episodes[(int)e.NewValue].FilmSources == null)
             {
                 ins.Next();
@@ -202,6 +207,8 @@ namespace UniversalAnimeDownloader.MediaPlayer
 
         private static void PreparePlayList(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
+            if (e.NewValue == null)
+                return;
             var ins = d as UADMediaPlayer;
             ins.mediaPlayer.Stop();
             ins.PlayIndex = 0;
@@ -896,6 +903,17 @@ namespace UniversalAnimeDownloader.MediaPlayer
                 await MessageDialog.ShowAsync("No playable media!", "We can't find any playable media of this series. You can switch to online version and download some episode.", MessageDialogButton.OKCancelButton);
             else
                 mediaPlayer.Play();
+        }
+
+        /// <summary>
+        /// Clear all the data inside uadmediaplayer such as Playlist, Index,...
+        /// </summary>
+        public virtual void Reset()
+        {
+            mediaPlayer.Stop();
+            PlayIndex = -1;
+            Playlist = null;
+            GC.Collect();
         }
     }
 }

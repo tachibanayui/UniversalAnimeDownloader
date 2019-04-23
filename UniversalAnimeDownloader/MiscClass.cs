@@ -186,6 +186,7 @@ namespace UniversalAnimeDownloader
         private static MainWindowViewModel _Ins;
         private static UADMediaPlayer _Player;
         private static OnlineUADMediaPlayer _OnlinePlayer;
+        public static bool IsOnlineMediaPlayerPlaying = false;
 
         public static async void Play(AnimeSeriesInfo info, int index = 0, bool isOnline = false)
         {
@@ -193,20 +194,28 @@ namespace UniversalAnimeDownloader
             {
                 NullCheck();
                 UADMediaPlayer currentPlayer = null;
+                //To prevent 2 video from playing
+                if(_Ins.IsPlayButtonEnable)
+                {
+                    _Player.mediaPlayer.Stop();
+                    _OnlinePlayer.mediaPlayer.Stop();
+                }
+
                 if (isOnline)
                 {
                     currentPlayer = _OnlinePlayer;
                     _Ins.UADMediaPlayerVisibility = Visibility.Collapsed;
+                    IsOnlineMediaPlayerPlaying = true;
                 }
                 else
                 {
                     currentPlayer = _Player;
                     _Ins.UADOnlineMediaPlayerVisibility = Visibility.Collapsed;
+                    IsOnlineMediaPlayerPlaying = false;
                 }
-
+                currentPlayer.Reset();
                 currentPlayer.Playlist = info;
-                if (index != 0)
-                    currentPlayer.PlayIndex = index;
+                currentPlayer.PlayIndex = index;
 
                 currentPlayer.VM.UpdateBindings();
                 (currentPlayer.Parent as Grid).Opacity = 0;
@@ -227,15 +236,22 @@ namespace UniversalAnimeDownloader
             else
             {
                 var episode = info.Episodes[index];
+                if(episode.FilmSources == null)
+                {
+                    var manager = ApiHelpper.CreateAnimeSeriesManagerObjectByClassName(info.ModInfo.ModTypeString);
+                    manager.AttachedAnimeSeriesInfo = info;
+                    await manager.GetEpisodes(new List<int>() { episode.EpisodeID });
+                }
                 var source = episode.FilmSources.Where(p => !string.IsNullOrEmpty(p.Value.LocalFile));
 
                 if (isOnline)
                 {
                     var res = await MessageDialog.ShowAsync("Waring!", "Playing online using your broswer will likely be blocked by the server due to referer and origin policy. Do you still want to continue?", MessageDialogButton.YesNoButton);
-                    if (res == MessageDialogResult.Cancel)
+                    if (res == MessageDialogResult.No)
                         return;
-                    if (source.Count() != 0)
-                        try { Process.Start(source.Last().Value.Url); return; } catch { };
+                    try {
+                        Process.Start(episode.FilmSources.Last().Value.Url); return;
+                    } catch { };
                 }
                 else
                 {

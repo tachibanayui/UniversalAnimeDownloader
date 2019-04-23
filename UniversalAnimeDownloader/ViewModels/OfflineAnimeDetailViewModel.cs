@@ -60,7 +60,9 @@ namespace UniversalAnimeDownloader.ViewModels
             });
 
             WatchEpisodeCommand = new RelayCommand<EpisodeInfo>(p => p.AvailableOffline, p =>
-            Process.Start(p.FilmSources.Last(query => query.Value.IsFinishedRequesting).Value.LocalFile));
+            {
+                UADMediaPlayerHelper.Play(CurrentSeries.AttachedAnimeSeriesInfo, CurrentSeries.AttachedAnimeSeriesInfo.Episodes.FindIndex(pp => pp == p));
+            });
 
             OnlineVersionCommand = new RelayCommand<object>(p => true,async p =>
             {

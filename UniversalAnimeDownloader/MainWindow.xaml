@@ -88,20 +88,22 @@
             <Button
                 Grid.Column="1"
                 Command="{Binding GoBackNavigationCommand}"
-                Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}">
+                Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
+                ToolTip="Go back to the last page">
                 <materialDesign:PackIcon Foreground="{DynamicResource MaterialDesignBody}" Kind="ArrowLeftBold" />
             </Button>
             <Button
                 Grid.Column="2"
                 Command="{Binding GoForwardNavigationCommand}"
-                Style="{StaticResource MaterialDesignActionFlatButton}">
+                Style="{StaticResource MaterialDesignActionFlatButton}"
+                ToolTip="Go forward">
                 <materialDesign:PackIcon Foreground="{DynamicResource MaterialDesignBody}" Kind="ArrowRightBold" />
             </Button>
             <Button
                 Grid.Column="3"
                 Command="{Binding OpenUADMediaPlayerCommand}"
-                CommandParameter="{Binding ElementName=uadMediaPlayer}"
-                Style="{StaticResource MaterialDesignActionFlatButton}">
+                Style="{StaticResource MaterialDesignActionFlatButton}"
+                ToolTip="Open Media Player if Media player is minimize">
                 <materialDesign:PackIcon Foreground="{DynamicResource MaterialDesignBody}" Kind="Play" />
             </Button>
             <TextBlock
@@ -418,7 +420,7 @@
             <media:OnlineUADMediaPlayer>
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="RequestWindowState">
-                        <cmd:EventToCommand Command="{Binding ChangeWindowStateRequestCommand}" PassEventArgsToCommand="True" />
+                        <cmd:EventToCommand Command="{Binding ChangeWindowStateRequestOnlineCommand}" PassEventArgsToCommand="True" />
                     </i:EventTrigger>
                     <i:EventTrigger EventName="UADMediaPlayerClosed">
                         <cmd:EventToCommand Command="{Binding UADMediaPlayerClosedCommand}" CommandParameter="Online" />

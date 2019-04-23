@@ -31,6 +31,7 @@ namespace UniversalAnimeDownloader.ViewModels
         public ICommand BlackOverlayMouseDownCommand { get; set; }
         public ICommand OpenUADMediaPlayerCommand { get; set; }
         public ICommand ChangeWindowStateRequestCommand { get; set; }
+        public ICommand ChangeWindowStateRequestOnlineCommand { get; set; }
         public ICommand UADMediaPlayerClosedCommand { get; set; }
         public ICommand WindowStateChangedCommand { get; set; }
 
@@ -255,7 +256,14 @@ namespace UniversalAnimeDownloader.ViewModels
             ResetNotifyBadgeCommand = new RelayCommand<object>(p => true, p => NotifycationBadgeCount = 0);
             NavigateCommand = new RelayCommand<string>(p => true, NavigateProcess);
             ChangeWindowStateRequestCommand = new RelayCommand<RequestingWindowStateEventArgs>(p => true, ChangeUADMediaPlayerWindowState);
-            OpenUADMediaPlayerCommand = new RelayCommand<object>(p => IsPlayButtonEnable, p => UADMediaPlayerVisibility = Visibility.Visible);
+            ChangeWindowStateRequestOnlineCommand = new RelayCommand<RequestingWindowStateEventArgs>(p => true, ChangeUADOnlineMediaPlayerWindowState);
+            OpenUADMediaPlayerCommand = new RelayCommand<object>(p => IsPlayButtonEnable, p =>
+            {
+                if(UADMediaPlayerHelper.IsOnlineMediaPlayerPlaying)
+                    UADOnlineMediaPlayerVisibility = Visibility.Visible;
+                else
+                    UADMediaPlayerVisibility = Visibility.Visible;
+            });
             UADMediaPlayerClosedCommand = new RelayCommand<string>(p => true, p =>
             {
                 if (p == "Offline")
@@ -266,6 +274,25 @@ namespace UniversalAnimeDownloader.ViewModels
             });
             WindowStateChangedCommand = new RelayCommand<Window>(p => true, WindowStateChangedAction);
             CheckForAnimeSeriesUpdate();
+        }
+
+        private void ChangeUADOnlineMediaPlayerWindowState(RequestingWindowStateEventArgs obj)
+        {
+            switch (obj.RequestState)
+            {
+                case WindowState.Normal:
+                    Application.Current.MainWindow.WindowState = WindowState.Normal;
+                    break;
+                case WindowState.Maximized:
+                    Application.Current.MainWindow.WindowState = WindowState.Maximized;
+                    break;
+                case WindowState.Minimized:
+                    UADOnlineMediaPlayerVisibility = Visibility.Collapsed;
+                    IsPlayButtonEnable = true;
+                    break;
+                default:
+                    break;
+            }
         }
 
         private void WindowStateChangedAction(Window obj)

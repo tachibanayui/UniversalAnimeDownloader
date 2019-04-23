@@ -18,6 +18,13 @@ namespace UniversalAnimeDownloader.MediaPlayer
         {
             var ins = d as OnlineUADMediaPlayer;
             var newVal = (int)e.NewValue;
+            if (newVal == -1)
+                return;
+
+            //Base class "UADMediaPlyayer" make Playlist return null when call Reset()
+            if (ins.Playlist == null)
+                return;
+
             var currentEpisode = ins.Playlist.Episodes[(int)e.NewValue];
 
             //if the IAnimeSeriesManager.GetEpisode() is not call yet
