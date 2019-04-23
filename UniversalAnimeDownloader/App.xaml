@@ -17,6 +17,7 @@
                 <ResourceDictionary Source="pack://application:,,,/DefinedResources/VisualValueResources.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/DefinedResources/CustomStyles.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/DefinedResources/MainResources.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/DefinedResources/ToolbarNotifyIcon.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

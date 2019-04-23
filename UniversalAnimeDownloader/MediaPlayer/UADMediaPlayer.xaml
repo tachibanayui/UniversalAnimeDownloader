@@ -248,7 +248,7 @@
                                                         <TextBlock
                                                             Grid.Row="1"
                                                             Foreground="Red"
-                                                            Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListViewItem}}"
+                                                            Text="This episode is not download yet"
                                                             Visibility="{Binding AvailableOffline, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}" />
                                                     </Grid>
                                                 </Grid>

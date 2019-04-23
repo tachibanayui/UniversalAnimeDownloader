@@ -22,6 +22,7 @@ namespace UniversalAnimeDownloader.ViewModels
     {
         private readonly Predicate<T> _canExecute;
         private readonly Action<T> _execute;
+        private Func<object, bool> p;
 
         public RelayCommand(Predicate<T> canExecute, Action<T> execute)
         {
@@ -29,6 +30,11 @@ namespace UniversalAnimeDownloader.ViewModels
                 throw new ArgumentNullException("execute");
             _canExecute = canExecute;
             _execute = execute;
+        }
+
+        public RelayCommand(Func<object, bool> p)
+        {
+            this.p = p;
         }
 
         public bool CanExecute(object parameter)
