@@ -15,6 +15,7 @@ namespace UniversalAnimeDownloader.ViewModels
         public ICommand RefreshCommand { get; set; }
         public ICommand ShowAnimeDetailCommand { get; set; }
         public ICommand AnimeListScrollingCommand { get; set; }
+        public ICommand PageLoaded { get; set; }
         // public ICommand OverlayNoInternetVisibility { get; set; }
         #endregion
 
@@ -171,11 +172,12 @@ namespace UniversalAnimeDownloader.ViewModels
                 }
             });
 
-            InitAnimeList();
+            PageLoaded = new RelayCommand<object>(p => true, async p => await InitAnimeList());
         }
 
-        private async void InitAnimeList()
+        private async Task InitAnimeList()
         {
+            IsLoadOngoing = true;
             if (UserInterestMananger.Data.LastSuggestion != null)
             {
                 await SuggestedAnimeInfos.AddRange(UserInterestMananger.Data.LastSuggestion, LoadAnimeCancelToken.Token);
@@ -192,6 +194,7 @@ namespace UniversalAnimeDownloader.ViewModels
                     //Add an error in UADAPI.OutputLogHelper class
                 }
             }
+            IsLoadOngoing = false;
         }
 
         public async Task LoadFeaturedAnime(int offset, int count, bool clearPreviousCard = true)

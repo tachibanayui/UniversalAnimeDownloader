@@ -43,12 +43,6 @@ namespace UniversalAnimeDownloader.ViewModels
         {
             get
             {
-                if (_SettingData == null)
-                {
-                    UADSettingsManager.Instance.Init();
-                    _SettingData = UADSettingsManager.Instance.CurrentSettings;
-                }
-
                 return _SettingData;
             }
             set
@@ -153,8 +147,17 @@ namespace UniversalAnimeDownloader.ViewModels
             ApplyAccentCommand = new RelayCommand<Swatch>(p => true, p => UADSettingsManager.Instance.CurrentSettings.AccentColorTheme = p);
             ApplyPrimaryCommand = new RelayCommand<Swatch>(p => true, p => UADSettingsManager.Instance.CurrentSettings.PrimaryColorTheme = p);
             ApplyFramerateCommand = new RelayCommand<double>(p => true, p => SettingData.AnimationFrameRate = (int)p);
-            HostLoadedCommand = new RelayCommand<UserControl>(p => true, p =>
+            HostLoadedCommand = new RelayCommand<UserControl>(p => true, async p =>
             {
+                //Load the setting
+                if (UADSettingsManager.Instance.CurrentSettings == null)
+                {
+                    await UADSettingsManager.Instance.Init();
+                    SettingData = UADSettingsManager.Instance.CurrentSettings;
+                    OnPropertyChanged("SettingData");
+                }
+
+
                 //To avoid the control binding will erase the setting while the comonent are init. So after the UserContro is loaded we will add binding
                 IsHostLoaded = true;
                 var cbxStret = p.FindName("stretchMode") as ComboBox;

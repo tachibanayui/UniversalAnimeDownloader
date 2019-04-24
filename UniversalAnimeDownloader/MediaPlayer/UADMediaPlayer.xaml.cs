@@ -264,26 +264,51 @@ namespace UniversalAnimeDownloader.MediaPlayer
         {
             VM = new UADPlayerViewModel();
             InitializeComponent();
+        }
+
+
+        private async void Event_MediaPlayerHostLoaded(object sender, RoutedEventArgs e)
+        {
             (Content as FrameworkElement).DataContext = VM;
             mediaPlayer.Source = VideoUri;
             isControllerVisible = true;
-            //var t = Application.Current.Resources["applicationTaskbarPopup"] as TaskbarIcon;
             string tt = AppDomain.CurrentDomain.BaseDirectory + "unnamed.ico";
-            ////t.Icon = new System.Drawing.Icon(tt);
-            //t.Visibility = Visibility.Visible;
             mediaPlayer.Pause();
 
+            await UADSettingsManager.Instance.Init();
             if (UADSettingsManager.Instance.CurrentSettings.PlayMediaFullScreen)
             {
                 OnRequestWindowState(WindowState.Maximized);
                 (btnFullScreenToggle.Content as PackIcon).Kind = PackIconKind.ArrowCollapse;
             }
             strokeThicknessSlider.Value = UADSettingsManager.Instance.CurrentSettings.PrimaryBurshThickness;
-        }
 
+            //Set the property previously add in the VM
+            VM.MediaElementVolume = UADSettingsManager.Instance.CurrentSettings.PlaybackVolume / 100;
+            VM.InkCanvasVisibility = Visibility.Collapsed;
 
-        private void Event_MediaPlayerHostLoaded(object sender, RoutedEventArgs e)
-        {
+            VM.PrimaryPen = new DrawingAttributes()
+            {
+                Color = UADSettingsManager.Instance.CurrentSettings.PrimaryPenColor,
+                Width = UADSettingsManager.Instance.CurrentSettings.PrimaryBurshThickness,
+                Height = UADSettingsManager.Instance.CurrentSettings.PrimaryBurshThickness
+            };
+
+            VM.SecondaryPen = new DrawingAttributes()
+            {
+                Color = UADSettingsManager.Instance.CurrentSettings.SecondaryPenColor,
+                Width = UADSettingsManager.Instance.CurrentSettings.SecondaryBurshThickness,
+                Height = UADSettingsManager.Instance.CurrentSettings.SecondaryBurshThickness
+            };
+
+            VM.HighlighterPen = new DrawingAttributes()
+            {
+                IsHighlighter = true,
+                Color = UADSettingsManager.Instance.CurrentSettings.HighlighterPenColor,
+                Width = UADSettingsManager.Instance.CurrentSettings.HighlighterBurshThickness,
+                Height = UADSettingsManager.Instance.CurrentSettings.HighlighterBurshThickness
+            };
+        
             //Change the fullsrceen icon when the host window state changed
             AssignProperty();
             var hostWindow = Window.GetWindow(this);

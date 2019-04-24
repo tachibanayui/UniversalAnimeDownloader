@@ -29,8 +29,15 @@ namespace UniversalAnimeDownloader.MediaPlayer
         {
             get
             {
-                MediaElementVolume = UADSettingsManager.Instance.CurrentSettings.PlaybackVolume / 100;
-                return UADSettingsManager.Instance.CurrentSettings.PlaybackVolume;
+                if (UADSettingsManager.Instance.CurrentSettings != null)
+                {
+                    MediaElementVolume = UADSettingsManager.Instance.CurrentSettings.PlaybackVolume / 100;
+                    return UADSettingsManager.Instance.CurrentSettings.PlaybackVolume;
+                }
+                else
+                {
+                    return 1;
+                }
             }
             set
             {
@@ -42,9 +49,21 @@ namespace UniversalAnimeDownloader.MediaPlayer
                 }
             }
         }
+
+        private bool _IsDrawingEnabled;
         public bool IsDrawingEnabled
         {
-            get { return UADSettingsManager.Instance.CurrentSettings.IsDrawingEnabled; }
+            get
+            {
+                if (UADSettingsManager.Instance.CurrentSettings != null)
+                {
+                    return UADSettingsManager.Instance.CurrentSettings.IsDrawingEnabled;
+                }
+                else
+                {
+                    return true;
+                }
+            }
         }
 
         private double mediaElementVolume;
@@ -90,19 +109,22 @@ namespace UniversalAnimeDownloader.MediaPlayer
             }
         }
 
+        private DrawingAttributes _PrimaryPen;
         public DrawingAttributes PrimaryPen
         {
-            get {return new DrawingAttributes() { Color = UADSettingsManager.Instance.CurrentSettings.PrimaryPenColor, Width = UADSettingsManager.Instance.CurrentSettings.PrimaryBurshThickness, Height = UADSettingsManager.Instance.CurrentSettings.PrimaryBurshThickness }; }
+            get { return _PrimaryPen; }
             set
             {
                 UADSettingsManager.Instance.CurrentSettings.PrimaryBurshThickness = value.Height;
                 UADSettingsManager.Instance.CurrentSettings.PrimaryPenColor = value.Color;
+                OnPropertyChanged();
             }
         }
 
+        private DrawingAttributes _SecondaryPen;
         public DrawingAttributes SecondaryPen
         {
-            get { return new DrawingAttributes() { Color = UADSettingsManager.Instance.CurrentSettings.SecondaryPenColor, Width = UADSettingsManager.Instance.CurrentSettings.SecondaryBurshThickness, Height = UADSettingsManager.Instance.CurrentSettings.SecondaryBurshThickness }; }
+            get { return _SecondaryPen; }
             set
             {
                 UADSettingsManager.Instance.CurrentSettings.SecondaryBurshThickness = value.Height;
@@ -110,9 +132,10 @@ namespace UniversalAnimeDownloader.MediaPlayer
             }
         }
 
+        private DrawingAttributes _HighlighterPen;
         public DrawingAttributes HighlighterPen
         {
-            get { return new DrawingAttributes() { IsHighlighter = true, Color = UADSettingsManager.Instance.CurrentSettings.HighlighterPenColor, Width = UADSettingsManager.Instance.CurrentSettings.HighlighterBurshThickness, Height = UADSettingsManager.Instance.CurrentSettings.HighlighterBurshThickness }; }
+            get { return _HighlighterPen; }
             set
             {
                 UADSettingsManager.Instance.CurrentSettings.HighlighterBurshThickness = value.Height;
@@ -124,9 +147,16 @@ namespace UniversalAnimeDownloader.MediaPlayer
         {
             get
             {
-                if (UADSettingsManager.Instance.CurrentSettings.IsSneakyWatcherEnabled && UADSettingsManager.Instance.CurrentSettings.IsSneakyWatcherBorderEnabled)
+                if (UADSettingsManager.Instance.CurrentSettings != null)
                 {
-                    return 2;
+                    if (UADSettingsManager.Instance.CurrentSettings.IsSneakyWatcherEnabled && UADSettingsManager.Instance.CurrentSettings.IsSneakyWatcherBorderEnabled)
+                    {
+                        return 2;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
                 }
                 else
                 {
@@ -139,28 +169,42 @@ namespace UniversalAnimeDownloader.MediaPlayer
         {
             get
             {
-                if (UADSettingsManager.Instance.CurrentSettings.IsSneakyWatcherEnabled)
+                if (UADSettingsManager.Instance.CurrentSettings != null)
                 {
-                    return true;
+                    if (UADSettingsManager.Instance.CurrentSettings.IsSneakyWatcherEnabled)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
                 else
                 {
-                    return false;
+                    return true;
                 }
             }
         }
 
-        public SolidColorBrush ScreenBlockerColor => new SolidColorBrush(UADSettingsManager.Instance.CurrentSettings.BlockerColor);
+        public SolidColorBrush ScreenBlockerColor => UADSettingsManager.Instance.CurrentSettings != null ? new SolidColorBrush(UADSettingsManager.Instance.CurrentSettings.BlockerColor) : new SolidColorBrush(Colors.Black);
 
-        public bool ShowBlockerImage => IsBlockerActive && UADSettingsManager.Instance.CurrentSettings.IsBlockerImageEnabled;
+        public bool ShowBlockerImage => UADSettingsManager.Instance.CurrentSettings != null ? IsBlockerActive && UADSettingsManager.Instance.CurrentSettings.IsBlockerImageEnabled : false;
 
         public ImageSource BlockerImageSource
         {
             get
             {
-                if (!string.IsNullOrEmpty(UADSettingsManager.Instance.CurrentSettings.BlockerImageLocation))
+                if (UADSettingsManager.Instance.CurrentSettings != null)
                 {
-                    return new BitmapImage(new Uri(UADSettingsManager.Instance.CurrentSettings.BlockerImageLocation));
+                    if (!string.IsNullOrEmpty(UADSettingsManager.Instance.CurrentSettings.BlockerImageLocation))
+                    {
+                        return new BitmapImage(new Uri(UADSettingsManager.Instance.CurrentSettings.BlockerImageLocation));
+                    }
+                    else
+                    {
+                        return new BitmapImage();
+                    }
                 }
                 else
                 {
@@ -169,14 +213,9 @@ namespace UniversalAnimeDownloader.MediaPlayer
             }
         }
 
-        public Stretch BlockerStretchMode => UADSettingsManager.Instance.CurrentSettings.BlockerStretchMode;
+        public Stretch BlockerStretchMode => UADSettingsManager.Instance.CurrentSettings != null ? UADSettingsManager.Instance.CurrentSettings.BlockerStretchMode : Stretch.Fill;
 
 
-        public UADPlayerViewModel()
-        {
-            MediaElementVolume = UADSettingsManager.Instance.CurrentSettings.PlaybackVolume / 100;
-            InkCanvasVisibility = Visibility.Collapsed;
-        }
 
         private int _SidePanelTabIndex = 0;
         public int SidePanelTabIndex

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 using UADAPI;
 using UniversalAnimeDownloader.UADSettingsPortal;
 
@@ -18,6 +20,7 @@ namespace UniversalAnimeDownloader.ViewModels
         public ICommand RefreshCommand { get; set; }
         public ICommand ShowAnimeDetailCommand { get; set; }
         public ICommand AnimeListScrollingCommand { get; set; }
+        public ICommand PageLoaded { get; set; }
         // public ICommand OverlayNoInternetVisibility { get; set; }
         #endregion
 
@@ -122,11 +125,6 @@ namespace UniversalAnimeDownloader.ViewModels
 
         public AnimeSuggestionViewModel()
         {
-            ApiHelpper.LoadAssembly();
-            UADSettingsManager.Instance.Init();
-            string userInterestString = UADSettingsManager.Instance.CurrentSettings.UserInterest;
-            UserInterestMananger.Deserialize(userInterestString);
-
             SelectedQueryModIndex = 0;
             RefreshCommand = new RelayCommand<object>(p => true, async (p) => await LoadSuggestedAnime(Rand.Next(1, 1000000), 50));
             AnimeListScrollingCommand = new RelayCommand<object>(p =>
@@ -144,7 +142,6 @@ namespace UniversalAnimeDownloader.ViewModels
             {
                 await LoadSuggestedAnime(Rand.Next(1,1000000), 50, false);
             });
-
             ShowAnimeDetailCommand = new RelayCommand<AnimeSeriesInfo>(p => true, async (p) =>
             {
                 if (p != null)
@@ -155,12 +152,19 @@ namespace UniversalAnimeDownloader.ViewModels
                     (Application.Current.FindResource("AnimeDetailsViewModel") as AnimeDetailsViewModel).CurrentSeries = manager;
                 }
             });
+            PageLoaded = new RelayCommand<object>(p => true, async p => 
+            {
+                await UADSettingsManager.Instance.Init(); // 625 ms 
+                string userInterestString = UADSettingsManager.Instance.CurrentSettings.UserInterest;
+                UserInterestMananger.Deserialize(userInterestString); // 16 ms
 
-            InitAnimeList();
+                await InitAnimeList();
+            });
         }
 
-        private async void InitAnimeList()
+        private async Task InitAnimeList()
         {
+            IsLoadOngoing = true;
             if(UserInterestMananger.Data.LastSuggestion != null)
                 await SuggestedAnimeInfos.AddRange(UserInterestMananger.Data.LastSuggestion, LoadAnimeCancelToken.Token);
             else
@@ -175,6 +179,7 @@ namespace UniversalAnimeDownloader.ViewModels
                     //Add an error in UADAPI.OutputLogHelper class
                 }
             }
+            IsLoadOngoing = false;
         }
 
         public async Task LoadSuggestedAnime(int offset, int count, bool clearPreviousCard = true)
@@ -188,11 +193,15 @@ namespace UniversalAnimeDownloader.ViewModels
                     OverlayActiityIndicatorVisibility = Visibility.Visible;
                     if (Querier != null)
                     {
-                        LoadAnimeCancelToken?.Cancel();
-                        LoadAnimeCancelToken = new CancellationTokenSource();
+                        var animes = await Task.Run(async () => 
+                        {
+                            LoadAnimeCancelToken?.Cancel();
+                            LoadAnimeCancelToken = new CancellationTokenSource();
 
-                        var animes = await UserInterestMananger.GetSuggestion(Querier.GetType().FullName, offset, count);
-                        UADSettingsManager.Instance.CurrentSettings.UserInterest = UserInterestMananger.Serialize();
+                            var tmp = await UserInterestMananger.GetSuggestion(Querier.GetType().FullName, offset, count);
+                            UADSettingsManager.Instance.CurrentSettings.UserInterest = UserInterestMananger.Serialize();
+                            return tmp;
+                        });
 
                         if (clearPreviousCard)
                         {

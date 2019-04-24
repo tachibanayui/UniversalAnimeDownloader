@@ -20,7 +20,7 @@ namespace UniversalAnimeDownloader.ValueConverters
 
             if (!string.IsNullOrEmpty(info.LocalFile))
             {
-                if(File.Exists(info.LocalFile))
+                if (File.Exists(info.LocalFile))
                     return new BitmapImage(new Uri(info.LocalFile));
                 else
                     return new BitmapImage(new Uri(info.Url));

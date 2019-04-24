@@ -92,7 +92,7 @@ namespace UniversalAnimeDownloader.UADSettingsPortal
                     if (_PrimaryColorTheme != value.Name)
                     {
                         _PrimaryColorTheme = value.Name;
-                        new PaletteHelper().ReplacePrimaryColor(value.Name);
+                        Application.Current.Dispatcher.Invoke(() => new PaletteHelper().ReplacePrimaryColor(value.Name));
                         OnPropertyChanged();
                     }
                 }
@@ -111,7 +111,7 @@ namespace UniversalAnimeDownloader.UADSettingsPortal
                 if (_AccentColorTheme != value)
                 {
                     _AccentColorTheme = value;
-                    //new PaletteHelper().ReplaceAccentColor(value);
+                    Application.Current.Dispatcher.Invoke(() => new PaletteHelper().ReplaceAccentColor(value.Name));
                     OnPropertyChanged();
                 }
             }

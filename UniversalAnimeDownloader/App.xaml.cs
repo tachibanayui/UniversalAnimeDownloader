@@ -19,8 +19,10 @@ namespace UniversalAnimeDownloader
     {
         protected override void OnStartup(StartupEventArgs e)
         {
+            ApiHelpper.LoadAssembly();
             base.OnStartup(e);
             ToolTipService.ShowDurationProperty.OverrideMetadata(typeof(DependencyObject), new FrameworkPropertyMetadata(60000));
         }
+
     }
 }

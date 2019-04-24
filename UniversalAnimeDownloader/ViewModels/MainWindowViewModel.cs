@@ -34,6 +34,7 @@ namespace UniversalAnimeDownloader.ViewModels
         public ICommand ChangeWindowStateRequestOnlineCommand { get; set; }
         public ICommand UADMediaPlayerClosedCommand { get; set; }
         public ICommand WindowStateChangedCommand { get; set; }
+        public ICommand PageLoaded { get; set; }
 
         public ICommand NavigateCommand { get; set; }
         #endregion
@@ -192,10 +193,6 @@ namespace UniversalAnimeDownloader.ViewModels
 
         public MainWindowViewModel()
         {
-            string notificationString = UADSettingsManager.Instance.CurrentSettings.Notification;
-            NotificationManager.Deserialize(notificationString);
-            string downloadString = UADSettingsManager.Instance.CurrentSettings.Download;
-            DownloadManager.Deserialize(downloadString);
             DownloadManager.Instances.CollectionChanged += (s, e) => UADSettingsManager.Instance.CurrentSettings.Download = DownloadManager.Serialize();
             NotificationManager.ItemRemoved += (s, e) => UADSettingsManager.Instance.CurrentSettings.Notification = NotificationManager.Serialize();
             NotificationManager.ItemAdded += (s, e) =>
@@ -273,7 +270,15 @@ namespace UniversalAnimeDownloader.ViewModels
                 IsPlayButtonEnable = false;
             });
             WindowStateChangedCommand = new RelayCommand<Window>(p => true, WindowStateChangedAction);
-            CheckForAnimeSeriesUpdate();
+            PageLoaded = new RelayCommand<object>(p => true, async p => 
+            {
+                await UADSettingsManager.Instance.Init();
+                string notificationString = UADSettingsManager.Instance.CurrentSettings.Notification;
+                NotificationManager.Deserialize(notificationString);
+                string downloadString = UADSettingsManager.Instance.CurrentSettings.Download;
+                DownloadManager.Deserialize(downloadString);
+                CheckForAnimeSeriesUpdate();
+            });
         }
 
         private void ChangeUADOnlineMediaPlayerWindowState(RequestingWindowStateEventArgs obj)

@@ -32,6 +32,7 @@ namespace UniversalAnimeDownloader.ViewModels
         public ICommand DetailTooltipOpenedCommand { get; set; }
         public ICommand AnimeListScrollingCommand { get; set; }
         public ICommand ShowAnimeDetailCommand { get; set; }
+        public ICommand PageLoaded { get; set; }
         #endregion
 
         #region BindableProperties
@@ -218,16 +219,15 @@ namespace UniversalAnimeDownloader.ViewModels
                 await LoadAnime(0, 50);
             };
 
-            ApiHelpper.LoadAssembly();
             AnimeInfos = new DelayedObservableCollection<AnimeSeriesInfo>();
             AnimeInfos.DelayInterval = TimeSpan.FromSeconds(0.1);
             Genres = new ObservableCollection<GenreItem>();
             Seasons = new ObservableCollection<SeasonItem>();
 
-            InitAnimeList();
+            PageLoaded = new RelayCommand<object>(p => true, async p => await InitAnimeList());
         }
 
-        private async void InitAnimeList()
+        private async Task InitAnimeList()
         {
             SelectedQueryModIndex = 0;
             SelectedGenresIndex = 0;

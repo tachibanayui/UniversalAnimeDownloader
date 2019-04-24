@@ -1741,19 +1741,21 @@ namespace UADAPI
         /// <returns>Is internet connection avaible</returns>
         public static async Task<bool> CheckForInternetConnection()
         {
-            try
+            return await Task.Run(async () =>
             {
-                using (var client = new WebClient())
-                using (await client.OpenReadTaskAsync("http://clients3.google.com/generate_204"))
+                try
                 {
-                    return true;
+                    using (var client = new WebClient())
+                    using (await client.OpenReadTaskAsync("http://clients3.google.com/generate_204"))
+                    {
+                        return true;
+                    }
                 }
-            }
-            catch
-            {
-                return false;
-            }
-
+                catch
+                {
+                    return false;
+                }
+            });
         }
     }
 }

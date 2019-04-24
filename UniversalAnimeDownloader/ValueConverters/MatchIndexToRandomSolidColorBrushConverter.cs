@@ -33,6 +33,9 @@ namespace UniversalAnimeDownloader.ValueConverters
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
+            if (values.Count(p => p == DependencyProperty.UnsetValue) > 0)
+                return Visibility.Collapsed;
+
             int parsedVal = (int)values[0];
 
             for (int i = 1; i < values.Length; i++)
