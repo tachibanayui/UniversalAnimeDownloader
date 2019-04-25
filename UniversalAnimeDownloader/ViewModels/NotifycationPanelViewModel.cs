@@ -28,13 +28,7 @@ namespace UniversalAnimeDownloader.ViewModels
             InvokeActionButton = new RelayCommand<Button>(p => true, async p => await (p.DataContext as NotificationItem).InvokeAsync());
             RemoveNotificationItem = new RelayCommand<Button>(p => true, p => NotificationManager.Remove(p.DataContext as NotificationItem));
             ClearCommand = new RelayCommand<object>(p => true, p => NotificationManager.RemoveAll());
-            HostLoaded = new RelayCommand<object>(p => true, p => 
-            {
-                BallonHost = Application.Current.FindResource("ToolbarTrayBallon") as Card;
-                MainTaskBarIcon = Application.Current.FindResource("mainToolbarTray") as TaskbarIcon;
-                NotificationManager.ItemAdded += ShowToolbarTrayBaloon;
-            });
-
+            
             BallonHost = Application.Current.FindResource("ToolbarTrayBallon") as Card;
             MainTaskBarIcon = Application.Current.FindResource("mainToolbarTray") as TaskbarIcon;
             NotificationManager.ItemAdded += ShowToolbarTrayBaloon;

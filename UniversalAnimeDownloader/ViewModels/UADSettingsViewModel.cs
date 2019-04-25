@@ -140,23 +140,21 @@ namespace UniversalAnimeDownloader.ViewModels
 
         public UADSettingsViewModel()
         {
-            //SettingData = UADSettingsManager.Instance.CurrentSettings;
+            SettingData = (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings;
             Swatches = new SwatchesProvider().Swatches.ToList();
             Helper = new PaletteHelper();
 
-            ApplyAccentCommand = new RelayCommand<Swatch>(p => true, p => UADSettingsManager.Instance.CurrentSettings.AccentColorTheme = p);
-            ApplyPrimaryCommand = new RelayCommand<Swatch>(p => true, p => UADSettingsManager.Instance.CurrentSettings.PrimaryColorTheme = p);
+            ApplyAccentCommand = new RelayCommand<Swatch>(p => true, p => (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.AccentColorTheme = p);
+            ApplyPrimaryCommand = new RelayCommand<Swatch>(p => true, p => (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.PrimaryColorTheme = p);
             ApplyFramerateCommand = new RelayCommand<object>(p => p != null ? true : false, p => SettingData.AnimationFrameRate = (int)p);
             HostLoadedCommand = new RelayCommand<UserControl>(p => true, async p =>
             {
                 //Load the setting
-                if (UADSettingsManager.Instance.CurrentSettings == null)
+                if (SettingData == null)
                 {
-                    await UADSettingsManager.Instance.Init();
-                    SettingData = UADSettingsManager.Instance.CurrentSettings;
+                    SettingData = (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings;
                     OnPropertyChanged("SettingData");
                 }
-
 
                 //To avoid the control binding will erase the setting while the comonent are init. So after the UserContro is loaded we will add binding
                 IsHostLoaded = true;
@@ -337,9 +335,9 @@ namespace UniversalAnimeDownloader.ViewModels
 
 
 
-        public void OnShow() => UADSettingsManager.Instance.CurrentSettings.Save();
+        public void OnShow() => (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.Save();
 
-        public void OnHide() => UADSettingsManager.Instance.CurrentSettings.Save();
+        public void OnHide() => (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.Save();
     }
 }
 

@@ -11,42 +11,34 @@ namespace UniversalAnimeDownloader.UADSettingsPortal
 {
     class UADSettingsManager : BaseViewModel
     {
-        private Task InitTask = null;
-
         public UADSettingsManager()
         {
             Init();
         }
 
-        public async Task Init()
+        public void Init()
         {
-            if (InitTask == null)
-                InitTask = Task.Run(async () =>
+            if (CurrentSettings == null)
+            {
+                var settingFolder = AppDomain.CurrentDomain.BaseDirectory + "Settings\\";
+                if (!Directory.Exists(settingFolder))
                 {
-                    if (CurrentSettings == null)
-                    {
-                        var settingFolder = AppDomain.CurrentDomain.BaseDirectory + "Settings\\";
-                        if (!Directory.Exists(settingFolder))
-                        {
-                            Directory.CreateDirectory(settingFolder);
-                        }
+                    Directory.CreateDirectory(settingFolder);
+                }
 
-                        var settingsFile = settingFolder + "UserSetting.json";
-                        if (File.Exists(settingsFile))
-                        {
-                            var settingFileContent = File.ReadAllText(settingsFile);
-                            var tmp = JsonConvert.DeserializeObject<UADSettingsData>(settingFileContent);
-                            await Application.Current.Dispatcher.InvokeAsync(() => CurrentSettings = tmp);
-                        }
-                        else
-                        {
-                            await Application.Current.Dispatcher.InvokeAsync(() => CurrentSettings = new UADSettingsData());
-                        }
-                        await Application.Current.Dispatcher.InvokeAsync(() => Timeline.DesiredFrameRateProperty.OverrideMetadata(typeof(Timeline), new FrameworkPropertyMetadata { DefaultValue = (int)CurrentSettings.AnimationFrameRate }));
-                    }
-                });
-
-            await InitTask;
+                var settingsFile = settingFolder + "UserSetting.json";
+                if (File.Exists(settingsFile))
+                {
+                    var settingFileContent = File.ReadAllText(settingsFile);
+                    var tmp = JsonConvert.DeserializeObject<UADSettingsData>(settingFileContent);
+                    CurrentSettings = tmp;
+                }
+                else
+                {
+                    CurrentSettings = new UADSettingsData();
+                }
+                Timeline.DesiredFrameRateProperty.OverrideMetadata(typeof(Timeline), new FrameworkPropertyMetadata { DefaultValue = (int)CurrentSettings.AnimationFrameRate });
+            }
         }
 
         private UADSettingsData _CurrentSettings;
@@ -55,7 +47,7 @@ namespace UniversalAnimeDownloader.UADSettingsPortal
             get => _CurrentSettings;
             set
             {
-                if(_CurrentSettings != value)
+                if (_CurrentSettings != value)
                 {
                     _CurrentSettings = value;
                     OnPropertyChanged();

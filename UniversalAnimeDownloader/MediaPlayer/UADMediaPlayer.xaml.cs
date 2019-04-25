@@ -212,12 +212,12 @@ namespace UniversalAnimeDownloader.MediaPlayer
             var ins = d as UADMediaPlayer;
             ins.mediaPlayer.Stop();
             ins.PlayIndex = 0;
-            if (UADSettingsManager.Instance.CurrentSettings.PlayMediaFullScreen)
+            if ((Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.PlayMediaFullScreen)
             {
                 ins.OnRequestWindowState(WindowState.Maximized);
                 (ins.btnFullScreenToggle.Content as PackIcon).Kind = PackIconKind.ArrowCollapse;
             }
-            ins.strokeThicknessSlider.Value = UADSettingsManager.Instance.CurrentSettings.PrimaryBurshThickness;
+            ins.strokeThicknessSlider.Value = (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.PrimaryBurshThickness;
         }
 
         /// <summary>
@@ -275,38 +275,37 @@ namespace UniversalAnimeDownloader.MediaPlayer
             string tt = AppDomain.CurrentDomain.BaseDirectory + "unnamed.ico";
             mediaPlayer.Pause();
 
-            await UADSettingsManager.Instance.Init();
-            if (UADSettingsManager.Instance.CurrentSettings.PlayMediaFullScreen)
+            if ((Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.PlayMediaFullScreen)
             {
                 OnRequestWindowState(WindowState.Maximized);
                 (btnFullScreenToggle.Content as PackIcon).Kind = PackIconKind.ArrowCollapse;
             }
-            strokeThicknessSlider.Value = UADSettingsManager.Instance.CurrentSettings.PrimaryBurshThickness;
+            strokeThicknessSlider.Value = (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.PrimaryBurshThickness;
 
             //Set the property previously add in the VM
-            VM.MediaElementVolume = UADSettingsManager.Instance.CurrentSettings.PlaybackVolume / 100;
+            VM.MediaElementVolume = (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.PlaybackVolume / 100;
             VM.InkCanvasVisibility = Visibility.Collapsed;
 
             VM.PrimaryPen = new DrawingAttributes()
             {
-                Color = UADSettingsManager.Instance.CurrentSettings.PrimaryPenColor,
-                Width = UADSettingsManager.Instance.CurrentSettings.PrimaryBurshThickness,
-                Height = UADSettingsManager.Instance.CurrentSettings.PrimaryBurshThickness
+                Color = (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.PrimaryPenColor,
+                Width = (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.PrimaryBurshThickness,
+                Height = (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.PrimaryBurshThickness
             };
 
             VM.SecondaryPen = new DrawingAttributes()
             {
-                Color = UADSettingsManager.Instance.CurrentSettings.SecondaryPenColor,
-                Width = UADSettingsManager.Instance.CurrentSettings.SecondaryBurshThickness,
-                Height = UADSettingsManager.Instance.CurrentSettings.SecondaryBurshThickness
+                Color = (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.SecondaryPenColor,
+                Width = (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.SecondaryBurshThickness,
+                Height = (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.SecondaryBurshThickness
             };
 
             VM.HighlighterPen = new DrawingAttributes()
             {
                 IsHighlighter = true,
-                Color = UADSettingsManager.Instance.CurrentSettings.HighlighterPenColor,
-                Width = UADSettingsManager.Instance.CurrentSettings.HighlighterBurshThickness,
-                Height = UADSettingsManager.Instance.CurrentSettings.HighlighterBurshThickness
+                Color = (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.HighlighterPenColor,
+                Width = (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.HighlighterBurshThickness,
+                Height = (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.HighlighterBurshThickness
             };
         
             //Change the fullsrceen icon when the host window state changed
@@ -721,9 +720,9 @@ namespace UniversalAnimeDownloader.MediaPlayer
             var windowHost = Window.GetWindow(this);
             await Task.Delay(50);
             string fileName = "Captured Image " + DateTime.Now.ToLongDateString() + ", " + DateTime.Now.ToLongTimeString().Replace(':', '-') + ".png";
-            string fileLocation = System.IO.Path.Combine(UADSettingsManager.Instance.CurrentSettings.ScreenShotLocation, fileName);
-            if (!Directory.Exists(UADSettingsManager.Instance.CurrentSettings.ScreenShotLocation))
-                Directory.CreateDirectory(UADSettingsManager.Instance.CurrentSettings.ScreenShotLocation);
+            string fileLocation = System.IO.Path.Combine((Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.ScreenShotLocation, fileName);
+            if (!Directory.Exists((Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.ScreenShotLocation))
+                Directory.CreateDirectory((Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.ScreenShotLocation);
 
             var picture = MiscClass.SaveFrameworkElementToPng(this, (int)windowHost.Width, (int)windowHost.Height, fileLocation);
             capturedImg.Source = picture;
@@ -775,12 +774,12 @@ namespace UniversalAnimeDownloader.MediaPlayer
         {
             InitSneakyWatcher();
             if (VM.IsBlockerActive)
-                if (UADSettingsManager.Instance.CurrentSettings.IsEnableMasterPassword)
-                    if (new SneakyWatcherPasswordBox().ValidatePassword(UADSettingsManager.Instance.CurrentSettings.SneakyWatcherMasterPassword, UADSettingsManager.Instance.CurrentSettings.IsRandomizePasswordBox))
+                if ((Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.IsEnableMasterPassword)
+                    if (new SneakyWatcherPasswordBox().ValidatePassword((Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.SneakyWatcherMasterPassword, (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.IsRandomizePasswordBox))
                     {
                         VM.IsBlockerActive = false;
 
-                        if (UADSettingsManager.Instance.CurrentSettings.ChangeAppIconWhenSneakyWatcherActive)
+                        if ((Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.ChangeAppIconWhenSneakyWatcherActive)
                             OnRequestIconChange(new Uri("pack://application:,,,/Resources/UADIcon.ico"));
                     }
                     else
@@ -789,7 +788,7 @@ namespace UniversalAnimeDownloader.MediaPlayer
                 {
                     VM.IsBlockerActive = false;
 
-                    if (UADSettingsManager.Instance.CurrentSettings.ChangeAppIconWhenSneakyWatcherActive)
+                    if ((Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.ChangeAppIconWhenSneakyWatcherActive)
                         OnRequestIconChange(new Uri("pack://application:,,,/Resources/UADIcon.ico"));
                 }
             else
@@ -802,8 +801,8 @@ namespace UniversalAnimeDownloader.MediaPlayer
             var WinHost = Window.GetWindow(this);
 
             if (IsFakeCrashActive)
-                if (UADSettingsManager.Instance.CurrentSettings.IsEnableMasterPassword)
-                    if (new SneakyWatcherPasswordBox().ValidatePassword(UADSettingsManager.Instance.CurrentSettings.SneakyWatcherMasterPassword, UADSettingsManager.Instance.CurrentSettings.IsRandomizePasswordBox))
+                if ((Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.IsEnableMasterPassword)
+                    if (new SneakyWatcherPasswordBox().ValidatePassword((Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.SneakyWatcherMasterPassword, (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.IsRandomizePasswordBox))
                         UnActivateFakeCrash(WinHost);
                     else
                         return;
@@ -811,9 +810,9 @@ namespace UniversalAnimeDownloader.MediaPlayer
                     UnActivateFakeCrash(WinHost);
             else
             {
-                if (UADSettingsManager.Instance.CurrentSettings.MakeWindowTopMost)
+                if ((Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.MakeWindowTopMost)
                     WinHost.Topmost = true;
-                if (UADSettingsManager.Instance.CurrentSettings.DisableAltF4)
+                if ((Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.DisableAltF4)
                     WinHost.Closing += MiscClass.CancelCloseWindow;
                 FakeAppCrashFill.Visibility = Visibility.Visible;
                 FakeHost = new FakeNotRespondingDialog();
@@ -824,7 +823,7 @@ namespace UniversalAnimeDownloader.MediaPlayer
 
         private void ActivateBGPlayer()
         {
-            if (UADSettingsManager.Instance.CurrentSettings.IsPauseWhenSneakyWactherActive)
+            if ((Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.IsPauseWhenSneakyWactherActive)
             {
                 mediaPlayer.Pause();
                 isPlaying = false;
@@ -844,25 +843,25 @@ namespace UniversalAnimeDownloader.MediaPlayer
             FakeHost.Close();
             FakeAppCrashFill.Visibility = Visibility.Collapsed;
             IsFakeCrashActive = false;
-            if (UADSettingsManager.Instance.CurrentSettings.MakeWindowTopMost)
+            if ((Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.MakeWindowTopMost)
                 WinHost.Topmost = false;
-            if (UADSettingsManager.Instance.CurrentSettings.DisableAltF4)
+            if ((Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.DisableAltF4)
                 WinHost.Closing -= MiscClass.CancelCloseWindow;
 
-            if (UADSettingsManager.Instance.CurrentSettings.ChangeAppIconWhenSneakyWatcherActive)
+            if ((Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.ChangeAppIconWhenSneakyWatcherActive)
                 OnRequestIconChange(new Uri("pack://application:,,,/Resources/UADIcon.ico"));
         }
 
         private void InitSneakyWatcher()
         {
-            if (UADSettingsManager.Instance.CurrentSettings.IsPauseWhenSneakyWactherActive)
+            if ((Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.IsPauseWhenSneakyWactherActive)
             {
                 mediaPlayer.Pause();
                 isPlaying = false;
                 (btnPlayPause.Content as PackIcon).Kind = PackIconKind.Play;
             }
 
-            if (UADSettingsManager.Instance.CurrentSettings.ChangeAppIconWhenSneakyWatcherActive)
+            if ((Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.ChangeAppIconWhenSneakyWatcherActive)
                 OnRequestIconChange(new Uri("pack://application:,,,/Resources/WinDefaultIcon.png"));
 
             Focus();

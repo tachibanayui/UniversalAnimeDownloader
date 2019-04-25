@@ -1752,7 +1752,7 @@ namespace UADAPI
                     _InternetAvaible = await _CheckForInternetTask;
                     _IsCheckForInternetOnGoing = false;
 
-                    Thread.Sleep(30000);
+                    await Task.Delay(30000);
                 }
             })
             { IsBackground = true, Name = "Check for internet thread", Priority = ThreadPriority.BelowNormal };

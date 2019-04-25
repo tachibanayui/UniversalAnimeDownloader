@@ -29,10 +29,10 @@ namespace UniversalAnimeDownloader.MediaPlayer
         {
             get
             {
-                if (UADSettingsManager.Instance.CurrentSettings != null)
+                if ((Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings != null)
                 {
-                    MediaElementVolume = UADSettingsManager.Instance.CurrentSettings.PlaybackVolume / 100;
-                    return UADSettingsManager.Instance.CurrentSettings.PlaybackVolume;
+                    MediaElementVolume = (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.PlaybackVolume / 100;
+                    return (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.PlaybackVolume;
                 }
                 else
                 {
@@ -41,10 +41,10 @@ namespace UniversalAnimeDownloader.MediaPlayer
             }
             set
             {
-                if (UADSettingsManager.Instance.CurrentSettings.PlaybackVolume != value)
+                if ((Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.PlaybackVolume != value)
                 {
-                    UADSettingsManager.Instance.CurrentSettings.PlaybackVolume = value;
-                    MediaElementVolume = UADSettingsManager.Instance.CurrentSettings.PlaybackVolume / 100;
+                    (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.PlaybackVolume = value;
+                    MediaElementVolume = (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.PlaybackVolume / 100;
                     OnPropertyChanged("PlayerVolume");
                 }
             }
@@ -55,9 +55,9 @@ namespace UniversalAnimeDownloader.MediaPlayer
         {
             get
             {
-                if (UADSettingsManager.Instance.CurrentSettings != null)
+                if ((Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings != null)
                 {
-                    return UADSettingsManager.Instance.CurrentSettings.IsDrawingEnabled;
+                    return (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.IsDrawingEnabled;
                 }
                 else
                 {
@@ -115,8 +115,8 @@ namespace UniversalAnimeDownloader.MediaPlayer
             get { return _PrimaryPen; }
             set
             {
-                UADSettingsManager.Instance.CurrentSettings.PrimaryBurshThickness = value.Height;
-                UADSettingsManager.Instance.CurrentSettings.PrimaryPenColor = value.Color;
+                (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.PrimaryBurshThickness = value.Height;
+                (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.PrimaryPenColor = value.Color;
                 OnPropertyChanged();
             }
         }
@@ -127,8 +127,8 @@ namespace UniversalAnimeDownloader.MediaPlayer
             get { return _SecondaryPen; }
             set
             {
-                UADSettingsManager.Instance.CurrentSettings.SecondaryBurshThickness = value.Height;
-                UADSettingsManager.Instance.CurrentSettings.SecondaryPenColor = value.Color;
+                (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.SecondaryBurshThickness = value.Height;
+                (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.SecondaryPenColor = value.Color;
             }
         }
 
@@ -138,8 +138,8 @@ namespace UniversalAnimeDownloader.MediaPlayer
             get { return _HighlighterPen; }
             set
             {
-                UADSettingsManager.Instance.CurrentSettings.HighlighterBurshThickness = value.Height;
-                UADSettingsManager.Instance.CurrentSettings.HighlighterPenColor = value.Color;
+                (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.HighlighterBurshThickness = value.Height;
+                (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.HighlighterPenColor = value.Color;
             }
         }
 
@@ -147,9 +147,9 @@ namespace UniversalAnimeDownloader.MediaPlayer
         {
             get
             {
-                if (UADSettingsManager.Instance.CurrentSettings != null)
+                if ((Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings != null)
                 {
-                    if (UADSettingsManager.Instance.CurrentSettings.IsSneakyWatcherEnabled && UADSettingsManager.Instance.CurrentSettings.IsSneakyWatcherBorderEnabled)
+                    if ((Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.IsSneakyWatcherEnabled && (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.IsSneakyWatcherBorderEnabled)
                     {
                         return 2;
                     }
@@ -169,9 +169,9 @@ namespace UniversalAnimeDownloader.MediaPlayer
         {
             get
             {
-                if (UADSettingsManager.Instance.CurrentSettings != null)
+                if ((Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings != null)
                 {
-                    if (UADSettingsManager.Instance.CurrentSettings.IsSneakyWatcherEnabled)
+                    if ((Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.IsSneakyWatcherEnabled)
                     {
                         return true;
                     }
@@ -187,19 +187,19 @@ namespace UniversalAnimeDownloader.MediaPlayer
             }
         }
 
-        public SolidColorBrush ScreenBlockerColor => UADSettingsManager.Instance.CurrentSettings != null ? new SolidColorBrush(UADSettingsManager.Instance.CurrentSettings.BlockerColor) : new SolidColorBrush(Colors.Black);
+        public SolidColorBrush ScreenBlockerColor => (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings != null ? new SolidColorBrush((Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.BlockerColor) : new SolidColorBrush(Colors.Black);
 
-        public bool ShowBlockerImage => UADSettingsManager.Instance.CurrentSettings != null ? IsBlockerActive && UADSettingsManager.Instance.CurrentSettings.IsBlockerImageEnabled : false;
+        public bool ShowBlockerImage => (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings != null ? IsBlockerActive && (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.IsBlockerImageEnabled : false;
 
         public ImageSource BlockerImageSource
         {
             get
             {
-                if (UADSettingsManager.Instance.CurrentSettings != null)
+                if ((Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings != null)
                 {
-                    if (!string.IsNullOrEmpty(UADSettingsManager.Instance.CurrentSettings.BlockerImageLocation))
+                    if (!string.IsNullOrEmpty((Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.BlockerImageLocation))
                     {
-                        return new BitmapImage(new Uri(UADSettingsManager.Instance.CurrentSettings.BlockerImageLocation));
+                        return new BitmapImage(new Uri((Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.BlockerImageLocation));
                     }
                     else
                     {
@@ -213,7 +213,7 @@ namespace UniversalAnimeDownloader.MediaPlayer
             }
         }
 
-        public Stretch BlockerStretchMode => UADSettingsManager.Instance.CurrentSettings != null ? UADSettingsManager.Instance.CurrentSettings.BlockerStretchMode : Stretch.Fill;
+        public Stretch BlockerStretchMode => (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings != null ? (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.BlockerStretchMode : Stretch.Fill;
 
 
 

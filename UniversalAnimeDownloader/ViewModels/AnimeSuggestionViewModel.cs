@@ -154,8 +154,7 @@ namespace UniversalAnimeDownloader.ViewModels
             });
             PageLoaded = new RelayCommand<object>(p => true, async p => 
             {
-                await UADSettingsManager.Instance.Init(); // 625 ms 
-                string userInterestString = UADSettingsManager.Instance.CurrentSettings.UserInterest;
+                string userInterestString = (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.UserInterest;
                 UserInterestMananger.Deserialize(userInterestString); // 16 ms
 
                 await InitAnimeList();
@@ -164,29 +163,27 @@ namespace UniversalAnimeDownloader.ViewModels
 
         private async Task InitAnimeList()
         {
-            if(await ApiHelpper.CheckForInternetConnection())
+            IsLoadOngoing = true;
+            if(UserInterestMananger.Data.LastSuggestion != null)
             {
-                IsLoadOngoing = true;
-                if(UserInterestMananger.Data.LastSuggestion != null)
-                    await SuggestedAnimeInfos.AddRange(UserInterestMananger.Data.LastSuggestion, LoadAnimeCancelToken.Token);
-                else
-                {
-                    try
-                    {
-                        await LoadSuggestedAnime(0, 50);
-                    }
-                    catch (Exception e)
-                    {
-                        ShowErrorOcuredOverlay(e);
-                        //Add an error in UADAPI.OutputLogHelper class
-                    }
-                }
-                IsLoadOngoing = false;
+                HideAllOverlay();
+                OverlayActiityIndicatorVisibility = Visibility.Visible;
+                await SuggestedAnimeInfos.AddRange(UserInterestMananger.Data.LastSuggestion, LoadAnimeCancelToken.Token);
+                HideAllOverlay();
             }
             else
             {
-                ShowNoInternetOverlay();
+                try
+                {
+                    await LoadSuggestedAnime(0, 50);
+                }
+                catch (Exception e)
+                {
+                    ShowErrorOcuredOverlay(e);
+                    //Add an error in UADAPI.OutputLogHelper class
+                }
             }
+            IsLoadOngoing = false;
         }
 
         public async Task LoadSuggestedAnime(int offset, int count, bool clearPreviousCard = true)
@@ -194,10 +191,10 @@ namespace UniversalAnimeDownloader.ViewModels
             IsLoadOngoing = true;
             try
             {
+                HideAllOverlay();
+                OverlayActiityIndicatorVisibility = Visibility.Visible;
                 if (await ApiHelpper.CheckForInternetConnection())
                 {
-                    HideAllOverlay();
-                    OverlayActiityIndicatorVisibility = Visibility.Visible;
                     if (Querier != null)
                     {
                         var animes = await Task.Run(async () => 
@@ -206,7 +203,7 @@ namespace UniversalAnimeDownloader.ViewModels
                             LoadAnimeCancelToken = new CancellationTokenSource();
 
                             var tmp = await UserInterestMananger.GetSuggestion(Querier.GetType().FullName, offset, count);
-                            UADSettingsManager.Instance.CurrentSettings.UserInterest = UserInterestMananger.Serialize();
+                            (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.UserInterest = UserInterestMananger.Serialize();
                             return tmp;
                         });
 

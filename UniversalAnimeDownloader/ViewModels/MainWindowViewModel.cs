@@ -193,12 +193,16 @@ namespace UniversalAnimeDownloader.ViewModels
 
         public MainWindowViewModel()
         {
-            DownloadManager.Instances.CollectionChanged += (s, e) => UADSettingsManager.Instance.CurrentSettings.Download = DownloadManager.Serialize();
-            NotificationManager.ItemRemoved += (s, e) => UADSettingsManager.Instance.CurrentSettings.Notification = NotificationManager.Serialize();
+            string notificationString = (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.Notification;
+            NotificationManager.Deserialize(notificationString);
+            string downloadString = (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.Download;
+            DownloadManager.Deserialize(downloadString);
+            DownloadManager.Instances.CollectionChanged += (s, e) => (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.Download = DownloadManager.Serialize();
+            NotificationManager.ItemRemoved += (s, e) => (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.Notification = NotificationManager.Serialize();
             NotificationManager.ItemAdded += (s, e) =>
             {
                 NotifycationBadgeCount++;
-                try { UADSettingsManager.Instance.CurrentSettings.Notification = NotificationManager.Serialize(); } catch { }
+                try { (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.Notification = NotificationManager.Serialize(); } catch { }
             };
 
             //NotificationManager.Add(new NotificationItem() { Title = "Test notification", Detail = "This is a test notification!", ShowActionButton = true, ActionButtonContent = "Click here!", ButtonAction = new Action(() => { MessageBox.Show("Test"); }) });
@@ -272,11 +276,6 @@ namespace UniversalAnimeDownloader.ViewModels
             WindowStateChangedCommand = new RelayCommand<Window>(p => true, WindowStateChangedAction);
             PageLoaded = new RelayCommand<object>(p => true, async p => 
             {
-                await UADSettingsManager.Instance.Init();
-                string notificationString = UADSettingsManager.Instance.CurrentSettings.Notification;
-                NotificationManager.Deserialize(notificationString);
-                string downloadString = UADSettingsManager.Instance.CurrentSettings.Download;
-                DownloadManager.Deserialize(downloadString);
                 CheckForAnimeSeriesUpdate();
             });
         }

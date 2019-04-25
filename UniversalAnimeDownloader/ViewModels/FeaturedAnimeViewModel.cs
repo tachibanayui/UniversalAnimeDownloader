@@ -178,21 +178,14 @@ namespace UniversalAnimeDownloader.ViewModels
         private async Task InitAnimeList()
         {
             IsLoadOngoing = true;
-            if (UserInterestMananger.Data.LastSuggestion != null)
+            try
             {
-                await SuggestedAnimeInfos.AddRange(UserInterestMananger.Data.LastSuggestion, LoadAnimeCancelToken.Token);
+                await LoadFeaturedAnime(0, 50);
             }
-            else
+            catch (Exception e)
             {
-                try
-                {
-                    await LoadFeaturedAnime(0, 50);
-                }
-                catch (Exception e)
-                {
-                    ShowErrorOcuredOverlay(e);
-                    //Add an error in UADAPI.OutputLogHelper class
-                }
+                ShowErrorOcuredOverlay(e);
+                //Add an error in UADAPI.OutputLogHelper class
             }
             IsLoadOngoing = false;
         }
@@ -205,10 +198,10 @@ namespace UniversalAnimeDownloader.ViewModels
                 IsLoadOngoing = true;
                 try
                 {
+                    HideAllOverlay();
+                    OverlayActiityIndicatorVisibility = Visibility.Visible;
                     if (await ApiHelpper.CheckForInternetConnection())
                     {
-                        HideAllOverlay();
-                        OverlayActiityIndicatorVisibility = Visibility.Visible;
                         if (Querier != null)
                         {
                             LoadAnimeCancelToken?.Cancel();

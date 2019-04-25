@@ -245,9 +245,9 @@ namespace UniversalAnimeDownloader.ViewModels
                     DownloadButtonString = "Downloading...";
                     foreach (var item in CurrentSeries.AttachedAnimeSeriesInfo.Genres)
                         await UserInterestMananger.AddInterest(CurrentSeries.RelativeQueryInfo.ModTypeString, item);
-                    UADSettingsManager.Instance.CurrentSettings.UserInterest = UserInterestMananger.Serialize();
-                    UADSettingsManager.Instance.CurrentSettings.Download = DownloadManager.Serialize();
-                    downloader.EpisodeDownloadCompleted += (s,e) => UADSettingsManager.Instance.CurrentSettings.Download = DownloadManager.Serialize();
+                    (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.UserInterest = UserInterestMananger.Serialize();
+                    (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.Download = DownloadManager.Serialize();
+                    downloader.EpisodeDownloadCompleted += (s,e) => (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.Download = DownloadManager.Serialize();
                 }
             });
             OfflineVerionCommand = new RelayCommand<object>(p => true, p =>

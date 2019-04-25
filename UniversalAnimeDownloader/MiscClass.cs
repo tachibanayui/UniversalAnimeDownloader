@@ -190,7 +190,7 @@ namespace UniversalAnimeDownloader
 
         public static async void Play(AnimeSeriesInfo info, int index = 0, bool isOnline = false)
         {
-            if(UADSettingsManager.Instance.CurrentSettings.PreferedPlayer == PlayerType.Embeded)
+            if((Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.PreferedPlayer == PlayerType.Embeded)
             {
                 NullCheck();
                 UADMediaPlayer currentPlayer = null;

@@ -16,11 +16,6 @@
     TextElement.FontWeight="Normal"
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     mc:Ignorable="d">
-    <i:Interaction.Triggers>
-        <i:EventTrigger EventName="Loaded">
-            <i:InvokeCommandAction Command="{Binding HostLoaded}" />
-        </i:EventTrigger>
-    </i:Interaction.Triggers>
     <Grid>
         <Grid.Resources>
             <uadapi:NotificationManager x:Key="notificationCount" />
@@ -69,7 +64,7 @@
                 <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                     <ListView
                         materialDesign:RippleAssist.IsDisabled="True"
-                        ItemsSource="{x:Static uadapi:NotificationManager.Notifications}"
+                        ItemsSource="{Binding Source={StaticResource notificationCount}, Path=Notifications}"
                         Style="{StaticResource listViewEpisodeBaseTemplate}">
                         <ListView.ItemTemplate>
                             <DataTemplate>
