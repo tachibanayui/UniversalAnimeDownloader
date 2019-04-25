@@ -84,6 +84,7 @@
             Grid.Row="2"
             ex:ListBoxExtensions.ScrollChangedCommand="{Binding AnimeListScrollingCommand}"
             ex:ListBoxExtensions.ScrollChangedCommandParameter="{Binding ElementName=animeList}"
+            materialDesign:RippleAssist.IsDisabled="True"
             ItemsPanel="{Binding AnimeCardPanel, Mode=OneWay}"
             ItemsSource="{Binding SuggestedAnimeInfos, IsAsync=True}"
             VirtualizingStackPanel.IsVirtualizing="True"

@@ -13,15 +13,9 @@ namespace UniversalAnimeDownloader.UADSettingsPortal
     {
         private Task InitTask = null;
 
-        private static UADSettingsManager _Ins;
-        public static UADSettingsManager Instance
+        public UADSettingsManager()
         {
-            get
-            {
-                if (_Ins == null)
-                    _Ins = new UADSettingsManager();
-                return _Ins;
-            }
+            Init();
         }
 
         public async Task Init()

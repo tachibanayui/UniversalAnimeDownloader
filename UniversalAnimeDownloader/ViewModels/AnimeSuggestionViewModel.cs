@@ -164,22 +164,29 @@ namespace UniversalAnimeDownloader.ViewModels
 
         private async Task InitAnimeList()
         {
-            IsLoadOngoing = true;
-            if(UserInterestMananger.Data.LastSuggestion != null)
-                await SuggestedAnimeInfos.AddRange(UserInterestMananger.Data.LastSuggestion, LoadAnimeCancelToken.Token);
+            if(await ApiHelpper.CheckForInternetConnection())
+            {
+                IsLoadOngoing = true;
+                if(UserInterestMananger.Data.LastSuggestion != null)
+                    await SuggestedAnimeInfos.AddRange(UserInterestMananger.Data.LastSuggestion, LoadAnimeCancelToken.Token);
+                else
+                {
+                    try
+                    {
+                        await LoadSuggestedAnime(0, 50);
+                    }
+                    catch (Exception e)
+                    {
+                        ShowErrorOcuredOverlay(e);
+                        //Add an error in UADAPI.OutputLogHelper class
+                    }
+                }
+                IsLoadOngoing = false;
+            }
             else
             {
-                try
-                {
-                    await LoadSuggestedAnime(0, 50);
-                }
-                catch (Exception e)
-                {
-                    ShowErrorOcuredOverlay(e);
-                    //Add an error in UADAPI.OutputLogHelper class
-                }
+                ShowNoInternetOverlay();
             }
-            IsLoadOngoing = false;
         }
 
         public async Task LoadSuggestedAnime(int offset, int count, bool clearPreviousCard = true)

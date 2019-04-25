@@ -14,7 +14,7 @@
     TextElement.FontWeight="Medium"
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     mc:Ignorable="d">
-    <Grid x:Name="overlayNotSupported" Visibility="{Binding OverlayNotSupported, IsAsync=True, FallbackValue=Collasped}">
+    <Grid x:Name="overlayNotSupported">
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition Width="1.65*" />

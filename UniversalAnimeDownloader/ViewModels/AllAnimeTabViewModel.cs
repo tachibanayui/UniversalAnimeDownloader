@@ -183,7 +183,7 @@ namespace UniversalAnimeDownloader.ViewModels
 
         public AllAnimeTabViewModel()
         {
-            SearchAnimeCommand = new RelayCommand<object>(p => true, async (p) => await LoadAnime(0, 50));
+            SearchAnimeCommand = new RelayCommand<object>(p => true, async (p) =>  await LoadAnime(0, 50));
             ReloadInternetCommand = new RelayCommand<object>(p => OverlayNoInternetVisibility == Visibility.Visible, async (p) => await LoadAnime(0, 50));
             AnimeListScrollingCommand = new RelayCommand<object>(p =>
             {
@@ -298,22 +298,26 @@ namespace UniversalAnimeDownloader.ViewModels
 
         private async Task LoadGenresAndSeasons()
         {
-            var genres = await Querier.GetAnimeGenres();
-            Genres.Clear();
-            foreach (var item in genres)
+            try
             {
-                Genres.Add(item);
-            }
-
-            var season = await Querier.GetAnimeSeasons();
-            Seasons.Clear();
-            if (season != null)
-            {
-                foreach (var item in season)
+                var genres = await Querier.GetAnimeGenres();
+                Genres.Clear();
+                foreach (var item in genres)
                 {
-                    Seasons.Add(item);
+                    Genres.Add(item);
+                }
+
+                var season = await Querier.GetAnimeSeasons();
+                Seasons.Clear();
+                if (season != null)
+                {
+                    foreach (var item in season)
+                    {
+                        Seasons.Add(item);
+                    }
                 }
             }
+            catch { }
         }
 
         private void ShowNoInternetOverlay()

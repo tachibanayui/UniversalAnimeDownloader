@@ -3,38 +3,71 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Data;
+using System.Windows.Markup;
 using System.Windows.Media.Imaging;
 using UADAPI;
 
 namespace UniversalAnimeDownloader.ValueConverters
 {
-    class MediaSourceInfoToImageSource : IValueConverter
+    class MediaSourceInfoToImageSource : MarkupExtension, IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            Task<Stream> task = null;
             if (!(value is MediaSourceInfo info))
-                return null;
+                return new BitmapImage();
 
             if (!string.IsNullOrEmpty(info.LocalFile))
-            {
                 if (File.Exists(info.LocalFile))
-                    return new BitmapImage(new Uri(info.LocalFile));
-                else
-                    return new BitmapImage(new Uri(info.Url));
-            }
-            else if (!string.IsNullOrEmpty(info.Url))
-                return new BitmapImage(new Uri(info.Url));
-            else
-                return null;
+                        task = Task.Run(() => GetOfflineImage(info.LocalFile));
+            //return new BitmapImage(new Uri(info.LocalFile));
 
+            if (!string.IsNullOrEmpty(info.Url))
+                task = Task.Run(() => GetOnlineImage(info));
+            // return new BitmapImage(new Uri(info.Url));
+            else
+                return new BitmapImage();
+
+            return new TaskCompletionNotifier<Stream>(task);
+        }
+
+        private Stream GetOnlineImage(MediaSourceInfo info)
+        {
+            try
+            {
+                HttpWebRequest req = (HttpWebRequest)WebRequest.Create(info.Url);
+                AnimeInformationRequester.AddHeader(req, info.Headers);
+                using (WebResponse resp = req.GetResponse())
+                {
+                    using (Stream stream = resp.GetResponseStream())
+                    {
+                        var copiedStream = new MemoryStream();
+                        stream.CopyTo(copiedStream);
+                        return copiedStream;
+                    }
+                }
+            }
+            catch { return null; }
+        }
+
+        private Stream GetOfflineImage(string path)
+        {
+            return File.OpenRead(path);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
+        }
+
+        public override object ProvideValue(IServiceProvider serviceProvider)
+        {
+            return this;
         }
     }
 }

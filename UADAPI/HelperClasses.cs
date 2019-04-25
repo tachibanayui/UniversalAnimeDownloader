@@ -10,6 +10,7 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 using UADAPI.PlatformSpecific;
 using ErrorEventArgs = Newtonsoft.Json.Serialization.ErrorEventArgs;
@@ -1438,7 +1439,13 @@ namespace UADAPI
             throw new InvalidOperationException("Failed to get the requested data!" + url, lastError);
         }
 
-        private static HttpWebRequest AddHeader(HttpWebRequest request, WebHeaderCollection headers)
+        /// <summary>
+        /// Ulility method for adding header
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="headers"></param>
+        /// <returns></returns>
+        public static HttpWebRequest AddHeader(HttpWebRequest request, WebHeaderCollection headers)
         {
             //Add headers
             if (headers != null)
@@ -1718,6 +1725,39 @@ namespace UADAPI
             return false;
         }
 
+        static ApiHelpper()
+        {
+            _CheckInternetThread = new Thread(async () =>
+            {
+                while (true)
+                {
+                    _IsCheckForInternetOnGoing = true;
+                    _CheckForInternetTask = Task.Run(() =>
+                    {
+                        try
+                        {
+                            using (var client = new WebClient())
+                            using (client.OpenRead("http://clients3.google.com/generate_204"))
+                            {
+                                return true;
+                            }
+                        }
+                        catch
+                        {
+                            return false;
+                        }
+                    });
+
+                    await Task.WhenAny(_CheckForInternetTask);
+                    _InternetAvaible = await _CheckForInternetTask;
+                    _IsCheckForInternetOnGoing = false;
+
+                    Thread.Sleep(30000);
+                }
+            })
+            { IsBackground = true, Name = "Check for internet thread", Priority = ThreadPriority.BelowNormal };
+            _CheckInternetThread.Start();
+        }
 
         /// <summary>
         /// Not implemented yet!
@@ -1741,21 +1781,15 @@ namespace UADAPI
         /// <returns>Is internet connection avaible</returns>
         public static async Task<bool> CheckForInternetConnection()
         {
-            return await Task.Run(async () =>
-            {
-                try
-                {
-                    using (var client = new WebClient())
-                    using (await client.OpenReadTaskAsync("http://clients3.google.com/generate_204"))
-                    {
-                        return true;
-                    }
-                }
-                catch
-                {
-                    return false;
-                }
-            });
+            if (_IsCheckForInternetOnGoing)
+                return await _CheckForInternetTask;
+            else
+                return _InternetAvaible;
         }
+
+        private static bool _InternetAvaible = true;
+        private static bool _IsCheckForInternetOnGoing = false;
+        private static Task<bool> _CheckForInternetTask;
+        private static Thread _CheckInternetThread = null;
     }
 }

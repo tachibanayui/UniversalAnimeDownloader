@@ -78,6 +78,7 @@
             Grid.Row="2"
             ex:ListBoxExtensions.ScrollChangedCommand="{Binding AnimeListScrollingCommand}"
             ex:ListBoxExtensions.ScrollChangedCommandParameter="{Binding ElementName=animeList}"
+            materialDesign:RippleAssist.IsDisabled="True"
             ItemsPanel="{Binding AnimeCardPanel, Mode=OneWay}"
             ItemsSource="{Binding SuggestedAnimeInfos, IsAsync=True}"
             VirtualizingStackPanel.IsVirtualizing="True"
@@ -93,7 +94,7 @@
             <page:NoInternetConnectionOverlay ReloadButtonCommand="{Binding RefreshCommand}" Visibility="{Binding OverlayNoInternetVisibility, IsAsync=True, FallbackValue=Collapsed}" />
             <page:ErrorOccuredOverlay Visibility="{Binding OverlayErrorOccuredVisibility, IsAsync=True, FallbackValue=Collapsed}" />
             <page:ActivityIndicator Visibility="{Binding OverlayActiityIndicatorVisibility, IsAsync=True, FallbackValue=Collapsed}" />
-            <page:NotSupportedOverlay Visibility="{Binding OverlayNotSupported, IsAsync=True, FallbackValue=Collasped}" />
+            <page:NotSupportedOverlay Visibility="{Binding OverlayNotSupported, IsAsync=True, FallbackValue=Collapsed}" />
         </Grid>
     </Grid>
 </UserControl>

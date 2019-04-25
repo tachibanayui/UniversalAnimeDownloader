@@ -41,6 +41,8 @@ namespace UniversalAnimeDownloader.ViewModels
         {
             try
             {
+                if(_canExecute.Method.GetParameters()[0].ParameterType == typeof(double))
+                    Console.WriteLine("aay");
                 return _canExecute == null ? true : _canExecute((T)parameter);
             }
             catch

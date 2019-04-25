@@ -236,7 +236,7 @@
                                                         Grid.Column="1"
                                                         Width="64"
                                                         Height="36"
-                                                        Source="{Binding Thumbnail, Converter={StaticResource MediaSourceInfoToImageSourceConverter}}"
+                                                        Source="{Binding Thumbnail, IsAsync=True, Converter={StaticResource MediaSourceInfoToImageSourceConverter}}"
                                                         Stretch="UniformToFill" />
 
                                                     <Grid Grid.Column="3">
@@ -271,7 +271,7 @@
                                     <Image
                                         Width="340"
                                         Height="191"
-                                        Source="{Binding Playlist.Thumbnail, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:UADMediaPlayer}, Converter={StaticResource MediaSourceInfoToImageSourceConverter}}" />
+                                        Source="{Binding Playlist.Thumbnail, IsAsync=True, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:UADMediaPlayer}, Converter={StaticResource MediaSourceInfoToImageSourceConverter}}" />
                                     <TextBlock
                                         Margin="0,10,0,0"
                                         Text="{Binding Playlist.Name, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:UADMediaPlayer}}"

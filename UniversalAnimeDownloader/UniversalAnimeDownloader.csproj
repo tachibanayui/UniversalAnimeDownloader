@@ -126,6 +126,7 @@
     <Compile Include="CustomCommands.cs" />
     <Compile Include="CustomControls\CarouselPanel.cs" />
     <Compile Include="CustomControls\ColorfulTabDecorator.cs" />
+    <Compile Include="CustomControls\CustomImage.cs" />
     <Compile Include="DelayedObservableCollection.cs" />
     <Compile Include="Extensions\ListBoxExtensions.cs" />
     <Compile Include="IPageContent.cs" />
@@ -150,6 +151,7 @@
     <Compile Include="MessageDialog.cs" />
     <Compile Include="MiscClass.cs" />
     <Compile Include="LifeSpanObservableCollection.cs" />
+    <Compile Include="TaskCompletionNotifier.cs" />
     <Compile Include="UADSettingsPortal\UADSettingsData.cs" />
     <Compile Include="UADSettingsPortal\UADSettingsManager.cs" />
     <Compile Include="UcContentPages\ActivityIndicator.xaml.cs">

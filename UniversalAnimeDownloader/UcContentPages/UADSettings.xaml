@@ -821,6 +821,9 @@
                                     <Grid>
                                         <CheckBox Content=" Only fetch anime series when their host page are show" IsChecked="{Binding SettingData.UseVirtalizingWrapPanel}" />
                                     </Grid>
+                                    <Grid>
+                                        <CheckBox Content=" Disable button ripple in Anime Card" IsChecked="{Binding SettingData.UseVirtalizingWrapPanel}" />
+                                    </Grid>
                                 </StackPanel>
                             </Grid>
                         </materialDesign:Card>

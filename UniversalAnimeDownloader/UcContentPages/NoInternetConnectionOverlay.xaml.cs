@@ -27,7 +27,12 @@ namespace UniversalAnimeDownloader.UcContentPages
             set { SetValue(ReloadButtonCommandProperty, value); }
         }
         public static readonly DependencyProperty ReloadButtonCommandProperty =
-            DependencyProperty.Register("ReloadButtonCommand", typeof(ICommand), typeof(NoInternetConnectionOverlay), new PropertyMetadata());
+            DependencyProperty.Register("ReloadButtonCommand", typeof(ICommand), typeof(NoInternetConnectionOverlay), new PropertyMetadata(CommandChanged));
+
+        private static void CommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            (d as NoInternetConnectionOverlay).btnReload.Command = e.NewValue as ICommand;
+        }
 
         public event EventHandler<RoutedEventArgs> ReloadButtonClicked;
         protected virtual void OnReloadButtonClicked(RoutedEventArgs e) => ReloadButtonClicked?.Invoke(this, e);
@@ -35,8 +40,6 @@ namespace UniversalAnimeDownloader.UcContentPages
         public NoInternetConnectionOverlay()
         {
             InitializeComponent();
-            Binding binding = new Binding("ReloadButtonCommand");
-            BindingOperations.SetBinding(btnReload, ButtonBase.CommandProperty, binding);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e) => OnReloadButtonClicked(e);

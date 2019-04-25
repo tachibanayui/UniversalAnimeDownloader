@@ -47,7 +47,7 @@
                                             <RowDefinition />
                                             <RowDefinition Height="auto" />
                                         </Grid.RowDefinitions>
-                                        <Image
+                                        <customControl:CustomImage
                                             Grid.RowSpan="2"
                                             Source="{Binding Thumbnail.Url}"
                                             Stretch="UniformToFill" />
@@ -109,6 +109,7 @@
                             <StackPanel Orientation="Horizontal">
                                 <ListBox
                                     x:Name="featureAnimeList"
+                                    materialDesign:RippleAssist.IsDisabled="True"
                                     ItemsSource="{Binding FeaturedAnimeList, IsAsync=True}"
                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                     ScrollViewer.VerticalScrollBarVisibility="Disabled"
@@ -151,6 +152,7 @@
                             <StackPanel Orientation="Horizontal">
                                 <ListBox
                                     x:Name="suggestedAnimeList"
+                                    materialDesign:RippleAssist.IsDisabled="True"
                                     ItemsSource="{Binding SuggestedAnimeList, IsAsync=True}"
                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                     ScrollViewer.VerticalScrollBarVisibility="Disabled"
