@@ -15,7 +15,7 @@ using UniversalAnimeDownloader.ViewModels;
 
 namespace UniversalAnimeDownloader.UADSettingsPortal
 {
-    class UADSettingsData : INotifyPropertyChanged
+    public class UADSettingsData : INotifyPropertyChanged
     {
         public string SaveLocation { get; set; } = AppDomain.CurrentDomain.BaseDirectory + "Settings\\UserSetting.json";
 
@@ -643,6 +643,24 @@ namespace UniversalAnimeDownloader.UADSettingsPortal
                 }
             }
         }
+
+        private bool _IsLoadPageInBackground = true;
+        public bool IsLoadPageInBackground
+        {
+            get
+            {
+                return _IsLoadPageInBackground;
+            }
+            set
+            {
+                if (_IsLoadPageInBackground != value)
+                {
+                    _IsLoadPageInBackground = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
 
         #endregion
 

@@ -822,10 +822,7 @@
                                         <CheckBox Content=" Only fetch anime series when their host page are show" IsChecked="{Binding SettingData.IsOnlyLoadWhenHostShow}" />
                                     </Grid>
                                     <Grid>
-                                        <CheckBox Content=" Disable button ripple in Anime Card" IsChecked="{Binding SettingData.UseVirtalizingWrapPanel}" />
-                                    </Grid>
-                                    <Grid>
-                                        <CheckBox Content=" Load others pages in the background" IsChecked="{Binding SettingData.UseVirtalizingWrapPanel}" />
+                                        <CheckBox Content=" Load others pages in the background" IsChecked="{Binding SettingData.IsLoadPageInBackground}" />
                                     </Grid>
                                 </StackPanel>
                             </Grid>

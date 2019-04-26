@@ -38,7 +38,6 @@ namespace UniversalAnimeDownloader.ViewModels
         #endregion
 
         #region BindableProperties
-
         private int _SelectedQueryModIndex = 1;
         public int SelectedQueryModIndex
         {

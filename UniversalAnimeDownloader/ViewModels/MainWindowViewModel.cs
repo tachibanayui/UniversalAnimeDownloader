@@ -306,25 +306,36 @@ namespace UniversalAnimeDownloader.ViewModels
                 IsPlayButtonEnable = false;
             });
             WindowStateChangedCommand = new RelayCommand<Window>(p => true, WindowStateChangedAction);
-            PageLoaded = new RelayCommand<object>(p => true, async p =>
+            PageLoaded = new RelayCommand<Window>(p => true, async p =>
             {
+                p.Visibility = Visibility.Collapsed;
                 (Pages[0].DataContext as IPageContent).OnShow();
                 CheckForAnimeSeriesUpdate();
-                await Task.Delay(5000);
-                LoadPagesToMemory();
+                if((Application.Current.FindResource("Settings")as UADSettingsManager).CurrentSettings.IsLoadPageInBackground)
+                {
+                    p.Visibility = Visibility.Visible;
+                    await Task.Delay(5000);
+                    await LoadPagesToMemory(true);
+                }
+                else
+                {
+                    await LoadPagesToMemory(false);
+                    p.Visibility = Visibility.Visible;
+                }
+
             });
         }
 
-        private async void LoadPagesToMemory()
+        private async Task LoadPagesToMemory(bool waitShorter)
         {
             for (int i = 0; i < Pages.Count; i++)
             {
                 if (Pages[i].Visibility == Visibility.Collapsed)
                 {
                     Pages[i].Visibility = Visibility.Visible;
-                    await Task.Delay(100);
+                    await Task.Delay(waitShorter ? 100 : 10);
                     Pages[i].Visibility = Visibility.Collapsed;
-                    await Task.Delay(1000);
+                    await Task.Delay(waitShorter ? 1000 : 100);
                 }
             }
         }

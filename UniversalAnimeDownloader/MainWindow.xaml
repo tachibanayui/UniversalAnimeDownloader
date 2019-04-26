@@ -34,7 +34,7 @@
             <i:InvokeCommandAction Command="{Binding WindowStateChangedCommand}" CommandParameter="{Binding ElementName=mainWindow}" />
         </i:EventTrigger>
         <i:EventTrigger EventName="Loaded">
-            <i:InvokeCommandAction Command="{Binding PageLoaded}" />
+            <i:InvokeCommandAction Command="{Binding PageLoaded}" CommandParameter="{Binding ElementName=mainWindow}" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Window.Resources>
