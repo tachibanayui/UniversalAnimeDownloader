@@ -42,6 +42,7 @@ namespace UniversalAnimeDownloader.ViewModels
         public ICommand StartMovingAnimeDirectory { get; set; }
         public ICommand SaveSettingDialogCommand { get; set; }
         public ICommand ResetUADCommand { get; set; }
+        public ICommand LoadSettingsFromFileCommand { get; set; }
         #endregion
 
         public bool IsHostLoaded { get; set; } = false;
@@ -414,6 +415,17 @@ namespace UniversalAnimeDownloader.ViewModels
                     File.WriteAllText(saveFileDialog.FileName, JsonConvert.SerializeObject(SettingData));
             });
             ResetUADCommand = new RelayCommand<object>(p => true, p => UADSettingsManager.ResetCurrentSettings());
+            LoadSettingsFromFileCommand = new RelayCommand<object>(p => true, p =>
+            {
+                Microsoft.Win32.OpenFileDialog fileDialog = new Microsoft.Win32.OpenFileDialog();
+                fileDialog.Multiselect = false;
+                fileDialog.Filter = "Json Files: (*.JSON)|*.JSON|All Files|*.*";
+                if((bool)fileDialog.ShowDialog())
+                {
+                    UADSettingsManager.LoadSettingFromFile(fileDialog.FileName);
+                }
+                
+            });
         }
 
         private async void MoveAnimeDirectoryAction()
@@ -510,6 +522,8 @@ namespace UniversalAnimeDownloader.ViewModels
 
         private double GetDistFromHostWindow(ScrollViewer obj, int index)
         {
+            if (index < 0)
+                return 0;
             var currentTab = (obj.Content as VirtualizingStackPanel).Children[index];
             return currentTab.TranslatePoint(new Point(0, 0), HostWindow).Y;
         }

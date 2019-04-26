@@ -192,7 +192,7 @@
                                             <ColumnDefinition Width="75" />
                                         </Grid.ColumnDefinitions>
                                         <TextBlock VerticalAlignment="Center" Text="Or load from your backup file" />
-                                        <Button Grid.Column="2">
+                                        <Button Grid.Column="2" Command="{Binding LoadSettingsFromFileCommand}">
                                             <materialDesign:PackIcon Kind="FileRestore" />
                                         </Button>
                                     </Grid>
