@@ -1,6 +1,7 @@
 ﻿using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -109,6 +110,28 @@ namespace UniversalAnimeDownloader.ViewModels
                 }
             }
         }
+
+        private int _PreTransitionerIndex;
+        /// <summary>
+        /// This property will change before the actual slide animation. Use for load the Page before transitioning
+        /// </summary>
+        public int PreTransitionerIndex
+        {
+            get
+            {
+                return _PreTransitionerIndex;
+            }
+            set
+            {
+                if (_PreTransitionerIndex != value)
+                {
+                    _PreTransitionerIndex = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+
 
         public Brush BadgeBackgroundBrush => NotifycationBadgeCount == 0 ? new SolidColorBrush(Colors.Transparent) : Application.Current.FindResource("PrimaryHueDarkBrush") as Brush;
         public Visibility BadgeContentVisibility { get => NotifycationBadgeCount == 0 ? Visibility.Collapsed : Visibility.Visible; }
@@ -260,24 +283,49 @@ namespace UniversalAnimeDownloader.ViewModels
             ChangeWindowStateRequestOnlineCommand = new RelayCommand<RequestingWindowStateEventArgs>(p => true, ChangeUADOnlineMediaPlayerWindowState);
             OpenUADMediaPlayerCommand = new RelayCommand<object>(p => IsPlayButtonEnable, p =>
             {
-                if(UADMediaPlayerHelper.IsOnlineMediaPlayerPlaying)
+                if (UADMediaPlayerHelper.IsOnlineMediaPlayerPlaying)
+                {
                     UADOnlineMediaPlayerVisibility = Visibility.Visible;
+                }
                 else
+                {
                     UADMediaPlayerVisibility = Visibility.Visible;
+                }
             });
             UADMediaPlayerClosedCommand = new RelayCommand<string>(p => true, p =>
             {
                 if (p == "Offline")
+                {
                     UADMediaPlayerVisibility = Visibility.Collapsed;
+                }
                 else
+                {
                     UADOnlineMediaPlayerVisibility = Visibility.Collapsed;
+                }
+
                 IsPlayButtonEnable = false;
             });
             WindowStateChangedCommand = new RelayCommand<Window>(p => true, WindowStateChangedAction);
-            PageLoaded = new RelayCommand<object>(p => true, async p => 
+            PageLoaded = new RelayCommand<object>(p => true, async p =>
             {
                 CheckForAnimeSeriesUpdate();
+                await Task.Delay(5000);
+                LoadPagesToMemory();
             });
+        }
+
+        private async void LoadPagesToMemory()
+        {
+            for (int i = 0; i < Pages.Count; i++)
+            {
+                if (Pages[i].Visibility == Visibility.Collapsed)
+                {
+                    Pages[i].Visibility = Visibility.Visible;
+                    await Task.Delay(100);
+                    Pages[i].Visibility = Visibility.Collapsed;
+                    await Task.Delay(1000);
+                }
+            }
         }
 
         private void ChangeUADOnlineMediaPlayerWindowState(RequestingWindowStateEventArgs obj)
@@ -373,7 +421,7 @@ namespace UniversalAnimeDownloader.ViewModels
             NotificationManager.Add(new NotificationItem() { Title = "Check for anime updates completed", Detail = $"Found {updatedSeries} anime series need to updated out of {offlineList.Count} in your library. See download center for mode detail." });
         }
 
-        public void NavigateProcess(string pageName)
+        public async void NavigateProcess(string pageName)
         {
             if (!string.IsNullOrEmpty(pageName))
             {
@@ -417,12 +465,19 @@ namespace UniversalAnimeDownloader.ViewModels
                     {
                         cont.OnHide();
                     }
-                    TransisionerIndex = pageIndex;
-                    MiscClass.NavigationHelper.AddNavigationHistory(pageIndex);
+                    if(pageIndex != TransisionerIndex)
+                        Pages[pageIndex].Visibility = Visibility.Visible;
+                    await Task.Delay(50);
                     if (Pages[pageIndex].DataContext is IPageContent pageContent)
                     {
                         pageContent.OnShow();
                     }
+                    int previousIndex = TransisionerIndex;
+                    TransisionerIndex = pageIndex;
+                    MiscClass.NavigationHelper.AddNavigationHistory(pageIndex);
+                    await Task.Delay(250);
+                    if(pageIndex != previousIndex && pageIndex != 1 && pageIndex != 5)
+                        Pages[previousIndex].Visibility = Visibility.Collapsed;
                 }
             }
         }
@@ -431,15 +486,15 @@ namespace UniversalAnimeDownloader.ViewModels
         //Test
         public List<UserControl> Pages { get; set; } = new List<UserControl>()
         {
-            new UcContentPages.AllAnimeTab(),
-            new UcContentPages.AnimeDetails(),
-            new UcContentPages.AnimeSuggestion(),
-            new UcContentPages.DownloadCenter(),
-            new UcContentPages.MyAnimeLibrary(),
-            new UcContentPages.OfflineAnimeDetail(),
-            new UcContentPages.UADSettings(),
-            new UcContentPages.FeaturedAnime(),
-            new UcContentPages.Explore()
+            new UcContentPages.AllAnimeTab(){ Visibility = Visibility.Visible},
+            new UcContentPages.AnimeDetails(){ Visibility = Visibility.Visible},
+            new UcContentPages.AnimeSuggestion(){ Visibility = Visibility.Collapsed},
+            new UcContentPages.DownloadCenter(){ Visibility = Visibility.Collapsed},
+            new UcContentPages.MyAnimeLibrary(){ Visibility = Visibility.Collapsed},
+            new UcContentPages.OfflineAnimeDetail(){ Visibility = Visibility.Visible},
+            new UcContentPages.UADSettings(){ Visibility = Visibility.Collapsed},
+            new UcContentPages.FeaturedAnime(){ Visibility = Visibility.Collapsed},
+            new UcContentPages.Explore(){ Visibility = Visibility.Collapsed}
         };
     }
 }

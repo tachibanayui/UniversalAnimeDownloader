@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Xceed.Wpf.Toolkit;
 
 namespace UniversalAnimeDownloader.ViewModels
 {
@@ -26,10 +27,8 @@ namespace UniversalAnimeDownloader.ViewModels
 
         public RelayCommand(Predicate<T> canExecute, Action<T> execute)
         {
-            if (execute == null)
-                throw new ArgumentNullException("execute");
             _canExecute = canExecute;
-            _execute = execute;
+            _execute = execute ?? throw new ArgumentNullException("execute");
         }
 
         public RelayCommand(Func<object, bool> p)
@@ -41,8 +40,6 @@ namespace UniversalAnimeDownloader.ViewModels
         {
             try
             {
-                if(_canExecute.Method.GetParameters()[0].ParameterType == typeof(double))
-                    Console.WriteLine("aay");
                 return _canExecute == null ? true : _canExecute((T)parameter);
             }
             catch

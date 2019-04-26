@@ -2,13 +2,17 @@
 using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using UniversalAnimeDownloader.Behaviour;
+using UniversalAnimeDownloader.Models;
 using UniversalAnimeDownloader.UADSettingsPortal;
 using Xceed.Wpf.Toolkit;
 
@@ -31,11 +35,17 @@ namespace UniversalAnimeDownloader.ViewModels
         public ICommand BrowseFolderDialogCommand { get; set; }
         public ICommand MainScrollChangedCommand { get; set; }
         public ICommand AnimateSrcoll { get; set; }
+        public ICommand DirectoryChangerWizard { get; set; }
+        public ICommand DirectoryWizardCancel { get; set; }
+        public ICommand UpdateAffectedAnime { get; set; }
+        public ICommand StartMovingAnimeDirectory { get; set; }
         #endregion
 
         public bool IsHostLoaded { get; set; } = false;
         public string CurrentObjectRequestColorName { get; set; }
         public string CurrentObjectRequestKeyName { get; set; }
+
+        public ObservableCollection<AffectedAnimesModel> DirWizardAffectedAnimes { get; set; } = new ObservableCollection<AffectedAnimesModel>();
 
 
         private UADSettingsData _SettingData;
@@ -134,6 +144,125 @@ namespace UniversalAnimeDownloader.ViewModels
         }
 
 
+        private bool _IsDirectoryChangerWizard;
+        public bool IsDirectoryChangerWizard
+        {
+            get
+            {
+                return _IsDirectoryChangerWizard;
+            }
+            set
+            {
+                if (_IsDirectoryChangerWizard != value)
+                {
+                    _IsDirectoryChangerWizard = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+
+        private string _DirectoryWizardCurrentDir;
+        public string DirectoryWizardCurrentDir
+        {
+            get
+            {
+                return _DirectoryWizardCurrentDir;
+            }
+            set
+            {
+                if (_DirectoryWizardCurrentDir != value)
+                {
+                    _DirectoryWizardCurrentDir = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private string _DirectoryWizardDesDir;
+        public string DirectoryWizardDesDir
+        {
+            get
+            {
+                return _DirectoryWizardDesDir;
+            }
+            set
+            {
+                if (_DirectoryWizardDesDir != value)
+                {
+                    _DirectoryWizardDesDir = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private string _AnimeTransferCurrentOperation;
+        public string AnimeTransferCurrentOperation
+        {
+            get
+            {
+                return _AnimeTransferCurrentOperation;
+            }
+            set
+            {
+                if (_AnimeTransferCurrentOperation != value)
+                {
+                    _AnimeTransferCurrentOperation = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private bool _IsDoneMovingAnimesDirectory;
+        public bool IsDoneMovingAnimesDirectory
+        {
+            get
+            {
+                return _IsDoneMovingAnimesDirectory;
+            }
+            set
+            {
+                if (_IsDoneMovingAnimesDirectory != value)
+                {
+                    _IsDoneMovingAnimesDirectory = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private Visibility _MovingInProgressOverlayVisibility = Visibility.Collapsed;
+        public Visibility MovingInProgressOverlayVisibility
+        {
+            get
+            {
+                return _MovingInProgressOverlayVisibility;
+            }
+            set
+            {
+                if (_MovingInProgressOverlayVisibility != value)
+                {
+                    _MovingInProgressOverlayVisibility = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private bool _IsDeleteOldDir;
+        public bool IsDeleteOldDir
+        {
+            get
+            {
+                return _IsDeleteOldDir;
+            }
+            set
+            {
+                if (_IsDeleteOldDir != value)
+                {
+                    _IsDeleteOldDir = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         public PaletteHelper Helper { get; set; }
         public IList<Swatch> Swatches { get; }
@@ -253,6 +382,13 @@ namespace UniversalAnimeDownloader.ViewModels
                         case "Screenshots":
                             SettingData.ScreenShotLocation = dialog.SelectedPath;
                             break;
+                        case "DirWizardCurrentDir":
+                            DirectoryWizardCurrentDir = dialog.SelectedPath;
+                            UpdateAffectedAnimes();
+                            break;
+                        case "DirWizardDesDir":
+                            DirectoryWizardDesDir = dialog.SelectedPath;
+                            break;
                         default:
                             break;
                     }
@@ -261,6 +397,86 @@ namespace UniversalAnimeDownloader.ViewModels
             });
             MainScrollChangedCommand = new RelayCommand<ScrollViewer>(p => IsHostLoaded, MainScrollChangedAction);
             AnimateSrcoll = new RelayCommand<string>(p => true, AnimateAction);
+            DirectoryChangerWizard = new RelayCommand<object>(p => true, p => { IsDirectoryChangerWizard = true; MovingInProgressOverlayVisibility = Visibility.Collapsed; });
+            DirectoryWizardCancel = new RelayCommand<object>(p => true, p => IsDirectoryChangerWizard = false);
+            UpdateAffectedAnime = new RelayCommand<object>(p => true, p => UpdateAffectedAnimes());
+            StartMovingAnimeDirectory = new RelayCommand<object>(p => true, p => MoveAnimeDirectoryAction());
+        }
+
+        private async void MoveAnimeDirectoryAction()
+        {
+            MovingInProgressOverlayVisibility = Visibility.Visible;
+            IsDoneMovingAnimesDirectory = false;
+            ReportAnimeTransferCurrentOperation("Checking information");
+            await Task.Delay(1000);
+            await Task.Run(() =>
+            {
+                List<AffectedAnimesModel> affectedItem = new List<AffectedAnimesModel>();
+                //ReCalcualte the affected item in case the user don't clear the prevous input
+                if (string.IsNullOrEmpty(DirectoryWizardCurrentDir) || string.IsNullOrEmpty(DirectoryWizardDesDir) || !Directory.Exists(DirectoryWizardCurrentDir))
+                {
+                    ReportAnimeTransferCurrentOperation("Failed!");
+                    return;
+                }
+                foreach (var item in Directory.EnumerateDirectories(DirectoryWizardCurrentDir))
+                {
+                    string managerLoc = Path.Combine(item, "Manager.json");
+                    if (File.Exists(managerLoc))
+                    {
+                        var info = new AffectedAnimesModel(managerLoc);
+                        affectedItem.Add(info);
+                    }
+                }
+
+                foreach (var item in DirWizardAffectedAnimes)
+                {
+                    item.ThumbnailLocation = string.Empty;
+                    ReportAnimeTransferCurrentOperation("Moving videos files and manager file for " + item.Name);
+                    if (!Directory.Exists(Path.Combine(DirectoryWizardDesDir, item.Name)))
+                    {
+                        Directory.CreateDirectory(Path.Combine(DirectoryWizardDesDir, item.FolderName));
+                    }
+
+                    MiscClass.CopyDirectory(Path.Combine(DirectoryWizardCurrentDir, item.FolderName), Path.Combine(DirectoryWizardDesDir, item.FolderName));
+
+                    ReportAnimeTransferCurrentOperation("Modify manager file and creating folder for " + item.Name);
+                    string managerContent = File.ReadAllText(Path.Combine(DirectoryWizardDesDir, item.FolderName, "Manager.json"));
+                    string newManagerContent = managerContent.Replace(DirectoryWizardCurrentDir, DirectoryWizardDesDir);
+                    File.WriteAllText(Path.Combine(DirectoryWizardDesDir, item.FolderName, "Manager.json"), newManagerContent);
+                    if (IsDeleteOldDir)
+                    {
+                        Directory.Delete(Path.Combine(DirectoryWizardCurrentDir, item.FolderName), true);
+                    }
+                }
+
+                ReportAnimeTransferCurrentOperation("Done");
+            });
+            IsDoneMovingAnimesDirectory = true;
+        }
+
+        private void ReportAnimeTransferCurrentOperation(string text) => Application.Current.Dispatcher.Invoke(() => AnimeTransferCurrentOperation = text + "...");
+
+        private async void UpdateAffectedAnimes()
+        {
+            // Do something here
+            DirWizardAffectedAnimes.Clear();
+            await Task.Run(() =>
+            {
+                if (string.IsNullOrEmpty(DirectoryWizardCurrentDir) || !Directory.Exists(DirectoryWizardCurrentDir))
+                {
+                    return;
+                }
+
+                foreach (var item in Directory.EnumerateDirectories(DirectoryWizardCurrentDir))
+                {
+                    string managerLoc = Path.Combine(item, "Manager.json");
+                    if (File.Exists(managerLoc))
+                    {
+                        var info = new AffectedAnimesModel(managerLoc);
+                        Application.Current.Dispatcher.Invoke(() => DirWizardAffectedAnimes.Add(info));
+                    }
+                }
+            });
         }
 
         private void AnimateAction(string obj)
@@ -297,7 +513,10 @@ namespace UniversalAnimeDownloader.ViewModels
             else
             {
                 if (CurrentSettingIndex + 1 >= (obj.Content as VirtualizingStackPanel).Children.Count - 1)
+                {
                     return;
+                }
+
                 if (GetDistFromHostWindow(obj, CurrentSettingIndex + 1) < IndexChangeMark)
                 {
                     //(Forward scroll)
@@ -312,7 +531,10 @@ namespace UniversalAnimeDownloader.ViewModels
         private void GetNextTab(ScrollViewer obj)
         {
             if (CurrentSettingIndex + 1 >= (obj.Content as VirtualizingStackPanel).Children.Count - 1)
+            {
                 return;
+            }
+
             if (GetDistFromHostWindow(obj, CurrentSettingIndex + 1) < IndexChangeMark)
             {
                 CurrentSettingIndex++;
@@ -324,7 +546,10 @@ namespace UniversalAnimeDownloader.ViewModels
         private void GetPastTab(ScrollViewer obj)
         {
             if (CurrentSettingIndex - 1 < 0)
+            {
                 return;
+            }
+
             if (GetDistFromHostWindow(obj, CurrentSettingIndex) > IndexChangeMark)
             {
                 CurrentSettingIndex--;

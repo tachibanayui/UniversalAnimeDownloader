@@ -159,7 +159,7 @@
                                             <ColumnDefinition Width="75" />
                                         </Grid.ColumnDefinitions>
                                         <TextBlock VerticalAlignment="Center" Text="Just change the setting above? Use this wizard to tranfer all your anime to new location automatically" />
-                                        <Button Grid.Column="2">
+                                        <Button Grid.Column="2" Command="{Binding DirectoryChangerWizard}">
                                             <materialDesign:PackIcon Kind="DotsHorizontal" />
                                         </Button>
                                     </Grid>
@@ -824,6 +824,9 @@
                                     <Grid>
                                         <CheckBox Content=" Disable button ripple in Anime Card" IsChecked="{Binding SettingData.UseVirtalizingWrapPanel}" />
                                     </Grid>
+                                    <Grid>
+                                        <CheckBox Content=" Load others pages in the background" IsChecked="{Binding SettingData.UseVirtalizingWrapPanel}" />
+                                    </Grid>
                                 </StackPanel>
                             </Grid>
                         </materialDesign:Card>
@@ -864,7 +867,7 @@
                         <Button
                             Grid.Column="3"
                             Command="{Binding ApplyColorCommand}"
-                            CommandParameter="{Binding ElementName=colorConvas}"
+                            CommandParameter="{Binding Source={x:Reference colorConvas}}"
                             Content="OK" />
                     </Grid>
                 </Grid>
@@ -895,7 +898,7 @@
                         Text="{Binding KeyInputText}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="TextChanged">
-                                <i:InvokeCommandAction Command="{Binding ValidateKeyCommand}" CommandParameter="{Binding ElementName=keyInput}" />
+                                <i:InvokeCommandAction Command="{Binding ValidateKeyCommand}" CommandParameter="{Binding Path=Children, Source={RelativeSource Mode=FindAncestor, AncestorType=Grid}}" />
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                     </TextBox>
@@ -905,6 +908,194 @@
                             <ColumnDefinition Width="auto" />
                         </Grid.ColumnDefinitions>
                         <Button Grid.Column="3" Content="Cancel" />
+                    </Grid>
+                </Grid>
+            </materialDesign:DialogHost.DialogContent>
+        </materialDesign:DialogHost>
+
+        <materialDesign:DialogHost
+            x:Name="directoryChangerWizard"
+            CloseOnClickAway="False"
+            DialogTheme="Inherit"
+            IsOpen="{Binding IsDirectoryChangerWizard}">
+            <materialDesign:DialogHost.DialogContent>
+                <Grid
+                    Width="600"
+                    Height="450"
+                    Margin="5">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="5" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="5" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition />
+                            <RowDefinition Height="10" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="15" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="5" />
+                            <RowDefinition Height="auto" />
+                        </Grid.RowDefinitions>
+                        <TextBlock
+                            HorizontalAlignment="Right"
+                            FontSize="{DynamicResource Heading3}"
+                            Text="Welcome the directory converter wizard." />
+                        <TextBlock
+                            Grid.Row="2"
+                            HorizontalAlignment="Right"
+                            Foreground="LightGray"
+                            Text="Please don't close this dialog when the operation is running" />
+                        <Grid Grid.Row="3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="10" />
+                                <ColumnDefinition Width="auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBox
+                                x:Name="txbCurrentDir"
+                                materialDesign:HintAssist.Hint="Current Directory: "
+                                Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                Text="{Binding DirectoryWizardCurrentDir}">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="LostFocus">
+                                        <i:InvokeCommandAction Command="{Binding UpdateAffectedAnime}" CommandParameter="{Binding ElementName=txbCurrentDir, Path=Text}" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </TextBox>
+                            <Button
+                                Grid.Column="2"
+                                Command="{Binding BrowseFolderDialogCommand}"
+                                CommandParameter="DirWizardCurrentDir">
+                                <materialDesign:PackIcon Width="50" Kind="FolderMove" />
+                            </Button>
+                        </Grid>
+
+                        <TextBlock Grid.Row="5" Text="These anime series will be changed:" />
+                        <ListView
+                            Grid.Row="6"
+                            HorizontalContentAlignment="Stretch"
+                            ItemsSource="{Binding DirWizardAffectedAnimes}"
+                            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                            ScrollViewer.VerticalScrollBarVisibility="Visible">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Height="100">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="150" />
+                                            <ColumnDefinition Width="10" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <Image Stretch="UniformToFill">
+                                            <Image.Source>
+                                                <BitmapImage CacheOption="OnLoad" UriSource="{Binding ThumbnailLocation}" />
+                                            </Image.Source>
+                                        </Image>
+                                        <Grid Grid.Column="2">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="auto" />
+                                                <RowDefinition Height="5" />
+                                                <RowDefinition />
+                                            </Grid.RowDefinitions>
+                                            <TextBlock Text="{Binding Name}" TextTrimming="CharacterEllipsis" />
+                                            <TextBlock
+                                                Grid.Row="2"
+                                                Foreground="LightGray"
+                                                Text="{Binding ManagerFileLocation}"
+                                                TextWrapping="Wrap" />
+                                        </Grid>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                        <Grid Grid.Row="8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="10" />
+                                <ColumnDefinition Width="auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBox materialDesign:HintAssist.Hint="Destination directory:" Text="{Binding DirectoryWizardDesDir}" />
+                            <Button
+                                Grid.Column="2"
+                                Command="{Binding BrowseFolderDialogCommand}"
+                                CommandParameter="DirWizardDesDir">
+                                <materialDesign:PackIcon Width="50" Kind="FolderMove" />
+                            </Button>
+                        </Grid>
+
+                        <CheckBox
+                            Grid.Row="10"
+                            Content="Remove Old Directory"
+                            IsChecked="{Binding IsDeleteOldDir}" />
+
+                        <Grid Grid.Row="12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="10" />
+                                <ColumnDefinition Width="auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <Button
+                                Grid.Column="1"
+                                Width="100"
+                                Command="{Binding DirectoryWizardCancel}"
+                                Content="Cancel"
+                                Style="{StaticResource MaterialDesignFlatButton}" />
+                            <Button
+                                Grid.Column="3"
+                                Width="100"
+                                Command="{Binding StartMovingAnimeDirectory}"
+                                Content="Start" />
+                        </Grid>
+                    </Grid>
+                    <Grid
+                        x:Name="workingOverlay"
+                        Background="{DynamicResource MaterialDesignPaper}"
+                        Visibility="{Binding MovingInProgressOverlayVisibility}">
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            FontSize="{DynamicResource Heading2}"
+                            Text="Moving in progress..." />
+                        <Image
+                            Width="200"
+                            Margin="50"
+                            VerticalAlignment="Top"
+                            Source="/UniversalAnimeDownloader;component/Resources/FileTransferIcon.png" />
+                        <StackPanel Margin="0,275,0,0">
+                            <TextBlock FontSize="{DynamicResource Heading3}">
+                                <Run Text="From:" />
+                                <Run Text="{Binding DirectoryWizardCurrentDir}" />
+                            </TextBlock>
+                            <TextBlock FontSize="{DynamicResource Heading3}">
+                                <Run Text="To:" />
+                                <Run Text="{Binding DirectoryWizardCurrentDir}" />
+                            </TextBlock>
+                            <TextBlock
+                                MaxHeight="90"
+                                FontSize="{DynamicResource Heading3}"
+                                TextTrimming="CharacterEllipsis"
+                                TextWrapping="Wrap">
+                                <Run Text="Current Operation:" />
+                                <Run Text="{Binding AnimeTransferCurrentOperation}" />
+                            </TextBlock>
+                        </StackPanel>
+
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Bottom"
+                            FontSize="{DynamicResource Heading2}"
+                            Foreground="LightGray"
+                            Text="Please don't close this dialog!"
+                            Visibility="{Binding IsDoneMovingAnimesDirectory, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}" />
+
+                        <Button
+                            VerticalAlignment="Bottom"
+                            Command="{Binding DirectoryWizardCancel}"
+                            Content="Close"
+                            Visibility="{Binding IsDoneMovingAnimesDirectory, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Normal}" />
                     </Grid>
                 </Grid>
             </materialDesign:DialogHost.DialogContent>

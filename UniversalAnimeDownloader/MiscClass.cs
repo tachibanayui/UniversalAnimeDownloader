@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -16,6 +17,7 @@ using UniversalAnimeDownloader.MediaPlayer;
 using UniversalAnimeDownloader.UADSettingsPortal;
 using UniversalAnimeDownloader.UcContentPages;
 using UniversalAnimeDownloader.ViewModels;
+using ErrorEventArgs = Newtonsoft.Json.Serialization.ErrorEventArgs;
 
 namespace UniversalAnimeDownloader
 {
@@ -31,6 +33,12 @@ namespace UniversalAnimeDownloader
             "External Media Player", "UAD Media Player"
         };
         public static string[] StretchString { get => Enum.GetNames(typeof(Stretch)); }
+
+        public static JsonSerializerSettings IgnoreConverterErrorJson = new JsonSerializerSettings()
+        {
+            Error = new EventHandler<ErrorEventArgs>((s, e) => e.ErrorContext.Handled = true),
+            TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Full,
+        };
 
         public static event EventHandler<SearchEventArgs> UserSearched;
         public static void OnUserSearched(object sender, string searchKeyword) => UserSearched?.Invoke(sender, new SearchEventArgs(searchKeyword));
@@ -178,6 +186,14 @@ namespace UniversalAnimeDownloader
                 encoder.Save(stream);
                 stream.Close();
             }
+        }
+
+        public static void CopyDirectory(string source, string destination)
+        {
+            foreach (string dir in Directory.GetDirectories(source, "*", SearchOption.AllDirectories))
+                Directory.CreateDirectory(Path.Combine(destination, dir.Substring(source.Length + 1)));
+            foreach (string file_name in Directory.GetFiles(source, "*", SearchOption.AllDirectories))
+                File.Copy(file_name, Path.Combine(destination, file_name.Substring(source.Length + 1)), true);
         }
     }
 

@@ -232,11 +232,12 @@
                                                         </Rectangle.Fill>
                                                     </Rectangle>
 
-                                                    <Image
+                                                    <customControls:CustomImage
                                                         Grid.Column="1"
                                                         Width="64"
                                                         Height="36"
-                                                        Source="{Binding Thumbnail, IsAsync=True, Converter={StaticResource MediaSourceInfoToImageSourceConverter}}"
+                                                        StreamSource="{Binding Path=Result, IsAsync=True}"
+                                                        DataContext="{Binding Thumbnail, Converter={StaticResource MediaSourceInfoToImageSourceConverter}}"
                                                         Stretch="UniformToFill" />
 
                                                     <Grid Grid.Column="3">
