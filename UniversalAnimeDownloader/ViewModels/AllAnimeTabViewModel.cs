@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using UADAPI;
+using UniversalAnimeDownloader.UADSettingsPortal;
 
 namespace UniversalAnimeDownloader.ViewModels
 {
@@ -23,6 +24,7 @@ namespace UniversalAnimeDownloader.ViewModels
         public CancellationTokenSource LoadAnimeCancelToken { get; set; } = new CancellationTokenSource();
         public bool IsLoadOngoing { get; set; }
         public Exception LastError { get; set; }
+        public bool IsLoadedAnime { get; set; }
         #endregion
 
         #region RelayCommand
@@ -224,7 +226,7 @@ namespace UniversalAnimeDownloader.ViewModels
             Genres = new ObservableCollection<GenreItem>();
             Seasons = new ObservableCollection<SeasonItem>();
 
-            PageLoaded = new RelayCommand<object>(p => true, async p => await InitAnimeList());
+            PageLoaded = new RelayCommand<object>(p => true, async p => { if (!(Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.IsOnlyLoadWhenHostShow) await InitAnimeList(); });
         }
 
         private async Task InitAnimeList()
@@ -233,8 +235,11 @@ namespace UniversalAnimeDownloader.ViewModels
             SelectedGenresIndex = 0;
             try
             {
-                await TempTask;
-                await LoadAnime(0, 50);
+                {
+                    await TempTask;
+                    await LoadAnime(0, 50);
+                }
+
             }
             catch (Exception e)
             {
@@ -366,8 +371,13 @@ namespace UniversalAnimeDownloader.ViewModels
             OverlayActiityIndicatorVisibility = Visibility.Collapsed;
         }
 
-        public void OnShow()
+        public async void OnShow()
         {
+            if ((Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.IsOnlyLoadWhenHostShow && !IsLoadedAnime)
+            {
+                IsLoadedAnime = true;
+                await InitAnimeList();
+            }
         }
 
         public void OnHide()

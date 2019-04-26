@@ -14,7 +14,7 @@ using UniversalAnimeDownloader.UADSettingsPortal;
 
 namespace UniversalAnimeDownloader.ViewModels
 {
-    class AnimeSuggestionViewModel : BaseViewModel
+    class AnimeSuggestionViewModel : BaseViewModel, IPageContent
     {
         #region Commands
         public ICommand RefreshCommand { get; set; }
@@ -31,6 +31,7 @@ namespace UniversalAnimeDownloader.ViewModels
         public bool IsLoadOngoing { get; private set; }
         public IQueryAnimeSeries Querier { get; set; }
         public Exception LastError { get; set; }
+        public bool IsLoadedAnime { get; set; }
         #endregion
 
         #region Bindable Properties
@@ -155,9 +156,9 @@ namespace UniversalAnimeDownloader.ViewModels
             PageLoaded = new RelayCommand<object>(p => true, async p => 
             {
                 string userInterestString = (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.UserInterest;
-                UserInterestMananger.Deserialize(userInterestString); // 16 ms
-
-                await InitAnimeList();
+                await UserInterestMananger.Deserialize(userInterestString); // 16 ms
+                if (!(Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.IsOnlyLoadWhenHostShow)
+                    await InitAnimeList();
             });
         }
 
@@ -278,6 +279,19 @@ namespace UniversalAnimeDownloader.ViewModels
             OverlayActiityIndicatorVisibility = Visibility.Collapsed;
 
             LastError = e;
+        }
+
+        public async void OnShow()
+        {
+            if ((Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.IsOnlyLoadWhenHostShow && !IsLoadedAnime)
+            {
+                IsLoadedAnime = true;
+                await InitAnimeList();
+            }
+        }
+
+        public void OnHide()
+        {
         }
     }
 }

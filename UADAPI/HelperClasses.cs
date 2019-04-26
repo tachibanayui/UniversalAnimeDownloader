@@ -1320,19 +1320,22 @@ namespace UADAPI
 
         public static string Serialize() => JsonConvert.SerializeObject(Data);
 
-        public static void Deserialize(string val)
+        public static async Task Deserialize(string val)
         {
-            var jsonSetting = new JsonSerializerSettings()
+            await Task.Run(() =>
             {
-                Error = new EventHandler<ErrorEventArgs>((s, e) => e.ErrorContext.Handled = true),
-                TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Full,
-            };
+                var jsonSetting = new JsonSerializerSettings()
+                {
+                    Error = new EventHandler<ErrorEventArgs>((s, e) => e.ErrorContext.Handled = true),
+                    TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Full,
+                };
 
-            if (!string.IsNullOrEmpty(val))
-            {
-                var tmp = JsonConvert.DeserializeObject<UserInterestData>(val, jsonSetting);
-                Data = tmp;
-            }
+                if (!string.IsNullOrEmpty(val))
+                {
+                    var tmp = JsonConvert.DeserializeObject<UserInterestData>(val, jsonSetting);
+                    Data = tmp;
+                }
+            });
         }
     }
 

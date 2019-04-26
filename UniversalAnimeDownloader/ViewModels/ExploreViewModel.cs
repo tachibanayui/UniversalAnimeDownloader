@@ -12,7 +12,7 @@ using UniversalAnimeDownloader.UADSettingsPortal;
 
 namespace UniversalAnimeDownloader.ViewModels
 {
-    class ExploreViewModel : BaseViewModel
+    class ExploreViewModel : BaseViewModel , IPageContent
     {
         public ICommand NavigateGetMoreCommand { get; set; }
         public ICommand LoadedCommand { get; set; }
@@ -26,6 +26,7 @@ namespace UniversalAnimeDownloader.ViewModels
         public ObservableCollection<AnimeSeriesInfo> CarouselAnimeList { get; set; } = new DelayedObservableCollection<AnimeSeriesInfo>();
         public CancellationTokenSource LoadFeaturedAnimeCancelToken { get; set; } = new CancellationTokenSource();
         public CancellationTokenSource LoadSuggestedAnimeCancelToken { get; set; } = new CancellationTokenSource();
+        public bool IsLoadedAnime { get; set; }
 
         private Visibility _OverlayNoInternetVisibility = Visibility.Collapsed;
         public Visibility OverlayNoInternetVisibility
@@ -80,6 +81,7 @@ namespace UniversalAnimeDownloader.ViewModels
             OverlayNoInternetVisibility = await ApiHelpper.CheckForInternetConnection() ? Visibility.Collapsed : Visibility.Visible;
 
             Querier = ApiHelpper.CreateQueryAnimeObjectByType(ApiHelpper.QueryTypes[0]);
+
             InitAnimeList();
         }
 
@@ -115,6 +117,19 @@ namespace UniversalAnimeDownloader.ViewModels
                 }
                 catch { }
             };
+        }
+
+        public void OnShow()
+        {
+            if ((Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.IsOnlyLoadWhenHostShow && !IsLoadedAnime)
+            {
+                IsLoadedAnime = true;
+                InitAnimeList();
+            }
+        }
+
+        public void OnHide()
+        {
         }
     }
 }

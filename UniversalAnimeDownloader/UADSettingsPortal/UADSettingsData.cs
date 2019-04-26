@@ -626,6 +626,26 @@ namespace UniversalAnimeDownloader.UADSettingsPortal
 
         #endregion
 
+        #region Performance Settings
+        private bool _IsOnlyLoadWhenHostShow = true;
+        public bool IsOnlyLoadWhenHostShow
+        {
+            get
+            {
+                return _IsOnlyLoadWhenHostShow;
+            }
+            set
+            {
+                if (_IsOnlyLoadWhenHostShow != value)
+                {
+                    _IsOnlyLoadWhenHostShow = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        #endregion
+
         private string _Notification;
         public string Notification
         {

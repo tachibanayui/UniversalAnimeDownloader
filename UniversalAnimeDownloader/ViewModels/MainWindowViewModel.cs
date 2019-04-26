@@ -308,6 +308,7 @@ namespace UniversalAnimeDownloader.ViewModels
             WindowStateChangedCommand = new RelayCommand<Window>(p => true, WindowStateChangedAction);
             PageLoaded = new RelayCommand<object>(p => true, async p =>
             {
+                (Pages[0].DataContext as IPageContent).OnShow();
                 CheckForAnimeSeriesUpdate();
                 await Task.Delay(5000);
                 LoadPagesToMemory();
@@ -453,7 +454,10 @@ namespace UniversalAnimeDownloader.ViewModels
                         pageIndex = 7;
                         break;
                     case "Explore":
+                        //This case explore need suggestion and feature to be able to show content so we will init them here
                         pageIndex = 8;
+                        (Pages[2].DataContext as IPageContent).OnShow();
+                        (Pages[7].DataContext as IPageContent).OnShow();
                         break;
                     default:
                         break;
