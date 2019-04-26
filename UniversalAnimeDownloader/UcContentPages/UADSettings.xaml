@@ -170,7 +170,7 @@
                                             <ColumnDefinition Width="75" />
                                         </Grid.ColumnDefinitions>
                                         <TextBlock VerticalAlignment="Center" Text="Need a backup setting, you can create one here" />
-                                        <Button Grid.Column="2">
+                                        <Button Grid.Column="2" Command="{Binding SaveSettingDialogCommand}">
                                             <materialDesign:PackIcon Kind="FileRestore" />
                                         </Button>
                                     </Grid>
@@ -181,7 +181,7 @@
                                             <ColumnDefinition Width="75" />
                                         </Grid.ColumnDefinitions>
                                         <TextBlock VerticalAlignment="Center" Text="Oops, did your setting don't work properly? Don't worry you can reset it here" />
-                                        <Button Grid.Column="2">
+                                        <Button Grid.Column="2" Command="{Binding ResetUADCommand}">
                                             <materialDesign:PackIcon Kind="BackupRestore" />
                                         </Button>
                                     </Grid>
@@ -302,7 +302,7 @@
                                                     <RowDefinition Height="*" />
                                                 </Grid.RowDefinitions>
                                                 <StackPanel Margin="8" Orientation="Horizontal">
-                                                    <TextBlock VerticalAlignment="Center">Light</TextBlock>
+                                                    <TextBlock VerticalAlignment="Center">Light (Expiremental)</TextBlock>
                                                     <ToggleButton Margin="8,0,16,0" IsChecked="{Binding SettingData.IsDarkTheme}" />
                                                     <TextBlock VerticalAlignment="Center">Dark</TextBlock>
                                                 </StackPanel>

@@ -1,6 +1,7 @@
 ﻿
 using Newtonsoft.Json;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
@@ -53,6 +54,27 @@ namespace UniversalAnimeDownloader.UADSettingsPortal
                     OnPropertyChanged();
                 }
             }
+        }
+
+        public static void ResetCurrentSettings()
+        {
+            string settingFileLocation = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Settings", "UserSetting.json");
+            string newSettingFileContent = JsonConvert.SerializeObject(new UADSettingsData(), MiscClass.IgnoreConverterErrorJson);
+            File.WriteAllText(settingFileLocation, newSettingFileContent);
+
+            //Restart UAD
+            string batchContent = "timeout /t 3 /nobreak\r\nstart UniversalAnimeDownloader.exe";
+            File.WriteAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "UADScript.bat"), batchContent);
+            Process process = new Process();
+            process.StartInfo = new ProcessStartInfo()
+            {
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                FileName = "cmd.exe",
+                Arguments = $"/C start UADScript.bat"
+            };
+            process.Start();
+            Application.Current.Shutdown();
         }
     }
 }

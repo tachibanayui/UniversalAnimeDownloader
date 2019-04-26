@@ -1,5 +1,6 @@
 ﻿using MaterialDesignColors;
 using MaterialDesignThemes.Wpf;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -39,6 +40,8 @@ namespace UniversalAnimeDownloader.ViewModels
         public ICommand DirectoryWizardCancel { get; set; }
         public ICommand UpdateAffectedAnime { get; set; }
         public ICommand StartMovingAnimeDirectory { get; set; }
+        public ICommand SaveSettingDialogCommand { get; set; }
+        public ICommand ResetUADCommand { get; set; }
         #endregion
 
         public bool IsHostLoaded { get; set; } = false;
@@ -401,6 +404,16 @@ namespace UniversalAnimeDownloader.ViewModels
             DirectoryWizardCancel = new RelayCommand<object>(p => true, p => IsDirectoryChangerWizard = false);
             UpdateAffectedAnime = new RelayCommand<object>(p => true, p => UpdateAffectedAnimes());
             StartMovingAnimeDirectory = new RelayCommand<object>(p => true, p => MoveAnimeDirectoryAction());
+            SaveSettingDialogCommand = new RelayCommand<object>(p => true, p => 
+            {
+                Microsoft.Win32.SaveFileDialog saveFileDialog = new Microsoft.Win32.SaveFileDialog();
+                saveFileDialog.Filter = "All files (*.*)|*.*";
+                saveFileDialog.FileName = "UserSetting.json";
+                saveFileDialog.RestoreDirectory = true;
+                if(saveFileDialog.ShowDialog() == true)
+                    File.WriteAllText(saveFileDialog.FileName, JsonConvert.SerializeObject(SettingData));
+            });
+            ResetUADCommand = new RelayCommand<object>(p => true, p => UADSettingsManager.ResetCurrentSettings());
         }
 
         private async void MoveAnimeDirectoryAction()
