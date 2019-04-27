@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using UADAPI;
 
 namespace UniversalAnimeDownloader.MediaPlayer
 {
     class OnlineUADMediaPlayer : UADMediaPlayer
     {
+        DispatcherTimer timer = null;
+
         static OnlineUADMediaPlayer()
         {
             PlayIndexProperty.OverrideMetadata(typeof(OnlineUADMediaPlayer), new PropertyMetadata(ChangeIndexCallback));
@@ -49,8 +52,28 @@ namespace UniversalAnimeDownloader.MediaPlayer
         }
 
 
-        public OnlineUADMediaPlayer() : base() { }
+        public OnlineUADMediaPlayer() : base()
+        {
+            timer = new DispatcherTimer() { Interval = TimeSpan.FromSeconds(1) };
+            timer.Tick += UpdateBufferingStatus;
+        }
 
+        private void UpdateBufferingStatus(object sender, EventArgs e)
+        {
+             bufferingIndicator.Visibility = mediaPlayer.IsBuffering ? Visibility.Visible : Visibility.Collapsed;
+        }
 
+        public override void Play()
+        {
+            base.Play();
+            timer.Start();
+        }
+
+        protected override void OnUADMediaPlayerClosed()
+        {
+            base.OnUADMediaPlayerClosed();
+            timer.Stop();
+        }
     }
+
 }

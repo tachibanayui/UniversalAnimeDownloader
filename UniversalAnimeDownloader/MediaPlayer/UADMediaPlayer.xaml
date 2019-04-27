@@ -9,6 +9,7 @@
     xmlns:local="clr-namespace:UniversalAnimeDownloader.MediaPlayer"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:page="clr-namespace:UniversalAnimeDownloader.UcContentPages"
     xmlns:proj="clr-namespace:UniversalAnimeDownloader"
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
     d:DesignHeight="450"
@@ -76,6 +77,8 @@
                 MediaOpened="mediaPlayer_MediaOpened"
                 MouseDown="ToggleCotrollerBar"
                 Volume="{Binding MediaElementVolume}" />
+
+            <page:ActivityIndicator x:Name="bufferingIndicator" Visibility="Collapsed" />
 
             <Grid>
                 <Grid.Resources>
@@ -236,8 +239,8 @@
                                                         Grid.Column="1"
                                                         Width="64"
                                                         Height="36"
-                                                        StreamSource="{Binding Path=Result, IsAsync=True}"
                                                         DataContext="{Binding Thumbnail, Converter={StaticResource MediaSourceInfoToImageSourceConverter}}"
+                                                        StreamSource="{Binding Path=Result, IsAsync=True}"
                                                         Stretch="UniformToFill" />
 
                                                     <Grid Grid.Column="3">

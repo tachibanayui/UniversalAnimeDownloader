@@ -921,12 +921,13 @@ namespace UniversalAnimeDownloader.MediaPlayer
 
         public virtual async void Play()
         {
-           
-
             if (NoPlayableMedia)
                 await MessageDialog.ShowAsync("No playable media!", "We can't find any playable media of this series. You can switch to online version and download some episode.", MessageDialogButton.OKCancelButton);
             else
+            {
                 mediaPlayer.Play();
+                (btnPlayPause.Content as PackIcon).Kind = PackIconKind.Pause;
+            }
         }
 
         /// <summary>
