@@ -16,6 +16,7 @@ namespace UniversalAnimeDownloader.ViewModels
         public ICommand OnlineVersionCommand { get; set; }
         public ICommand PlayAllButtonCommand { get; set; }
         public ICommand CopyDescriptionCommand { get; set; }
+        public ICommand DeleteEpisodeCommand { get; set; }
         #endregion
 
         #region BindableProperties

@@ -211,6 +211,8 @@
                                             <ColumnDefinition Width="15" />
                                             <ColumnDefinition Width="1*" />
                                             <ColumnDefinition Width="50" />
+                                            <ColumnDefinition Width="50" />
+                                            <ColumnDefinition Width="50" />
                                         </Grid.ColumnDefinitions>
                                         <Image Source="{Binding Thumbnail, Converter={StaticResource MediaSourceInfoToImageSourceConverter}}" Stretch="Uniform" />
                                         <Grid Grid.Column="2">
@@ -226,8 +228,18 @@
                                             Foreground="Red"
                                             Text="This episode is not downloaded!"
                                             Visibility="{Binding AvailableOffline, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}" />
+
                                         <Button
                                             Grid.Column="4"
+                                            Command="{Binding DataContext.DeleteEpisodeCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:OfflineAnimeDetail}}}"
+                                            CommandParameter="{Binding}"
+                                            Visibility="{Binding AvailableOffline, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Normal}"
+                                            Style="{StaticResource MaterialDesignActionFlatButton}">
+                                            <materialDesign:PackIcon Kind="Delete" />
+                                        </Button>
+
+                                        <Button
+                                            Grid.Column="5"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Center"
                                             IsEnabled="{Binding AvailableOffline}"

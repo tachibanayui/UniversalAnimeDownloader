@@ -81,7 +81,7 @@
                 x:Name="effect"
                 BlurRadius="14"
                 Direction="225"
-                ShadowDepth="10"
+                ShadowDepth="0"
                 Color="#626262" />
         </materialDesign:Card.Effect>
         <materialDesign:Card.ToolTip>
