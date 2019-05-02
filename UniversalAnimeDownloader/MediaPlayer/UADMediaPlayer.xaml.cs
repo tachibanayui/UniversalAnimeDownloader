@@ -136,7 +136,7 @@ namespace UniversalAnimeDownloader.MediaPlayer
             set { SetValue(PlaylistProperty, value); }
         }
         public static readonly DependencyProperty PlaylistProperty =
-            DependencyProperty.Register("Playlist", typeof(AnimeSeriesInfo), typeof(UADMediaPlayer), new PropertyMetadata(PreparePlayList));
+            DependencyProperty.Register("Playlist", typeof(AnimeSeriesInfo), typeof(UADMediaPlayer), new PropertyMetadata(null, PreparePlayList));
 
         private Uri _VideoUri;
         public Uri VideoUri
@@ -259,7 +259,26 @@ namespace UniversalAnimeDownloader.MediaPlayer
                 return -1;
         }
 
-        public bool isPlaying = true;
+
+
+        public bool IsPlaying
+        {
+            get { return (bool)GetValue(IsPlayingProperty); }
+            set { SetValue(IsPlayingProperty, value); }
+        }
+        private static readonly DependencyProperty IsPlayingProperty =
+            DependencyProperty.Register("IsPlaying", typeof(bool), typeof(UADMediaPlayer), new PropertyMetadata(true));
+
+        public bool IsPause
+        {
+            get { return (bool)GetValue(IsPauseProperty); }
+            set { SetValue(IsPauseProperty, value); }
+        }
+        public static readonly DependencyProperty IsPauseProperty =
+            DependencyProperty.Register("IsPause", typeof(bool), typeof(UADMediaPlayer), new PropertyMetadata(false));
+
+
+
         public UADMediaPlayer()
         {
             VM = new UADPlayerViewModel();
@@ -411,7 +430,7 @@ namespace UniversalAnimeDownloader.MediaPlayer
         {
             PackIcon pkIcon = btnPlayPause.Content as PackIcon;
 
-            if (isPlaying)
+            if (!IsPause)
             {
                 pkIcon.Kind = PackIconKind.Play;
                 MiscClass.FadeInAnimation(grdFilmProperty, TimeSpan.FromSeconds(0.25), false);
@@ -431,7 +450,8 @@ namespace UniversalAnimeDownloader.MediaPlayer
                 await Task.Delay(260);
                 Play();
             }
-            isPlaying = !isPlaying;
+
+            IsPause = !IsPause;
         }
 
         private void Back10Sec(object sender, RoutedEventArgs e) => mediaPlayer.Position -= TimeSpan.FromSeconds(10);
@@ -826,7 +846,7 @@ namespace UniversalAnimeDownloader.MediaPlayer
             if ((Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.IsPauseWhenSneakyWactherActive)
             {
                 mediaPlayer.Pause();
-                isPlaying = false;
+                IsPlaying = false;
                 (btnPlayPause.Content as PackIcon).Kind = PackIconKind.Play;
             }
 
@@ -857,7 +877,7 @@ namespace UniversalAnimeDownloader.MediaPlayer
             if ((Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.IsPauseWhenSneakyWactherActive)
             {
                 mediaPlayer.Pause();
-                isPlaying = false;
+                IsPlaying = false;
                 (btnPlayPause.Content as PackIcon).Kind = PackIconKind.Play;
             }
 
@@ -927,6 +947,7 @@ namespace UniversalAnimeDownloader.MediaPlayer
             {
                 mediaPlayer.Play();
                 (btnPlayPause.Content as PackIcon).Kind = PackIconKind.Pause;
+                IsPlaying = true;
             }
         }
 
@@ -936,6 +957,7 @@ namespace UniversalAnimeDownloader.MediaPlayer
         public virtual void Reset()
         {
             mediaPlayer.Stop();
+            IsPlaying = false;
             PlayIndex = -1;
             Playlist = null;
             GC.Collect();

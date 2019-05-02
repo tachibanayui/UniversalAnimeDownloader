@@ -1,6 +1,7 @@
 ﻿using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -36,6 +37,8 @@ namespace UniversalAnimeDownloader.ViewModels
         public ICommand UADMediaPlayerClosedCommand { get; set; }
         public ICommand WindowStateChangedCommand { get; set; }
         public ICommand PageLoaded { get; set; }
+        public ICommand MouseEnterCommand { get; set; }
+        public ICommand MouseLeaveCommand { get; set; }
 
         public ICommand NavigateCommand { get; set; }
         #endregion
@@ -205,14 +208,147 @@ namespace UniversalAnimeDownloader.ViewModels
             }
         }
 
+        private int _UADMediaPlayerPlayIndex;
+        public int UADMediaPlayerPlayIndex
+        {
+            get
+            {
+                return _UADMediaPlayerPlayIndex;
+            }
+            set
+            {
+                if (_UADMediaPlayerPlayIndex != value)
+                {
+                    _UADMediaPlayerPlayIndex = value;
+                    if(value != -1 && NowPlayingPlaylist != null)
+                    {
+                        UADMediaPlayerNowPlaying = NowPlayingPlaylist.Episodes[value];
+                    }
+                    OnPropertyChanged();
+                }
+            }
+        }
 
+        private bool _UADMediaPlayerPlaying;
+        public bool UADMediaPlayerPlaying
+        {
+            get
+            {
+                return _UADMediaPlayerPlaying;
+            }
+            set
+            {
+                if (_UADMediaPlayerPlaying != value)
+                {
+                    _UADMediaPlayerPlaying = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private int _OnlineUADMediaPlayerPlayIndex;
+        public int OnlineUADMediaPlayerPlayIndex
+        {
+            get
+            {
+                return _OnlineUADMediaPlayerPlayIndex;
+            }
+            set
+            {
+                if (_OnlineUADMediaPlayerPlayIndex != value)
+                {
+                    _OnlineUADMediaPlayerPlayIndex = value;
+                    if (value != -1 && NowPlayingPlaylist != null)
+                    {
+                        UADMediaPlayerNowPlaying = NowPlayingPlaylist.Episodes[value];
+                    }
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private bool _OnlineUADMediaPlayerPlaying;
+        public bool OnlineUADMediaPlayerPlaying
+        {
+            get
+            {
+                return _OnlineUADMediaPlayerPlaying;
+            }
+            set
+            {
+                if (_OnlineUADMediaPlayerPlaying != value)
+                {
+                    _OnlineUADMediaPlayerPlaying = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private bool _IsNowPlayingPopupOpen;
+        public bool IsNowPlayingPopupOpen
+        {
+            get
+            {
+                return _IsNowPlayingPopupOpen;
+            }
+            set
+            {
+                if (_IsNowPlayingPopupOpen != value)
+                {
+                    _IsNowPlayingPopupOpen = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private EpisodeInfo _UADMediaPlayerNowPlaying;
+        public EpisodeInfo UADMediaPlayerNowPlaying
+        {
+            get
+            {
+                return _UADMediaPlayerNowPlaying;
+            }
+            set
+            {
+                if (_UADMediaPlayerNowPlaying != value)
+                {
+                    _UADMediaPlayerNowPlaying = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private AnimeSeriesInfo _NowPlayingPlaylist;
+        public AnimeSeriesInfo NowPlayingPlaylist
+        {
+            get
+            {
+                return _NowPlayingPlaylist;
+            }
+            set
+            {
+                if (_NowPlayingPlaylist != value)
+                {
+                    _NowPlayingPlaylist = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
 
         #endregion
 
         #region Fields and Properties
         public bool IsPlayButtonEnable { get; set; }
+        public bool MediaPlayerBtnMouseOver { get; set; }
+        private CancellationTokenSource MediaPlayerMouseOverBtnToken = null;
+        private bool IsMediaPlayerPopupMouseOver;
         #endregion
+
+        private void CalculateIsNowPlayingPopupOpen()
+        {
+
+        }
 
         public MainWindowViewModel()
         {
@@ -303,7 +439,7 @@ namespace UniversalAnimeDownloader.ViewModels
                 p.Visibility = Visibility.Collapsed;
                 (Pages[0].DataContext as IPageContent).OnShow();
                 CheckForAnimeSeriesUpdate();
-                if((Application.Current.FindResource("Settings")as UADSettingsManager).CurrentSettings.IsLoadPageInBackground)
+                if ((Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.IsLoadPageInBackground)
                 {
                     p.Visibility = Visibility.Visible;
                     await Task.Delay(5000);
@@ -315,6 +451,76 @@ namespace UniversalAnimeDownloader.ViewModels
                     p.Visibility = Visibility.Visible;
                 }
 
+            });
+            MouseEnterCommand = new RelayCommand<string>(p => true, p =>
+            {
+                switch (p)
+                {
+                    case "MediaPlayerBtn":
+                        MediaPlayerBtnMouseOver = true;
+                        if (UADMediaPlayerPlaying || OnlineUADMediaPlayerPlaying)
+                        {
+                            IsNowPlayingPopupOpen = true;
+                            if (MediaPlayerMouseOverBtnToken != null)
+                            {
+                                MediaPlayerMouseOverBtnToken.Cancel();
+                            }
+                        }
+                        break;
+                    case "MediaPlayerPopup":
+                        IsMediaPlayerPopupMouseOver = true;
+                        if (MediaPlayerMouseOverBtnToken != null)
+                        {
+                            MediaPlayerMouseOverBtnToken.Cancel();
+                        }
+
+                        break;
+                    default:
+                        break;
+                }
+
+            });
+            MouseLeaveCommand = new RelayCommand<string>(p => true, async p =>
+            {
+                switch (p)
+                {
+                    case "MediaPlayerBtn":
+                        MediaPlayerBtnMouseOver = false;
+                        MediaPlayerMouseOverBtnToken = new CancellationTokenSource();
+                        if (!IsMediaPlayerPopupMouseOver)
+                        {
+                            await QueueToClosePopup();
+                        }
+
+                        break;
+                    case "MediaPlayerPopup":
+                        IsMediaPlayerPopupMouseOver = false;
+                        MediaPlayerMouseOverBtnToken = new CancellationTokenSource();
+                        if (!MediaPlayerBtnMouseOver)
+                        {
+                            await QueueToClosePopup();
+                        }
+
+                        break;
+                    default:
+                        break;
+                }
+            });
+        }
+
+        private async Task QueueToClosePopup()
+        {
+            await Task.Run(() =>
+            {
+                for (int i = 0; i < 10; i++)
+                {
+                    Thread.Sleep(50);
+                    if (MediaPlayerMouseOverBtnToken.IsCancellationRequested)
+                    {
+                        return;
+                    }
+                }
+                IsNowPlayingPopupOpen = false;
             });
         }
 
@@ -480,7 +686,10 @@ namespace UniversalAnimeDownloader.ViewModels
                     cont.OnHide();
                 }
                 if (pageIndex != TransisionerIndex)
+                {
                     Pages[pageIndex].Visibility = Visibility.Visible;
+                }
+
                 await Task.Delay(50);
                 if (Pages[pageIndex].DataContext is IPageContent pageContent)
                 {
@@ -490,7 +699,9 @@ namespace UniversalAnimeDownloader.ViewModels
                 TransisionerIndex = pageIndex;
                 await Task.Delay(250);
                 if (pageIndex != previousIndex && previousIndex != 1 && previousIndex != 5)
+                {
                     Pages[previousIndex].Visibility = Visibility.Collapsed;
+                }
             }
         }
 

@@ -230,7 +230,7 @@ namespace UniversalAnimeDownloader
                     IsOnlineMediaPlayerPlaying = false;
                 }
                 currentPlayer.Reset();
-                currentPlayer.Playlist = info;
+                _Ins.NowPlayingPlaylist = info;
                 currentPlayer.PlayIndex = index;
 
                 currentPlayer.VM.UpdateBindings();

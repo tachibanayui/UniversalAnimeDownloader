@@ -103,10 +103,18 @@
                 <materialDesign:PackIcon Foreground="{DynamicResource MaterialDesignBody}" Kind="ArrowRightBold" />
             </Button>
             <Button
+                x:Name="maximizePlayer"
                 Grid.Column="3"
                 Command="{Binding OpenUADMediaPlayerCommand}"
-                Style="{StaticResource MaterialDesignActionFlatButton}"
-                ToolTip="Open Media Player if Media player is minimize">
+                Style="{StaticResource MaterialDesignActionFlatButton}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseEnter">
+                        <i:InvokeCommandAction Command="{Binding MouseEnterCommand}" CommandParameter="MediaPlayerBtn" />
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="MouseLeave">
+                        <i:InvokeCommandAction Command="{Binding MouseLeaveCommand}" CommandParameter="MediaPlayerBtn" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
                 <materialDesign:PackIcon Foreground="{DynamicResource MaterialDesignBody}" Kind="Play" />
             </Button>
             <TextBlock
@@ -401,7 +409,10 @@
             Background="Black"
             Opacity="0"
             Visibility="{Binding UADMediaPlayerVisibility}">
-            <media:UADMediaPlayer>
+            <media:UADMediaPlayer
+                IsPlaying="{Binding UADMediaPlayerPlaying, Mode=TwoWay}"
+                PlayIndex="{Binding UADMediaPlayerPlayIndex, Mode=TwoWay}"
+                Playlist="{Binding NowPlayingPlaylist, Mode=TwoWay}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="RequestWindowState">
                         <cmd:EventToCommand Command="{Binding ChangeWindowStateRequestCommand}" PassEventArgsToCommand="True" />
@@ -413,14 +424,13 @@
             </media:UADMediaPlayer>
         </Grid>
 
-
         <Grid
             x:Name="uadOnlineMediaPlayer"
             Grid.RowSpan="3"
             Background="Black"
             Opacity="0"
             Visibility="{Binding UADOnlineMediaPlayerVisibility}">
-            <media:OnlineUADMediaPlayer>
+            <media:OnlineUADMediaPlayer IsPlaying="{Binding OnlineUADMediaPlayerPlaying}" PlayIndex="{Binding OnlineUADMediaPlayerPlayIndex}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="RequestWindowState">
                         <cmd:EventToCommand Command="{Binding ChangeWindowStateRequestOnlineCommand}" PassEventArgsToCommand="True" />
@@ -431,6 +441,80 @@
                 </i:Interaction.Triggers>
             </media:OnlineUADMediaPlayer>
         </Grid>
+
+        <Canvas x:Name="popup">
+            <Popup
+                AllowsTransparency="True"
+                IsOpen="{Binding IsNowPlayingPopupOpen}"
+                Placement="Bottom"
+                PlacementTarget="{Binding ElementName=maximizePlayer}"
+                VerticalOffset="15">
+                <Grid>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseEnter">
+                            <i:InvokeCommandAction Command="{Binding MouseEnterCommand}" CommandParameter="MediaPlayerPopup" />
+                        </i:EventTrigger>
+                        <i:EventTrigger EventName="MouseLeave">
+                            <i:InvokeCommandAction Command="{Binding MouseLeaveCommand}" CommandParameter="MediaPlayerPopup" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    <materialDesign:Card
+                        Width="550"
+                        Height="200"
+                        UniformCornerRadius="10">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition Height="0.5*" />
+                            </Grid.RowDefinitions>
+                            <customControl:CustomImage
+                                Grid.RowSpan="2"
+                                DataContext="{Binding UADMediaPlayerNowPlaying.Thumbnail, Converter={StaticResource MediaSourceInfoToImageSourceConverter}}"
+                                StreamSource="{Binding Result, IsAsync=True}"
+                                Stretch="UniformToFill" />
+                            <Rectangle Fill="Black" Opacity="0.25" />
+
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock
+                                    FontSize="{DynamicResource Heading1}"
+                                    FontWeight="SemiBold"
+                                    Text="{Binding UADMediaPlayerNowPlaying.Name}"
+                                    TextAlignment="Center"
+                                    TextTrimming="CharacterEllipsis" />
+                                <TextBlock
+                                    FontSize="{DynamicResource Heading2}"
+                                    FontStyle="Italic"
+                                    Text="{Binding NowPlayingPlaylist.Name}"
+                                    TextAlignment="Center"
+                                    TextTrimming="CharacterEllipsis" />
+                            </StackPanel>
+                            <Grid Grid.Row="1">
+                                <Rectangle Fill="Black" Opacity="0.7" />
+                                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                    <Button Style="{StaticResource MaterialDesignActionFlatButton}">
+                                        <materialDesign:PackIcon Kind="SkipBackward" />
+                                    </Button>
+                                    <Button Style="{StaticResource MaterialDesignActionFlatButton}">
+                                        <materialDesign:PackIcon Kind="Play" />
+                                    </Button>
+                                    <Button Style="{StaticResource MaterialDesignActionFlatButton}">
+                                        <materialDesign:PackIcon Kind="SkipForward" />
+                                    </Button>
+                                </StackPanel>
+
+                                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                                    <Button Style="{StaticResource MaterialDesignActionFlatButton}">
+                                        <materialDesign:PackIcon Kind="PlaylistPlay" />
+                                    </Button>
+                                </StackPanel>
+
+                                <Slider VerticalAlignment="Bottom" />
+                            </Grid>
+                        </Grid>
+                    </materialDesign:Card>
+                </Grid>
+            </Popup>
+        </Canvas>
 
         <Grid x:Name="overlay" Grid.Row="1">
             <materialDesign:DialogHost
