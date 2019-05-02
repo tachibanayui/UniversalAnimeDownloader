@@ -47,7 +47,7 @@
                                             <RowDefinition />
                                             <RowDefinition Height="auto" />
                                         </Grid.RowDefinitions>
-                                        <customControl:CustomImage
+                                        <Image
                                             Grid.RowSpan="2"
                                             Source="{Binding Thumbnail.Url}"
                                             Stretch="UniformToFill" />

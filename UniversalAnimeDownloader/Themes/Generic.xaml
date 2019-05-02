@@ -4,7 +4,8 @@
     xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:converters="clr-namespace:UniversalAnimeDownloader.ValueConverters"
     xmlns:local="clr-namespace:UniversalAnimeDownloader.CustomControls"
-    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:materialDesignConverter="clr-namespace:MaterialDesignThemes.Wpf.Converters;assembly=MaterialDesignThemes.Wpf">
 
     <Style TargetType="{x:Type local:CarouselPanel}">
         <Setter Property="Template">
