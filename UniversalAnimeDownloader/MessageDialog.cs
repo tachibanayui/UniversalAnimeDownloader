@@ -54,6 +54,11 @@ namespace UniversalAnimeDownloader
                     _VM.OKButtonVisibility = Visibility.Visible;
                     _VM.CancelVisibility = Visibility.Visible;
                     break;
+                case MessageDialogButton.OKOnlyButton:
+                    _VM.YesButtonVisibility = Visibility.Collapsed;
+                    _VM.NoButtonVisibility = Visibility.Collapsed;
+                    _VM.OKButtonVisibility = Visibility.Visible;
+                    break;
                 default:
                     break;
             }
@@ -73,7 +78,7 @@ namespace UniversalAnimeDownloader
 
     public enum MessageDialogButton
     {
-        YesNoButton, OKCancelButton
+        YesNoButton, OKCancelButton, OKOnlyButton
     }
 
     public enum MessageDialogResult

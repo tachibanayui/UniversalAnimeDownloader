@@ -119,13 +119,35 @@ namespace UADAPI
         /// Delete episode(s) in the anime series. This will change IsSelectiveDownload Property of the AnimeSeries to true
         /// </summary>
         /// <param name="EpisodeIndexes">Episodes to delete</param>
-        public void DeleteEpisodes(List<int> EpisodeIndexes)
+        public async Task DeleteEpisodes(List<int> id)
         {
-            CurrentAnimeSeries.AttachedAnimeSeriesInfo.IsSelectiveDownload = true;
-
-            foreach (int item in EpisodeIndexes)
+            await Task.Run(() =>
             {
-                EpisodeInfo info = CurrentAnimeSeries.AttachedAnimeSeriesInfo.Episodes.Where(query => query.Index == item).ToArray()[0];
+                CurrentAnimeSeries.AttachedAnimeSeriesInfo.IsSelectiveDownload = true;
+
+                foreach (int item in id)
+                {
+                    EpisodeInfo info = CurrentAnimeSeries.AttachedAnimeSeriesInfo.Episodes.Where(query => query.Index == item).ToArray()[0];
+                    info.AvailableOffline = false;
+
+                    foreach (var item2 in info.FilmSources.Keys)
+                    {
+                        if (File.Exists(info.FilmSources[item2].LocalFile.ToString()))
+                        {
+                            File.Delete(info.FilmSources[item2].LocalFile.ToString());
+                        }
+                        info.FilmSources[item2].LocalFile = string.Empty;
+                    }
+
+                    SerializeAndSaveToFile();
+                }
+            });
+        }
+
+        public async Task DeleteEpisodes(EpisodeInfo info)
+        {
+            await Task.Run(() =>
+            {
                 info.AvailableOffline = false;
 
                 foreach (var item2 in info.FilmSources.Keys)
@@ -134,8 +156,11 @@ namespace UADAPI
                     {
                         File.Delete(info.FilmSources[item2].LocalFile.ToString());
                     }
+                    info.FilmSources[item2].LocalFile = string.Empty;
                 }
-            }
+
+                SerializeAndSaveToFile();
+            });
         }
 
         /// <summary>

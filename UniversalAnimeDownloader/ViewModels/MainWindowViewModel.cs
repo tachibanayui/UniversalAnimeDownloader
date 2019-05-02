@@ -267,16 +267,8 @@ namespace UniversalAnimeDownloader.ViewModels
 
             });
             SearchButtonClickCommand = new RelayCommand<TextBox>(p => true, p => MiscClass.OnUserSearched(this, p.Text));
-            GoBackNavigationCommand = new RelayCommand<object>(p => MiscClass.NavigationHelper.CanGoBack, p =>
-            {
-                TransisionerIndex = MiscClass.NavigationHelper.Back();
-                var cnt = Pages[TransisionerIndex].DataContext as IPageContent;
-                if (cnt != null)
-                {
-                    cnt.OnShow();
-                }
-            });
-            GoForwardNavigationCommand = new RelayCommand<object>(p => MiscClass.NavigationHelper.CanGoForward, p => TransisionerIndex = MiscClass.NavigationHelper.Forward());
+            GoBackNavigationCommand = new RelayCommand<object>(p => MiscClass.NavigationHelper.CanGoBack, async p => await SwichPage(MiscClass.NavigationHelper.Back()));
+            GoForwardNavigationCommand = new RelayCommand<object>(p => MiscClass.NavigationHelper.CanGoForward, async p => await SwichPage(MiscClass.NavigationHelper.Forward()));
             ResetNotifyBadgeCommand = new RelayCommand<object>(p => true, p => NotifycationBadgeCount = 0);
             NavigateCommand = new RelayCommand<string>(p => true, NavigateProcess);
             ChangeWindowStateRequestCommand = new RelayCommand<RequestingWindowStateEventArgs>(p => true, ChangeUADMediaPlayerWindowState);
@@ -474,26 +466,31 @@ namespace UniversalAnimeDownloader.ViewModels
                         break;
                 }
 
-                if (pageIndex != -1)
+                await SwichPage(pageIndex);
+                MiscClass.NavigationHelper.AddNavigationHistory(pageIndex);
+            }
+        }
+
+        private async Task SwichPage(int pageIndex)
+        {
+            if (pageIndex != -1)
+            {
+                if (Pages[TransisionerIndex].DataContext is IPageContent cont)
                 {
-                    if (Pages[TransisionerIndex].DataContext is IPageContent cont)
-                    {
-                        cont.OnHide();
-                    }
-                    if(pageIndex != TransisionerIndex)
-                        Pages[pageIndex].Visibility = Visibility.Visible;
-                    await Task.Delay(50);
-                    if (Pages[pageIndex].DataContext is IPageContent pageContent)
-                    {
-                        pageContent.OnShow();
-                    }
-                    int previousIndex = TransisionerIndex;
-                    TransisionerIndex = pageIndex;
-                    MiscClass.NavigationHelper.AddNavigationHistory(pageIndex);
-                    await Task.Delay(250);
-                    if(pageIndex != previousIndex && pageIndex != 1 && pageIndex != 5)
-                        Pages[previousIndex].Visibility = Visibility.Collapsed;
+                    cont.OnHide();
                 }
+                if (pageIndex != TransisionerIndex)
+                    Pages[pageIndex].Visibility = Visibility.Visible;
+                await Task.Delay(50);
+                if (Pages[pageIndex].DataContext is IPageContent pageContent)
+                {
+                    pageContent.OnShow();
+                }
+                int previousIndex = TransisionerIndex;
+                TransisionerIndex = pageIndex;
+                await Task.Delay(250);
+                if (pageIndex != previousIndex && previousIndex != 1 && previousIndex != 5)
+                    Pages[previousIndex].Visibility = Visibility.Collapsed;
             }
         }
 

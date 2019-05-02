@@ -1,6 +1,8 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -32,11 +34,15 @@ namespace UniversalAnimeDownloader.ViewModels
                 if (_CurrentSeries != value)
                 {
                     _CurrentSeries = value;
+                    SourceControl = new AnimeSourceControl(value);
                     OnPropertyChanged();
                 }
             }
         }
         #endregion
+
+        private AnimeSourceControl SourceControl = null;
+
 
         public OfflineAnimeDetailViewModel()
         {
@@ -73,6 +79,15 @@ namespace UniversalAnimeDownloader.ViewModels
                 //await onlineManager.GetPrototypeEpisodes();
                 (Application.Current.FindResource("AnimeDetailsViewModel") as AnimeDetailsViewModel).CurrentSeries = CurrentSeries;
                 (Application.Current.FindResource("MainWindowViewModel") as MainWindowViewModel).NavigateProcess("AnimeDetails");
+            });
+
+            DeleteEpisodeCommand = new RelayCommand<EpisodeInfo>(p => true, async p => 
+            {
+                await SourceControl.DeleteEpisodes(p);
+                (Application.Current.FindResource("MyAnimeLibraryViewModel") as MyAnimeLibraryViewModel).ReloadAnimeCommand.Execute(false);
+                ICollectionView view = CollectionViewSource.GetDefaultView(CurrentSeries.AttachedAnimeSeriesInfo.Episodes);
+                view.Refresh();
+                await MessageDialog.ShowAsync("Episode deleted successfully", $"This episode: {p.Name} as successfully removed from your library!", MessageDialogButton.OKOnlyButton);
             });
         }
 

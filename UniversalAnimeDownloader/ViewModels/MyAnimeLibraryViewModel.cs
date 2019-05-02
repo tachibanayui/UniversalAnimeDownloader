@@ -66,7 +66,7 @@ namespace UniversalAnimeDownloader.ViewModels
             ReloadAnimeCommand = new RelayCommand<object>(p => true, async p => await ReloadAnimeLibrary(false));
             ShowAnimeDetailCommand = new RelayCommand<AnimeSeriesInfo>(p => true, p =>
             {
-                MiscClass.NavigationHelper.AddNavigationHistory(4);
+                MiscClass.NavigationHelper.AddNavigationHistory(5);
                 IAnimeSeriesManager manager = ApiHelpper.CreateAnimeSeriesManagerObjectByClassName(p.ModInfo.ModTypeString);
                 manager.AttachedAnimeSeriesInfo = p;
                 (Application.Current.FindResource("OfflineAnimeDetailViewModel") as OfflineAnimeDetailViewModel).CurrentSeries = manager;
@@ -81,7 +81,7 @@ namespace UniversalAnimeDownloader.ViewModels
                 return (obj as AnimeSeriesInfo).Name.ToLower().Contains(LastSearchedKeyWord.ToLower());
         }
 
-        private async Task ReloadAnimeLibrary(bool isRealtimeList)
+        public async Task ReloadAnimeLibrary(bool isRealtimeList)
         {
             AnimeLibrary.Clear();
             string lib = AppDomain.CurrentDomain.BaseDirectory + "Anime Library\\";
