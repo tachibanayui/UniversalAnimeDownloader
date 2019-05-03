@@ -17,6 +17,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using UADAPI;
 using UniversalAnimeDownloader.Animations;
 using UniversalAnimeDownloader.UADSettingsPortal;
@@ -81,6 +82,7 @@ namespace UniversalAnimeDownloader.MediaPlayer
 
        
         public FakeNotRespondingDialog FakeHost { get; set; }
+        private DispatcherTimer _Timer;
         #endregion
 
         #region Dependency Properties
@@ -93,6 +95,48 @@ namespace UniversalAnimeDownloader.MediaPlayer
             DependencyProperty.Register("PlayIndex", typeof(int), typeof(UADMediaPlayer), new PropertyMetadata(-1, UpdateMediaElementSource));
 
         private static void UpdateMediaElementSource(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if ((d as UADMediaPlayer).IsPlayOnline)
+                OnlineUpdateMediaElementSource(d, e);
+            else
+                OfflineUpdateMediaElementSource(d, e);
+        }
+
+        private static async void OnlineUpdateMediaElementSource(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var ins = d as OnlineUADMediaPlayer;
+            var newVal = (int)e.NewValue;
+            if (newVal == -1)
+                return;
+
+            //Base class "UADMediaPlyayer" make Playlist return null when call Reset()
+            if (ins.Playlist == null)
+                return;
+
+            var currentEpisode = ins.Playlist.Episodes[(int)e.NewValue];
+
+            //if the IAnimeSeriesManager.GetEpisode() is not call yet
+            if (currentEpisode.FilmSources == null)
+            {
+                var manager = ApiHelpper.CreateAnimeSeriesManagerObjectByClassName(ins.Playlist.ModInfo.ModTypeString);
+                manager.AttachedAnimeSeriesInfo = ins.Playlist;
+                await manager.GetEpisodes(new List<int> { currentEpisode.EpisodeID });
+            }
+            if (currentEpisode.FilmSources.Count != 0)
+            {
+                ins.VideoUri = new Uri(currentEpisode.FilmSources.Last().Value.Url.Replace("https", "http"));
+                var episodeInfo = ins.Playlist.Episodes[(int)e.NewValue];
+
+                ins.AnimeThumbnail = new BitmapImage(new Uri(episodeInfo.Thumbnail.Url));
+
+                ins.Title = ins.Playlist.Name;
+                ins.SubbedTitle = episodeInfo.Name;
+            }
+            else
+                ins.PlayIndex++;
+        }
+
+        private static void OfflineUpdateMediaElementSource(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var ins = d as UADMediaPlayer;
             if ((int)e.NewValue == -1)
@@ -117,7 +161,7 @@ namespace UniversalAnimeDownloader.MediaPlayer
             {
                 ins.VideoUri = new Uri(source.Last().Value.LocalFile);
                 var episodeInfo = ins.Playlist.Episodes[(int)e.NewValue];
-                
+
                 string localThumbnailSrc = episodeInfo.Thumbnail.LocalFile;
                 if (!string.IsNullOrEmpty(localThumbnailSrc))
                     ins.AnimeThumbnail = new BitmapImage(new Uri(localThumbnailSrc));
@@ -277,16 +321,33 @@ namespace UniversalAnimeDownloader.MediaPlayer
         public static readonly DependencyProperty IsPauseProperty =
             DependencyProperty.Register("IsPause", typeof(bool), typeof(UADMediaPlayer), new PropertyMetadata(false));
 
+        public bool IsPlayOnline
+        {
+            get { return (bool)GetValue(IsPlayOnlineProperty); }
+            set { SetValue(IsPlayOnlineProperty, value); }
+        }
+        public static readonly DependencyProperty IsPlayOnlineProperty =
+            DependencyProperty.Register("IsPlayOnline", typeof(bool), typeof(UADMediaPlayer), new PropertyMetadata(false));
+
+
 
 
         public UADMediaPlayer()
         {
             VM = new UADPlayerViewModel();
             InitializeComponent();
+
+            //Online media player
+            _Timer = new DispatcherTimer() { Interval = TimeSpan.FromSeconds(1) };
+            _Timer.Tick += UpdateBufferingStatus;
         }
 
+        private void UpdateBufferingStatus(object sender, EventArgs e)
+        {
+            bufferingIndicator.Visibility = mediaPlayer.IsBuffering ? Visibility.Visible : Visibility.Collapsed;
+        }
 
-        private async void Event_MediaPlayerHostLoaded(object sender, RoutedEventArgs e)
+        private void Event_MediaPlayerHostLoaded(object sender, RoutedEventArgs e)
         {
             (Content as FrameworkElement).DataContext = VM;
             mediaPlayer.Source = VideoUri;
@@ -895,7 +956,16 @@ namespace UniversalAnimeDownloader.MediaPlayer
 
         protected virtual void OnRequestWindowState(WindowState state) => RequestWindowState?.Invoke(this, new RequestingWindowStateEventArgs() { RequestState = state });
         protected virtual void OnRequestIconChange(Uri iconLocation) => RequestIconChange?.Invoke(this, new RequestWindowIconChangeEventArgs() { IconLocation = iconLocation });
-        protected virtual void OnUADMediaPlayerClosed() => UADMediaPlayerClosed?.Invoke(this, EventArgs.Empty);
+        protected virtual void OnUADMediaPlayerClosed()
+        {
+            UADMediaPlayerClosed?.Invoke(this, EventArgs.Empty);
+
+            //Online Media Player
+            if(IsPlayOnline)
+                _Timer.Stop();
+
+            bufferingIndicator.Visibility = Visibility.Collapsed;
+        }
 
         private void Event_WindowMinimize(object sender, RoutedEventArgs e) => OnRequestWindowState(WindowState.Minimized);
 
@@ -948,6 +1018,12 @@ namespace UniversalAnimeDownloader.MediaPlayer
                 mediaPlayer.Play();
                 (btnPlayPause.Content as PackIcon).Kind = PackIconKind.Pause;
                 IsPlaying = true;
+
+                //Online media player
+                if (IsPlayOnline)
+                    _Timer.Start();
+                else
+                    bufferingIndicator.Visibility = Visibility.Collapsed;
             }
         }
 

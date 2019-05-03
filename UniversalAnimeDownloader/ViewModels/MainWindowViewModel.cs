@@ -39,6 +39,7 @@ namespace UniversalAnimeDownloader.ViewModels
         public ICommand PageLoaded { get; set; }
         public ICommand MouseEnterCommand { get; set; }
         public ICommand MouseLeaveCommand { get; set; }
+        public ICommand PauseMediaPlayerCommand { get; set; }
 
         public ICommand NavigateCommand { get; set; }
         #endregion
@@ -220,7 +221,7 @@ namespace UniversalAnimeDownloader.ViewModels
                 if (_UADMediaPlayerPlayIndex != value)
                 {
                     _UADMediaPlayerPlayIndex = value;
-                    if(value != -1 && NowPlayingPlaylist != null)
+                    if (value != -1 && NowPlayingPlaylist != null)
                     {
                         UADMediaPlayerNowPlaying = NowPlayingPlaylist.Episodes[value];
                     }
@@ -330,6 +331,40 @@ namespace UniversalAnimeDownloader.ViewModels
                 if (_NowPlayingPlaylist != value)
                 {
                     _NowPlayingPlaylist = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private bool _IsMediaPlayerPause;
+        public bool IsMediaPlayerPause
+        {
+            get
+            {
+                return _IsMediaPlayerPause;
+            }
+            set
+            {
+                if (_IsMediaPlayerPause != value)
+                {
+                    _IsMediaPlayerPause = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private bool _IsOnlineMediaPlayerPause;
+        public bool IsOnlineMediaPlayerPause
+        {
+            get
+            {
+                return _IsOnlineMediaPlayerPause;
+            }
+            set
+            {
+                if (_IsOnlineMediaPlayerPause != value)
+                {
+                    _IsOnlineMediaPlayerPause = value;
                     OnPropertyChanged();
                 }
             }

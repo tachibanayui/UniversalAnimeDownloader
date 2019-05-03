@@ -410,9 +410,10 @@
             Opacity="0"
             Visibility="{Binding UADMediaPlayerVisibility}">
             <media:UADMediaPlayer
+                IsPause="{Binding IsMediaPlayerPause}"
                 IsPlaying="{Binding UADMediaPlayerPlaying, Mode=TwoWay}"
-                PlayIndex="{Binding UADMediaPlayerPlayIndex, Mode=TwoWay}"
-                Playlist="{Binding NowPlayingPlaylist, Mode=TwoWay}">
+                PlayIndex="{Binding UADMediaPlayerPlayIndex, Mode=TwoWay}">
+                <!--  Playlist="{Binding NowPlayingPlaylist, Mode=TwoWay}"  -->
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="RequestWindowState">
                         <cmd:EventToCommand Command="{Binding ChangeWindowStateRequestCommand}" PassEventArgsToCommand="True" />
@@ -430,7 +431,10 @@
             Background="Black"
             Opacity="0"
             Visibility="{Binding UADOnlineMediaPlayerVisibility}">
-            <media:OnlineUADMediaPlayer IsPlaying="{Binding OnlineUADMediaPlayerPlaying}" PlayIndex="{Binding OnlineUADMediaPlayerPlayIndex}">
+            <media:OnlineUADMediaPlayer
+                IsPause="{Binding IsOnlineMediaPlayerPause}"
+                IsPlaying="{Binding OnlineUADMediaPlayerPlaying}"
+                PlayIndex="{Binding OnlineUADMediaPlayerPlayIndex}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="RequestWindowState">
                         <cmd:EventToCommand Command="{Binding ChangeWindowStateRequestOnlineCommand}" PassEventArgsToCommand="True" />
@@ -494,7 +498,7 @@
                                     <Button Style="{StaticResource MaterialDesignActionFlatButton}">
                                         <materialDesign:PackIcon Kind="SkipBackward" />
                                     </Button>
-                                    <Button Style="{StaticResource MaterialDesignActionFlatButton}">
+                                    <Button Command="{Binding PauseMediaPlayerCommand}" Style="{StaticResource MaterialDesignActionFlatButton}">
                                         <materialDesign:PackIcon Kind="Play" />
                                     </Button>
                                     <Button Style="{StaticResource MaterialDesignActionFlatButton}">
