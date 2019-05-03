@@ -31,7 +31,7 @@ namespace UniversalAnimeDownloader.MediaPlayer
     {
         #region Fields and Properties
         public UADPlayerViewModel VM;
-        private bool isSeekSliderLocked = false;
+        public bool IsSeekSliderLocked = false;
 
         private Random rand = new Random();
         private bool isToolboxBarHold = false;
@@ -554,7 +554,7 @@ namespace UniversalAnimeDownloader.MediaPlayer
             while (true)
             {
                 txblMediaPos.Text = mediaPlayer.Position.ToString(@"hh\:mm\:ss");
-                if (!isSeekSliderLocked)
+                if (!IsSeekSliderLocked)
                 {
                     var progressVal = MiscClass.GetTimeSpanRatio(mediaPlayer.Position, MediaDuration);
                     seekSlider.Value = progressVal;
@@ -566,14 +566,19 @@ namespace UniversalAnimeDownloader.MediaPlayer
             }
         }
 
-        private void ChangePosition(object sender, MouseButtonEventArgs e)
+        private void ChangePosition(object sender, MouseButtonEventArgs e) => ChangePositionProgress(seekSlider.Value);
+
+        /// <summary>
+        /// Change the MediaPlayer Position based on the specified progress
+        /// </summary>
+        public void ChangePositionProgress(double progress)
         {
-            mediaPlayer.Position = MiscClass.MutiplyTimeSpan(MediaDuration, seekSlider.Value);
-            isSeekSliderLocked = false;
+            mediaPlayer.Position = MiscClass.MutiplyTimeSpan(MediaDuration, progress);
+            IsSeekSliderLocked = false;
             Focus();
         }
 
-        private void LockSeekSlider(object sender, MouseButtonEventArgs e) => isSeekSliderLocked = true;
+        private void LockSeekSlider(object sender, MouseButtonEventArgs e) => IsSeekSliderLocked = true;
 
         private void VolumnChange(object sender, RoutedEventArgs e)
         {

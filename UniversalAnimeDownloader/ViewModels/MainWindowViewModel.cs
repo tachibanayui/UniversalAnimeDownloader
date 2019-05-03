@@ -39,6 +39,9 @@ namespace UniversalAnimeDownloader.ViewModels
         public ICommand MouseEnterCommand { get; set; }
         public ICommand MouseLeaveCommand { get; set; }
         public ICommand PauseMediaPlayerCommand { get; set; }
+        public ICommand LookSliderCommand { get; set; }
+        public ICommand ChangePositionCommand { get; set; }
+        public ICommand WindowSizeChangedCommand { get; set; }
 
         public ICommand NavigateCommand { get; set; }
         #endregion
@@ -314,6 +317,23 @@ namespace UniversalAnimeDownloader.ViewModels
                 }
             }
         }
+
+        private double _NowPlayingPopupScale = 0.4;
+        public double NowPlayingPopupScale
+        {
+            get
+            {
+                return _NowPlayingPopupScale;
+            }
+            set
+            {
+                if (_NowPlayingPopupScale != value)
+                {
+                    _NowPlayingPopupScale = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
         #endregion
 
         #region Fields and Properties
@@ -466,6 +486,9 @@ namespace UniversalAnimeDownloader.ViewModels
                 }
             });
             PauseMediaPlayerCommand = new RelayCommand<object>(p => true, p => UADMediaPlayerHelper.TogglePlayPause());
+            LookSliderCommand = new RelayCommand<object>(p => true, p => UADMediaPlayerHelper.LockSliderPosition());
+            ChangePositionCommand = new RelayCommand<double>(p => true, p => UADMediaPlayerHelper.ChangePositionByProgress(p));
+            WindowSizeChangedCommand = new RelayCommand<Window>(p => true, p => NowPlayingPopupScale = p.Width / 1920 * 1.25);
         }
 
         private async Task QueueToClosePopup()

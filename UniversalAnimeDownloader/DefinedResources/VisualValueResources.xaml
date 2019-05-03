@@ -26,6 +26,7 @@
     <valueConverter:StringToPlayerTypeConverter x:Key="StringToPlayerTypeConverter" />
     <valueConverter:ColorToSolidColorBrushConverter x:Key="ColorToSolidColorBrushConverter" />
     <valueConverter:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+    <valueConverter:MultiplicationMultiConverter x:Key="MultiplicationMultiConverter" />
 
     <sys:Double x:Key="Heading1">36</sys:Double>
     <sys:Double x:Key="Heading2">24</sys:Double>

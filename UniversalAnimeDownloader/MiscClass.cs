@@ -275,6 +275,18 @@ namespace UniversalAnimeDownloader
                 await _Player.PlayPauseMedia();
         }
 
+        public static void LockSliderPosition()
+        {
+            NullCheck();
+            _Player.IsSeekSliderLocked = true;
+        }
+
+        public static void ChangePositionByProgress(double progress)
+        {
+            NullCheck();
+            _Player.ChangePositionProgress(progress);
+        }
+
         private static void NullCheck()
         {
             if (_Ins == null)
