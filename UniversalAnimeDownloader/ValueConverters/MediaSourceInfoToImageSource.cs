@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Markup;
@@ -20,18 +16,29 @@ namespace UniversalAnimeDownloader.ValueConverters
         {
             Task<Stream> task = null;
             if (!(value is MediaSourceInfo info))
+            {
                 return new BitmapImage();
+            }
 
             if (!string.IsNullOrEmpty(info.LocalFile))
+            {
                 if (File.Exists(info.LocalFile))
-                        task = Task.Run(() => GetOfflineImage(info.LocalFile));
-            //return new BitmapImage(new Uri(info.LocalFile));
-
-            if (!string.IsNullOrEmpty(info.Url))
+                {
+                    task = Task.Run(() => GetOfflineImage(info.LocalFile));
+                }
+                else if (!string.IsNullOrEmpty(info.Url))
+                {
+                    task = Task.Run(() => GetOnlineImage(info));
+                }
+            }
+            else if (!string.IsNullOrEmpty(info.Url))
+            {
                 task = Task.Run(() => GetOnlineImage(info));
-            // return new BitmapImage(new Uri(info.Url));
+            }
             else
+            {
                 return new BitmapImage();
+            }
 
             return new TaskCompletionNotifier<Stream>(task);
         }

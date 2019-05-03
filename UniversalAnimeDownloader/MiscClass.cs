@@ -201,7 +201,6 @@ namespace UniversalAnimeDownloader
     {
         private static MainWindowViewModel _Ins;
         private static UADMediaPlayer _Player;
-        private static OnlineUADMediaPlayer _OnlinePlayer;
         public static bool IsOnlineMediaPlayerPlaying = false;
 
         public static async void Play(AnimeSeriesInfo info, int index = 0, bool isOnline = false)
@@ -209,45 +208,31 @@ namespace UniversalAnimeDownloader
             if((Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.PreferedPlayer == PlayerType.Embeded)
             {
                 NullCheck();
-                UADMediaPlayer currentPlayer = null;
                 //To prevent 2 video from playing
                 if(_Ins.IsPlayButtonEnable)
                 {
                     _Player.mediaPlayer.Stop();
-                    _OnlinePlayer.mediaPlayer.Stop();
                 }
 
-                if (isOnline)
-                {
-                    currentPlayer = _OnlinePlayer;
-                    _Ins.UADMediaPlayerVisibility = Visibility.Collapsed;
-                    IsOnlineMediaPlayerPlaying = true;
-                }
-                else
-                {
-                    currentPlayer = _Player;
-                    _Ins.UADOnlineMediaPlayerVisibility = Visibility.Collapsed;
-                    IsOnlineMediaPlayerPlaying = false;
-                }
-                currentPlayer.Reset();
+                IsOnlineMediaPlayerPlaying = isOnline;
+                _Player.IsPlayOnline = isOnline;
+
+                _Player.Reset();
                 _Ins.NowPlayingPlaylist = info;
-                currentPlayer.PlayIndex = index;
+                _Ins.UADMediaPlayerPlayIndex = index;
 
-                currentPlayer.VM.UpdateBindings();
-                (currentPlayer.Parent as Grid).Opacity = 0;
-                currentPlayer.Focus();
-                if(isOnline)
-                    _Ins.UADOnlineMediaPlayerVisibility = Visibility.Visible;
-                else
-                    _Ins.UADMediaPlayerVisibility = Visibility.Visible;
+                _Player.VM.UpdateBindings();
+                (_Player.Parent as Grid).Opacity = 0;
+                _Player.Focus();
+                _Ins.UADMediaPlayerVisibility = Visibility.Visible;
                 
-                MiscClass.FadeInAnimation(currentPlayer.Parent as Grid, TimeSpan.FromSeconds(.5), true, new EventHandler((s,e) => 
+                MiscClass.FadeInAnimation(_Player.Parent as Grid, TimeSpan.FromSeconds(.5), true, new EventHandler((s,e) => 
                 {
-                    (currentPlayer.Parent as Grid).IsHitTestVisible = true;
-                    currentPlayer.Play();
-                    currentPlayer.Focus();
+                    (_Player.Parent as Grid).IsHitTestVisible = true;
+                    _Player.Play();
+                    _Player.Focus();
                 }));
-                currentPlayer.Focus();
+                _Player.Focus();
             }
             else
             {
@@ -283,14 +268,19 @@ namespace UniversalAnimeDownloader
             
         }
 
+        public static async void TogglePlayPause()
+        {
+            NullCheck();
+            if (_Player.IsPlaying)
+                await _Player.PlayPauseMedia();
+        }
+
         private static void NullCheck()
         {
             if (_Ins == null)
                 _Ins = Application.Current.FindResource("MainWindowViewModel") as MainWindowViewModel;
             if (_Player == null)
                 _Player = MiscClass.FindVisualChild<UADMediaPlayer>(Application.Current.MainWindow);
-            if(_OnlinePlayer == null)
-                _OnlinePlayer = MiscClass.FindVisualChild<OnlineUADMediaPlayer>(Application.Current.MainWindow);
         }
     }
 

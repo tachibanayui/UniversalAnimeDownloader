@@ -410,10 +410,11 @@
             Opacity="0"
             Visibility="{Binding UADMediaPlayerVisibility}">
             <media:UADMediaPlayer
-                IsPause="{Binding IsMediaPlayerPause}"
+                x:Name="uadMediaPlayerInternal"
+                IsPause="{Binding IsMediaPlayerPause, Mode=TwoWay}"
                 IsPlaying="{Binding UADMediaPlayerPlaying, Mode=TwoWay}"
-                PlayIndex="{Binding UADMediaPlayerPlayIndex, Mode=TwoWay}">
-                <!--  Playlist="{Binding NowPlayingPlaylist, Mode=TwoWay}"  -->
+                PlayIndex="{Binding UADMediaPlayerPlayIndex, Mode=TwoWay}"
+                Playlist="{Binding NowPlayingPlaylist, Mode=TwoWay}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="RequestWindowState">
                         <cmd:EventToCommand Command="{Binding ChangeWindowStateRequestCommand}" PassEventArgsToCommand="True" />
@@ -423,27 +424,6 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </media:UADMediaPlayer>
-        </Grid>
-
-        <Grid
-            x:Name="uadOnlineMediaPlayer"
-            Grid.RowSpan="3"
-            Background="Black"
-            Opacity="0"
-            Visibility="{Binding UADOnlineMediaPlayerVisibility}">
-            <media:OnlineUADMediaPlayer
-                IsPause="{Binding IsOnlineMediaPlayerPause}"
-                IsPlaying="{Binding OnlineUADMediaPlayerPlaying}"
-                PlayIndex="{Binding OnlineUADMediaPlayerPlayIndex}">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="RequestWindowState">
-                        <cmd:EventToCommand Command="{Binding ChangeWindowStateRequestOnlineCommand}" PassEventArgsToCommand="True" />
-                    </i:EventTrigger>
-                    <i:EventTrigger EventName="UADMediaPlayerClosed">
-                        <cmd:EventToCommand Command="{Binding UADMediaPlayerClosedCommand}" CommandParameter="Online" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </media:OnlineUADMediaPlayer>
         </Grid>
 
         <Canvas x:Name="popup">
@@ -473,7 +453,7 @@
                             </Grid.RowDefinitions>
                             <customControl:CustomImage
                                 Grid.RowSpan="2"
-                                DataContext="{Binding UADMediaPlayerNowPlaying.Thumbnail, Converter={StaticResource MediaSourceInfoToImageSourceConverter}}"
+                                DataContext="{Binding NowPlaying.Thumbnail, Converter={StaticResource MediaSourceInfoToImageSourceConverter}}"
                                 StreamSource="{Binding Result, IsAsync=True}"
                                 Stretch="UniformToFill" />
                             <Rectangle Fill="Black" Opacity="0.25" />
@@ -482,7 +462,7 @@
                                 <TextBlock
                                     FontSize="{DynamicResource Heading1}"
                                     FontWeight="SemiBold"
-                                    Text="{Binding UADMediaPlayerNowPlaying.Name}"
+                                    Text="{Binding NowPlaying.Name}"
                                     TextAlignment="Center"
                                     TextTrimming="CharacterEllipsis" />
                                 <TextBlock
@@ -496,23 +476,27 @@
                                 <Rectangle Fill="Black" Opacity="0.7" />
                                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                                     <Button Style="{StaticResource MaterialDesignActionFlatButton}">
-                                        <materialDesign:PackIcon Kind="SkipBackward" />
+                                        <materialDesign:PackIcon Kind="SkipBackward" Style="{StaticResource AutoSizeIconPack}" />
                                     </Button>
                                     <Button Command="{Binding PauseMediaPlayerCommand}" Style="{StaticResource MaterialDesignActionFlatButton}">
-                                        <materialDesign:PackIcon Kind="Play" />
+                                        <materialDesign:PackIcon Kind="{Binding PlayPauseButtonIconKind}" />
                                     </Button>
                                     <Button Style="{StaticResource MaterialDesignActionFlatButton}">
-                                        <materialDesign:PackIcon Kind="SkipForward" />
+                                        <materialDesign:PackIcon Kind="SkipForward" Style="{StaticResource AutoSizeIconPack}" />
                                     </Button>
                                 </StackPanel>
 
                                 <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                                     <Button Style="{StaticResource MaterialDesignActionFlatButton}">
-                                        <materialDesign:PackIcon Kind="PlaylistPlay" />
+                                        <materialDesign:PackIcon Kind="PlaylistPlay" Style="{StaticResource AutoSizeIconPack}" />
                                     </Button>
                                 </StackPanel>
 
-                                <Slider VerticalAlignment="Bottom" />
+                                <Slider
+                                    VerticalAlignment="Bottom"
+                                    Maximum="1"
+                                    Minimum="0"
+                                    Value="{Binding ElementName=uadMediaPlayerInternal, Path=PlayProgress}" />
                             </Grid>
                         </Grid>
                     </materialDesign:Card>

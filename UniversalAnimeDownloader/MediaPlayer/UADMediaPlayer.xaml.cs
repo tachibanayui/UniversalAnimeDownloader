@@ -31,7 +31,6 @@ namespace UniversalAnimeDownloader.MediaPlayer
     {
         #region Fields and Properties
         public UADPlayerViewModel VM;
-        public TimeSpan MediaDuration;
         private bool isSeekSliderLocked = false;
 
         private Random rand = new Random();
@@ -86,6 +85,30 @@ namespace UniversalAnimeDownloader.MediaPlayer
         #endregion
 
         #region Dependency Properties
+        public double PlayProgress
+        {
+            get { return (double)GetValue(PlayProgressProperty); }
+            set { SetValue(PlayProgressProperty, value); }
+        }
+        public static readonly DependencyProperty PlayProgressProperty =
+            DependencyProperty.Register("PlayProgress", typeof(double), typeof(UADMediaPlayer), new PropertyMetadata(0d));
+
+        public TimeSpan MediaDuration
+        {
+            get { return (TimeSpan)GetValue(MediaDurationProperty); }
+            set { SetValue(MediaDurationProperty, value); }
+        }
+        public static readonly DependencyProperty MediaDurationProperty =
+            DependencyProperty.Register("MediaDuration", typeof(TimeSpan), typeof(UADMediaPlayer), new PropertyMetadata());
+
+        public TimeSpan MediaPosition
+        {
+            get { return (TimeSpan)GetValue(MediaPositionProperty); }
+            set { SetValue(MediaPositionProperty, value); }
+        }
+        public static readonly DependencyProperty MediaPositionProperty =
+            DependencyProperty.Register("MediaPosition", typeof(TimeSpan), typeof(UADMediaPlayer), new PropertyMetadata());
+
         public int PlayIndex
         {
             get { return (int)GetValue(PlayIndexProperty); }
@@ -104,7 +127,7 @@ namespace UniversalAnimeDownloader.MediaPlayer
 
         private static async void OnlineUpdateMediaElementSource(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var ins = d as OnlineUADMediaPlayer;
+            var ins = d as UADMediaPlayer;
             var newVal = (int)e.NewValue;
             if (newVal == -1)
                 return;
@@ -487,7 +510,7 @@ namespace UniversalAnimeDownloader.MediaPlayer
             IsControllerVisible = true;
         }
 
-        private async Task PlayPauseMedia()
+        public async Task PlayPauseMedia()
         {
             PackIcon pkIcon = btnPlayPause.Content as PackIcon;
 
@@ -532,7 +555,13 @@ namespace UniversalAnimeDownloader.MediaPlayer
             {
                 txblMediaPos.Text = mediaPlayer.Position.ToString(@"hh\:mm\:ss");
                 if (!isSeekSliderLocked)
-                    seekSlider.Value = MiscClass.GetTimeSpanRatio(mediaPlayer.Position, MediaDuration);
+                {
+                    var progressVal = MiscClass.GetTimeSpanRatio(mediaPlayer.Position, MediaDuration);
+                    seekSlider.Value = progressVal;
+                    PlayProgress = progressVal;
+                    MediaPosition = mediaPlayer.Position;
+                }
+
                 await Task.Delay(500);
             }
         }

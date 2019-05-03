@@ -33,7 +33,6 @@ namespace UniversalAnimeDownloader.ViewModels
         public ICommand BlackOverlayMouseDownCommand { get; set; }
         public ICommand OpenUADMediaPlayerCommand { get; set; }
         public ICommand ChangeWindowStateRequestCommand { get; set; }
-        public ICommand ChangeWindowStateRequestOnlineCommand { get; set; }
         public ICommand UADMediaPlayerClosedCommand { get; set; }
         public ICommand WindowStateChangedCommand { get; set; }
         public ICommand PageLoaded { get; set; }
@@ -192,18 +191,35 @@ namespace UniversalAnimeDownloader.ViewModels
             }
         }
 
-        private Visibility _UADOnlineMediaPlayerVisibility = Visibility.Collapsed;
-        public Visibility UADOnlineMediaPlayerVisibility
+        private EpisodeInfo _NowPlaying;
+        public EpisodeInfo NowPlaying
         {
             get
             {
-                return _UADOnlineMediaPlayerVisibility;
+                return _NowPlaying;
             }
             set
             {
-                if (_UADOnlineMediaPlayerVisibility != value)
+                if (_NowPlaying != value)
                 {
-                    _UADOnlineMediaPlayerVisibility = value;
+                    _NowPlaying = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private AnimeSeriesInfo _NowPlayingPlaylist;
+        public AnimeSeriesInfo NowPlayingPlaylist
+        {
+            get
+            {
+                return _NowPlayingPlaylist;
+            }
+            set
+            {
+                if (_NowPlayingPlaylist != value)
+                {
+                    _NowPlayingPlaylist = value;
                     OnPropertyChanged();
                 }
             }
@@ -223,7 +239,7 @@ namespace UniversalAnimeDownloader.ViewModels
                     _UADMediaPlayerPlayIndex = value;
                     if (value != -1 && NowPlayingPlaylist != null)
                     {
-                        UADMediaPlayerNowPlaying = NowPlayingPlaylist.Episodes[value];
+                        NowPlaying = NowPlayingPlaylist.Episodes[value];
                     }
                     OnPropertyChanged();
                 }
@@ -247,39 +263,36 @@ namespace UniversalAnimeDownloader.ViewModels
             }
         }
 
-        private int _OnlineUADMediaPlayerPlayIndex;
-        public int OnlineUADMediaPlayerPlayIndex
+        private bool _IsMediaPlayerPause;
+        public bool IsMediaPlayerPause
         {
             get
             {
-                return _OnlineUADMediaPlayerPlayIndex;
+                return _IsMediaPlayerPause;
             }
             set
             {
-                if (_OnlineUADMediaPlayerPlayIndex != value)
+                if (_IsMediaPlayerPause != value)
                 {
-                    _OnlineUADMediaPlayerPlayIndex = value;
-                    if (value != -1 && NowPlayingPlaylist != null)
-                    {
-                        UADMediaPlayerNowPlaying = NowPlayingPlaylist.Episodes[value];
-                    }
+                    _IsMediaPlayerPause = value;
+                    PlayPauseButtonIconKind = value ? PackIconKind.PlayCircleOutline : PackIconKind.PauseCircleOutline;
                     OnPropertyChanged();
                 }
             }
         }
 
-        private bool _OnlineUADMediaPlayerPlaying;
-        public bool OnlineUADMediaPlayerPlaying
+        private PackIconKind _PlayPauseButtonIconKind = PackIconKind.PauseCircleOutline;
+        public PackIconKind PlayPauseButtonIconKind
         {
             get
             {
-                return _OnlineUADMediaPlayerPlaying;
+                return _PlayPauseButtonIconKind;
             }
             set
             {
-                if (_OnlineUADMediaPlayerPlaying != value)
+                if (_PlayPauseButtonIconKind != value)
                 {
-                    _OnlineUADMediaPlayerPlaying = value;
+                    _PlayPauseButtonIconKind = value;
                     OnPropertyChanged();
                 }
             }
@@ -301,76 +314,6 @@ namespace UniversalAnimeDownloader.ViewModels
                 }
             }
         }
-
-        private EpisodeInfo _UADMediaPlayerNowPlaying;
-        public EpisodeInfo UADMediaPlayerNowPlaying
-        {
-            get
-            {
-                return _UADMediaPlayerNowPlaying;
-            }
-            set
-            {
-                if (_UADMediaPlayerNowPlaying != value)
-                {
-                    _UADMediaPlayerNowPlaying = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        private AnimeSeriesInfo _NowPlayingPlaylist;
-        public AnimeSeriesInfo NowPlayingPlaylist
-        {
-            get
-            {
-                return _NowPlayingPlaylist;
-            }
-            set
-            {
-                if (_NowPlayingPlaylist != value)
-                {
-                    _NowPlayingPlaylist = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        private bool _IsMediaPlayerPause;
-        public bool IsMediaPlayerPause
-        {
-            get
-            {
-                return _IsMediaPlayerPause;
-            }
-            set
-            {
-                if (_IsMediaPlayerPause != value)
-                {
-                    _IsMediaPlayerPause = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        private bool _IsOnlineMediaPlayerPause;
-        public bool IsOnlineMediaPlayerPause
-        {
-            get
-            {
-                return _IsOnlineMediaPlayerPause;
-            }
-            set
-            {
-                if (_IsOnlineMediaPlayerPause != value)
-                {
-                    _IsOnlineMediaPlayerPause = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-
         #endregion
 
         #region Fields and Properties
@@ -443,29 +386,10 @@ namespace UniversalAnimeDownloader.ViewModels
             ResetNotifyBadgeCommand = new RelayCommand<object>(p => true, p => NotifycationBadgeCount = 0);
             NavigateCommand = new RelayCommand<string>(p => true, NavigateProcess);
             ChangeWindowStateRequestCommand = new RelayCommand<RequestingWindowStateEventArgs>(p => true, ChangeUADMediaPlayerWindowState);
-            ChangeWindowStateRequestOnlineCommand = new RelayCommand<RequestingWindowStateEventArgs>(p => true, ChangeUADOnlineMediaPlayerWindowState);
-            OpenUADMediaPlayerCommand = new RelayCommand<object>(p => IsPlayButtonEnable, p =>
+            OpenUADMediaPlayerCommand = new RelayCommand<object>(p => IsPlayButtonEnable, p => UADMediaPlayerVisibility = Visibility.Visible);
+            UADMediaPlayerClosedCommand = new RelayCommand<object>(p => true, p =>
             {
-                if (UADMediaPlayerHelper.IsOnlineMediaPlayerPlaying)
-                {
-                    UADOnlineMediaPlayerVisibility = Visibility.Visible;
-                }
-                else
-                {
-                    UADMediaPlayerVisibility = Visibility.Visible;
-                }
-            });
-            UADMediaPlayerClosedCommand = new RelayCommand<string>(p => true, p =>
-            {
-                if (p == "Offline")
-                {
-                    UADMediaPlayerVisibility = Visibility.Collapsed;
-                }
-                else
-                {
-                    UADOnlineMediaPlayerVisibility = Visibility.Collapsed;
-                }
-
+                UADMediaPlayerVisibility = Visibility.Collapsed;
                 IsPlayButtonEnable = false;
             });
             WindowStateChangedCommand = new RelayCommand<Window>(p => true, WindowStateChangedAction);
@@ -493,7 +417,7 @@ namespace UniversalAnimeDownloader.ViewModels
                 {
                     case "MediaPlayerBtn":
                         MediaPlayerBtnMouseOver = true;
-                        if (UADMediaPlayerPlaying || OnlineUADMediaPlayerPlaying)
+                        if (UADMediaPlayerPlaying)
                         {
                             IsNowPlayingPopupOpen = true;
                             if (MediaPlayerMouseOverBtnToken != null)
@@ -541,6 +465,7 @@ namespace UniversalAnimeDownloader.ViewModels
                         break;
                 }
             });
+            PauseMediaPlayerCommand = new RelayCommand<object>(p => true, p => UADMediaPlayerHelper.TogglePlayPause());
         }
 
         private async Task QueueToClosePopup()
@@ -570,25 +495,6 @@ namespace UniversalAnimeDownloader.ViewModels
                     Pages[i].Visibility = Visibility.Collapsed;
                     await Task.Delay(waitShorter ? 1000 : 100);
                 }
-            }
-        }
-
-        private void ChangeUADOnlineMediaPlayerWindowState(RequestingWindowStateEventArgs obj)
-        {
-            switch (obj.RequestState)
-            {
-                case WindowState.Normal:
-                    Application.Current.MainWindow.WindowState = WindowState.Normal;
-                    break;
-                case WindowState.Maximized:
-                    Application.Current.MainWindow.WindowState = WindowState.Maximized;
-                    break;
-                case WindowState.Minimized:
-                    UADOnlineMediaPlayerVisibility = Visibility.Collapsed;
-                    IsPlayButtonEnable = true;
-                    break;
-                default:
-                    break;
             }
         }
 
