@@ -417,7 +417,8 @@
                 x:Name="uadMediaPlayerInternal"
                 IsPause="{Binding IsMediaPlayerPause, Mode=TwoWay}"
                 IsPlaying="{Binding UADMediaPlayerPlaying, Mode=TwoWay}"
-                PlayIndex="{Binding UADMediaPlayerPlayIndex, Mode=TwoWay}">
+                PlayIndex="{Binding UADMediaPlayerPlayIndex, Mode=TwoWay}"
+                Playlist="{Binding NowPlayingPlaylist, Mode=TwoWay}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="RequestWindowState">
                         <cmd:EventToCommand Command="{Binding ChangeWindowStateRequestCommand}" PassEventArgsToCommand="True" />
@@ -442,13 +443,18 @@
                 <Grid RenderTransformOrigin="0,0">
                     <Grid.LayoutTransform>
                         <TransformGroup>
-                            <ScaleTransform ScaleX="1" ScaleY="1" />
-                            <!--<ScaleTransform ScaleX="{Binding NowPlayingPopupScale, FallbackValue=1}" ScaleY="{Binding NowPlayingPopupScale, FallbackValue=1}" />-->
+                            <!--<ScaleTransform ScaleX="1" ScaleY="1" />-->
+                            <ScaleTransform ScaleX="{Binding NowPlayingPopupScale, FallbackValue=1}" ScaleY="{Binding NowPlayingPopupScale, FallbackValue=1}" />
                             <SkewTransform />
                             <RotateTransform />
                             <TranslateTransform />
                         </TransformGroup>
                     </Grid.LayoutTransform>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="15" />
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="MouseEnter">
                             <i:InvokeCommandAction Command="{Binding MouseEnterCommand}" CommandParameter="MediaPlayerPopup" />
@@ -459,7 +465,9 @@
                     </i:Interaction.Triggers>
                     <materialDesign:Card
                         Width="562"
-                        Height="162"
+                        Height="182"
+                        materialDesign:ShadowAssist.ShadowDepth="Depth5"
+                        materialDesign:ThemeAssist.Theme="Inherit"
                         UniformCornerRadius="10">
                         <Grid>
                             <Grid.RowDefinitions>
@@ -529,6 +537,86 @@
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
                             </Slider>
+                        </Grid>
+                    </materialDesign:Card>
+
+                    <materialDesign:Card
+                        Grid.Row="2"
+                        Width="562"
+                        Height="592"
+                        materialDesign:ShadowAssist.ShadowDepth="Depth5"
+                        materialDesign:ThemeAssist.Theme="Inherit"
+                        UniformCornerRadius="10">
+                        <Grid Margin="15">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="15" />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Rectangle
+                                Height="60"
+                                Fill="{DynamicResource MaterialDesignPaper}"
+                                RadiusX="10"
+                                RadiusY="10" />
+                            <Grid Margin="0,15">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition Width="75" />
+                                </Grid.ColumnDefinitions>
+                                <TextBox
+                                    Margin="15,0"
+                                    VerticalAlignment="Center"
+                                    materialDesign:HintAssist.Hint="type to search"
+                                    materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
+                                    BorderThickness="0"
+                                    FontSize="{DynamicResource Heading3}" />
+                                <Button Grid.Column="1" Style="{StaticResource MaterialDesignActionFlatButton}">
+                                    <materialDesign:PackIcon
+                                        Width="25"
+                                        Height="25"
+                                        Kind="Search" />
+                                </Button>
+                            </Grid>
+
+                            <ListView
+                                Grid.Row="2"
+                                AlternationCount="{Binding NowPlayingPlaylist.Episodes.Count}"
+                                ItemsSource="{Binding NowPlayingPlaylist.Episodes}"
+                                Style="{StaticResource listViewEpisodeBaseTemplate}">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <TextBlock Margin="0,7" TextTrimming="CharacterEllipsis">
+                                                <Run FontSize="{DynamicResource Heading3}" Text="{Binding Name}">
+                                                    <Run.Foreground>
+                                                        <MultiBinding Converter="{StaticResource MatchIndexToSpecificSolidColorBrushConverter}">
+                                                            <Binding Source="{StaticResource PrimaryHueMidBrush}" />
+                                                            <Binding Path="DataContext.UADMediaPlayerPlayIndex" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=local:MainWindow}" />
+                                                            <Binding Path="(ItemsControl.AlternationIndex)" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=ListViewItem}" />
+                                                        </MultiBinding>
+                                                    </Run.Foreground>
+                                                </Run>
+                                                <Run Text="  " />
+                                                <Run
+                                                    DataContext="{Binding Path=DataContext.NowPlayingPlaylist, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:MainWindow}}"
+                                                    FontWeight="SemiBold"
+                                                    Foreground="Gray"
+                                                    Text="{Binding Name}" />
+                                            </TextBlock>
+
+                                            <materialDesign:PackIcon
+                                                Width="25"
+                                                Height="25"
+                                                HorizontalAlignment="Right"
+                                                VerticalAlignment="Center"
+                                                Foreground="Red"
+                                                Kind="AlertCircle"
+                                                ToolTip="This episode is not downloaded yet!"
+                                                Visibility="{Binding AvailableOffline, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
                         </Grid>
                     </materialDesign:Card>
                 </Grid>

@@ -22,6 +22,7 @@
     <valueConverter:AnimeSeriesStorageStateToIconVisibilityConverter x:Key="AnimeSeriesStorageStateToIconVisibilityConverter" />
     <valueConverter:GreaterThanParameterToVisibilityConverter x:Key="GreaterThanParameterToVisibilityConverter" />
     <valueConverter:MatchIndexToRandomSolidColorBrushConverter x:Key="MatchIndexToRandomSolidColorBrushConverter" />
+    <valueConverter:MatchIndexToSpecificSolidColorBrushConverter x:Key="MatchIndexToSpecificSolidColorBrushConverter" />
     <valueConverter:MatchIndexToVisibilityConverter x:Key="MatchIndexToVisibilityConverter" />
     <valueConverter:StringToPlayerTypeConverter x:Key="StringToPlayerTypeConverter" />
     <valueConverter:ColorToSolidColorBrushConverter x:Key="ColorToSolidColorBrushConverter" />

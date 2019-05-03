@@ -29,6 +29,25 @@ namespace UniversalAnimeDownloader.ValueConverters
         }
     }
 
+    class MatchIndexToSpecificSolidColorBrushConverter : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            int parsedVal = (int)values[1];
+
+            for (int i = 2; i < values.Length; i++)
+                if ((int)values[i] != parsedVal)
+                    return new SolidColorBrush(Colors.Transparent);
+
+            return values[0];
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     class MatchIndexToVisibilityConverter : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)

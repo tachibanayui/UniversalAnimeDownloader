@@ -88,13 +88,6 @@
                 </Style>
             </Setter.Value>
         </Setter>
-        <Setter Property="ItemContainerStyleSelector">
-            <Setter.Value>
-                <StyleSelector>
-                   
-                </StyleSelector>
-            </Setter.Value>
-        </Setter>
 
         <Setter Property="Background" Value="{DynamicResource MaterialDesignPaper}" />
         <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}" />
