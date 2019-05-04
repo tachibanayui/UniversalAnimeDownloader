@@ -1,9 +1,11 @@
 ﻿using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -119,7 +121,8 @@ namespace UniversalAnimeDownloader.MediaPlayer
 
         private static void UpdateMediaElementSource(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if ((d as UADMediaPlayer).IsPlayOnline)
+            var ins = d as UADMediaPlayer;
+            if (ins.IsPlayOnline)
                 OnlineUpdateMediaElementSource(d, e);
             else
                 OfflineUpdateMediaElementSource(d, e);

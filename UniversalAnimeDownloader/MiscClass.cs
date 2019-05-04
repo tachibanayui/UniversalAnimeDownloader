@@ -287,6 +287,28 @@ namespace UniversalAnimeDownloader
             _Player.ChangePositionProgress(progress);
         }
 
+        /// <summary>
+        /// Change index without binding
+        /// </summary>
+        /// <param name="index"></param>
+        public static void ChangeDirectIndex(int index)
+        {
+            NullCheck();
+            _Player.PlayIndex = index;
+        }
+
+        public static void Next()
+        {
+            NullCheck();
+            _Player.Next();
+        }
+
+        public static void Previous()
+        {
+            NullCheck();
+            _Player.Previous();
+        }
+
         private static void NullCheck()
         {
             if (_Ins == null)

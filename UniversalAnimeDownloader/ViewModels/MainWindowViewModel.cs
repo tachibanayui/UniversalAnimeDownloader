@@ -42,6 +42,9 @@ namespace UniversalAnimeDownloader.ViewModels
         public ICommand LookSliderCommand { get; set; }
         public ICommand ChangePositionCommand { get; set; }
         public ICommand WindowSizeChangedCommand { get; set; }
+        public ICommand SelectPlayIndexCommand { get; set; }
+        public ICommand PreviousMediaPlayerPopupCommand { get; set; }
+        public ICommand NextMediaPlayerPopupCommand { get; set; }
 
         public ICommand NavigateCommand { get; set; }
         #endregion
@@ -343,11 +346,6 @@ namespace UniversalAnimeDownloader.ViewModels
         private bool IsMediaPlayerPopupMouseOver;
         #endregion
 
-        private void CalculateIsNowPlayingPopupOpen()
-        {
-
-        }
-
         public MainWindowViewModel()
         {
             string notificationString = (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.Notification;
@@ -429,6 +427,7 @@ namespace UniversalAnimeDownloader.ViewModels
                     await LoadPagesToMemory(false);
                     p.Visibility = Visibility.Visible;
                 }
+                NowPlayingPopupScale = p.Width / 1920 * (1 + (1 - (p.Width / 1920)));
 
             });
             MouseEnterCommand = new RelayCommand<string>(p => true, p =>
@@ -488,7 +487,10 @@ namespace UniversalAnimeDownloader.ViewModels
             PauseMediaPlayerCommand = new RelayCommand<object>(p => true, p => UADMediaPlayerHelper.TogglePlayPause());
             LookSliderCommand = new RelayCommand<object>(p => true, p => UADMediaPlayerHelper.LockSliderPosition());
             ChangePositionCommand = new RelayCommand<double>(p => true, p => UADMediaPlayerHelper.ChangePositionByProgress(p));
-            WindowSizeChangedCommand = new RelayCommand<Window>(p => true, p => NowPlayingPopupScale = p.Width / 1920 * 1.25);
+            WindowSizeChangedCommand = new RelayCommand<Window>(p => true, p => NowPlayingPopupScale = p.Width / 1920 * (1 + (1 - (p.Width / 1920))));
+            SelectPlayIndexCommand = new RelayCommand<int>(p => true, p => UADMediaPlayerHelper.ChangeDirectIndex(p));
+            PreviousMediaPlayerPopupCommand = new RelayCommand<object>(p => true, p => UADMediaPlayerHelper.Previous());
+            NextMediaPlayerPopupCommand = new RelayCommand<object>(p => true, p => UADMediaPlayerHelper.Next());
         }
 
         private async Task QueueToClosePopup()

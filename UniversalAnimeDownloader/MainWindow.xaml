@@ -415,10 +415,10 @@
             Visibility="{Binding UADMediaPlayerVisibility}">
             <media:UADMediaPlayer
                 x:Name="uadMediaPlayerInternal"
-                IsPause="{Binding IsMediaPlayerPause, Mode=TwoWay}"
-                IsPlaying="{Binding UADMediaPlayerPlaying, Mode=TwoWay}"
-                PlayIndex="{Binding UADMediaPlayerPlayIndex, Mode=TwoWay}"
-                Playlist="{Binding NowPlayingPlaylist, Mode=TwoWay}">
+                IsPause="{Binding IsMediaPlayerPause, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                IsPlaying="{Binding UADMediaPlayerPlaying, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                PlayIndex="{Binding UADMediaPlayerPlayIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                Playlist="{Binding NowPlayingPlaylist, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="RequestWindowState">
                         <cmd:EventToCommand Command="{Binding ChangeWindowStateRequestCommand}" PassEventArgsToCommand="True" />
@@ -499,7 +499,10 @@
                             <Grid Grid.Row="1" Grid.RowSpan="2">
                                 <Rectangle Fill="Black" Opacity="0.7" />
                                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                                    <Button Margin="10,0" Style="{StaticResource MaterialDesignActionFlatButton}">
+                                    <Button
+                                        Margin="10,0"
+                                        Command="{Binding PreviousMediaPlayerPopupCommand}"
+                                        Style="{StaticResource MaterialDesignActionFlatButton}">
                                         <materialDesign:PackIcon Kind="SkipBackward" Style="{StaticResource AutoSizeIconPack}" />
                                     </Button>
                                     <Button
@@ -508,7 +511,10 @@
                                         Style="{StaticResource MaterialDesignActionFlatButton}">
                                         <materialDesign:PackIcon Kind="{Binding PlayPauseButtonIconKind}" Style="{StaticResource AutoSizeIconPack}" />
                                     </Button>
-                                    <Button Margin="10,0" Style="{StaticResource MaterialDesignActionFlatButton}">
+                                    <Button
+                                        Margin="10,0"
+                                        Command="{Binding NextMediaPlayerPopupCommand}"
+                                        Style="{StaticResource MaterialDesignActionFlatButton}">
                                         <materialDesign:PackIcon Kind="SkipForward" Style="{StaticResource AutoSizeIconPack}" />
                                     </Button>
                                 </StackPanel>
@@ -580,40 +586,57 @@
 
                             <ListView
                                 Grid.Row="2"
+                                VerticalContentAlignment="Stretch"
                                 AlternationCount="{Binding NowPlayingPlaylist.Episodes.Count}"
                                 ItemsSource="{Binding NowPlayingPlaylist.Episodes}"
                                 Style="{StaticResource listViewEpisodeBaseTemplate}">
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
-                                        <Grid>
-                                            <TextBlock Margin="0,7" TextTrimming="CharacterEllipsis">
-                                                <Run FontSize="{DynamicResource Heading3}" Text="{Binding Name}">
-                                                    <Run.Foreground>
-                                                        <MultiBinding Converter="{StaticResource MatchIndexToSpecificSolidColorBrushConverter}">
-                                                            <Binding Source="{StaticResource PrimaryHueMidBrush}" />
-                                                            <Binding Path="DataContext.UADMediaPlayerPlayIndex" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=local:MainWindow}" />
-                                                            <Binding Path="(ItemsControl.AlternationIndex)" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=ListViewItem}" />
-                                                        </MultiBinding>
-                                                    </Run.Foreground>
-                                                </Run>
-                                                <Run Text="  " />
-                                                <Run
-                                                    DataContext="{Binding Path=DataContext.NowPlayingPlaylist, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:MainWindow}}"
-                                                    FontWeight="SemiBold"
-                                                    Foreground="Gray"
-                                                    Text="{Binding Name}" />
-                                            </TextBlock>
+                                        <Button Command="{Binding DataContext.SelectPlayIndexCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:MainWindow}}" CommandParameter="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListViewItem}}">
+                                            <Button.Style>
+                                                <Style TargetType="Button">
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate TargetType="Button">
+                                                                <ContentPresenter Content="{TemplateBinding Content}" />
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </Button.Style>
 
-                                            <materialDesign:PackIcon
-                                                Width="25"
-                                                Height="25"
-                                                HorizontalAlignment="Right"
-                                                VerticalAlignment="Center"
-                                                Foreground="Red"
-                                                Kind="AlertCircle"
-                                                ToolTip="This episode is not downloaded yet!"
-                                                Visibility="{Binding AvailableOffline, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}" />
-                                        </Grid>
+                                            <Grid>
+                                                <Rectangle Fill="Black" Opacity="0.0001" />
+                                                <TextBlock Margin="0,7" TextTrimming="CharacterEllipsis">
+                                                    <Run FontSize="{DynamicResource Heading3}" Text="{Binding Name}">
+                                                        <Run.Foreground>
+                                                            <MultiBinding Converter="{StaticResource MatchIndexToSpecificSolidColorBrushConverter}">
+                                                                <Binding Source="{StaticResource PrimaryHueMidBrush}" />
+                                                                <Binding Source="{StaticResource MaterialDesignBody}" />
+                                                                <Binding Path="DataContext.UADMediaPlayerPlayIndex" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=local:MainWindow}" />
+                                                                <Binding Path="(ItemsControl.AlternationIndex)" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=ListViewItem}" />
+                                                            </MultiBinding>
+                                                        </Run.Foreground>
+                                                    </Run>
+                                                    <Run Text="  " />
+                                                    <Run
+                                                        DataContext="{Binding Path=DataContext.NowPlayingPlaylist, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:MainWindow}}"
+                                                        FontWeight="SemiBold"
+                                                        Foreground="Gray"
+                                                        Text="{Binding Name}" />
+                                                </TextBlock>
+
+                                                <materialDesign:PackIcon
+                                                    Width="25"
+                                                    Height="25"
+                                                    HorizontalAlignment="Right"
+                                                    VerticalAlignment="Center"
+                                                    Foreground="Red"
+                                                    Kind="AlertCircle"
+                                                    ToolTip="This episode is not downloaded yet!"
+                                                    Visibility="{Binding AvailableOffline, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}" />
+                                            </Grid>
+                                        </Button>
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
                             </ListView>

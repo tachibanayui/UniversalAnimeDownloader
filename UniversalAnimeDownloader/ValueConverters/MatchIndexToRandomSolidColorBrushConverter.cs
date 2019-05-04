@@ -33,11 +33,11 @@ namespace UniversalAnimeDownloader.ValueConverters
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            int parsedVal = (int)values[1];
+            int parsedVal = (int)values[2];
 
-            for (int i = 2; i < values.Length; i++)
+            for (int i = 3; i < values.Length; i++)
                 if ((int)values[i] != parsedVal)
-                    return new SolidColorBrush(Colors.Transparent);
+                    return values[1];
 
             return values[0];
         }
