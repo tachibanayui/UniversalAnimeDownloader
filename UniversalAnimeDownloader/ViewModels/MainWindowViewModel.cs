@@ -1,10 +1,13 @@
 ﻿using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
@@ -45,6 +48,9 @@ namespace UniversalAnimeDownloader.ViewModels
         public ICommand SelectPlayIndexCommand { get; set; }
         public ICommand PreviousMediaPlayerPopupCommand { get; set; }
         public ICommand NextMediaPlayerPopupCommand { get; set; }
+        public ICommand OpenNowPlayingPopupCommand { get; set; }
+        public ICommand ShowPlaylistButtonCommand { get; set; }
+        public ICommand FilterPlaylistPopup { get; set; }
 
         public ICommand NavigateCommand { get; set; }
         #endregion
@@ -321,6 +327,96 @@ namespace UniversalAnimeDownloader.ViewModels
             }
         }
 
+        private void AnimateNowPlayingPopupOpen(Popup popup, bool isOpen)
+        {
+            Storyboard stb = new Storyboard();
+            var globalDuration = TimeSpan.FromSeconds(0.4);
+
+            double opacityFrom = 0;
+            double opacityTo = 1;
+            double bounceInFrom = 0.7;
+            double bounceInTo = 0.9;
+
+            DoubleAnimation fadeInAnim = new DoubleAnimation()
+            {
+                From = opacityFrom,
+                To = opacityTo,
+                Duration = globalDuration,
+                EasingFunction = new CubicEase() {EasingMode = EasingMode.EaseOut },
+                FillBehavior = FillBehavior.HoldEnd
+            };
+            Storyboard.SetTargetProperty(fadeInAnim, new PropertyPath("Opacity"));
+            stb.Children.Add(fadeInAnim);
+
+            DoubleAnimation bounceInScaleXAnim = new DoubleAnimation()
+            {
+                From = bounceInFrom,
+                To = bounceInTo,
+                Duration = globalDuration,
+                EasingFunction = new ElasticEase() { EasingMode = EasingMode.EaseOut, Springiness = 6, Oscillations = 2 },
+                FillBehavior = FillBehavior.HoldEnd
+            };
+            Storyboard.SetTargetProperty(bounceInScaleXAnim, new PropertyPath("RenderTransform.Children[0].ScaleX"));
+            stb.Children.Add(bounceInScaleXAnim);
+
+            DoubleAnimation bounceInScaleYAnim = new DoubleAnimation()
+            {
+                From = bounceInFrom,
+                To = bounceInTo,
+                Duration = globalDuration,
+                EasingFunction = new ElasticEase() { EasingMode = EasingMode.EaseOut, Springiness = 6, Oscillations = 2 },
+                FillBehavior = FillBehavior.HoldEnd
+            };
+            Storyboard.SetTargetProperty(bounceInScaleYAnim, new PropertyPath("RenderTransform.Children[0].ScaleY"));
+            stb.Children.Add(bounceInScaleYAnim);
+            (popup.Child as Grid).BeginStoryboard(stb);
+        }
+
+        private Storyboard GetNowPlayingPopupCloseStoryBoard()
+        {
+            Storyboard stb = new Storyboard();
+            var globalDuration = TimeSpan.FromSeconds(0.4);
+
+            double opacityFrom = 1;
+            double opacityTo = 0;
+            double bounceInFrom = 0.9;
+            double bounceInTo = 0.7;
+
+            DoubleAnimation fadeInAnim = new DoubleAnimation()
+            {
+                From = opacityFrom,
+                To = opacityTo,
+                Duration = globalDuration,
+                EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut },
+                FillBehavior = FillBehavior.Stop
+            };
+            Storyboard.SetTargetProperty(fadeInAnim, new PropertyPath("Opacity"));
+            stb.Children.Add(fadeInAnim);
+
+            DoubleAnimation bounceInScaleXAnim = new DoubleAnimation()
+            {
+                From = bounceInFrom,
+                To = bounceInTo,
+                Duration = globalDuration,
+                EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut },
+                FillBehavior = FillBehavior.Stop
+            };
+            Storyboard.SetTargetProperty(bounceInScaleXAnim, new PropertyPath("RenderTransform.Children[0].ScaleX"));
+            stb.Children.Add(bounceInScaleXAnim);
+
+            DoubleAnimation bounceInScaleYAnim = new DoubleAnimation()
+            {
+                From = bounceInFrom,
+                To = bounceInTo,
+                Duration = globalDuration,
+                EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut },
+                FillBehavior = FillBehavior.Stop
+            };
+            Storyboard.SetTargetProperty(bounceInScaleYAnim, new PropertyPath("RenderTransform.Children[0].ScaleY"));
+            stb.Children.Add(bounceInScaleYAnim);
+            return stb;
+        }
+
         private double _NowPlayingPopupScale = 0.4;
         public double NowPlayingPopupScale
         {
@@ -342,6 +438,7 @@ namespace UniversalAnimeDownloader.ViewModels
         #region Fields and Properties
         public bool IsPlayButtonEnable { get; set; }
         public bool MediaPlayerBtnMouseOver { get; set; }
+        public bool IsPlaylistToggled { get; set; }
         private CancellationTokenSource MediaPlayerMouseOverBtnToken = null;
         private bool IsMediaPlayerPopupMouseOver;
         #endregion
@@ -491,6 +588,75 @@ namespace UniversalAnimeDownloader.ViewModels
             SelectPlayIndexCommand = new RelayCommand<int>(p => true, p => UADMediaPlayerHelper.ChangeDirectIndex(p));
             PreviousMediaPlayerPopupCommand = new RelayCommand<object>(p => true, p => UADMediaPlayerHelper.Previous());
             NextMediaPlayerPopupCommand = new RelayCommand<object>(p => true, p => UADMediaPlayerHelper.Next());
+            OpenNowPlayingPopupCommand = new RelayCommand<Popup>(p => true, p => AnimateNowPlayingPopupOpen(p, true));
+            ShowPlaylistButtonCommand = new RelayCommand<object>(p => true, p =>
+            {
+                IsPlaylistToggled = !IsPlaylistToggled;
+                var cardHost = (UADMediaPlayerHelper.NowPlayingPopup.Child as Grid).Children[0] as Grid;
+                var card = cardHost.Children[1] as Card;
+
+                if(IsPlaylistToggled)
+                    cardHost.Height = 789;
+                Storyboard stb = GetPlaylistPanelAnim(IsPlaylistToggled);
+                stb.Completed += (s, e) =>
+                {
+                    cardHost.Height = IsPlaylistToggled ? 789 : 197;
+                };
+
+                card.BeginStoryboard(stb);
+            });
+            FilterPlaylistPopup = new RelayCommand<string>(p => true, p => 
+            {
+                ICollectionView view = CollectionViewSource.GetDefaultView(NowPlayingPlaylist.Episodes);
+                view.Filter = o =>
+                {
+                    if (string.IsNullOrEmpty(p))
+                        return true;
+                    return (o as EpisodeInfo).Name.ToLower().Contains(p.ToLower());
+                };
+
+                view.Refresh();
+            });
+        }
+
+        private Storyboard GetPlaylistPanelAnim(bool isOpen)
+        {
+            Storyboard stb = new Storyboard();
+            var globalDuration = TimeSpan.FromSeconds(0.7);
+            IEasingFunction globalEasingFunc = new CubicEase { EasingMode = EasingMode.EaseOut };
+            double opacityTo = 1;
+            double heightTo = 592;
+
+            if (!isOpen)
+            {
+                opacityTo = 0;
+                heightTo = 0;
+            }
+
+            DoubleAnimation opacityAnim = new DoubleAnimation()
+            {
+                To = opacityTo,
+                Duration = globalDuration,
+                EasingFunction = globalEasingFunc
+            };
+            if (!isOpen)
+            {
+                opacityAnim.EasingFunction = new CubicEase { EasingMode = EasingMode.EaseInOut };
+                opacityAnim.Duration = TimeSpan.FromSeconds(0.6);
+            }
+
+            Storyboard.SetTargetProperty(opacityAnim, new PropertyPath("Opacity"));
+            stb.Children.Add(opacityAnim);
+
+            DoubleAnimation heightAnim = new DoubleAnimation()
+            {
+                To = heightTo,
+                Duration = globalDuration,
+                EasingFunction = globalEasingFunc
+            };
+            Storyboard.SetTargetProperty(heightAnim, new PropertyPath("Height"));
+            stb.Children.Add(heightAnim);
+            return stb;
         }
 
         private async Task QueueToClosePopup()
@@ -505,7 +671,45 @@ namespace UniversalAnimeDownloader.ViewModels
                         return;
                     }
                 }
-                IsNowPlayingPopupOpen = false;
+                Storyboard stb = null;
+                Application.Current.Dispatcher.Invoke(async () =>
+                {
+                    stb = GetNowPlayingPopupCloseStoryBoard();
+                    stb.Completed += (s, e) =>
+                    {
+                        if (MediaPlayerMouseOverBtnToken.IsCancellationRequested)
+                        {
+                            Application.Current.Dispatcher.Invoke(() => AnimateNowPlayingPopupOpen(UADMediaPlayerHelper.NowPlayingPopup, true));
+                            return;
+                        }
+                        else
+                        {
+                            IsNowPlayingPopupOpen = false;
+                            Storyboard stbPlaylist = GetPlaylistPanelAnim(IsPlaylistToggled);
+                            
+                        }
+                    };
+                    if(IsPlaylistToggled)
+                    {
+                        IsPlaylistToggled = false;
+
+                        var cardHost = (UADMediaPlayerHelper.NowPlayingPopup.Child as Grid).Children[0] as Grid;
+                        var card = cardHost.Children[1] as Card;
+
+                        if (IsPlaylistToggled)
+                            cardHost.Height = 789;
+                        Storyboard stb2 = GetPlaylistPanelAnim(IsPlaylistToggled);
+                        stb2.Completed += (s, e) =>
+                        {
+                            cardHost.Height = IsPlaylistToggled ? 789 : 197;
+                        };
+
+
+                        card.BeginStoryboard(stb2);
+                        await Task.Delay(100);
+                    }
+                    (UADMediaPlayerHelper.NowPlayingPopup.Child as Grid).BeginStoryboard(stb);
+                });
             });
         }
 

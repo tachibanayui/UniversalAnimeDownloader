@@ -8,6 +8,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
@@ -201,7 +202,18 @@ namespace UniversalAnimeDownloader
     {
         private static MainWindowViewModel _Ins;
         private static UADMediaPlayer _Player;
+        private static Popup _NowPlayingPopup;
         public static bool IsOnlineMediaPlayerPlaying = false;
+
+        public static Popup NowPlayingPopup
+        {
+            get
+            {
+                if (_NowPlayingPopup == null)
+                    NullCheck();
+                return _NowPlayingPopup;
+            }
+        }
 
         public static async void Play(AnimeSeriesInfo info, int index = 0, bool isOnline = false)
         {
@@ -315,6 +327,8 @@ namespace UniversalAnimeDownloader
                 _Ins = Application.Current.FindResource("MainWindowViewModel") as MainWindowViewModel;
             if (_Player == null)
                 _Player = MiscClass.FindVisualChild<UADMediaPlayer>(Application.Current.MainWindow);
+            if (_NowPlayingPopup == null)
+                _NowPlayingPopup = Application.Current.MainWindow.FindName("nowPlayingPopup") as Popup;
         }
     }
 

@@ -33,11 +33,19 @@ namespace UniversalAnimeDownloader.ValueConverters
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
+            if (values[2] == DependencyProperty.UnsetValue)
+                return values[1];
+
             int parsedVal = (int)values[2];
 
             for (int i = 3; i < values.Length; i++)
+            {
+                if(values[i] == DependencyProperty.UnsetValue)
+                    return values[1];
+
                 if ((int)values[i] != parsedVal)
                     return values[1];
+            }
 
             return values[0];
         }
