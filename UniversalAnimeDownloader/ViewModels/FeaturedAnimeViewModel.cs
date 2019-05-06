@@ -144,7 +144,7 @@ namespace UniversalAnimeDownloader.ViewModels
         public FeaturedAnimeViewModel()
         {
             SelectedQueryModIndex = 0;
-            RefreshCommand = new RelayCommand<object>(p => true, async (p) => await LoadFeaturedAnime(0, 50));
+            RefreshCommand = new RelayCommand<object>(null, async (p) => await LoadFeaturedAnime(0, 50));
             AnimeListScrollingCommand = new RelayCommand<object>(p =>
             {
                 if (p != null)
@@ -161,7 +161,7 @@ namespace UniversalAnimeDownloader.ViewModels
                 await LoadFeaturedAnime(SuggestedAnimeInfos.Count, 50, false);
             });
 
-            ShowAnimeDetailCommand = new RelayCommand<AnimeSeriesInfo>(p => true, async (p) =>
+            ShowAnimeDetailCommand = new RelayCommand<AnimeSeriesInfo>(null, async (p) =>
             {
                 if (p != null)
                 {
@@ -173,7 +173,7 @@ namespace UniversalAnimeDownloader.ViewModels
                 }
             });
 
-            PageLoaded = new RelayCommand<object>(p => true, async p => { if (!(Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.IsOnlyLoadWhenHostShow) await InitAnimeList(); });
+            PageLoaded = new RelayCommand<object>(null, async p => { if (!(Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.IsOnlyLoadWhenHostShow) await InitAnimeList(); });
         }
 
         private async Task InitAnimeList()

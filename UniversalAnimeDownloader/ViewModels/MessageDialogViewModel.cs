@@ -15,7 +15,7 @@ namespace UniversalAnimeDownloader.ViewModels
 
         public MessageDialogViewModel()
         {
-            ActionButtonCommand = new RelayCommand<string>(p => true, p =>
+            ActionButtonCommand = new RelayCommand<string>(null, p =>
             {
                 IsDialogOpen = false;
                 switch (p)

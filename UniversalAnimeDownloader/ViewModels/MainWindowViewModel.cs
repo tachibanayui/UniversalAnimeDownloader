@@ -1,6 +1,7 @@
 ﻿using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
@@ -232,10 +233,22 @@ namespace UniversalAnimeDownloader.ViewModels
                 if (_NowPlayingPlaylist != value)
                 {
                     _NowPlayingPlaylist = value;
+                    CreateClonePlaylist(value);
                     OnPropertyChanged();
                 }
             }
         }
+
+        private void CreateClonePlaylist(AnimeSeriesInfo info)
+        {
+            FilteredNowPlayingPlaylist.Clear();
+            foreach (var item in info.Episodes)
+            {
+                FilteredNowPlayingPlaylist.Add(item);
+            }
+        }
+
+        public ObservableCollection<EpisodeInfo> FilteredNowPlayingPlaylist { get; set; } = new ObservableCollection<EpisodeInfo>();
 
         private int _UADMediaPlayerPlayIndex;
         public int UADMediaPlayerPlayIndex
@@ -342,7 +355,7 @@ namespace UniversalAnimeDownloader.ViewModels
                 From = opacityFrom,
                 To = opacityTo,
                 Duration = globalDuration,
-                EasingFunction = new CubicEase() {EasingMode = EasingMode.EaseOut },
+                EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut },
                 FillBehavior = FillBehavior.HoldEnd
             };
             Storyboard.SetTargetProperty(fadeInAnim, new PropertyPath("Opacity"));
@@ -433,12 +446,43 @@ namespace UniversalAnimeDownloader.ViewModels
                 }
             }
         }
+
+        private Brush _PlaylistOpenButtonIconBrush = Application.Current.FindResource("MaterialDesignBody") as Brush;;
+        public Brush PlaylistOpenButtonIconBrush
+        {
+            get
+            {
+                return _PlaylistOpenButtonIconBrush;
+            }
+            set
+            {
+                if (_PlaylistOpenButtonIconBrush != value)
+                {
+                    _PlaylistOpenButtonIconBrush = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
         #endregion
 
         #region Fields and Properties
         public bool IsPlayButtonEnable { get; set; }
         public bool MediaPlayerBtnMouseOver { get; set; }
-        public bool IsPlaylistToggled { get; set; }
+        private bool _IsPlaylistToggled;
+        public bool IsPlaylistToggled {
+            get => _IsPlaylistToggled;
+            set
+            {
+                if(_IsPlaylistToggled != value)
+                {
+                    _IsPlaylistToggled = value;
+                    if (value)
+                        PlaylistOpenButtonIconBrush = Application.Current.FindResource("PrimaryHueMidBrush") as Brush;
+                    else
+                        PlaylistOpenButtonIconBrush = Application.Current.FindResource("MaterialDesignBody") as Brush;
+                }
+            }
+        }
         private CancellationTokenSource MediaPlayerMouseOverBtnToken = null;
         private bool IsMediaPlayerPopupMouseOver;
         #endregion
@@ -459,8 +503,8 @@ namespace UniversalAnimeDownloader.ViewModels
 
             //NotificationManager.Add(new NotificationItem() { Title = "Test notification", Detail = "This is a test notification!", ShowActionButton = true, ActionButtonContent = "Click here!", ButtonAction = new Action(() => { MessageBox.Show("Test"); }) });
 
-            CloseWindowCommand = new RelayCommand<object>(p => true, p => Application.Current.Shutdown());
-            ChangeWindowStateCommand = new RelayCommand<Button>(p => true, p =>
+            CloseWindowCommand = new RelayCommand<object>(null, p => Application.Current.Shutdown());
+            ChangeWindowStateCommand = new RelayCommand<Button>(null, p =>
             {
                 if (p != null)
                 {
@@ -477,12 +521,12 @@ namespace UniversalAnimeDownloader.ViewModels
                     }
                 }
             });
-            MinimizeWindowCommand = new RelayCommand<Window>(p => true, p => p.WindowState = WindowState.Minimized);
-            DragMoveWindowCommand = new RelayCommand<Window>(p => true, p => p.DragMove());
-            ToggleNavSideBarCommand = new RelayCommand<Window>(p => true, AnimateMenuBar);
+            MinimizeWindowCommand = new RelayCommand<Window>(null, p => p.WindowState = WindowState.Minimized);
+            DragMoveWindowCommand = new RelayCommand<Window>(null, p => p.DragMove());
+            ToggleNavSideBarCommand = new RelayCommand<Window>(null, AnimateMenuBar);
             BlackOverlayMouseDownCommand = new RelayCommand<Rectangle>(p => p.IsHitTestVisible = true, p => { IsExpandSidePanel = !IsExpandSidePanel; AnimateMenuBar(Window.GetWindow(p)); });
-            DeleteSearchBoxCommand = new RelayCommand<TextBox>(p => true, p => { p.Clear(); MiscClass.OnUserSearched(this, p.Text); });
-            CheckForEnterKeyCommand = new RelayCommand<TextBox>(p => true, p =>
+            DeleteSearchBoxCommand = new RelayCommand<TextBox>(null, p => { p.Clear(); MiscClass.OnUserSearched(this, p.Text); });
+            CheckForEnterKeyCommand = new RelayCommand<TextBox>(null, p =>
             {
                 if (p != null)
                 {
@@ -495,20 +539,20 @@ namespace UniversalAnimeDownloader.ViewModels
                 }
 
             });
-            SearchButtonClickCommand = new RelayCommand<TextBox>(p => true, p => MiscClass.OnUserSearched(this, p.Text));
+            SearchButtonClickCommand = new RelayCommand<TextBox>(null, p => MiscClass.OnUserSearched(this, p.Text));
             GoBackNavigationCommand = new RelayCommand<object>(p => MiscClass.NavigationHelper.CanGoBack, async p => await SwichPage(MiscClass.NavigationHelper.Back()));
             GoForwardNavigationCommand = new RelayCommand<object>(p => MiscClass.NavigationHelper.CanGoForward, async p => await SwichPage(MiscClass.NavigationHelper.Forward()));
-            ResetNotifyBadgeCommand = new RelayCommand<object>(p => true, p => NotifycationBadgeCount = 0);
-            NavigateCommand = new RelayCommand<string>(p => true, NavigateProcess);
-            ChangeWindowStateRequestCommand = new RelayCommand<RequestingWindowStateEventArgs>(p => true, ChangeUADMediaPlayerWindowState);
+            ResetNotifyBadgeCommand = new RelayCommand<object>(null, p => NotifycationBadgeCount = 0);
+            NavigateCommand = new RelayCommand<string>(null, NavigateProcess);
+            ChangeWindowStateRequestCommand = new RelayCommand<RequestingWindowStateEventArgs>(null, ChangeUADMediaPlayerWindowState);
             OpenUADMediaPlayerCommand = new RelayCommand<object>(p => IsPlayButtonEnable, p => UADMediaPlayerVisibility = Visibility.Visible);
-            UADMediaPlayerClosedCommand = new RelayCommand<object>(p => true, p =>
+            UADMediaPlayerClosedCommand = new RelayCommand<object>(null, p =>
             {
                 UADMediaPlayerVisibility = Visibility.Collapsed;
                 IsPlayButtonEnable = false;
             });
-            WindowStateChangedCommand = new RelayCommand<Window>(p => true, WindowStateChangedAction);
-            PageLoaded = new RelayCommand<Window>(p => true, async p =>
+            WindowStateChangedCommand = new RelayCommand<Window>(null, WindowStateChangedAction);
+            PageLoaded = new RelayCommand<Window>(null, async p =>
             {
                 p.Visibility = Visibility.Collapsed;
                 (Pages[0].DataContext as IPageContent).OnShow();
@@ -527,7 +571,7 @@ namespace UniversalAnimeDownloader.ViewModels
                 NowPlayingPopupScale = p.Width / 1920 * (1 + (1 - (p.Width / 1920)));
 
             });
-            MouseEnterCommand = new RelayCommand<string>(p => true, p =>
+            MouseEnterCommand = new RelayCommand<string>(null, p =>
             {
                 switch (p)
                 {
@@ -555,7 +599,7 @@ namespace UniversalAnimeDownloader.ViewModels
                 }
 
             });
-            MouseLeaveCommand = new RelayCommand<string>(p => true, async p =>
+            MouseLeaveCommand = new RelayCommand<string>(null, async p =>
             {
                 switch (p)
                 {
@@ -581,22 +625,25 @@ namespace UniversalAnimeDownloader.ViewModels
                         break;
                 }
             });
-            PauseMediaPlayerCommand = new RelayCommand<object>(p => true, p => UADMediaPlayerHelper.TogglePlayPause());
-            LookSliderCommand = new RelayCommand<object>(p => true, p => UADMediaPlayerHelper.LockSliderPosition());
-            ChangePositionCommand = new RelayCommand<double>(p => true, p => UADMediaPlayerHelper.ChangePositionByProgress(p));
-            WindowSizeChangedCommand = new RelayCommand<Window>(p => true, p => NowPlayingPopupScale = p.Width / 1920 * (1 + (1 - (p.Width / 1920))));
-            SelectPlayIndexCommand = new RelayCommand<int>(p => true, p => UADMediaPlayerHelper.ChangeDirectIndex(p));
-            PreviousMediaPlayerPopupCommand = new RelayCommand<object>(p => true, p => UADMediaPlayerHelper.Previous());
-            NextMediaPlayerPopupCommand = new RelayCommand<object>(p => true, p => UADMediaPlayerHelper.Next());
-            OpenNowPlayingPopupCommand = new RelayCommand<Popup>(p => true, p => AnimateNowPlayingPopupOpen(p, true));
-            ShowPlaylistButtonCommand = new RelayCommand<object>(p => true, p =>
+            PauseMediaPlayerCommand = new RelayCommand<object>(null, p => UADMediaPlayerHelper.TogglePlayPause());
+            LookSliderCommand = new RelayCommand<object>(null, p => UADMediaPlayerHelper.LockSliderPosition());
+            ChangePositionCommand = new RelayCommand<double>(null, p => UADMediaPlayerHelper.ChangePositionByProgress(p));
+            WindowSizeChangedCommand = new RelayCommand<Window>(null, p => NowPlayingPopupScale = p.Width / 1920 * (1 + (1 - (p.Width / 1920))));
+            SelectPlayIndexCommand = new RelayCommand<int>(null, p => UADMediaPlayerHelper.ChangeDirectIndex(p));
+            PreviousMediaPlayerPopupCommand = new RelayCommand<object>(null, p => UADMediaPlayerHelper.Previous());
+            NextMediaPlayerPopupCommand = new RelayCommand<object>(null, p => UADMediaPlayerHelper.Next());
+            OpenNowPlayingPopupCommand = new RelayCommand<Popup>(null, p => AnimateNowPlayingPopupOpen(p, true));
+            ShowPlaylistButtonCommand = new RelayCommand<object>(null, p =>
             {
                 IsPlaylistToggled = !IsPlaylistToggled;
                 var cardHost = (UADMediaPlayerHelper.NowPlayingPopup.Child as Grid).Children[0] as Grid;
                 var card = cardHost.Children[1] as Card;
 
-                if(IsPlaylistToggled)
+                if (IsPlaylistToggled)
+                {
                     cardHost.Height = 789;
+                }
+
                 Storyboard stb = GetPlaylistPanelAnim(IsPlaylistToggled);
                 stb.Completed += (s, e) =>
                 {
@@ -605,13 +652,16 @@ namespace UniversalAnimeDownloader.ViewModels
 
                 card.BeginStoryboard(stb);
             });
-            FilterPlaylistPopup = new RelayCommand<string>(p => true, p => 
+            FilterPlaylistPopup = new RelayCommand<string>(null, p =>
             {
-                ICollectionView view = CollectionViewSource.GetDefaultView(NowPlayingPlaylist.Episodes);
+                ICollectionView view = CollectionViewSource.GetDefaultView(FilteredNowPlayingPlaylist);
                 view.Filter = o =>
                 {
                     if (string.IsNullOrEmpty(p))
+                    {
                         return true;
+                    }
+
                     return (o as EpisodeInfo).Name.ToLower().Contains(p.ToLower());
                 };
 
@@ -686,10 +736,10 @@ namespace UniversalAnimeDownloader.ViewModels
                         {
                             IsNowPlayingPopupOpen = false;
                             Storyboard stbPlaylist = GetPlaylistPanelAnim(IsPlaylistToggled);
-                            
+
                         }
                     };
-                    if(IsPlaylistToggled)
+                    if (IsPlaylistToggled)
                     {
                         IsPlaylistToggled = false;
 
@@ -697,7 +747,10 @@ namespace UniversalAnimeDownloader.ViewModels
                         var card = cardHost.Children[1] as Card;
 
                         if (IsPlaylistToggled)
+                        {
                             cardHost.Height = 789;
+                        }
+
                         Storyboard stb2 = GetPlaylistPanelAnim(IsPlaylistToggled);
                         stb2.Completed += (s, e) =>
                         {

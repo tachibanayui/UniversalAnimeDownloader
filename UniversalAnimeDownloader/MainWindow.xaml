@@ -417,7 +417,8 @@
                 x:Name="uadMediaPlayerInternal"
                 IsPause="{Binding IsMediaPlayerPause, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 IsPlaying="{Binding UADMediaPlayerPlaying, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                PlayIndex="{Binding UADMediaPlayerPlayIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                PlayIndex="{Binding UADMediaPlayerPlayIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                Playlist="{Binding NowPlayingPlaylist, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="RequestWindowState">
                         <cmd:EventToCommand Command="{Binding ChangeWindowStateRequestCommand}" PassEventArgsToCommand="True" />
@@ -447,7 +448,7 @@
                 <Grid
                     Margin="0"
                     VerticalAlignment="Top"
-                    RenderTransformOrigin="0.5,0.5">
+                    RenderTransformOrigin="0.5,0">
                     <Grid.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform ScaleX="0.9" ScaleY="0.9" />
@@ -541,7 +542,10 @@
 
                                     <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                                         <Button Command="{Binding ShowPlaylistButtonCommand}" Style="{StaticResource MaterialDesignActionFlatButton}">
-                                            <materialDesign:PackIcon Kind="PlaylistPlay" Style="{StaticResource AutoSizeIconPack}" />
+                                            <materialDesign:PackIcon
+                                                Foreground="{Binding PlaylistOpenButtonIconBrush}"
+                                                Kind="PlaylistPlay"
+                                                Style="{StaticResource AutoSizeIconPack}" />
                                         </Button>
                                     </StackPanel>
                                 </Grid>
@@ -602,19 +606,20 @@
                                             </i:EventTrigger>
                                         </i:Interaction.Triggers>
                                     </TextBox>
-                                    <Button Grid.Column="1" Style="{StaticResource MaterialDesignActionFlatButton}">
-                                        <materialDesign:PackIcon
-                                            Width="25"
-                                            Height="25"
-                                            Kind="Search" />
-                                    </Button>
+                                    <materialDesign:PackIcon
+                                        Grid.Column="1"
+                                        Width="25"
+                                        Height="25"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Kind="Search" />
                                 </Grid>
 
                                 <ListView
                                     Grid.Row="2"
                                     VerticalContentAlignment="Stretch"
-                                    AlternationCount="{Binding NowPlayingPlaylist.Episodes.Count}"
-                                    ItemsSource="{Binding NowPlayingPlaylist.Episodes}"
+                                    AlternationCount="{Binding FilteredNowPlayingPlaylist.Count}"
+                                    ItemsSource="{Binding FilteredNowPlayingPlaylist}"
                                     Style="{StaticResource listViewEpisodeBaseTemplate}">
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
@@ -639,8 +644,8 @@
                                                                 <MultiBinding Converter="{StaticResource MatchIndexToSpecificSolidColorBrushConverter}">
                                                                     <Binding Source="{StaticResource PrimaryHueMidBrush}" />
                                                                     <Binding Source="{StaticResource MaterialDesignBody}" />
-                                                                    <Binding Path="DataContext.UADMediaPlayerPlayIndex" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=local:MainWindow}" />
-                                                                    <Binding Path="(ItemsControl.AlternationIndex)" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=ListViewItem}" />
+                                                                    <Binding Path="DataContext.NowPlaying.EpisodeID" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=local:MainWindow}" />
+                                                                    <Binding Path="EpisodeID" />
                                                                 </MultiBinding>
                                                             </Run.Foreground>
                                                         </Run>

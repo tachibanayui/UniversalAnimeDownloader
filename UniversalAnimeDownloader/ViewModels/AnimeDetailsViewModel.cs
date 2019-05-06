@@ -206,8 +206,8 @@ namespace UniversalAnimeDownloader.ViewModels
                 view.Refresh();
             };
 
-            CopyDescriptionCommand = new RelayCommand<object>(p => true, p => Clipboard.SetText(CurrentSeries.AttachedAnimeSeriesInfo.Description ?? ""));
-            WatchEpisodeOnline = new RelayCommand<SelectableEpisodeInfo>(p => true, async (p) =>
+            CopyDescriptionCommand = new RelayCommand<object>(null, p => Clipboard.SetText(CurrentSeries.AttachedAnimeSeriesInfo.Description ?? ""));
+            WatchEpisodeOnline = new RelayCommand<SelectableEpisodeInfo>(null, async (p) =>
             {
                 UADMediaPlayerHelper.Play(CurrentSeries.AttachedAnimeSeriesInfo, 0, true);
 
@@ -217,8 +217,8 @@ namespace UniversalAnimeDownloader.ViewModels
                 //    Process.Start(episodeDetail.FilmSources[episodeDetail.FilmSources.Keys.ToList()[0]].Url);
                 //}
             });
-            SelectedEpisodeCommand = new RelayCommand<TextBox>(p => true, p => {TempTask = SelectEpisodeIndex(p); });
-            DownloadAnimeCommand = new RelayCommand<object>(p => true, async p =>
+            SelectedEpisodeCommand = new RelayCommand<TextBox>(null, p => {TempTask = SelectEpisodeIndex(p); });
+            DownloadAnimeCommand = new RelayCommand<object>(null, async p =>
             {
                 MessageDialogResult result = 0;
                 if (ManualSelectEpisodeOnDownloaded)
@@ -250,7 +250,7 @@ namespace UniversalAnimeDownloader.ViewModels
                     downloader.EpisodeDownloadCompleted += (s,e) => (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.Download = DownloadManager.Serialize();
                 }
             });
-            OfflineVerionCommand = new RelayCommand<object>(p => true, p =>
+            OfflineVerionCommand = new RelayCommand<object>(null, p =>
             {
                 var offline = Application.Current.FindResource("OfflineAnimeDetailViewModel") as OfflineAnimeDetailViewModel;
                 var lib = Application.Current.FindResource("MyAnimeLibraryViewModel") as MyAnimeLibraryViewModel;

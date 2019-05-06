@@ -196,7 +196,7 @@ namespace UniversalAnimeDownloader.CustomControls
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
-            TestCommand = new RelayCommand<object>(p => true, p => {
+            TestCommand = new RelayCommand<object>(null, p => {
                 var tmp = new List<object>(SlideItemsSource.OfType<object>());
                 var index = tmp.FindIndex(pp => pp == p);
                 if (index > -1 && index < tmp.Count)

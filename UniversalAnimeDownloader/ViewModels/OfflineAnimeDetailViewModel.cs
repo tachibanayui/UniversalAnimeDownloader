@@ -59,9 +59,9 @@ namespace UniversalAnimeDownloader.ViewModels
                 view.Refresh();
             };
 
-            CopyDescriptionCommand = new RelayCommand<object>(p => true, p => Clipboard.SetText(CurrentSeries.AttachedAnimeSeriesInfo.Description ?? ""));
+            CopyDescriptionCommand = new RelayCommand<object>(null, p => Clipboard.SetText(CurrentSeries.AttachedAnimeSeriesInfo.Description ?? ""));
 
-            PlayAllButtonCommand = new RelayCommand<object>(p => true, p =>
+            PlayAllButtonCommand = new RelayCommand<object>(null, p =>
             {
                 UADMediaPlayerHelper.Play(CurrentSeries.AttachedAnimeSeriesInfo);
             });
@@ -71,7 +71,7 @@ namespace UniversalAnimeDownloader.ViewModels
                 UADMediaPlayerHelper.Play(CurrentSeries.AttachedAnimeSeriesInfo, CurrentSeries.AttachedAnimeSeriesInfo.Episodes.FindIndex(pp => pp == p));
             });
 
-            OnlineVersionCommand = new RelayCommand<object>(p => true,async p =>
+            OnlineVersionCommand = new RelayCommand<object>(null,async p =>
             {
                 //var online = await ApiHelpper.CreateQueryAnimeObjectByClassName(CurrentSeries.RelativeQueryInfo.ModTypeString).GetAnimeByID(CurrentSeries.AttachedAnimeSeriesInfo.AnimeID);
                 //var onlineManager = ApiHelpper.CreateAnimeSeriesManagerObjectByClassName(online.ModInfo.ModTypeString);
@@ -81,7 +81,7 @@ namespace UniversalAnimeDownloader.ViewModels
                 (Application.Current.FindResource("MainWindowViewModel") as MainWindowViewModel).NavigateProcess("AnimeDetails");
             });
 
-            DeleteEpisodeCommand = new RelayCommand<EpisodeInfo>(p => true, async p => 
+            DeleteEpisodeCommand = new RelayCommand<EpisodeInfo>(null, async p => 
             {
                 await SourceControl.DeleteEpisodes(p);
                 (Application.Current.FindResource("MyAnimeLibraryViewModel") as MyAnimeLibraryViewModel).ReloadAnimeCommand.Execute(false);

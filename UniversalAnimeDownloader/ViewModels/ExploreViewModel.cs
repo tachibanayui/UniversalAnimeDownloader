@@ -47,10 +47,10 @@ namespace UniversalAnimeDownloader.ViewModels
 
         public ExploreViewModel()
         {
-            LoadedCommand = new RelayCommand<object>(p => true, Init);
-            NavigateGetMoreCommand = new RelayCommand<string>(p => true, p => (Application.Current.FindResource("MainWindowViewModel") as MainWindowViewModel).NavigateProcess(p));
+            LoadedCommand = new RelayCommand<object>(null, Init);
+            NavigateGetMoreCommand = new RelayCommand<string>(null, p => (Application.Current.FindResource("MainWindowViewModel") as MainWindowViewModel).NavigateProcess(p));
 
-            ShowAnimeDetailCommand = new RelayCommand<AnimeSeriesInfo>(p => true,async p => 
+            ShowAnimeDetailCommand = new RelayCommand<AnimeSeriesInfo>(null,async p => 
             {
                 if (p == null)
                 {
@@ -65,7 +65,7 @@ namespace UniversalAnimeDownloader.ViewModels
                 (Application.Current.FindResource("MainWindowViewModel") as MainWindowViewModel).NavigateProcess("AnimeDetails");
             });
 
-            ReloadCommand = new RelayCommand<object>(p => true, async p =>
+            ReloadCommand = new RelayCommand<object>(null, async p =>
             {
                 if(await ApiHelpper.CheckForInternetConnection())
                 {

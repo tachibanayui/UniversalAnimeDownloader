@@ -184,7 +184,7 @@ namespace UniversalAnimeDownloader.ViewModels
 
         public AllAnimeTabViewModel()
         {
-            SearchAnimeCommand = new RelayCommand<object>(p => true, async (p) =>  await LoadAnime(0, 50));
+            SearchAnimeCommand = new RelayCommand<object>(null, async (p) =>  await LoadAnime(0, 50));
             ReloadInternetCommand = new RelayCommand<object>(p => OverlayNoInternetVisibility == Visibility.Visible, async (p) => await LoadAnime(0, 50));
             AnimeListScrollingCommand = new RelayCommand<object>(p =>
             {
@@ -201,7 +201,7 @@ namespace UniversalAnimeDownloader.ViewModels
             {
                 await LoadAnime(AnimeInfos.Count, 50, false);
             });
-            ShowAnimeDetailCommand = new RelayCommand<AnimeSeriesInfo>(p => true, async (p) =>
+            ShowAnimeDetailCommand = new RelayCommand<AnimeSeriesInfo>(null, async (p) =>
             {
                 if (p != null)
                 {
@@ -225,7 +225,7 @@ namespace UniversalAnimeDownloader.ViewModels
             Genres = new ObservableCollection<GenreItem>();
             Seasons = new ObservableCollection<SeasonItem>();
 
-            PageLoaded = new RelayCommand<object>(p => true, async p => { if (!(Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.IsOnlyLoadWhenHostShow) await InitAnimeList(); });
+            PageLoaded = new RelayCommand<object>(null, async p => { if (!(Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.IsOnlyLoadWhenHostShow) await InitAnimeList(); });
         }
 
         private async Task InitAnimeList()

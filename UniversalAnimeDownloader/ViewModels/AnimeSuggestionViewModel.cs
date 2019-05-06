@@ -127,7 +127,7 @@ namespace UniversalAnimeDownloader.ViewModels
         public AnimeSuggestionViewModel()
         {
             SelectedQueryModIndex = 0;
-            RefreshCommand = new RelayCommand<object>(p => true, async (p) => await LoadSuggestedAnime(Rand.Next(1, 1000000), 50));
+            RefreshCommand = new RelayCommand<object>(null, async (p) => await LoadSuggestedAnime(Rand.Next(1, 1000000), 50));
             AnimeListScrollingCommand = new RelayCommand<object>(p =>
             {
                 if (p != null)
@@ -143,7 +143,7 @@ namespace UniversalAnimeDownloader.ViewModels
             {
                 await LoadSuggestedAnime(Rand.Next(1,1000000), 50, false);
             });
-            ShowAnimeDetailCommand = new RelayCommand<AnimeSeriesInfo>(p => true, async (p) =>
+            ShowAnimeDetailCommand = new RelayCommand<AnimeSeriesInfo>(null, async (p) =>
             {
                 if (p != null)
                 {
@@ -153,7 +153,7 @@ namespace UniversalAnimeDownloader.ViewModels
                     (Application.Current.FindResource("AnimeDetailsViewModel") as AnimeDetailsViewModel).CurrentSeries = manager;
                 }
             });
-            PageLoaded = new RelayCommand<object>(p => true, async p => 
+            PageLoaded = new RelayCommand<object>(null, async p => 
             {
                 string userInterestString = (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.UserInterest;
                 await UserInterestMananger.Deserialize(userInterestString); // 16 ms

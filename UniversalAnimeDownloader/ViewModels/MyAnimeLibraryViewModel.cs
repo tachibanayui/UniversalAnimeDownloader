@@ -63,8 +63,8 @@ namespace UniversalAnimeDownloader.ViewModels
             ReloadAnimeLibrary(true);
             ReloadAnimeLibrary(false);
 
-            ReloadAnimeCommand = new RelayCommand<object>(p => true, async p => await ReloadAnimeLibrary(false));
-            ShowAnimeDetailCommand = new RelayCommand<AnimeSeriesInfo>(p => true, p =>
+            ReloadAnimeCommand = new RelayCommand<object>(null, async p => await ReloadAnimeLibrary(false));
+            ShowAnimeDetailCommand = new RelayCommand<AnimeSeriesInfo>(null, p =>
             {
                 MiscClass.NavigationHelper.AddNavigationHistory(5);
                 IAnimeSeriesManager manager = ApiHelpper.CreateAnimeSeriesManagerObjectByClassName(p.ModInfo.ModTypeString);

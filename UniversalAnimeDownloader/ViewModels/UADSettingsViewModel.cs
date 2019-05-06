@@ -277,10 +277,10 @@ namespace UniversalAnimeDownloader.ViewModels
             Swatches = new SwatchesProvider().Swatches.ToList();
             Helper = new PaletteHelper();
 
-            ApplyAccentCommand = new RelayCommand<Swatch>(p => true, p => (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.AccentColorTheme = p);
-            ApplyPrimaryCommand = new RelayCommand<Swatch>(p => true, p => (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.PrimaryColorTheme = p);
+            ApplyAccentCommand = new RelayCommand<Swatch>(null, p => (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.AccentColorTheme = p);
+            ApplyPrimaryCommand = new RelayCommand<Swatch>(null, p => (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.PrimaryColorTheme = p);
             ApplyFramerateCommand = new RelayCommand<object>(p => p != null ? true : false, p => SettingData.AnimationFrameRate = (int)p);
-            HostLoadedCommand = new RelayCommand<UserControl>(p => true, async p =>
+            HostLoadedCommand = new RelayCommand<UserControl>(null, async p =>
             {
                 //Load the setting
                 if (SettingData == null)
@@ -306,7 +306,7 @@ namespace UniversalAnimeDownloader.ViewModels
                     EndEmptySpaceHeight = e.NewSize.Height / 4d * 3d - 100;
                 };
             });
-            OpenFileDialogCommand = new RelayCommand<string>(p => true, p =>
+            OpenFileDialogCommand = new RelayCommand<string>(null, p =>
             {
                 Microsoft.Win32.OpenFileDialog fileDialog = new Microsoft.Win32.OpenFileDialog();
                 fileDialog.Multiselect = false;
@@ -321,8 +321,8 @@ namespace UniversalAnimeDownloader.ViewModels
                 }
             });
             StretchModeChangedCommand = new RelayCommand<ComboBox>(p => IsHostLoaded, p => SettingData.BlockerStretchMode = (Stretch)Enum.Parse(typeof(Stretch), p.SelectedItem.ToString()));
-            ColorPickerDialogClosingCommand = new RelayCommand<object>(p => true, p => { });
-            ChooseKeyCommand = new RelayCommand<string>(p => true, p => { CurrentObjectRequestKeyName = p; IsKeyInputOpen = true; });
+            ColorPickerDialogClosingCommand = new RelayCommand<object>(null, p => { });
+            ChooseKeyCommand = new RelayCommand<string>(null, p => { CurrentObjectRequestKeyName = p; IsKeyInputOpen = true; });
             ValidateKeyCommand = new RelayCommand<TextBox>(p => !string.IsNullOrEmpty(p.Text), p =>
            {
                char current = p.Text.ToUpper()[0];
@@ -349,7 +349,7 @@ namespace UniversalAnimeDownloader.ViewModels
                 CurrentObjectRequestColorName = p;
                 IsColorPickerOpen = true;
             });
-            ApplyColorCommand = new RelayCommand<ColorCanvas>(p => true, p =>
+            ApplyColorCommand = new RelayCommand<ColorCanvas>(null, p =>
             {
                 switch (CurrentObjectRequestColorName)
                 {
@@ -371,7 +371,7 @@ namespace UniversalAnimeDownloader.ViewModels
                 CurrentObjectRequestColorName = string.Empty;
                 IsColorPickerOpen = false;
             });
-            BrowseFolderDialogCommand = new RelayCommand<string>(p => true, p =>
+            BrowseFolderDialogCommand = new RelayCommand<string>(null, p =>
             {
                 System.Windows.Forms.FolderBrowserDialog dialog = new System.Windows.Forms.FolderBrowserDialog();
                 dialog.ShowNewFolderButton = true;
@@ -400,12 +400,12 @@ namespace UniversalAnimeDownloader.ViewModels
                 }
             });
             MainScrollChangedCommand = new RelayCommand<ScrollViewer>(p => IsHostLoaded, MainScrollChangedAction);
-            AnimateSrcoll = new RelayCommand<string>(p => true, AnimateAction);
-            DirectoryChangerWizard = new RelayCommand<object>(p => true, p => { IsDirectoryChangerWizard = true; MovingInProgressOverlayVisibility = Visibility.Collapsed; });
-            DirectoryWizardCancel = new RelayCommand<object>(p => true, p => IsDirectoryChangerWizard = false);
-            UpdateAffectedAnime = new RelayCommand<object>(p => true, p => UpdateAffectedAnimes());
-            StartMovingAnimeDirectory = new RelayCommand<object>(p => true, p => MoveAnimeDirectoryAction());
-            SaveSettingDialogCommand = new RelayCommand<object>(p => true, p => 
+            AnimateSrcoll = new RelayCommand<string>(null, AnimateAction);
+            DirectoryChangerWizard = new RelayCommand<object>(null, p => { IsDirectoryChangerWizard = true; MovingInProgressOverlayVisibility = Visibility.Collapsed; });
+            DirectoryWizardCancel = new RelayCommand<object>(null, p => IsDirectoryChangerWizard = false);
+            UpdateAffectedAnime = new RelayCommand<object>(null, p => UpdateAffectedAnimes());
+            StartMovingAnimeDirectory = new RelayCommand<object>(null, p => MoveAnimeDirectoryAction());
+            SaveSettingDialogCommand = new RelayCommand<object>(null, p => 
             {
                 Microsoft.Win32.SaveFileDialog saveFileDialog = new Microsoft.Win32.SaveFileDialog();
                 saveFileDialog.Filter = "All files (*.*)|*.*";
@@ -414,8 +414,8 @@ namespace UniversalAnimeDownloader.ViewModels
                 if(saveFileDialog.ShowDialog() == true)
                     File.WriteAllText(saveFileDialog.FileName, JsonConvert.SerializeObject(SettingData));
             });
-            ResetUADCommand = new RelayCommand<object>(p => true, p => UADSettingsManager.ResetCurrentSettings());
-            LoadSettingsFromFileCommand = new RelayCommand<object>(p => true, p =>
+            ResetUADCommand = new RelayCommand<object>(null, p => UADSettingsManager.ResetCurrentSettings());
+            LoadSettingsFromFileCommand = new RelayCommand<object>(null, p =>
             {
                 Microsoft.Win32.OpenFileDialog fileDialog = new Microsoft.Win32.OpenFileDialog();
                 fileDialog.Multiselect = false;

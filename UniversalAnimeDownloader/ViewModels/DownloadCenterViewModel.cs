@@ -52,7 +52,7 @@ namespace UniversalAnimeDownloader.ViewModels
                 data.Cancel();
                 (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.Download = DownloadManager.Serialize();
             });
-            RemoveFromListCommand = new RelayCommand<Button>(p => true, p =>
+            RemoveFromListCommand = new RelayCommand<Button>(null, p =>
             {
                 var data = p.DataContext as DownloadInstance;
                 if (data.State == UADDownloaderState.Working)
@@ -61,28 +61,28 @@ namespace UniversalAnimeDownloader.ViewModels
                 DownloadManager.Instances.Remove(data);
                 (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.Download = DownloadManager.Serialize();
             });
-            CancelAllCommand = new RelayCommand<Button>(p => true, p =>
+            CancelAllCommand = new RelayCommand<Button>(null, p =>
             {
                 foreach (var item in DownloadManager.Instances)
                     if (item.State == UADDownloaderState.Working)
                         item.Cancel();
                 (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.Download = DownloadManager.Serialize();
             });
-            PauseAllCommand = new RelayCommand<Button>(p => true, p =>
+            PauseAllCommand = new RelayCommand<Button>(null, p =>
             {
                 foreach (var item in DownloadManager.Instances)
                     if (item.State == UADDownloaderState.Working)
                         item.Pause();
                 (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.Download = DownloadManager.Serialize();
             });
-            ResumeAllCommand = new RelayCommand<Button>(p => true, p =>
+            ResumeAllCommand = new RelayCommand<Button>(null, p =>
             {
                 foreach (var item in DownloadManager.Instances)
                     if (item.State == UADDownloaderState.Paused)
                         item.Resume();
                 (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.Download = DownloadManager.Serialize();
             });
-            RemoveAllCommand = new RelayCommand<Button>(p => true, p => 
+            RemoveAllCommand = new RelayCommand<Button>(null, p => 
             {
                 DownloadManager.DeleteAllDownloadProcess();
                 (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.Download = DownloadManager.Serialize();
