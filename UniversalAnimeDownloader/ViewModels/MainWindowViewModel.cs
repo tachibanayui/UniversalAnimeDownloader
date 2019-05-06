@@ -242,6 +242,8 @@ namespace UniversalAnimeDownloader.ViewModels
         private void CreateClonePlaylist(AnimeSeriesInfo info)
         {
             FilteredNowPlayingPlaylist.Clear();
+            if (info == null)
+                return;
             foreach (var item in info.Episodes)
             {
                 FilteredNowPlayingPlaylist.Add(item);
@@ -447,7 +449,7 @@ namespace UniversalAnimeDownloader.ViewModels
             }
         }
 
-        private Brush _PlaylistOpenButtonIconBrush = Application.Current.FindResource("MaterialDesignBody") as Brush;;
+        private Brush _PlaylistOpenButtonIconBrush = Application.Current.FindResource("MaterialDesignBody") as Brush;
         public Brush PlaylistOpenButtonIconBrush
         {
             get
