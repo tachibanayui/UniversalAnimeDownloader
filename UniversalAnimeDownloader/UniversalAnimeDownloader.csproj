@@ -128,6 +128,7 @@
     <Compile Include="CustomControls\CarouselPanel.cs" />
     <Compile Include="CustomControls\ColorfulTabDecorator.cs" />
     <Compile Include="CustomControls\CustomImage.cs" />
+    <Compile Include="CustomControls\SidePanelNavigateButton.cs" />
     <Compile Include="DelayedObservableCollection.cs" />
     <Compile Include="Extensions\ListBoxExtensions.cs" />
     <Compile Include="IPageContent.cs" />

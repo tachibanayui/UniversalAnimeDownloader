@@ -12,10 +12,17 @@ namespace UniversalAnimeDownloader
             if (task.IsCompleted) return;
             task.ContinueWith(t =>
             {
-                System.Windows.Application.Current?.Dispatcher.Invoke(() =>
+                try
                 {
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Result"));
-                });
+                    System.Windows.Application.Current?.Dispatcher.Invoke(() =>
+                    {
+                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Result"));
+                    }, System.Windows.Threading.DispatcherPriority.Background);
+                }
+                catch
+                {
+
+                }
             });
         }
 
