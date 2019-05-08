@@ -1,0 +1,96 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
+    xmlns:converters="clr-namespace:UniversalAnimeDownloader.ValueConverters"
+    xmlns:local="clr-namespace:UniversalAnimeDownloader.CustomControls"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:materialDesignConverter="clr-namespace:MaterialDesignThemes.Wpf.Converters;assembly=MaterialDesignThemes.Wpf">
+    <Style TargetType="{x:Type local:ColorfulTabDecorator}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:ColorfulTabDecorator}">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid>
+                            <Grid.Resources>
+                                <ResourceDictionary>
+                                    <ResourceDictionary.MergedDictionaries>
+                                        <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Dark.xaml" />
+                                        <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                                        <ResourceDictionary Source="pack://application:,,,/DefinedResources/VisualValueResources.xaml" />
+                                    </ResourceDictionary.MergedDictionaries>
+
+                                    <Style TargetType="{x:Type local:SidePanelNavigateButton}">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="{x:Type local:SidePanelNavigateButton}">
+                                                    <Border
+                                                        Background="{TemplateBinding Background}"
+                                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                                        BorderThickness="{TemplateBinding BorderThickness}" />
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </ResourceDictionary>
+                            </Grid.Resources>
+
+                            <Rectangle Fill="#15FFFFFF">
+                                <Rectangle.Visibility>
+                                    <MultiBinding Converter="{StaticResource MatchIndexToVisibilityConverter}">
+                                        <Binding Path="CurrentTabIndex" RelativeSource="{RelativeSource Mode=TemplatedParent}" />
+                                        <Binding Path="ControlTabIndex" RelativeSource="{RelativeSource Mode=TemplatedParent}" />
+                                    </MultiBinding>
+                                </Rectangle.Visibility>
+                            </Rectangle>
+                            <DockPanel>
+                                <Rectangle
+                                    MinWidth="10"
+                                    MinHeight="10"
+                                    DockPanel.Dock="{TemplateBinding TabMarkerDock}">
+                                    <Rectangle.Fill>
+                                        <MultiBinding Converter="{StaticResource MatchIndexToRandomSolidColorBrushConverter}">
+                                            <Binding Path="CurrentTabIndex" RelativeSource="{RelativeSource Mode=TemplatedParent}" />
+                                            <Binding Path="ControlTabIndex" RelativeSource="{RelativeSource Mode=TemplatedParent}" />
+                                        </MultiBinding>
+                                    </Rectangle.Fill>
+                                </Rectangle>
+                                <Grid />
+                            </DockPanel>
+
+                            <Button
+                                x:Name="btn"
+                                Height="{TemplateBinding Height}"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                Command="{TemplateBinding ButtonCommand}"
+                                CommandParameter="{TemplateBinding ButtonCommandParameter}"
+                                Content="{TemplateBinding Content}">
+                                <Button.Style>
+                                    <Style BasedOn="{StaticResource MaterialDesignFlatButton}" TargetType="Button">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="Button">
+                                                    <Grid>
+                                                        <materialDesign:Ripple />
+                                                        <ContentPresenter
+                                                            HorizontalAlignment="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType=local:SidePanelNavigateButton}}"
+                                                            VerticalAlignment="Stretch"
+                                                            Content="{TemplateBinding Content}" />
+                                                    </Grid>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

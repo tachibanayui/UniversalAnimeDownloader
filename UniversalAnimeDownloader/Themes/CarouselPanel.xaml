@@ -1,0 +1,161 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
+    xmlns:converters="clr-namespace:UniversalAnimeDownloader.ValueConverters"
+    xmlns:local="clr-namespace:UniversalAnimeDownloader.CustomControls"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:materialDesignConverter="clr-namespace:MaterialDesignThemes.Wpf.Converters;assembly=MaterialDesignThemes.Wpf">
+    <Style TargetType="{x:Type local:CarouselPanel}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:CarouselPanel}">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid x:Name="root">
+                            <Grid.Resources>
+                                <converters:ReferenceEqualValueConverter x:Key="vc" />
+
+                                <Style x:Key="NavButton" TargetType="ToggleButton">
+                                    <Setter Property="Width" Value="10" />
+                                    <Setter Property="Height" Value="10" />
+                                    <Setter Property="Background" Value="LightBlue" />
+                                    <Setter Property="Margin" Value="3,0,3,0" />
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="ToggleButton">
+                                                <Ellipse
+                                                    x:Name="cnt"
+                                                    Fill="{TemplateBinding Background}"
+                                                    Stroke="{TemplateBinding Background}"
+                                                    StrokeThickness="1" />
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsChecked" Value="false">
+                                                        <Setter TargetName="cnt" Property="Fill" Value="Transparent" />
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+
+                                <Style x:Key="AutoSizeIconPack" TargetType="materialDesign:PackIcon">
+                                    <Setter Property="Width" Value="auto" />
+                                    <Setter Property="Height" Value="auto" />
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}" />
+                                </Style>
+
+                                <Style x:Key="leftNavButton" TargetType="Button">
+                                    <Setter Property="Width" Value="50" />
+                                    <Setter Property="Height" Value="100" />
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Grid>
+                                                    <Rectangle Fill="White" Opacity="0.0005" />
+                                                    <materialDesign:PackIcon
+                                                        Foreground="{TemplateBinding Background}"
+                                                        Kind="ChevronLeft"
+                                                        Style="{StaticResource AutoSizeIconPack}" />
+                                                </Grid>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+
+                                <Style x:Key="rightNavButton" TargetType="Button">
+                                    <Setter Property="Width" Value="50" />
+                                    <Setter Property="Height" Value="100" />
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Grid>
+                                                    <Rectangle Fill="White" Opacity="0.0005" />
+                                                    <materialDesign:PackIcon
+                                                        Foreground="{TemplateBinding Background}"
+                                                        Kind="ChevronRight"
+                                                        Style="{StaticResource AutoSizeIconPack}" />
+                                                </Grid>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Grid.Resources>
+                            <Rectangle Fill="White" Opacity="0.01" />
+                            <Controls:FlipView
+                                x:Name="slider"
+                                CircularNavigation="True"
+                                IsBannerEnabled="False"
+                                IsNavigationEnabled="False"
+                                ItemTemplate="{TemplateBinding SlideItemTemplate}"
+                                ItemsSource="{TemplateBinding SlideItemsSource}"
+                                SelectedIndex="{Binding SlideIndex, RelativeSource={RelativeSource TemplatedParent}}" />
+
+                            <ItemsControl
+                                x:Name="pagerContainer"
+                                Margin="25"
+                                VerticalAlignment="Bottom"
+                                ItemsSource="{TemplateBinding SlideItemsSource}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Bottom"
+                                            Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <ToggleButton
+                                            Background="{Binding PagerBrush, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:CarouselPanel}}}"
+                                            Command="{Binding TestCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:CarouselPanel}}"
+                                            CommandParameter="{Binding}"
+                                            Style="{Binding PagerButtonStyle, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:CarouselPanel}}}">
+                                            <ToggleButton.IsChecked>
+                                                <MultiBinding Converter="{StaticResource vc}" Mode="OneWay">
+                                                    <Binding Mode="OneWay" />
+                                                    <Binding
+                                                        ElementName="slider"
+                                                        Mode="OneWay"
+                                                        Path="SelectedItem" />
+                                                </MultiBinding>
+                                            </ToggleButton.IsChecked>
+                                        </ToggleButton>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+
+                            <Button
+                                x:Name="btnBack"
+                                Margin="15"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Background="{Binding BackNavigationButtonBrush, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:CarouselPanel}}}"
+                                Style="{TemplateBinding BackNavigationStyle}" />
+
+                            <Button
+                                x:Name="btnForward"
+                                Margin="15"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                                Background="{Binding ForwardNavigationButtonBrush, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:CarouselPanel}}}"
+                                Style="{TemplateBinding ForwardNavigationStyte}" />
+
+
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="false">
+                            <Setter TargetName="slider" Property="IsNavigationEnabled" Value="false" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>
