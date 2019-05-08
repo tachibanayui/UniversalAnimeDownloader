@@ -493,7 +493,7 @@ namespace UniversalAnimeDownloader.ViewModels
 
             if(EpisodeInfo.Count == 0)
             {
-                DownloadButtonString = "This series is release yet";
+                DownloadButtonString = "This series is not release yet";
                 IsDownloadButtonStringEnable = false;
             }
 

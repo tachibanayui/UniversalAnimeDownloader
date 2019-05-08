@@ -309,13 +309,13 @@
 
                     <customControl:SidePanelNavigateButton
                         ButtonCommandParameter="UADSettings"
-                        ControlTabIndex="3"
+                        ControlTabIndex="6"
                         SidePanelIconKind="Settings"
                         SidePanelText="Settings" />
 
                     <customControl:SidePanelNavigateButton
                         ButtonCommandParameter="UADSettings"
-                        ControlTabIndex="3"
+                        ControlTabIndex="6"
                         SidePanelIconKind="InformationOutline"
                         SidePanelText="Credits" />
                 </StackPanel>
@@ -337,6 +337,9 @@
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="RequestWindowState">
                         <cmd:EventToCommand Command="{Binding ChangeWindowStateRequestCommand}" PassEventArgsToCommand="True" />
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="UADMediaPlayerClosed">
+                        <i:InvokeCommandAction Command="{Binding UADMediaPlayerClosedCommand}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </media:UADMediaPlayer>
