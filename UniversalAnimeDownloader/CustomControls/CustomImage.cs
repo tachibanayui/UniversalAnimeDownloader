@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -28,7 +29,7 @@ namespace UniversalAnimeDownloader.CustomControls
         public static readonly DependencyProperty StreamSourceProperty =
             DependencyProperty.Register("StreamSource", typeof(Stream), typeof(CustomImage), new PropertyMetadata(StreamSourceChanged));
 
-        private static void StreamSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static async void StreamSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var ins = (d as Image);
             var newStream = e.NewValue as Stream;
@@ -36,11 +37,21 @@ namespace UniversalAnimeDownloader.CustomControls
                 newStream = e.OldValue as Stream;
             if (newStream != null)
             {
+                ins.Source = new BitmapImage();
+
                 newStream.Position = 0;
-                var imageSrc = new BitmapImage();
-                imageSrc.BeginInit();
-                imageSrc.StreamSource = newStream;
-                imageSrc.EndInit();
+                BitmapImage imageSrc = null;
+
+                await Task.Run(() =>
+                {
+                    imageSrc = new BitmapImage();
+                    imageSrc.BeginInit();
+                    imageSrc.StreamSource = newStream;
+                    imageSrc.EndInit();
+                    imageSrc.Freeze();
+                });
+
+                var newImageSrc = imageSrc.Clone();
                 ins.Source = imageSrc;
             }
             else

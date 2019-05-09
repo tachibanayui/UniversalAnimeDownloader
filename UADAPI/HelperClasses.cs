@@ -1386,17 +1386,7 @@ namespace UADAPI
         public static string UserAgent { get; set; } = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36";
         public static List<RequestCacheItem> HistoricalRequests { get; set; } = new List<RequestCacheItem>();
 
-        /// <summary>
-        /// Similar to HttpWebrequest but it reuse the request result if it re-request again, You shouldn't use this method to download large data larger than 25Mb
-        /// </summary>
-        /// <param name="url">The url to request</param>
-        /// <param name="headers">The header included when requesting</param>
-        /// <param name="reuseExpirationDate">The date time that the request don't use the cache one
-        /// <para>For example if the past request done on 1 Jan 2018 but you set the exp.Date to 3 Jan 2018. The request cache will be ignored</para>
-        /// </param>
-        /// <param name="retryLimit">The limit of retrying intil throw an exception</param>
-        /// <returns></returns>
-        public static async Task<string> Request(string url, WebHeaderCollection headers = null, DateTime? reuseExpirationDate = null, int? retryLimit = null)
+        public static async Task<Stream> GetStreamAsync(string url, WebHeaderCollection headers = null, DateTime? reuseExpirationDate = null, int? retryLimit = null)
         {
             DateTime dt = DateTime.MinValue;
             int retryLim = 3;
@@ -1415,6 +1405,7 @@ namespace UADAPI
             {
                 if (CompareHeaders(item.Headers, headers) && dt < item.RequestedDateTime)
                 {
+                    item.Result.Position = 0;
                     return item.Result;
                 }
             }
@@ -1435,20 +1426,21 @@ namespace UADAPI
                     {
                         if (resp.StatusCode == HttpStatusCode.OK)
                         {
-                            using (Stream stream = resp.GetResponseStream())
-                            {
-                                StreamReader reader = new StreamReader(stream);
-                                string res = await reader.ReadToEndAsync();
-                                HistoricalRequests.Add(new RequestCacheItem()
-                                {
-                                    Headers = headers,
-                                    RequestedDateTime = DateTime.Now,
-                                    Result = res,
-                                    Url = url,
-                                });
+                            Stream stream = resp.GetResponseStream();
+                            MemoryStream memStream = new MemoryStream();
+                            await stream.CopyToAsync(memStream);
+                            stream.Close();
 
-                                return res;
-                            }
+                            HistoricalRequests.Add(new RequestCacheItem()
+                            {
+                                Headers = headers,
+                                RequestedDateTime = DateTime.Now,
+                                Result = memStream,
+                                Url = url,
+                            });
+
+                            memStream.Position = 0;
+                            return memStream;
                         }
                         else
                         {
@@ -1465,6 +1457,24 @@ namespace UADAPI
             }
 
             throw new InvalidOperationException("Failed to get the requested data!" + url, lastError);
+        }
+
+        /// <summary>
+        /// Similar to HttpWebrequest but it reuse the request result if it re-request again, You shouldn't use this method to download large data larger than 25Mb
+        /// </summary>
+        /// <param name="url">The url to request</param>
+        /// <param name="headers">The header included when requesting</param>
+        /// <param name="reuseExpirationDate">The date time that the request don't use the cache one
+        /// <para>For example if the past request done on 1 Jan 2018 but you set the exp.Date to 3 Jan 2018. The request cache will be ignored</para>
+        /// </param>
+        /// <param name="retryLimit">The limit of retrying intil throw an exception</param>
+        /// <returns></returns>
+        public static async Task<string> Request(string url, WebHeaderCollection headers = null, DateTime? reuseExpirationDate = null, int? retryLimit = null)
+        {
+            var stream = await GetStreamAsync(url, headers, reuseExpirationDate, retryLimit);
+            StreamReader reader = new StreamReader(stream);
+            string res = await reader.ReadToEndAsync();
+            return res;
         }
 
         /// <summary>

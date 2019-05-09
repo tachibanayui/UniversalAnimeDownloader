@@ -3,6 +3,7 @@ using SegmentDownloader.Core;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Net;
 using UADAPI.PlatformSpecific;
 
@@ -232,7 +233,7 @@ namespace UADAPI
         /// <summary>
         /// The result of the request
         /// </summary>
-        public string Result { get; set; }
+        public MemoryStream Result { get; set; }
     }
 
     /// <summary>

@@ -86,7 +86,7 @@ namespace UniversalAnimeDownloader.ViewModels
             }
         }
 
-        private Visibility _OverlayNoModVisibility;
+        private Visibility _OverlayNoModVisibility = Visibility.Collapsed;
         public Visibility OverlayNoModVisibility
         {
             get
