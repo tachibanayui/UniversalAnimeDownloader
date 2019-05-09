@@ -1405,8 +1405,11 @@ namespace UADAPI
             {
                 if (CompareHeaders(item.Headers, headers) && dt < item.RequestedDateTime)
                 {
+                    MemoryStream returnStream = new MemoryStream();
                     item.Result.Position = 0;
-                    return item.Result;
+                    await item.Result.CopyToAsync(returnStream);
+                    returnStream.Position = 0;
+                    return returnStream;
                 }
             }
 
@@ -1427,6 +1430,7 @@ namespace UADAPI
                         if (resp.StatusCode == HttpStatusCode.OK)
                         {
                             Stream stream = resp.GetResponseStream();
+                            //This memStream only used for caching, we will return a copy of it
                             MemoryStream memStream = new MemoryStream();
                             await stream.CopyToAsync(memStream);
                             stream.Close();
@@ -1439,8 +1443,11 @@ namespace UADAPI
                                 Url = url,
                             });
 
+                            MemoryStream returnStream = new MemoryStream();
                             memStream.Position = 0;
-                            return memStream;
+                            await memStream.CopyToAsync(returnStream);
+                            returnStream.Position = 0;
+                            return returnStream;
                         }
                         else
                         {

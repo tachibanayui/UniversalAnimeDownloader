@@ -47,17 +47,8 @@ namespace UniversalAnimeDownloader.ValueConverters
         {
             try
             {
-                HttpWebRequest req = (HttpWebRequest)WebRequest.Create(info.Url);
-                AnimeInformationRequester.AddHeader(req, info.Headers);
-                using (WebResponse resp = req.GetResponse())
-                {
-                    using (Stream stream = resp.GetResponseStream())
-                    {
-                        var copiedStream = new MemoryStream();
-                        stream.CopyTo(copiedStream);
-                        return copiedStream;
-                    }
-                }
+                var stream =  AsyncHelpers.RunSync<Stream>(() => AnimeInformationRequester.GetStreamAsync(info.Url, info.Headers));
+                return stream;
             }
             catch { return null; }
         }

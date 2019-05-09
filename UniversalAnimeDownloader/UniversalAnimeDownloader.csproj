@@ -121,6 +121,7 @@
     <Compile Include="Animations\BrushAnimation.cs" />
     <Compile Include="Animations\ExpanderDoubleAnimation.cs" />
     <Compile Include="Animations\GridLengthAnimation.cs" />
+    <Compile Include="AsyncHelpers.cs" />
     <Compile Include="Behaviour\AnimatedScrollViewer.cs" />
     <Compile Include="Behaviour\BubbleScrollEvent.cs" />
     <Compile Include="Behaviour\SliderDragBehaviors.cs" />
