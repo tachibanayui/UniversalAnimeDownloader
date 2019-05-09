@@ -95,6 +95,7 @@
             <page:ErrorOccuredOverlay Visibility="{Binding OverlayErrorOccuredVisibility, IsAsync=True, FallbackValue=Collapsed}" />
             <page:ActivityIndicator Visibility="{Binding OverlayActiityIndicatorVisibility, IsAsync=True, FallbackValue=Collapsed}" />
             <page:NotSupportedOverlay Visibility="{Binding OverlayNotSupported, IsAsync=True, FallbackValue=Collapsed}" />
+            <page:NoModInstalledOverlay Visibility="{Binding OverlayNoModVisibility, IsAsync=True, FallbackValue=Collapsed}" />
         </Grid>
     </Grid>
 </UserControl>

@@ -839,21 +839,40 @@ namespace UniversalAnimeDownloader.ViewModels
 
         private async void CheckForAnimeSeriesUpdate()
         {
+            bool modMissing = false;
+            List<string> modMissingNames = new List<string>();
             var offlineList = (Application.Current.FindResource("MyAnimeLibraryViewModel") as MyAnimeLibraryViewModel).NoDelayAnimeLib;
             int updatedSeries = 0;
             for (int i = 0; i < offlineList.Count; i++)
             {
                 AnimeSeriesInfo item = offlineList[i];
                 var manager = ApiHelpper.CreateAnimeSeriesManagerObjectByClassName(item.ModInfo.ModTypeString);
-                manager.AttachedAnimeSeriesInfo = item;
-                AnimeSourceControl source = new AnimeSourceControl(manager);
-                if (await source.Update())
+                if(manager != null)
                 {
-                    updatedSeries++;
+                    manager.AttachedAnimeSeriesInfo = item;
+                    AnimeSourceControl source = new AnimeSourceControl(manager);
+                    if (await source.Update())
+                    {
+                        updatedSeries++;
+                    }
+                }
+                else
+                {
+                    modMissing = true;
+                    if(!modMissingNames.Contains(item.ModInfo.ModName))
+                        modMissingNames.Add(item.ModInfo.ModName);
                 }
             }
 
             NotificationManager.Add(new NotificationItem() { Title = "Check for anime updates completed", Detail = $"Found {updatedSeries} anime series need to updated out of {offlineList.Count} in your library. See download center for mode detail." });
+            if(modMissing)
+            {
+                string missingModList = string.Empty;
+                foreach (var item in modMissingNames)
+                    missingModList += item + ", ";
+                missingModList.Substring(0, missingModList.Length - 4);
+                NotificationManager.Add(new NotificationItem() { Title = "Some series are ignored!", Detail = $"There are {modMissingNames.Count} mod(s) is/are missing, series depend on these mod will be ignored. Missing mod list: {missingModList}" });
+            }
         }
 
         public async void NavigateProcess(string pageName)

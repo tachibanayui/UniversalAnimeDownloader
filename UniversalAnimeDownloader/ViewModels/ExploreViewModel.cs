@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using UADAPI;
@@ -12,7 +8,7 @@ using UniversalAnimeDownloader.UADSettingsPortal;
 
 namespace UniversalAnimeDownloader.ViewModels
 {
-    class ExploreViewModel : BaseViewModel , IPageContent
+    class ExploreViewModel : BaseViewModel, IPageContent
     {
         public ICommand NavigateGetMoreCommand { get; set; }
         public ICommand LoadedCommand { get; set; }
@@ -45,29 +41,48 @@ namespace UniversalAnimeDownloader.ViewModels
             }
         }
 
+        private Visibility _OverlayNoModInstalledVisibility = Visibility.Collapsed;
+        public Visibility OverlayNoModInstalledVisibility
+        {
+            get
+            {
+                return _OverlayNoModInstalledVisibility;
+            }
+            set
+            {
+                if (_OverlayNoModInstalledVisibility != value)
+                {
+                    _OverlayNoModInstalledVisibility = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+
+
         public ExploreViewModel()
         {
             LoadedCommand = new RelayCommand<object>(null, Init);
             NavigateGetMoreCommand = new RelayCommand<string>(null, p => (Application.Current.FindResource("MainWindowViewModel") as MainWindowViewModel).NavigateProcess(p));
 
-            ShowAnimeDetailCommand = new RelayCommand<AnimeSeriesInfo>(null,async p => 
-            {
-                if (p == null)
-                {
-                    await MessageDialog.ShowAsync("Loading in progress...", "We are getting anime series for you, be patient!", MessageDialogButton.OKCancelButton);
-                    return;
-                }
+            ShowAnimeDetailCommand = new RelayCommand<AnimeSeriesInfo>(null, async p =>
+             {
+                 if (p == null)
+                 {
+                     await MessageDialog.ShowAsync("Loading in progress...", "We are getting anime series for you, be patient!", MessageDialogButton.OKCancelButton);
+                     return;
+                 }
 
-                IAnimeSeriesManager manager = ApiHelpper.CreateAnimeSeriesManagerObjectByClassName(p.ModInfo.ModTypeString);
-                manager.AttachedAnimeSeriesInfo = p;
-                await manager.GetPrototypeEpisodes();
-                (Application.Current.FindResource("AnimeDetailsViewModel") as AnimeDetailsViewModel).CurrentSeries = manager;
-                (Application.Current.FindResource("MainWindowViewModel") as MainWindowViewModel).NavigateProcess("AnimeDetails");
-            });
+                 IAnimeSeriesManager manager = ApiHelpper.CreateAnimeSeriesManagerObjectByClassName(p.ModInfo.ModTypeString);
+                 manager.AttachedAnimeSeriesInfo = p;
+                 await manager.GetPrototypeEpisodes();
+                 (Application.Current.FindResource("AnimeDetailsViewModel") as AnimeDetailsViewModel).CurrentSeries = manager;
+                 (Application.Current.FindResource("MainWindowViewModel") as MainWindowViewModel).NavigateProcess("AnimeDetails");
+             });
 
             ReloadCommand = new RelayCommand<object>(null, async p =>
             {
-                if(await ApiHelpper.CheckForInternetConnection())
+                if (await ApiHelpper.CheckForInternetConnection())
                 {
                     await (Application.Current.FindResource("FeaturedAnimeViewModel") as FeaturedAnimeViewModel).LoadFeaturedAnime(0, 50);
                     await (Application.Current.FindResource("AnimeSuggestionViewModel") as AnimeSuggestionViewModel).LoadSuggestedAnime(0, 50);
@@ -79,6 +94,13 @@ namespace UniversalAnimeDownloader.ViewModels
         private async void Init(object obj)
         {
             OverlayNoInternetVisibility = await ApiHelpper.CheckForInternetConnection() ? Visibility.Collapsed : Visibility.Visible;
+
+            //If user don't install any mod
+            if (ApiHelpper.QueryTypes.Count == 0)
+            {
+                OverlayNoModInstalledVisibility = Visibility.Visible;
+                return;
+            }
 
             Querier = ApiHelpper.CreateQueryAnimeObjectByType(ApiHelpper.QueryTypes[0]);
 
@@ -101,7 +123,7 @@ namespace UniversalAnimeDownloader.ViewModels
                     {
                         CarouselAnimeList.Add(featureInfo[i]);
                     }
-                    await FeaturedAnimeList.AddRange(featureInfo.Where((f, i) => i > 6 &&  i < 18).ToList(), LoadFeaturedAnimeCancelToken.Token);
+                    await FeaturedAnimeList.AddRange(featureInfo.Where((f, i) => i > 6 && i < 18).ToList(), LoadFeaturedAnimeCancelToken.Token);
                 }
                 catch { }
             };

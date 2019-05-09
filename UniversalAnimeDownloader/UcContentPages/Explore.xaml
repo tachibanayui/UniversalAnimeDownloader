@@ -203,6 +203,7 @@
 
         <Grid x:Name="overlayContainer">
             <pages:NoInternetConnectionOverlay ReloadButtonCommand="{Binding ReloadCommand}" Visibility="{Binding OverlayNoInternetVisibility, IsAsync=True, FallbackValue=Collapsed}" />
+            <pages:NoModInstalledOverlay Visibility="{Binding OverlayNoModInstalledVisibility, IsAsync=True, FallbackValue=Collapsed}"/>
         </Grid>
     </Grid>
 </UserControl>

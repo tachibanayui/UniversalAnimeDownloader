@@ -86,6 +86,25 @@ namespace UniversalAnimeDownloader.ViewModels
             }
         }
 
+        private Visibility _OverlayNoModVisibility;
+        public Visibility OverlayNoModVisibility
+        {
+            get
+            {
+                return _OverlayNoModVisibility;
+            }
+            set
+            {
+                if (_OverlayNoModVisibility != value)
+                {
+                    _OverlayNoModVisibility = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+
+
         private ItemsPanelTemplate _AnimeCardPanel = Application.Current.FindResource("WrapPanelItemPanel") as ItemsPanelTemplate;
         public ItemsPanelTemplate AnimeCardPanel
         {
@@ -173,7 +192,7 @@ namespace UniversalAnimeDownloader.ViewModels
                 }
             });
 
-            PageLoaded = new RelayCommand<object>(null, async p => { if (!(Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.IsOnlyLoadWhenHostShow) await InitAnimeList(); });
+            PageLoaded = new RelayCommand<object>(null, async p => { if (!(Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.IsOnlyLoadWhenHostShow) { await InitAnimeList(); } });
         }
 
         private async Task InitAnimeList()
@@ -193,6 +212,11 @@ namespace UniversalAnimeDownloader.ViewModels
 
         public async Task LoadFeaturedAnime(int offset, int count, bool clearPreviousCard = true)
         {
+            if (Querier == null)
+            {
+                OverlayNoModVisibility = Visibility.Visible;
+                return;
+            }
             if (Querier.SupportGetPopularSeries)
             {
                 HideNotSupportedOverlay();
@@ -237,7 +261,9 @@ namespace UniversalAnimeDownloader.ViewModels
                 IsLoadOngoing = false;
             }
             else
+            {
                 ShowNotSupportedOverlay();
+            }
         }
 
         private void HideAllOverlay()

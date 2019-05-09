@@ -82,5 +82,9 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+
+        <Grid x:Name="overlayContainer" Grid.RowSpan="2">
+            <local:NoModInstalledOverlay Visibility="{Binding OverlayNoModVisibility, IsAsync=True, FallbackValue=Collapsed}" />
+        </Grid>
     </Grid>
 </UserControl>

@@ -2,6 +2,7 @@
     x:Class="UniversalAnimeDownloader.UcContentPages.AnimeDetails"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:behaviour="clr-namespace:UniversalAnimeDownloader.Behaviour"
     xmlns:customcontrols="clr-namespace:UniversalAnimeDownloader.CustomControls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:html="clr-namespace:TheArtOfDev.HtmlRenderer.WPF;assembly=HtmlRenderer.WPF"
@@ -172,6 +173,67 @@
                             Background="Transparent"
                             Foreground="White"
                             Text="{Binding CurrentSeries.AttachedAnimeSeriesInfo.Description, Converter={StaticResource HtmlTagToColoredTextConverter}}" />
+                    </Grid>
+                </materialDesign:Card>
+
+                <materialDesign:Card Margin="0,10,0,0" UniformCornerRadius="10">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="50" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+
+                        <TextBlock
+                            Margin="10,0,0,0"
+                            VerticalAlignment="Center"
+                            FontSize="{DynamicResource Heading2}"
+                            Text="Similar series:" />
+
+                        <Button
+                            Margin="0,0,10,0"
+                            HorizontalAlignment="Right"
+                            Command="{Binding CopyDescriptionCommand}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition Width="5" />
+                                    <ColumnDefinition Width="auto" />
+                                </Grid.ColumnDefinitions>
+                                <materialDesign:PackIcon Kind="Plus" />
+                                <TextBlock Grid.Column="2" Text="More" />
+                            </Grid>
+                        </Button>
+
+                        <Grid Grid.Row="2">
+                            <ScrollViewer ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                                <StackPanel Height="325" Orientation="Horizontal">
+                                    <ListBox
+                                        x:Name="featureAnimeList"
+                                        materialDesign:RippleAssist.IsDisabled="True"
+                                        ItemsSource="{Binding SimilarSeries, IsAsync=True}"
+                                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                        ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                        VirtualizingStackPanel.IsVirtualizing="True"
+                                        VirtualizingStackPanel.VirtualizationMode="Recycling">
+                                        <ListBox.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel Orientation="Horizontal" />
+                                            </ItemsPanelTemplate>
+                                        </ListBox.ItemsPanel>
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <local:AnimeItemCard AnimeCardCommand="{Binding DataContext.ShowAnimeDetailCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:AnimeDetails}}}" />
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                </StackPanel>
+
+                                <i:Interaction.Behaviors>
+                                    <behaviour:BubbleScrollEvent />
+                                </i:Interaction.Behaviors>
+                            </ScrollViewer>
+                            <local:ActivityIndicator Visibility="{Binding SimilarSeries.Count, IsAsync=True, FallbackValue=0, ConverterParameter=1, Converter={StaticResource SmallerThanParameterToVisibilityConverter}}" />
+                        </Grid>
                     </Grid>
                 </materialDesign:Card>
 

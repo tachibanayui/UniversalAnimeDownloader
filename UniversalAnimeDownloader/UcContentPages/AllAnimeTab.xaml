@@ -107,6 +107,7 @@
             <page:NoInternetConnectionOverlay ReloadButtonCommand="{Binding SearchAnimeCommand}" Visibility="{Binding OverlayNoInternetVisibility, IsAsync=True, FallbackValue=Collapsed}" />
             <page:ErrorOccuredOverlay Visibility="{Binding OverlayErrorOccuredVisibility, IsAsync=True, FallbackValue=Collapsed}" />
             <page:ActivityIndicator Visibility="{Binding OverlayActiityIndicatorVisibility, IsAsync=True, FallbackValue=Collapsed}" />
+            <page:NoModInstalledOverlay Visibility="{Binding OverlayNoModVisibility, IsAsync=True, FallbackValue=Collapsed}" />
         </Grid>
     </Grid>
 </UserControl>

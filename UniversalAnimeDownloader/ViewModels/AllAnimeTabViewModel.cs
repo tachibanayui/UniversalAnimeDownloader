@@ -162,6 +162,25 @@ namespace UniversalAnimeDownloader.ViewModels
             }
         }
 
+        private Visibility _OverlayNoModVisibility;
+        public Visibility OverlayNoModVisibility
+        {
+            get
+            {
+                return _OverlayNoModVisibility;
+            }
+            set
+            {
+                if (_OverlayNoModVisibility != value)
+                {
+                    _OverlayNoModVisibility = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+
+
         private ItemsPanelTemplate _AnimeCardPanel = Application.Current.FindResource("WrapPanelItemPanel") as ItemsPanelTemplate;
         public ItemsPanelTemplate AnimeCardPanel
         {
@@ -184,7 +203,7 @@ namespace UniversalAnimeDownloader.ViewModels
 
         public AllAnimeTabViewModel()
         {
-            SearchAnimeCommand = new RelayCommand<object>(null, async (p) =>  await LoadAnime(0, 50));
+            SearchAnimeCommand = new RelayCommand<object>(null, async (p) => await LoadAnime(0, 50));
             ReloadInternetCommand = new RelayCommand<object>(p => OverlayNoInternetVisibility == Visibility.Visible, async (p) => await LoadAnime(0, 50));
             AnimeListScrollingCommand = new RelayCommand<object>(p =>
             {
@@ -212,10 +231,13 @@ namespace UniversalAnimeDownloader.ViewModels
                     (Application.Current.FindResource("AnimeDetailsViewModel") as AnimeDetailsViewModel).CurrentSeries = manager;
                 }
             });
-            MiscClass.UserSearched += async (s, e) => 
+            MiscClass.UserSearched += async (s, e) =>
             {
                 if (MiscClass.NavigationHelper.Current != 0)
+                {
                     return;
+                }
+
                 SearchAnime = e.Keyword;
                 await LoadAnime(0, 50);
             };
@@ -225,7 +247,7 @@ namespace UniversalAnimeDownloader.ViewModels
             Genres = new ObservableCollection<GenreItem>();
             Seasons = new ObservableCollection<SeasonItem>();
 
-            PageLoaded = new RelayCommand<object>(null, async p => { if (!(Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.IsOnlyLoadWhenHostShow) await InitAnimeList(); });
+            PageLoaded = new RelayCommand<object>(null, async p => { if (!(Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.IsOnlyLoadWhenHostShow) { await InitAnimeList(); } });
         }
 
         private async Task InitAnimeList()
@@ -234,11 +256,14 @@ namespace UniversalAnimeDownloader.ViewModels
             SelectedGenresIndex = 0;
             try
             {
+                if (ApiHelpper.QueryTypes.Count == 0)
                 {
-                    await TempTask;
-                    await LoadAnime(0, 50);
+                    OverlayNoModVisibility = Visibility.Visible;
+                    return;
                 }
 
+                await TempTask;
+                await LoadAnime(0, 50);
             }
             catch (Exception e)
             {

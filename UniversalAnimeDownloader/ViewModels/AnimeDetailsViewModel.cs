@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -37,6 +38,7 @@ namespace UniversalAnimeDownloader.ViewModels
         }
 
         public ObservableCollection<SelectableEpisodeInfo> EpisodeInfo { get; set; } = new ObservableCollection<SelectableEpisodeInfo>();
+        public DelayedObservableCollection<AnimeSeriesInfo> SimilarSeries { get; set; } = new DelayedObservableCollection<AnimeSeriesInfo>();
 
         private List<int> _SelectedEpisodeIndex;
         public List<int> SelectedEpisodeIndex
@@ -183,6 +185,7 @@ namespace UniversalAnimeDownloader.ViewModels
         public ICommand WatchEpisodeOnline { get; set; }
         public ICommand DownloadAnimeCommand { get; set; }
         public ICommand OfflineVerionCommand { get; set; }
+        public ICommand ShowAnimeDetailCommand { get; set; }
         #endregion
 
         #region Properties
@@ -262,6 +265,13 @@ namespace UniversalAnimeDownloader.ViewModels
                     offline.CurrentSeries = manage;
                     (Application.Current.FindResource("MainWindowViewModel") as MainWindowViewModel).NavigateProcess("OfflineAnimeDetail");
                 }
+            });
+            ShowAnimeDetailCommand = new RelayCommand<AnimeSeriesInfo>(null, async p => 
+            {
+                IAnimeSeriesManager manager = ApiHelpper.CreateAnimeSeriesManagerObjectByClassName(p.ModInfo.ModTypeString);
+                manager.AttachedAnimeSeriesInfo = p;
+                await manager.GetPrototypeEpisodes();
+                CurrentSeries = manager;
             });
         }
 
@@ -498,6 +508,26 @@ namespace UniversalAnimeDownloader.ViewModels
             }
 
             SourceControl = new AnimeSourceControl(value);
+
+            await LoadSimilarSeries(value);
+        }
+
+        private CancellationTokenSource SimilarSeriesLoadCancelToken;
+
+        private async Task LoadSimilarSeries(IAnimeSeriesManager value)
+        {
+            GenreItem firstGenre = value.AttachedAnimeSeriesInfo.Genres.FirstOrDefault();
+            if (firstGenre != null)
+            {
+                if(SimilarSeriesLoadCancelToken != null)
+                    SimilarSeriesLoadCancelToken.Cancel();
+
+                SimilarSeriesLoadCancelToken = new CancellationTokenSource();
+                var querier = ApiHelpper.CreateQueryAnimeObjectByClassName(value.RelativeQueryInfo.ModTypeString);
+                var seriesList = await querier.GetAnime(0, 10, null, firstGenre.Slug, null);
+                SimilarSeries.Clear();
+                await SimilarSeries.AddRange(seriesList, SimilarSeriesLoadCancelToken.Token);
+            }
         }
 
         private SelectableEpisodeInfo FindEpisodeByIndex(int desiredIndex)

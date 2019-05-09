@@ -56,7 +56,7 @@
                             <Storyboard>
                                 <DoubleAnimation
                                     Storyboard.TargetProperty="(Effect).ShadowDepth"
-                                    To="0"
+                                    To="2"
                                     Duration="0:0:0.25">
                                     <DoubleAnimation.EasingFunction>
                                         <QuinticEase EasingMode="EaseOut" />
@@ -64,7 +64,7 @@
                                 </DoubleAnimation>
                                 <DoubleAnimation
                                     Storyboard.TargetProperty="(Effect).BlurRadius"
-                                    To="0"
+                                    To="14"
                                     Duration="0:0:0.25">
                                     <DoubleAnimation.EasingFunction>
                                         <QuinticEase EasingMode="EaseOut" />
@@ -81,7 +81,7 @@
                 x:Name="effect"
                 BlurRadius="14"
                 Direction="225"
-                ShadowDepth="0"
+                ShadowDepth="2"
                 Color="#626262" />
         </materialDesign:Card.Effect>
         <materialDesign:Card.ToolTip>

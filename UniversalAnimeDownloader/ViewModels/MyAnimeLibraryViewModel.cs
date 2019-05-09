@@ -1,12 +1,8 @@
-﻿using MaterialDesignThemes.Wpf;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -50,6 +46,25 @@ namespace UniversalAnimeDownloader.ViewModels
             }
         }
 
+        private Visibility _OverlayNoModVisibility;
+        public Visibility OverlayNoModVisibility
+        {
+            get
+            {
+                return _OverlayNoModVisibility;
+            }
+            set
+            {
+                if (_OverlayNoModVisibility != value)
+                {
+                    _OverlayNoModVisibility = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+
+
         public MyAnimeLibraryViewModel()
         {
             MiscClass.UserSearched += (s, e) =>
@@ -68,6 +83,11 @@ namespace UniversalAnimeDownloader.ViewModels
             {
                 MiscClass.NavigationHelper.AddNavigationHistory(5);
                 IAnimeSeriesManager manager = ApiHelpper.CreateAnimeSeriesManagerObjectByClassName(p.ModInfo.ModTypeString);
+                if (manager == null)
+                {
+                    OverlayNoModVisibility = Visibility.Visible;
+                    return;
+                }
                 manager.AttachedAnimeSeriesInfo = p;
                 (Application.Current.FindResource("OfflineAnimeDetailViewModel") as OfflineAnimeDetailViewModel).CurrentSeries = manager;
             });
@@ -76,9 +96,13 @@ namespace UniversalAnimeDownloader.ViewModels
         private bool SearchAnimeLibrary(object obj)
         {
             if (string.IsNullOrEmpty(LastSearchedKeyWord))
+            {
                 return true;
+            }
             else
+            {
                 return (obj as AnimeSeriesInfo).Name.ToLower().Contains(LastSearchedKeyWord.ToLower());
+            }
         }
 
         public async Task ReloadAnimeLibrary(bool isRealtimeList)
@@ -87,7 +111,7 @@ namespace UniversalAnimeDownloader.ViewModels
             string lib = AppDomain.CurrentDomain.BaseDirectory + "Anime Library\\";
             foreach (var item in Directory.EnumerateDirectories(lib))
             {
-                if(File.Exists(item + "\\Manager.json"))
+                if (File.Exists(item + "\\Manager.json"))
                 {
                     string content = File.ReadAllText(item + "\\Manager.json");
                     var jsonSetting = new JsonSerializerSettings()
@@ -97,12 +121,16 @@ namespace UniversalAnimeDownloader.ViewModels
                     };
                     var info = JsonConvert.DeserializeObject<AnimeSeriesInfo>(content, jsonSetting);
                     if (isRealtimeList)
+                    {
                         NoDelayAnimeLib.Add(info);
+                    }
                     else
+                    {
                         await AnimeLibrary.AddAndWait(info);
+                    }
                 }
             }
-            if(!isRealtimeList)
+            if (!isRealtimeList)
             {
                 NoDelayAnimeLib.Clear();
                 NoDelayAnimeLib.AddRange(AnimeLibrary);
@@ -115,7 +143,7 @@ namespace UniversalAnimeDownloader.ViewModels
 
         public void OnHide()
         {
-            
+
         }
     }
 }

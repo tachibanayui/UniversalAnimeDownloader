@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media.Imaging;
 using UADAPI;
 using UniversalAnimeDownloader.UADSettingsPortal;
 
@@ -48,7 +43,10 @@ namespace UniversalAnimeDownloader.ViewModels
                 {
                     _SelectedQueryModIndex = value;
                     if (ApiHelpper.QueryTypes.Count > value)
+                    {
                         Querier = ApiHelpper.CreateQueryAnimeObjectByType(ApiHelpper.QueryTypes[value]);
+                    }
+
                     OnPropertyChanged();
                 }
             }
@@ -83,6 +81,23 @@ namespace UniversalAnimeDownloader.ViewModels
                 if (_OverlayErrorOccuredVisibility != value)
                 {
                     _OverlayErrorOccuredVisibility = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private Visibility _OverlayNoModVisibility;
+        public Visibility OverlayNoModVisibility
+        {
+            get
+            {
+                return _OverlayNoModVisibility;
+            }
+            set
+            {
+                if (_OverlayNoModVisibility != value)
+                {
+                    _OverlayNoModVisibility = value;
                     OnPropertyChanged();
                 }
             }
@@ -141,31 +156,38 @@ namespace UniversalAnimeDownloader.ViewModels
                 }
             }, async (p) =>
             {
-                await LoadSuggestedAnime(Rand.Next(1,1000000), 50, false);
+                await LoadSuggestedAnime(Rand.Next(1, 1000000), 50, false);
             });
             ShowAnimeDetailCommand = new RelayCommand<AnimeSeriesInfo>(null, async (p) =>
             {
                 if (p != null)
                 {
                     IAnimeSeriesManager manager = ApiHelpper.CreateAnimeSeriesManagerObjectByClassName(p.ModInfo.ModTypeString);
+                    if (manager == null)
+                    {
+                        OverlayNoModVisibility = Visibility.Visible;
+                        return;
+                    }
                     manager.AttachedAnimeSeriesInfo = p;
                     await manager.GetPrototypeEpisodes();
                     (Application.Current.FindResource("AnimeDetailsViewModel") as AnimeDetailsViewModel).CurrentSeries = manager;
                 }
             });
-            PageLoaded = new RelayCommand<object>(null, async p => 
+            PageLoaded = new RelayCommand<object>(null, async p =>
             {
                 string userInterestString = (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.UserInterest;
                 await UserInterestMananger.Deserialize(userInterestString); // 16 ms
                 if (!(Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.IsOnlyLoadWhenHostShow)
+                {
                     await InitAnimeList();
+                }
             });
         }
 
         private async Task InitAnimeList()
         {
             IsLoadOngoing = true;
-            if(UserInterestMananger.Data.LastSuggestion != null)
+            if (UserInterestMananger.Data.LastSuggestion != null)
             {
                 HideAllOverlay();
                 OverlayActiityIndicatorVisibility = Visibility.Visible;
@@ -198,7 +220,7 @@ namespace UniversalAnimeDownloader.ViewModels
                 {
                     if (Querier != null)
                     {
-                        var animes = await Task.Run(async () => 
+                        var animes = await Task.Run(async () =>
                         {
                             LoadAnimeCancelToken?.Cancel();
                             LoadAnimeCancelToken = new CancellationTokenSource();
