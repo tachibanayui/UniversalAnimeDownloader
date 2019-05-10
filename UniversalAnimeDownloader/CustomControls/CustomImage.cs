@@ -54,7 +54,7 @@ namespace UniversalAnimeDownloader.CustomControls
                         {
                             if (File.Exists(info.LocalFile))
                             {
-                                var fs = File.Open(info.LocalFile, FileMode.Open);
+                                var fs = File.OpenRead(info.LocalFile);
                                 memStream = new MemoryStream();
                                 fs.CopyTo(memStream);
                                 fs.Close();

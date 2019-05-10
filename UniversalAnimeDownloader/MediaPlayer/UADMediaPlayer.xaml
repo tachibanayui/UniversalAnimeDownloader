@@ -150,19 +150,27 @@
                             </Grid.ColumnDefinitions>
                             <customControls:ColorfulTabDecorator
                                 Grid.Column="1"
+                                VerticalContentAlignment="Center"
                                 Clicked="Event_OpenPlayListTab"
                                 ControlTabIndex="0"
                                 CurrentTabIndex="{Binding SidePanelTabIndex}"
                                 TabMarkerDock="Top">
-                                <materialDesign:PackIcon Foreground="White" Kind="PlaylistPlay" />
+                                <materialDesign:PackIcon
+                                    HorizontalAlignment="Center"
+                                    Foreground="White"
+                                    Kind="PlaylistPlay" />
                             </customControls:ColorfulTabDecorator>
                             <customControls:ColorfulTabDecorator
                                 Grid.Column="2"
+                                VerticalContentAlignment="Center"
                                 Clicked="Event_OpenInfoTab"
                                 ControlTabIndex="1"
                                 CurrentTabIndex="{Binding SidePanelTabIndex}"
                                 TabMarkerDock="Top">
-                                <materialDesign:PackIcon Foreground="White" Kind="InformationOutline" />
+                                <materialDesign:PackIcon
+                                    HorizontalAlignment="Center"
+                                    Foreground="White"
+                                    Kind="InformationOutline" />
                             </customControls:ColorfulTabDecorator>
                         </Grid>
                         <Separator Margin="15,0" VerticalAlignment="Bottom" />
