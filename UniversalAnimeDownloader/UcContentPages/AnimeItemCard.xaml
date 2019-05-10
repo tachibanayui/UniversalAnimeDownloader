@@ -101,10 +101,7 @@
                             <ColumnDefinition />
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
-                        <customcontrols:CustomImage
-                            Margin="10"
-                            DataContext="{Binding Thumbnail, Converter={StaticResource MediaSourceInfoToImageSourceConverter}}"
-                            StreamSource="{Binding Path=Result, IsAsync=True}" />
+                        <customcontrols:CustomImage Margin="10" ImageInfo="{Binding Thumbnail}" />
                         <Grid Grid.Column="1" Margin="5">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="48" />
@@ -167,8 +164,7 @@
                                             x:Name="thumbnail"
                                             Margin="5"
                                             materialDesign:ShadowAssist.ShadowDepth="Depth5"
-                                            DataContext="{Binding Thumbnail, Converter={StaticResource MediaSourceInfoToImageSourceConverter}}"
-                                            StreamSource="{Binding Path=Result, IsAsync=True}"
+                                            ImageInfo="{Binding Thumbnail}"
                                             Stretch="UniformToFill" />
                                     </Border>
                                     <Grid
@@ -238,5 +234,6 @@
                 </Style>
             </Button.Style>
         </Button>
+
     </materialDesign:Card>
 </UserControl>

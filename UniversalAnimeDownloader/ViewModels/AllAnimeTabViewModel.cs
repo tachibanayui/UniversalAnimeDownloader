@@ -72,6 +72,7 @@ namespace UniversalAnimeDownloader.ViewModels
                 if (_SelectedGenresIndex != value)
                 {
                     _SelectedGenresIndex = value;
+                    SearchAnimeCommand.Execute(null);
                     OnPropertyChanged();
                 }
             }

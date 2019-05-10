@@ -56,10 +56,7 @@
             </Grid>
 
             <Grid Grid.Column="1" Grid.ColumnSpan="2">
-                <customcontrols:CustomImage
-                    DataContext="{Binding CurrentSeries.AttachedAnimeSeriesInfo.Thumbnail, Converter={StaticResource MediaSourceInfoToImageSourceConverter}}"
-                    StreamSource="{Binding Result, IsAsync=True}"
-                    Stretch="UniformToFill" />
+                <customcontrols:CustomImage ImageInfo="{Binding CurrentSeries.AttachedAnimeSeriesInfo.Thumbnail, IsAsync=True}" Stretch="UniformToFill" />
                 <Rectangle>
                     <Rectangle.Fill>
                         <LinearGradientBrush StartPoint="0.2,1">
@@ -192,7 +189,7 @@
                         <Button
                             Margin="0,0,10,0"
                             HorizontalAlignment="Right"
-                            Command="{Binding CopyDescriptionCommand}">
+                            Command="{Binding ShowMoreSimilarSeriesCommand}">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="auto" />
@@ -206,18 +203,17 @@
 
                         <Grid Grid.Row="2">
                             <ScrollViewer ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Disabled">
-                                <StackPanel Height="325" Orientation="Horizontal">
-                                    <ListBox
+                                <StackPanel Height="350" Orientation="Horizontal">
+                                    <ListView
                                         x:Name="featureAnimeList"
                                         materialDesign:RippleAssist.IsDisabled="True"
                                         ItemsSource="{Binding SimilarSeries, IsAsync=True}"
-                                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                        ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                        Style="{StaticResource listViewEpisodeBaseTemplate}"
                                         VirtualizingStackPanel.IsVirtualizing="True"
                                         VirtualizingStackPanel.VirtualizationMode="Recycling">
                                         <ListBox.ItemsPanel>
                                             <ItemsPanelTemplate>
-                                                <StackPanel Orientation="Horizontal" />
+                                                <VirtualizingStackPanel Orientation="Horizontal" />
                                             </ItemsPanelTemplate>
                                         </ListBox.ItemsPanel>
                                         <ListBox.ItemTemplate>
@@ -225,14 +221,14 @@
                                                 <local:AnimeItemCard AnimeCardCommand="{Binding DataContext.ShowAnimeDetailCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:AnimeDetails}}}" />
                                             </DataTemplate>
                                         </ListBox.ItemTemplate>
-                                    </ListBox>
+                                    </ListView>
                                 </StackPanel>
 
                                 <i:Interaction.Behaviors>
                                     <behaviour:BubbleScrollEvent />
                                 </i:Interaction.Behaviors>
                             </ScrollViewer>
-                            <local:ActivityIndicator Visibility="{Binding SimilarSeries.Count, IsAsync=True, FallbackValue=0, ConverterParameter=1, Converter={StaticResource SmallerThanParameterToVisibilityConverter}}" />
+                            <local:ActivityIndicator IsHitTestVisible="False" Visibility="{Binding SimilarSeries.Count, IsAsync=True, FallbackValue=0, ConverterParameter=1, Converter={StaticResource SmallerThanParameterToVisibilityConverter}}" />
                         </Grid>
                     </Grid>
                 </materialDesign:Card>

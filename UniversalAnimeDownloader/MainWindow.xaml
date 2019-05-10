@@ -339,7 +339,7 @@
                         <cmd:EventToCommand Command="{Binding ChangeWindowStateRequestCommand}" PassEventArgsToCommand="True" />
                     </i:EventTrigger>
                     <i:EventTrigger EventName="UADMediaPlayerClosed">
-                        <i:InvokeCommandAction Command="{Binding UADMediaPlayerClosedCommand}"/>
+                        <i:InvokeCommandAction Command="{Binding UADMediaPlayerClosedCommand}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </media:UADMediaPlayer>
@@ -416,8 +416,7 @@
                                 </Grid.RowDefinitions>
                                 <customControl:CustomImage
                                     Grid.RowSpan="3"
-                                    DataContext="{Binding NowPlaying.Thumbnail, Converter={StaticResource MediaSourceInfoToImageSourceConverter}}"
-                                    StreamSource="{Binding Result, IsAsync=True}"
+                                    ImageInfo="{Binding NowPlaying.Thumbnail, IsAsync=True}"
                                     Stretch="UniformToFill" />
                                 <Rectangle Fill="Black" Opacity="0.25" />
 

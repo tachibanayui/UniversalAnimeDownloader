@@ -14,50 +14,118 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using UADAPI;
 
 namespace UniversalAnimeDownloader.CustomControls
 {
     class CustomImage : Image
     {
-        public Stream StreamSource
+        //public Stream StreamSource
+        //{
+        //    get { return (Stream)GetValue(StreamSourceProperty); }
+        //    set { SetValue(StreamSourceProperty, value); }
+        //}
+        //public static readonly DependencyProperty StreamSourceProperty =
+        //    DependencyProperty.Register("StreamSource", typeof(Stream), typeof(CustomImage), new PropertyMetadata(StreamSourceChanged));
+
+
+        public MediaSourceInfo ImageInfo
         {
-            get { return (Stream)GetValue(StreamSourceProperty); }
-            set { SetValue(StreamSourceProperty, value); }
+            get { return (MediaSourceInfo)GetValue(ImageInfoProperty); }
+            set { SetValue(ImageInfoProperty, value); }
         }
+        public static readonly DependencyProperty ImageInfoProperty =
+            DependencyProperty.Register("ImageInfo", typeof(MediaSourceInfo), typeof(CustomImage), new PropertyMetadata(ImageInfoChanged));
 
-        // Using a DependencyProperty as the backing store for StreamSource.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty StreamSourceProperty =
-            DependencyProperty.Register("StreamSource", typeof(Stream), typeof(CustomImage), new PropertyMetadata(StreamSourceChanged));
-
-        private static async void StreamSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static async void ImageInfoChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var ins = (d as Image);
-            var newStream = e.NewValue as Stream;
-            if (newStream == null)
-                newStream = e.OldValue as Stream;
-            if (newStream != null)
+            var ins = d as CustomImage;
+            var info = e.NewValue as MediaSourceInfo;
+            MemoryStream memStream = null;
+            BitmapImage imgSrc = null;
+
+            try
             {
-                ins.Source = new BitmapImage();
-
-                newStream.Position = 0;
-                BitmapImage imageSrc = null;
-
-                await Task.Run(() =>
+                await Task.Run(async () =>
                 {
-                    imageSrc = new BitmapImage();
-                    imageSrc.BeginInit();
-                    imageSrc.StreamSource = newStream;
-                    imageSrc.EndInit();
-                    imageSrc.Freeze();
+                    if (info != null)
+                    {
+                        if (!string.IsNullOrEmpty(info.LocalFile))
+                        {
+                            if (File.Exists(info.LocalFile))
+                            {
+                                var fs = File.Open(info.LocalFile, FileMode.Open);
+                                memStream = new MemoryStream();
+                                fs.CopyTo(memStream);
+                                fs.Close();
+                            }
+                            else if (!string.IsNullOrEmpty(info.Url))
+                            {
+                                memStream = (await AnimeInformationRequester.GetStreamAsync(info.Url, info.Headers)) as MemoryStream;
+                            }
+                        }
+                        else if (!string.IsNullOrEmpty(info.Url))
+                        {
+                            memStream = (await AnimeInformationRequester.GetStreamAsync(info.Url, info.Headers)) as MemoryStream;
+                        }
+
+                        if (memStream != null)
+                        {
+                            memStream.Position = 0;
+                            imgSrc = new BitmapImage();
+                            imgSrc.BeginInit();
+                            imgSrc.StreamSource = memStream;
+                            imgSrc.EndInit();
+                            imgSrc.Freeze();
+                        }
+                    }
                 });
 
-                var newImageSrc = imageSrc.Clone();
-                ins.Source = imageSrc;
+                if (imgSrc != null)
+                {
+                    imgSrc = imgSrc.Clone();
+                    ins.Source = imgSrc;
+                }
+                else
+                {
+                    ins.Source = new BitmapImage();
+                }
             }
-            else
+            catch (Exception err)
             {
                 ins.Source = new BitmapImage();
             }
         }
+
+        //private static async void StreamSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        //{
+        //    var ins = (d as Image);
+        //    var newStream = e.NewValue as Stream;
+        //    if (newStream == null)
+        //        newStream = e.OldValue as Stream;
+        //    if (newStream != null)
+        //    {
+        //        ins.Source = new BitmapImage();
+
+        //        newStream.Position = 0;
+        //        BitmapImage imageSrc = null;
+
+        //        await Task.Run(() =>
+        //        {
+        //            imageSrc = new BitmapImage();
+        //            imageSrc.BeginInit();
+        //            imageSrc.StreamSource = newStream;
+        //            imageSrc.EndInit();
+        //            imageSrc.Freeze();
+        //        });
+
+        //        var newImageSrc = imageSrc.Clone();
+        //        ins.Source = imageSrc;
+        //    }
+        //    else
+        //    {
+        //        ins.Source = new BitmapImage();
+        //    }
+        //}
     }
 }

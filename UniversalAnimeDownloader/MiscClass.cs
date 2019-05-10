@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -195,6 +196,17 @@ namespace UniversalAnimeDownloader
                 Directory.CreateDirectory(Path.Combine(destination, dir.Substring(source.Length + 1)));
             foreach (string file_name in Directory.GetFiles(source, "*", SearchOption.AllDirectories))
                 File.Copy(file_name, Path.Combine(destination, file_name.Substring(source.Length + 1)), true);
+        }
+
+        public static int FindObservableCollectionIndex<T>(ObservableCollection<T> collection, Func<T, bool> predicate)
+        {
+            for (int i = 0; i < collection.Count; i++)
+            {
+                if (predicate(collection[i]))
+                    return i;
+            }
+
+            return -1;
         }
     }
 

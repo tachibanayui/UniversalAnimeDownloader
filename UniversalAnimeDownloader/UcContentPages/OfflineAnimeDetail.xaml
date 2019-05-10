@@ -55,10 +55,7 @@
             </Grid>
 
             <Grid Grid.Column="1" Grid.ColumnSpan="2">
-                <customcontrols:CustomImage
-                    DataContext="{Binding CurrentSeries.AttachedAnimeSeriesInfo.Thumbnail, Converter={StaticResource MediaSourceInfoToImageSourceConverter}}"
-                    StreamSource="{Binding Path=Result, IsAsync=True}"
-                    Stretch="UniformToFill" />
+                <customcontrols:CustomImage ImageInfo="{Binding CurrentSeries.AttachedAnimeSeriesInfo.Thumbnail}" Stretch="UniformToFill" />
                 <Rectangle>
                     <Rectangle.Fill>
                         <LinearGradientBrush StartPoint="0.2,1">
@@ -233,8 +230,8 @@
                                             Grid.Column="4"
                                             Command="{Binding DataContext.DeleteEpisodeCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:OfflineAnimeDetail}}}"
                                             CommandParameter="{Binding}"
-                                            Visibility="{Binding AvailableOffline, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Normal}"
-                                            Style="{StaticResource MaterialDesignActionFlatButton}">
+                                            Style="{StaticResource MaterialDesignActionFlatButton}"
+                                            Visibility="{Binding AvailableOffline, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Normal}">
                                             <materialDesign:PackIcon Kind="Delete" />
                                         </Button>
 

@@ -239,8 +239,7 @@
                                                         Grid.Column="1"
                                                         Width="64"
                                                         Height="36"
-                                                        DataContext="{Binding Thumbnail, Converter={StaticResource MediaSourceInfoToImageSourceConverter}}"
-                                                        StreamSource="{Binding Path=Result, IsAsync=True}"
+                                                        ImageInfo="{Binding Thumbnail, IsAsync=True}"
                                                         Stretch="UniformToFill" />
 
                                                     <Grid Grid.Column="3">

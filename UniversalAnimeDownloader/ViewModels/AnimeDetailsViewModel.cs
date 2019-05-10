@@ -38,7 +38,7 @@ namespace UniversalAnimeDownloader.ViewModels
         }
 
         public ObservableCollection<SelectableEpisodeInfo> EpisodeInfo { get; set; } = new ObservableCollection<SelectableEpisodeInfo>();
-        public DelayedObservableCollection<AnimeSeriesInfo> SimilarSeries { get; set; } = new DelayedObservableCollection<AnimeSeriesInfo>();
+        public ObservableCollection<AnimeSeriesInfo> SimilarSeries { get; set; } = new ObservableCollection<AnimeSeriesInfo>();
 
         private List<int> _SelectedEpisodeIndex;
         public List<int> SelectedEpisodeIndex
@@ -186,6 +186,7 @@ namespace UniversalAnimeDownloader.ViewModels
         public ICommand DownloadAnimeCommand { get; set; }
         public ICommand OfflineVerionCommand { get; set; }
         public ICommand ShowAnimeDetailCommand { get; set; }
+        public ICommand ShowMoreSimilarSeriesCommand { get; set; }
         #endregion
 
         #region Properties
@@ -272,6 +273,19 @@ namespace UniversalAnimeDownloader.ViewModels
                 manager.AttachedAnimeSeriesInfo = p;
                 await manager.GetPrototypeEpisodes();
                 CurrentSeries = manager;
+            });
+            ShowMoreSimilarSeriesCommand = new RelayCommand<object>(null, p =>
+            {
+                var firstGenre = CurrentSeries.AttachedAnimeSeriesInfo.Genres.FirstOrDefault();
+                if(firstGenre != null)
+                {
+                    var destPage = Application.Current.FindResource("AllAnimeTabViewModel") as AllAnimeTabViewModel;
+                    var index = MiscClass.FindObservableCollectionIndex(destPage.Genres, pp => pp.Slug == firstGenre.Slug);
+                    if (index != -1)
+                        destPage.SelectedGenresIndex = index;
+                }
+
+                (Application.Current.FindResource("MainWindowViewModel") as MainWindowViewModel).NavigateProcess("AllAnimeTab");
             });
         }
 
@@ -526,7 +540,10 @@ namespace UniversalAnimeDownloader.ViewModels
                 var querier = ApiHelpper.CreateQueryAnimeObjectByClassName(value.RelativeQueryInfo.ModTypeString);
                 var seriesList = await querier.GetAnime(0, 10, null, firstGenre.Slug, null);
                 SimilarSeries.Clear();
-                await SimilarSeries.AddRange(seriesList, SimilarSeriesLoadCancelToken.Token);
+                foreach (var item in seriesList)
+                {
+                    SimilarSeries.Add(item);
+                }
             }
         }
 
