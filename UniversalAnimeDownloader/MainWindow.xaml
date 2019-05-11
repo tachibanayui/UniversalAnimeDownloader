@@ -361,9 +361,6 @@
                     <i:EventTrigger EventName="Opened">
                         <i:InvokeCommandAction Command="{Binding OpenNowPlayingPopupCommand}" CommandParameter="{Binding ElementName=nowPlayingPopup}" />
                     </i:EventTrigger>
-                    <i:EventTrigger EventName="Closed">
-                        <i:InvokeCommandAction Command="{Binding CloseNowPlayingPopupCommand}" CommandParameter="{Binding ElementName=nowPlayingPopup}" />
-                    </i:EventTrigger>
                 </i:Interaction.Triggers>
                 <Grid
                     Margin="0"

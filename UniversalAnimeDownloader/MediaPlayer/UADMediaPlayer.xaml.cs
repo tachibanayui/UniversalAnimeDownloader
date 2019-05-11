@@ -32,7 +32,7 @@ namespace UniversalAnimeDownloader.MediaPlayer
     public partial class UADMediaPlayer : UserControl
     {
         #region Fields and Properties
-        public UADPlayerViewModel VM;
+        public UADPlayerViewModel VM { get; set; }
         public bool IsSeekSliderLocked = false;
 
         private Random rand = new Random();
@@ -375,7 +375,7 @@ namespace UniversalAnimeDownloader.MediaPlayer
 
         private void Event_MediaPlayerHostLoaded(object sender, RoutedEventArgs e)
         {
-            (Content as FrameworkElement).DataContext = VM;
+           // (Content as FrameworkElement).DataContext = VM;
             mediaPlayer.Source = VideoUri;
             isControllerVisible = true;
             string tt = AppDomain.CurrentDomain.BaseDirectory + "unnamed.ico";
@@ -685,13 +685,13 @@ namespace UniversalAnimeDownloader.MediaPlayer
             switch (icon.Kind)
             {
                 case PackIconKind.Pencil:
-                    inkCanvas.DefaultDrawingAttributes = VM.PrimaryPen;
+                    inkCanvas.DefaultDrawingAttributes = VM.PrimaryPen ?? new DrawingAttributes();
                     break;
                 case PackIconKind.Pen:
-                    inkCanvas.DefaultDrawingAttributes = VM.SecondaryPen;
+                    inkCanvas.DefaultDrawingAttributes = VM.SecondaryPen ?? new DrawingAttributes();
                     break;
                 case PackIconKind.GreasePencil:
-                    inkCanvas.DefaultDrawingAttributes = VM.HighlighterPen;
+                    inkCanvas.DefaultDrawingAttributes = VM.HighlighterPen ?? new DrawingAttributes();
                     break;
                 default:
                     throw new InvalidOperationException("Pen Not found!");

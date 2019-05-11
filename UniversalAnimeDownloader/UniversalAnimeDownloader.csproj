@@ -131,6 +131,7 @@
     <Compile Include="CustomControls\CustomImage.cs" />
     <Compile Include="CustomControls\SidePanelNavigateButton.cs" />
     <Compile Include="DelayedObservableCollection.cs" />
+    <Compile Include="ElementSpy.cs" />
     <Compile Include="Extensions\ListBoxExtensions.cs" />
     <Compile Include="IPageContent.cs" />
     <Compile Include="MainWindow.xaml.cs">

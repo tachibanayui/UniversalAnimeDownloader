@@ -50,7 +50,6 @@ namespace UniversalAnimeDownloader.MediaPlayer
             }
         }
 
-        private bool _IsDrawingEnabled;
         public bool IsDrawingEnabled
         {
             get
@@ -109,10 +108,14 @@ namespace UniversalAnimeDownloader.MediaPlayer
             }
         }
 
-        private DrawingAttributes _PrimaryPen;
         public DrawingAttributes PrimaryPen
         {
-            get { return _PrimaryPen; }
+            get
+            {
+                var thickness = (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.PrimaryBurshThickness;
+                var color = (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.PrimaryPenColor;
+                return GetDrawingAttributes(thickness, color);
+            }
             set
             {
                 (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.PrimaryBurshThickness = value.Height;
@@ -121,10 +124,14 @@ namespace UniversalAnimeDownloader.MediaPlayer
             }
         }
 
-        private DrawingAttributes _SecondaryPen;
         public DrawingAttributes SecondaryPen
         {
-            get { return _SecondaryPen; }
+            get
+            {
+                var thickness = (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.SecondaryBurshThickness;
+                var color = (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.SecondaryPenColor;
+                return GetDrawingAttributes(thickness, color);
+            }
             set
             {
                 (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.SecondaryBurshThickness = value.Height;
@@ -132,15 +139,31 @@ namespace UniversalAnimeDownloader.MediaPlayer
             }
         }
 
-        private DrawingAttributes _HighlighterPen;
         public DrawingAttributes HighlighterPen
         {
-            get { return _HighlighterPen; }
+            get
+            {
+                var thickness = (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.HighlighterBurshThickness;
+                var color = (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.HighlighterPenColor;
+                return GetDrawingAttributes(thickness, color, true);
+            }
             set
             {
                 (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.HighlighterBurshThickness = value.Height;
                 (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.HighlighterPenColor = value.Color;
             }
+        }
+
+        private DrawingAttributes GetDrawingAttributes(double thickness, Color color, bool isHighlighter = false)
+        {
+            return new DrawingAttributes()
+            {
+                Width = thickness,
+                Height = thickness,
+                Color = color,
+                IsHighlighter = isHighlighter,
+                FitToCurve = true
+            };
         }
 
         public double PlayerBorderThickness

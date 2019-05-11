@@ -32,8 +32,6 @@ namespace UniversalAnimeDownloader.UcContentPages
         public ErrorOccuredOverlay()
         {
             InitializeComponent();
-            Binding binding = new Binding("ReloadButtonCommand");
-            BindingOperations.SetBinding(btnDetail, ButtonBase.CommandProperty, binding);
         }
     }
 }

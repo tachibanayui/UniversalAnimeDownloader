@@ -77,7 +77,7 @@
                                                     <Grid>
                                                         <materialDesign:Ripple />
                                                         <ContentPresenter
-                                                            HorizontalAlignment="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType=local:SidePanelNavigateButton}}"
+                                                            HorizontalAlignment="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType=local:ColorfulTabDecorator}}"
                                                             VerticalAlignment="Stretch"
                                                             Content="{TemplateBinding Content}" />
                                                     </Grid>

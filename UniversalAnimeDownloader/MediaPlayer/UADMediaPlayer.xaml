@@ -68,7 +68,11 @@
             Command="proj:CustomCommands.QuitFullScreenHotkey"
             Executed="Command_QuitFullScreen" />
     </UserControl.CommandBindings>
-    <Border BorderBrush="OrangeRed" BorderThickness="{Binding PlayerBorderThickness}">
+    <Border
+        x:Name="test"
+        BorderBrush="OrangeRed"
+        BorderThickness="{Binding PlayerBorderThickness}"
+        DataContext="{Binding VM, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:UADMediaPlayer}}">
         <Grid>
             <MediaElement
                 x:Name="mediaPlayer"
@@ -637,8 +641,7 @@
                         x:Name="inkCanvas"
                         Width="{Binding ElementName=drawingContainer, Path=ActualWidth}"
                         Height="{Binding ElementName=drawingContainer, Path=ActualHeight}"
-                        Background="Transparent"
-                        DefaultDrawingAttributes="{Binding CurrentPen}" />
+                        Background="Transparent" />
 
                     <Grid
                         x:Name="drawingToolbox"

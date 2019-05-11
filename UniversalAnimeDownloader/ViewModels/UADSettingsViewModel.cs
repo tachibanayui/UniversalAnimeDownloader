@@ -268,6 +268,25 @@ namespace UniversalAnimeDownloader.ViewModels
             }
         }
 
+        private string _KeyInputText = string.Empty;
+        public string KeyInputText
+        {
+            get
+            {
+                return _KeyInputText;
+            }
+            set
+            {
+                if (_KeyInputText != value)
+                {
+                    _KeyInputText = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+
+
         public PaletteHelper Helper { get; set; }
         public IList<Swatch> Swatches { get; }
 
@@ -323,27 +342,30 @@ namespace UniversalAnimeDownloader.ViewModels
             StretchModeChangedCommand = new RelayCommand<ComboBox>(p => IsHostLoaded, p => SettingData.BlockerStretchMode = (Stretch)Enum.Parse(typeof(Stretch), p.SelectedItem.ToString()));
             ColorPickerDialogClosingCommand = new RelayCommand<object>(null, p => { });
             ChooseKeyCommand = new RelayCommand<string>(null, p => { CurrentObjectRequestKeyName = p; IsKeyInputOpen = true; });
-            ValidateKeyCommand = new RelayCommand<TextBox>(p => !string.IsNullOrEmpty(p.Text), p =>
-           {
-               char current = p.Text.ToUpper()[0];
+            ValidateKeyCommand = new RelayCommand<object>(null, p =>
+            {
+                if (string.IsNullOrEmpty(KeyInputText))
+                    return;
 
-               switch (CurrentObjectRequestKeyName)
-               {
-                   case "Blocker":
-                       SettingData.BlockerToggleHotKeys = current;
-                       break;
-                   case "FakeCrash":
-                       SettingData.AppCrashToggleHotKeys = current;
-                       break;
-                   case "Background":
-                       SettingData.BgPlayerToggleHotKeys = current;
-                       break;
-                   default:
-                       break;
-               }
-               p.Clear();
-               IsKeyInputOpen = false;
-           });
+                char current = KeyInputText.ToUpper()[0];
+
+                switch (CurrentObjectRequestKeyName)
+                {
+                    case "Blocker":
+                        SettingData.BlockerToggleHotKeys = current;
+                        break;
+                    case "FakeCrash":
+                        SettingData.AppCrashToggleHotKeys = current;
+                        break;
+                    case "Background":
+                        SettingData.BgPlayerToggleHotKeys = current;
+                        break;
+                    default:
+                        break;
+                }
+                KeyInputText = string.Empty;
+                IsKeyInputOpen = false;
+            });
             ChooseColorCommand = new RelayCommand<string>(p => string.IsNullOrEmpty(CurrentObjectRequestColorName), p =>
             {
                 CurrentObjectRequestColorName = p;
@@ -405,14 +427,16 @@ namespace UniversalAnimeDownloader.ViewModels
             DirectoryWizardCancel = new RelayCommand<object>(null, p => IsDirectoryChangerWizard = false);
             UpdateAffectedAnime = new RelayCommand<object>(null, p => UpdateAffectedAnimes());
             StartMovingAnimeDirectory = new RelayCommand<object>(null, p => MoveAnimeDirectoryAction());
-            SaveSettingDialogCommand = new RelayCommand<object>(null, p => 
+            SaveSettingDialogCommand = new RelayCommand<object>(null, p =>
             {
                 Microsoft.Win32.SaveFileDialog saveFileDialog = new Microsoft.Win32.SaveFileDialog();
                 saveFileDialog.Filter = "All files (*.*)|*.*";
                 saveFileDialog.FileName = "UserSetting.json";
                 saveFileDialog.RestoreDirectory = true;
-                if(saveFileDialog.ShowDialog() == true)
+                if (saveFileDialog.ShowDialog() == true)
+                {
                     File.WriteAllText(saveFileDialog.FileName, JsonConvert.SerializeObject(SettingData));
+                }
             });
             ResetUADCommand = new RelayCommand<object>(null, p => UADSettingsManager.ResetCurrentSettings());
             LoadSettingsFromFileCommand = new RelayCommand<object>(null, p =>
@@ -420,11 +444,11 @@ namespace UniversalAnimeDownloader.ViewModels
                 Microsoft.Win32.OpenFileDialog fileDialog = new Microsoft.Win32.OpenFileDialog();
                 fileDialog.Multiselect = false;
                 fileDialog.Filter = "Json Files: (*.JSON)|*.JSON|All Files|*.*";
-                if((bool)fileDialog.ShowDialog())
+                if ((bool)fileDialog.ShowDialog())
                 {
                     UADSettingsManager.LoadSettingFromFile(fileDialog.FileName);
                 }
-                
+
             });
         }
 
@@ -523,7 +547,10 @@ namespace UniversalAnimeDownloader.ViewModels
         private double GetDistFromHostWindow(ScrollViewer obj, int index)
         {
             if (index < 0)
+            {
                 return 0;
+            }
+
             var currentTab = (obj.Content as VirtualizingStackPanel).Children[index];
             return currentTab.TranslatePoint(new Point(0, 0), HostWindow).Y;
         }

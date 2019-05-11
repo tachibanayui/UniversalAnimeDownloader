@@ -42,6 +42,11 @@ namespace UniversalAnimeDownloader.UcContentPages
             InitializeComponent();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e) => OnReloadButtonClicked(e);
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (ReloadButtonCommand.CanExecute(null))
+                ReloadButtonCommand.Execute(null);
+            OnReloadButtonClicked(e);
+        }
     }
 }

@@ -44,6 +44,7 @@
             <Button
                 x:Name="btnDetail"
                 Margin="0,10,0,0"
+                Command="{Binding DetailButtonCommandProperty, RelativeSource={RelativeSource Mode=TemplatedParent}}"
                 Content="See error detail" />
         </StackPanel>
     </Grid>
