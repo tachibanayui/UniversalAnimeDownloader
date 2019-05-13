@@ -910,8 +910,9 @@ namespace UniversalAnimeDownloader.ViewModels
                         modMissingNames.Add(item.ModInfo.ModName);
                 }
             }
+            if(offlineList.Count > 0)
+                NotificationManager.Add(new NotificationItem() { Title = "Check for anime updates completed", Detail = $"Found {updatedSeries} anime series need to updated out of {offlineList.Count} in your library. See download center for mode detail." });
 
-            NotificationManager.Add(new NotificationItem() { Title = "Check for anime updates completed", Detail = $"Found {updatedSeries} anime series need to updated out of {offlineList.Count} in your library. See download center for mode detail." });
             if(modMissing)
             {
                 string missingModList = string.Empty;
