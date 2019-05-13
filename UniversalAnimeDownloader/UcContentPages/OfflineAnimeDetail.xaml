@@ -211,7 +211,7 @@
                                             <ColumnDefinition Width="50" />
                                             <ColumnDefinition Width="50" />
                                         </Grid.ColumnDefinitions>
-                                        <Image Source="{Binding Thumbnail, Converter={StaticResource MediaSourceInfoToImageSourceConverter}}" Stretch="Uniform" />
+                                        <customcontrols:CustomImage ImageInfo="{Binding Thumbnail}" Stretch="Uniform" />
                                         <Grid Grid.Column="2">
                                             <TextBlock
                                                 HorizontalAlignment="Stretch"
