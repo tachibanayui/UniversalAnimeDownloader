@@ -242,9 +242,14 @@
         <Rectangle
             x:Name="recBlackOverlay"
             Grid.Row="2"
-            Fill="Black"
             IsHitTestVisible="False"
-            Opacity="0">
+            Opacity="1">
+            <Rectangle.Fill>
+                <SolidColorBrush
+                    x:Name="overlayBrush"
+                    Opacity="0"
+                    Color="Black" />
+            </Rectangle.Fill>
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseLeftButtonDown">
                     <i:InvokeCommandAction Command="{Binding BlackOverlayMouseDownCommand}" CommandParameter="{Binding ElementName=recBlackOverlay}" />

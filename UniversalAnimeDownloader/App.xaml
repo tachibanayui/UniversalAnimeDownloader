@@ -15,13 +15,13 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/DefinedResources/VisualValueResources.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/DefinedResources/CustomStyles.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/DefinedResources/ToolbarNotifyIcon.xaml" />
                 <ResourceDictionary>
                     <setting:UADSettingsManager x:Key="Settings" />
                 </ResourceDictionary>
-                <ResourceDictionary Source="pack://application:,,,/DefinedResources/VisualValueResources.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/DefinedResources/CustomStyles.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/DefinedResources/MainResources.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/DefinedResources/ToolbarNotifyIcon.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

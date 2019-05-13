@@ -82,7 +82,7 @@
                                             BeginTime="0:0:0.25"
                                             Storyboard.TargetName="icon"
                                             Storyboard.TargetProperty="RenderTransform.Children[2].Angle"
-                                            To="15"
+                                            To="10"
                                             Duration="0:0:0.2">
                                             <DoubleAnimation.EasingFunction>
                                                 <SineEase EasingMode="EaseIn" />
@@ -94,8 +94,8 @@
                                             RepeatBehavior="Forever"
                                             Storyboard.TargetName="icon"
                                             Storyboard.TargetProperty="RenderTransform.Children[2].Angle"
-                                            From="15"
-                                            To="-15"
+                                            From="10"
+                                            To="-10"
                                             Duration="0:0:0.4">
                                             <DoubleAnimation.EasingFunction>
                                                 <SineEase EasingMode="EaseInOut" />
@@ -108,7 +108,7 @@
                                             Storyboard.TargetName="icon"
                                             Storyboard.TargetProperty="RenderTransform.Children[3].Y"
                                             From="0"
-                                            To="-25"
+                                            To="-20"
                                             Duration="0:0:0.2">
                                             <DoubleAnimation.EasingFunction>
                                                 <SineEase EasingMode="EaseInOut" />

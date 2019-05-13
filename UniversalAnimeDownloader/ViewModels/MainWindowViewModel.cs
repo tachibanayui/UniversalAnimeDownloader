@@ -823,7 +823,7 @@ namespace UniversalAnimeDownloader.ViewModels
 
                 DoubleAnimation transitionAnim = new DoubleAnimation(scroll.Width, 255, TimeSpan.FromSeconds(0.5)) { DecelerationRatio = 0.1, EasingFunction = new BackEase() { EasingMode = EasingMode.EaseOut } };
 
-                DoubleAnimation opacityAnim = new DoubleAnimation(fadeOverlay.Opacity, 0.5, TimeSpan.FromSeconds(0.5)) { DecelerationRatio = 0.1 };
+                DoubleAnimation opacityAnim = new DoubleAnimation(fadeOverlay.Fill.Opacity, 0.5, TimeSpan.FromSeconds(0.5)) { DecelerationRatio = 0.1 };
                 fadeOverlay.IsHitTestVisible = true;
 
                 if (!IsExpandSidePanel)
@@ -833,7 +833,7 @@ namespace UniversalAnimeDownloader.ViewModels
                     fadeOverlay.IsHitTestVisible = false;
                 }
                 scroll.BeginAnimation(FrameworkElement.WidthProperty, transitionAnim);
-                fadeOverlay.BeginAnimation(UIElement.OpacityProperty, opacityAnim);
+                fadeOverlay.Fill.BeginAnimation(Brush.OpacityProperty, opacityAnim);
             }
         }
 

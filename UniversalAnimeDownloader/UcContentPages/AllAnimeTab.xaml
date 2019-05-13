@@ -23,7 +23,7 @@
     mc:Ignorable="d">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
-            <i:InvokeCommandAction Command="{Binding PageLoaded}" />
+            <i:InvokeCommandAction Command="{Binding PageLoaded, Mode=OneTime}" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Grid>
@@ -67,7 +67,7 @@
                         Grid.Column="1"
                         materialDesign:HintAssist.Hint="Genres:"
                         DisplayMemberPath="Name"
-                        ItemsSource="{Binding Genres, IsAsync=True}"
+                        ItemsSource="{Binding Genres, IsAsync=True, Mode=OneWay}"
                         SelectedIndex="{Binding SelectedGenresIndex}"
                         Style="{StaticResource floatingHintCbx}" />
 
@@ -75,12 +75,12 @@
                         Grid.Column="2"
                         materialDesign:HintAssist.Hint="Season:"
                         DisplayMemberPath="Name"
-                        ItemsSource="{Binding Seasons, Converter={StaticResource GenreItemListToStringConverter}, IsAsync=True}"
+                        ItemsSource="{Binding Seasons, Mode=OneWay, Converter={StaticResource GenreItemListToStringConverter}, IsAsync=True}"
                         SelectedIndex="{Binding SelectedSeasonIndex}"
                         Style="{StaticResource floatingHintCbx}" />
                     <Button
                         Grid.Column="3"
-                        Command="{Binding SearchAnimeCommand}"
+                        Command="{Binding SearchAnimeCommand, Mode=OneTime}"
                         Content="Search!" />
                 </Grid>
             </Grid>
@@ -89,22 +89,22 @@
         <ListBox
             x:Name="animeList"
             Grid.Row="1"
-            ex:ListBoxExtensions.ScrollChangedCommand="{Binding AnimeListScrollingCommand}"
+            ex:ListBoxExtensions.ScrollChangedCommand="{Binding AnimeListScrollingCommand, Mode=OneTime}"
             ex:ListBoxExtensions.ScrollChangedCommandParameter="{Binding ElementName=animeList}"
             materialDesign:RippleAssist.IsDisabled="True"
             ItemsPanel="{Binding AnimeCardPanel, Mode=OneWay}"
-            ItemsSource="{Binding AnimeInfos, IsAsync=True}"
+            ItemsSource="{Binding AnimeInfos, IsAsync=True, Mode=OneWay}"
             VirtualizingStackPanel.IsVirtualizing="True"
             VirtualizingStackPanel.VirtualizationMode="Recycling">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <page:AnimeItemCard AnimeCardCommand="{Binding DataContext.ShowAnimeDetailCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:AllAnimeTab}}}" SecondAnimeCardCommand="{x:Static materialDesign:Transitioner.MoveNextCommand}" />
+                    <page:AnimeItemCard AnimeCardCommand="{Binding DataContext.ShowAnimeDetailCommand, Mode=OneTime, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:AllAnimeTab}}}" SecondAnimeCardCommand="{x:Static materialDesign:Transitioner.MoveNextCommand}" />
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
 
         <Grid x:Name="overlayContainer" Grid.Row="1">
-            <page:NoInternetConnectionOverlay ReloadButtonCommand="{Binding SearchAnimeCommand}" Visibility="{Binding OverlayNoInternetVisibility, IsAsync=True, FallbackValue=Collapsed}" />
+            <page:NoInternetConnectionOverlay ReloadButtonCommand="{Binding SearchAnimeCommand, Mode=OneWay}" Visibility="{Binding OverlayNoInternetVisibility, IsAsync=True, FallbackValue=Collapsed}" />
             <page:ErrorOccuredOverlay Visibility="{Binding OverlayErrorOccuredVisibility, IsAsync=True, FallbackValue=Collapsed}" />
             <page:ActivityIndicator Visibility="{Binding OverlayActiityIndicatorVisibility, IsAsync=True, FallbackValue=Collapsed}" />
             <page:NoModInstalledOverlay Visibility="{Binding OverlayNoModVisibility, IsAsync=True, FallbackValue=Collapsed}" />

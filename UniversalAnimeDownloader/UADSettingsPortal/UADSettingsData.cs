@@ -18,6 +18,8 @@ namespace UniversalAnimeDownloader.UADSettingsPortal
     public class UADSettingsData : INotifyPropertyChanged
     {
         public string SaveLocation { get; set; } = AppDomain.CurrentDomain.BaseDirectory + "Settings\\UserSetting.json";
+        [JsonIgnore]
+        public bool IsViewModelLoaded { get; set; } = false;
 
         #region GeneralSetting
         private string _AnimeLibraryLocation = AppDomain.CurrentDomain.BaseDirectory + "Anime Library";
@@ -179,9 +181,21 @@ namespace UniversalAnimeDownloader.UADSettingsPortal
                     else
                     {
                         appliedPanel = Application.Current.FindResource("WrapPanelItemPanel") as ItemsPanelTemplate;
-                    } (Application.Current.FindResource("AllAnimeTabViewModel") as AllAnimeTabViewModel).AnimeCardPanel = appliedPanel;
-                    (Application.Current.FindResource("AnimeDetailsViewModel") as AnimeDetailsViewModel).AnimeCardPanel = appliedPanel;
-                    (Application.Current.FindResource("MyAnimeLibraryViewModel") as MyAnimeLibraryViewModel).AnimeCardPanel = appliedPanel;
+                    }
+
+                    if(IsViewModelLoaded)
+                    {
+                        try
+                        {
+                            (Application.Current.FindResource("AllAnimeTabViewModel") as AllAnimeTabViewModel).AnimeCardPanel = appliedPanel;
+                            (Application.Current.FindResource("AnimeDetailsViewModel") as AnimeDetailsViewModel).AnimeCardPanel = appliedPanel;
+                            (Application.Current.FindResource("MyAnimeLibraryViewModel") as MyAnimeLibraryViewModel).AnimeCardPanel = appliedPanel;
+                            (Application.Current.FindResource("FeaturedAnimeViewModel") as FeaturedAnimeViewModel).AnimeCardPanel = appliedPanel;
+                            (Application.Current.FindResource("AnimeSuggestionViewModel") as AnimeSuggestionViewModel).AnimeCardPanel = appliedPanel;
+                        }
+                        catch { }
+                    }
+
                     OnPropertyChanged();
                 }
             }

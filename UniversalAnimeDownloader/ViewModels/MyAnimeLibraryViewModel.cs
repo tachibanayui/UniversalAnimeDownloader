@@ -9,7 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using UADAPI;
-
+using UniversalAnimeDownloader.UADSettingsPortal;
 using ErrorEventArgs = Newtonsoft.Json.Serialization.ErrorEventArgs;
 
 namespace UniversalAnimeDownloader.ViewModels
@@ -91,6 +91,18 @@ namespace UniversalAnimeDownloader.ViewModels
                 manager.AttachedAnimeSeriesInfo = p;
                 (Application.Current.FindResource("OfflineAnimeDetailViewModel") as OfflineAnimeDetailViewModel).CurrentSeries = manager;
             });
+
+            //When the setting is loaded, all viewmodels haven't loaded yet, the setting can't get the property to change, so we need to change here
+            ItemsPanelTemplate appliedPanel = null;
+            if ((Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.UseVirtalizingWrapPanel)
+            {
+                appliedPanel = Application.Current.FindResource("VirtualizingWrapPanelItemPanel") as ItemsPanelTemplate;
+            }
+            else
+            {
+                appliedPanel = Application.Current.FindResource("WrapPanelItemPanel") as ItemsPanelTemplate;
+            }
+            AnimeCardPanel = appliedPanel;
         }
 
         private bool SearchAnimeLibrary(object obj)

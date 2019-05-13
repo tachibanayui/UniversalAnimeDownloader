@@ -182,6 +182,18 @@ namespace UniversalAnimeDownloader.ViewModels
                     await InitAnimeList();
                 }
             });
+
+            //When the setting is loaded, all viewmodels haven't loaded yet, the setting can't get the property to change, so we need to change here
+            ItemsPanelTemplate appliedPanel = null;
+            if ((Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.UseVirtalizingWrapPanel)
+            {
+                appliedPanel = Application.Current.FindResource("VirtualizingWrapPanelItemPanel") as ItemsPanelTemplate;
+            }
+            else
+            {
+                appliedPanel = Application.Current.FindResource("WrapPanelItemPanel") as ItemsPanelTemplate;
+            }
+            AnimeCardPanel = appliedPanel;
         }
 
         private async Task InitAnimeList()
