@@ -213,6 +213,9 @@
     <Compile Include="UcContentPages\UADSettings.xaml.cs">
       <DependentUpon>UADSettings.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UcContentPages\UserFeedback.xaml.cs">
+      <DependentUpon>UserFeedback.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ValueConverters\AnimeSeriesStorageStateToIconVisibilityConverter.cs" />
     <Compile Include="ValueConverters\AutomatedUnitConversionFromByteConverter.cs" />
     <Compile Include="ValueConverters\ColorToSolidColorBrushConverter.cs" />
@@ -373,6 +376,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UcContentPages\UADSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UcContentPages\UserFeedback.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
