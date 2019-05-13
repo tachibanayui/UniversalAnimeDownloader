@@ -227,6 +227,16 @@ namespace UniversalAnimeDownloader
             }
         }
 
+        public static UADMediaPlayer MediaPlayer
+        {
+            get
+            {
+                if (_Player == null)
+                    NullCheck();
+                return _Player;
+            }
+        }
+
         public static async void Play(AnimeSeriesInfo info, int index = 0, bool isOnline = false)
         {
             if((Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.PreferedPlayer == PlayerType.Embeded)

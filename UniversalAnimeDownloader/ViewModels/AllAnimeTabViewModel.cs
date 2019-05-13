@@ -297,7 +297,10 @@ namespace UniversalAnimeDownloader.ViewModels
                     if (Querier != null)
                     {
                         LoadAnimeCancelToken?.Cancel();
+                        if (clearPreviousCard)
+                            AnimeInfos.RemoveAll();
                         LoadAnimeCancelToken = new CancellationTokenSource();
+                        var currentToken = LoadAnimeCancelToken.Token;
                         string strGenres = string.Empty;
                         string strSeason = string.Empty;
                         if (Genres.Count > SelectedGenresIndex)
@@ -317,7 +320,7 @@ namespace UniversalAnimeDownloader.ViewModels
                         }
                         try
                         {
-                            await AnimeInfos.AddRange(animes, LoadAnimeCancelToken.Token);
+                            await AnimeInfos.AddRange(animes, currentToken);
                         }
                         catch { }
                     }

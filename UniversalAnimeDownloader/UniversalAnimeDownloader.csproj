@@ -130,6 +130,7 @@
     <Compile Include="CustomControls\ColorfulTabDecorator.cs" />
     <Compile Include="CustomControls\CustomImage.cs" />
     <Compile Include="CustomControls\SidePanelNavigateButton.cs" />
+    <Compile Include="DefinedResources\ToolbarNotifyIcon.cs" />
     <Compile Include="DelayedObservableCollection.cs" />
     <Compile Include="ElementSpy.cs" />
     <Compile Include="Extensions\ListBoxExtensions.cs" />

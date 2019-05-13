@@ -25,10 +25,18 @@ namespace UniversalAnimeDownloader
         {
             for(int i = 0; i < items.Count; i++)
             {
+                if (token.IsCancellationRequested)
+                    return;
                 Items.Add(items[i]);
                 OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, items[i]));
-                token.ThrowIfCancellationRequested();
-                await Task.Delay(DelayInterval);
+
+                for (int j = 0; j < DelayInterval.TotalMilliseconds / 100; j++)
+                {
+                    if (token.IsCancellationRequested)
+                        return;
+                    await Task.Delay(100);
+                }
+                await Task.Delay(TimeSpan.FromMilliseconds(DelayInterval.TotalMilliseconds - (int)(Math.Ceiling(DelayInterval.TotalMilliseconds / 100) * 100)));
             }
             OnPropertyChanged(new PropertyChangedEventArgs("Count"));
             OnCollectionReallyChanged();

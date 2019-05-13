@@ -1,4 +1,5 @@
 ﻿<ResourceDictionary
+    x:Class="UniversalAnimeDownloader.DefinedResources.ToolbarNotifyIcon"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:UniversalAnimeDownloader.DefinedResources"
@@ -58,9 +59,39 @@
                     Text="Sneaky watcher option: " />
 
                 <StackPanel Grid.Row="2">
-                    <Button Content="oof" />
-                    <Button Content="oof" />
-                    <Button Content="oof" />
+                    <Button x:Name="blocker" Click="Event_ToggleSneakyWatcher">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="10" />
+                                <ColumnDefinition Width="auto" />
+                            </Grid.ColumnDefinitions>
+                            <materialDesign:PackIcon Kind="BlockHelper" />
+                            <TextBlock Grid.Column="2" Text="Toggle screen blocker" />
+                        </Grid>
+                    </Button>
+                    <Button x:Name="crash" Click="Event_ToggleSneakyWatcher">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="10" />
+                                <ColumnDefinition Width="auto" />
+                            </Grid.ColumnDefinitions>
+                            <materialDesign:PackIcon Kind="ImageBrokenVariant" />
+                            <TextBlock Grid.Column="2" Text="Toggle fake app crash" />
+                        </Grid>
+                    </Button>
+                    <Button x:Name="bg" Click="Event_ToggleSneakyWatcher">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="10" />
+                                <ColumnDefinition Width="auto" />
+                            </Grid.ColumnDefinitions>
+                            <materialDesign:PackIcon Kind="Incognito" />
+                            <TextBlock Grid.Column="2" Text="Toggle BackgroundPlayer" />
+                        </Grid>
+                    </Button>
                 </StackPanel>
             </Grid>
         </Grid>

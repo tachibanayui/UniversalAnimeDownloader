@@ -888,7 +888,7 @@ namespace UniversalAnimeDownloader.MediaPlayer
             ActivateBGPlayer();
         }
 
-        private void ActivateBlocker()
+        public void ActivateBlocker()
         {
             InitSneakyWatcher();
             if (VM.IsBlockerActive)
@@ -913,7 +913,7 @@ namespace UniversalAnimeDownloader.MediaPlayer
                 VM.IsBlockerActive = true;
         }
 
-        private void ActivateFakeCrash()
+        public void ActivateFakeCrash()
         {
             InitSneakyWatcher();
             var WinHost = Window.GetWindow(this);
@@ -939,7 +939,7 @@ namespace UniversalAnimeDownloader.MediaPlayer
             }
         }
 
-        private void ActivateBGPlayer()
+        public void ActivateBGPlayer()
         {
             if ((Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.IsPauseWhenSneakyWactherActive)
             {
