@@ -1,16 +1,36 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
+using UniversalAnimeDownloader.ViewModels;
 
-namespace UniversalAnimeDownloader.UcContentPages
+namespace UniversalAnimeDownloader
 {
     /// <summary>
     /// Interaction logic for UserFeedback.xaml
     /// </summary>
-    public partial class UserFeedback : UserControl, INotifyPropertyChanged
+    public partial class UserFeedback : Window, INotifyPropertyChanged
     {
+        #region Properties / Fields
+        private const string NotReportMessage = "This is not a error report!";
+        public Exception ExceptionDetail { get; set; }
+        public ManualResetEvent Waiter { get; set; }
+        public string UserInfo { get; set; }
+        public bool IsReport { get; set; }
+        #endregion
+
         #region Commands
         public ICommand SendCommand { get; set; }
         public ICommand ViewErrorCommand { get; set; }
@@ -161,7 +181,7 @@ namespace UniversalAnimeDownloader.UcContentPages
 
         #endregion
 
-        private Visibility _ViewErrorVisibility;
+        private Visibility _ViewErrorVisibility = Visibility.Visible;
         public Visibility ViewErrorVisibility
         {
             get
@@ -178,24 +198,7 @@ namespace UniversalAnimeDownloader.UcContentPages
             }
         }
 
-        private Visibility _CloseVisibility;
-        public Visibility CloseVisibility
-        {
-            get
-            {
-                return _CloseVisibility;
-            }
-            set
-            {
-                if (_CloseVisibility != value)
-                {
-                    _CloseVisibility = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        private Visibility _DescribeProblemVisibility;
+        private Visibility _DescribeProblemVisibility = Visibility.Visible;
         public Visibility DescribeProblemVisibility
         {
             get
@@ -219,6 +222,14 @@ namespace UniversalAnimeDownloader.UcContentPages
 
         public UserFeedback()
         {
+            ViewErrorCommand = new RelayCommand<object>(null, p => MessageBox.Show(ExceptionDetail.ToString(), "Exception Detail"));
+            CloseCommand = new RelayCommand<object>(null, p => Waiter.Set());
+            SendCommand = new RelayCommand<object>(null, p =>
+            {
+                var reportMessage = IsReport ? ProblemDescription : NotReportMessage;
+                UserInfo = $"First Name: {FirstName}\r\nLast Name: {LastName}\r\nEmail Address: {EmailAddress}\r\nProblem: {reportMessage}\r\nFeedback: {CustomerFeedBack}";
+                Waiter.Set();
+            });
             InitializeComponent();
         }
 
@@ -226,6 +237,41 @@ namespace UniversalAnimeDownloader.UcContentPages
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        /// <summary>
+        /// Get the user input for this error
+        /// </summary>
+        /// <param name="e"></param>
+        /// <returns>information user provided, empty string if user canceled</returns>
+        public static async Task<string> GetReportInfo(Exception e)
+        {
+            UserFeedback feedBack = new UserFeedback();
+            feedBack.ExceptionDetail = e;
+            feedBack.IsReport = true;
+            feedBack.Show();
+            feedBack.Waiter = new ManualResetEvent(false);
+            feedBack.Show();
+            await Task.Run(() => feedBack.Waiter.WaitOne());
+            feedBack.Close();
+            return feedBack.UserInfo;
+        }
+
+        /// <summary>
+        /// Get user input for feedback
+        /// </summary>
+        /// <returns>information user provided, empty string if user canceled</returns>
+        public static async Task<string> GetFeedbackInfo()
+        {
+            UserFeedback feedBack = new UserFeedback();
+            feedBack.ViewErrorVisibility = Visibility.Collapsed;
+            feedBack.DescribeProblemVisibility = Visibility.Collapsed;
+            feedBack.Show();
+            feedBack.Waiter = new ManualResetEvent(false);
+            feedBack.Show();
+            await Task.Run(() => feedBack.Waiter.WaitOne());
+            feedBack.Close();
+            return feedBack.UserInfo;
         }
     }
 }

@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using UniversalAnimeDownloader.ViewModels;
 
 namespace UniversalAnimeDownloader.UcContentPages
 {
@@ -21,17 +22,22 @@ namespace UniversalAnimeDownloader.UcContentPages
     /// </summary>
     public partial class ErrorOccuredOverlay : UserControl
     {
-        public ICommand DetailButtonCommand
+        public Exception ErrorInfo
         {
-            get { return (ICommand)GetValue(DetailButtonCommandProperty); }
-            set { SetValue(DetailButtonCommandProperty, value); }
+            get { return (Exception)GetValue(ErrorInfoProperty); }
+            set { SetValue(ErrorInfoProperty, value); }
         }
-        public static readonly DependencyProperty DetailButtonCommandProperty =
-            DependencyProperty.Register("DetailButtonCommand", typeof(ICommand), typeof(ErrorOccuredOverlay), new PropertyMetadata());
+        public static readonly DependencyProperty ErrorInfoProperty =
+            DependencyProperty.Register("ErrorInfo", typeof(Exception), typeof(ErrorOccuredOverlay), new PropertyMetadata());
 
+        public ICommand ReportErrorCommand { get; set; }
         public ErrorOccuredOverlay()
         {
             InitializeComponent();
+            ReportErrorCommand = new RelayCommand<object>(null, p => 
+            {
+                ReportErrorHelper.ReportError(ErrorInfo);
+            });
         }
     }
 }

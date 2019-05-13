@@ -23,14 +23,12 @@ namespace UniversalAnimeDownloader.ViewModels
         public ObservableCollection<SeasonItem> Seasons { get; set; }
         public CancellationTokenSource LoadAnimeCancelToken { get; set; } = new CancellationTokenSource();
         public bool IsLoadOngoing { get; set; }
-        public Exception LastError { get; set; }
         public bool IsLoadedAnime { get; set; }
         #endregion
 
         #region RelayCommand
         public ICommand SearchAnimeCommand { get; set; }
         public ICommand ReloadInternetCommand { get; set; }
-        public ICommand ShowErrorCommand { get; set; }
         public ICommand DetailTooltipOpenedCommand { get; set; }
         public ICommand AnimeListScrollingCommand { get; set; }
         public ICommand ShowAnimeDetailCommand { get; set; }
@@ -199,6 +197,25 @@ namespace UniversalAnimeDownloader.ViewModels
             }
         }
 
+        private Exception _CurrentException;
+        public Exception CurrentException
+        {
+            get
+            {
+                return _CurrentException;
+            }
+            set
+            {
+                if (_CurrentException != value)
+                {
+                    _CurrentException = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+
+
         #endregion
 
 
@@ -298,7 +315,10 @@ namespace UniversalAnimeDownloader.ViewModels
                     {
                         LoadAnimeCancelToken?.Cancel();
                         if (clearPreviousCard)
+                        {
                             AnimeInfos.RemoveAll();
+                        }
+
                         LoadAnimeCancelToken = new CancellationTokenSource();
                         var currentToken = LoadAnimeCancelToken.Token;
                         string strGenres = string.Empty;
@@ -393,7 +413,7 @@ namespace UniversalAnimeDownloader.ViewModels
             }
             OverlayActiityIndicatorVisibility = Visibility.Collapsed;
 
-            LastError = e;
+            CurrentException = e;
         }
 
         private void HideAllOverlay()

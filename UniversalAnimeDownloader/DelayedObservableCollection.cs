@@ -36,7 +36,7 @@ namespace UniversalAnimeDownloader
                         return;
                     await Task.Delay(100);
                 }
-                await Task.Delay(TimeSpan.FromMilliseconds(DelayInterval.TotalMilliseconds - (int)(Math.Ceiling(DelayInterval.TotalMilliseconds / 100) * 100)));
+                await Task.Delay(TimeSpan.FromMilliseconds(DelayInterval.TotalMilliseconds - (int)(Math.Floor(DelayInterval.TotalMilliseconds / 100) * 100)));
             }
             OnPropertyChanged(new PropertyChangedEventArgs("Count"));
             OnCollectionReallyChanged();

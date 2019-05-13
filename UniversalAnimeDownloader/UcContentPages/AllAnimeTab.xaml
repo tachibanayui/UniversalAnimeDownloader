@@ -105,7 +105,7 @@
 
         <Grid x:Name="overlayContainer" Grid.Row="1">
             <page:NoInternetConnectionOverlay ReloadButtonCommand="{Binding SearchAnimeCommand, Mode=OneWay}" Visibility="{Binding OverlayNoInternetVisibility, IsAsync=True, FallbackValue=Collapsed}" />
-            <page:ErrorOccuredOverlay Visibility="{Binding OverlayErrorOccuredVisibility, IsAsync=True, FallbackValue=Collapsed}" />
+            <page:ErrorOccuredOverlay ErrorInfo="{Binding CurrentException}" Visibility="{Binding OverlayErrorOccuredVisibility, IsAsync=True, FallbackValue=Collapsed}" />
             <page:ActivityIndicator Visibility="{Binding OverlayActiityIndicatorVisibility, IsAsync=True, FallbackValue=Collapsed}" />
             <page:NoModInstalledOverlay Visibility="{Binding OverlayNoModVisibility, IsAsync=True, FallbackValue=Collapsed}" />
         </Grid>

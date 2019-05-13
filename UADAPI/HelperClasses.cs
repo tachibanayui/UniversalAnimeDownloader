@@ -1091,7 +1091,8 @@ namespace UADAPI
             if (value != null)
             {
                 var tmp = JsonConvert.DeserializeObject<ObservableCollection<NotificationItem>>(value);
-                Notifications = new ObservableCollection<NotificationItem>(tmp);
+                if(tmp != null)
+                    Notifications = new ObservableCollection<NotificationItem>(tmp);
             }
             else
             {

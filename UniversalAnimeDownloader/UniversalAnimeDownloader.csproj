@@ -213,7 +213,7 @@
     <Compile Include="UcContentPages\UADSettings.xaml.cs">
       <DependentUpon>UADSettings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UcContentPages\UserFeedback.xaml.cs">
+    <Compile Include="UserFeedback.xaml.cs">
       <DependentUpon>UserFeedback.xaml</DependentUpon>
     </Compile>
     <Compile Include="ValueConverters\AnimeSeriesStorageStateToIconVisibilityConverter.cs" />
@@ -379,7 +379,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UcContentPages\UserFeedback.xaml">
+    <Page Include="UserFeedback.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -1,13 +1,14 @@
-﻿<UserControl
-    x:Class="UniversalAnimeDownloader.UcContentPages.UserFeedback"
+﻿<Window
+    x:Class="UniversalAnimeDownloader.UserFeedback"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:UniversalAnimeDownloader.UcContentPages"
+    xmlns:local="clr-namespace:UniversalAnimeDownloader"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    d:DesignHeight="800"
-    d:DesignWidth="450"
+    Title="User Feedback"
+    Width="450"
+    Height="800"
     Background="{DynamicResource MaterialDesignPaper}"
     TextElement.FontSize="14"
     TextElement.FontWeight="Medium"
@@ -53,7 +54,7 @@
                 materialDesign:HintAssist.Hint="Email address:"
                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                 Text="{Binding EmailAddress}" />
-            <CheckBox Content="Receive new updates from us" />
+            <CheckBox Content="Receive new updates from us" Visibility="Collapsed" />
             <TextBlock Margin="0,25,0,0" Text="Problem description: " />
             <TextBox
                 Height="200"
@@ -96,8 +97,7 @@
                 Command="{Binding CloseCommand, Mode=OneTime}"
                 Content="Close"
                 Foreground="Red"
-                Style="{StaticResource MaterialDesignFlatButton}"
-                Visibility="{Binding CloseVisibility}" />
+                Style="{StaticResource MaterialDesignFlatButton}" />
         </Grid>
     </Grid>
-</UserControl>
+</Window>
