@@ -49,619 +49,648 @@
         </ResourceDictionary>
     </Window.Resources>
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="50" />
-            <RowDefinition />
-        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
 
-
-        <Grid Grid.ColumnSpan="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="55" />
-                <ColumnDefinition Width="50" />
-                <ColumnDefinition Width="50" />
-                <ColumnDefinition Width="50" />
-                <ColumnDefinition Width="125" />
-                <ColumnDefinition Width="1*" />
-                <ColumnDefinition Width="200" />
-                <ColumnDefinition Width="50" />
-                <ColumnDefinition Width="50" />
-                <ColumnDefinition Width="50" />
-                <ColumnDefinition Width="50" />
-            </Grid.ColumnDefinitions>
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="MouseLeftButtonDown">
-                    <i:InvokeCommandAction Command="{Binding DragMoveWindowCommand}" CommandParameter="{Binding ElementName=mainWindow}" />
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-
-            <Rectangle Grid.ColumnSpan="10" Fill="{DynamicResource MaterialDesignPaper}" />
-            <ToggleButton
-                IsChecked="{Binding IsExpandSidePanel}"
-                RenderTransformOrigin="0.5,0.5"
-                Style="{StaticResource MaterialDesignHamburgerToggleButton}">
-                <ToggleButton.RenderTransform>
-                    <TransformGroup>
-                        <ScaleTransform ScaleX="0.6" ScaleY="0.6" />
-                        <SkewTransform />
-                        <RotateTransform />
-                        <TranslateTransform />
-                    </TransformGroup>
-                </ToggleButton.RenderTransform>
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Click">
-                        <i:InvokeCommandAction Command="{Binding ToggleNavSideBarCommand}" CommandParameter="{Binding ElementName=mainWindow}" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </ToggleButton>
-            <Button
-                Grid.Column="1"
-                Command="{Binding GoBackNavigationCommand}"
-                Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
-                ToolTip="Go back to the last page">
-                <materialDesign:PackIcon Foreground="{DynamicResource MaterialDesignBody}" Kind="ArrowLeftBold" />
-            </Button>
-            <Button
-                Grid.Column="2"
-                Command="{Binding GoForwardNavigationCommand}"
-                Style="{StaticResource MaterialDesignActionFlatButton}"
-                ToolTip="Go forward">
-                <materialDesign:PackIcon Foreground="{DynamicResource MaterialDesignBody}" Kind="ArrowRightBold" />
-            </Button>
-            <Button
-                x:Name="maximizePlayer"
-                Grid.Column="3"
-                Command="{Binding OpenUADMediaPlayerCommand}"
-                Style="{StaticResource MaterialDesignActionFlatButton}">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="MouseEnter">
-                        <i:InvokeCommandAction Command="{Binding MouseEnterCommand}" CommandParameter="MediaPlayerBtn" />
-                    </i:EventTrigger>
-                    <i:EventTrigger EventName="MouseLeave">
-                        <i:InvokeCommandAction Command="{Binding MouseLeaveCommand}" CommandParameter="MediaPlayerBtn" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-                <materialDesign:PackIcon Foreground="{DynamicResource MaterialDesignBody}" Kind="Play" />
-            </Button>
-            <TextBlock
-                Grid.Column="4"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Text="Test App Icon" />
-            <Grid Grid.Column="6">
+            <Grid Grid.ColumnSpan="2">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto" />
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="55" />
+                    <ColumnDefinition Width="50" />
+                    <ColumnDefinition Width="50" />
+                    <ColumnDefinition Width="50" />
+                    <ColumnDefinition Width="125" />
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="50" />
+                    <ColumnDefinition Width="50" />
+                    <ColumnDefinition Width="50" />
+                    <ColumnDefinition Width="50" />
                 </Grid.ColumnDefinitions>
-                <Button
-                    Command="{Binding SearchButtonClickCommand}"
-                    CommandParameter="{Binding ElementName=txbSearch}"
-                    Style="{StaticResource MaterialDesignActionFlatButton}">
-                    <materialDesign:PackIcon Foreground="{DynamicResource MaterialDesignBody}" Kind="Magnify" />
-                </Button>
-
-                <TextBox
-                    x:Name="txbSearch"
-                    Grid.Column="1"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Top"
-                    materialDesign:HintAssist.Hint="Search Anime"
-                    AcceptsReturn="True"
-                    Style="{StaticResource MaterialDesignFloatingHintTextBox}">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="TextChanged">
-                            <i:InvokeCommandAction Command="{Binding CheckForEnterKeyCommand}" CommandParameter="{Binding ElementName=txbSearch}" />
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </TextBox>
-
-                <Button
-                    Grid.Column="2"
-                    Command="{Binding DeleteSearchBoxCommand}"
-                    CommandParameter="{Binding ElementName=txbSearch}"
-                    Style="{StaticResource MaterialDesignActionFlatButton}">
-                    <materialDesign:PackIcon Foreground="{DynamicResource MaterialDesignBody}" Kind="Close" />
-                </Button>
-            </Grid>
-            <materialDesign:Badged
-                Grid.Column="7"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                BadgeBackground="{Binding BadgeBackgroundBrush}"
-                Foreground="{DynamicResource MaterialDesignBody}">
-                <materialDesign:Badged.Badge>
-                    <TextBlock
-                        Foreground="{DynamicResource MaterialDesignBody}"
-                        Text="{Binding NotifycationBadgeCount}"
-                        Visibility="{Binding BadgeContentVisibility}" />
-                </materialDesign:Badged.Badge>
-                <materialDesign:PopupBox StaysOpen="True">
-                    <materialDesign:PopupBox.ToggleContent>
-                        <materialDesign:PackIcon Foreground="{DynamicResource MaterialDesignBody}" Kind="Bell" />
-                    </materialDesign:PopupBox.ToggleContent>
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="Opened">
-                            <i:InvokeCommandAction Command="{Binding ResetNotifyBadgeCommand}" />
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                    <pages:NotifycationPanel Width="400" Height="500" />
-                </materialDesign:PopupBox>
-            </materialDesign:Badged>
-
-            <Button
-                Grid.Column="8"
-                Command="{Binding MinimizeWindowCommand}"
-                CommandParameter="{Binding ElementName=mainWindow}"
-                Style="{StaticResource MaterialDesignActionFlatButton}">
-                <materialDesign:PackIcon Foreground="{DynamicResource MaterialDesignBody}" Kind="WindowMinimize" />
-            </Button>
-
-            <Button
-                x:Name="btnWinState"
-                Grid.Column="9"
-                Command="{Binding ChangeWindowStateCommand}"
-                CommandParameter="{Binding ElementName=btnWinState}"
-                Style="{StaticResource MaterialDesignActionFlatButton}">
-                <materialDesign:PackIcon Foreground="{DynamicResource MaterialDesignBody}" Kind="WindowMaximize" />
-            </Button>
-
-            <Button
-                Grid.Column="10"
-                Command="{Binding CloseWindowCommand}"
-                Style="{StaticResource MaterialDesignActionFlatButton}">
-                <materialDesign:PackIcon Foreground="{DynamicResource MaterialDesignBody}" Kind="WindowClose" />
-            </Button>
-        </Grid>
-
-        <Grid
-            x:Name="grdContentContainer"
-            Grid.Row="1"
-            Grid.Column="1"
-            Margin="70,5,5,5">
-            <materialDesign:Transitioner
-                materialDesign:TransitionAssist.DisableTransitions="{Binding DisableAnimation}"
-                AutoApplyTransitionOrigins="True"
-                ItemsSource="{Binding Pages}"
-                SelectedIndex="{Binding TransisionerIndex}">
-                <materialDesign:Transitioner.ItemContainerStyle>
-                    <Style BasedOn="{StaticResource {x:Type materialDesign:TransitionerSlide}}" TargetType="materialDesign:TransitionerSlide">
-                        <Setter Property="Background" Value="{DynamicResource MaterialDesignPaper}" />
-                        <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}" />
-                        <Setter Property="ClipToBounds" Value="True" />
-                        <Setter Property="OpeningEffect">
-                            <Setter.Value>
-                                <materialDesign:TransitionEffect Kind="SlideInFromBottom" Duration="0:0:0.5" />
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </materialDesign:Transitioner.ItemContainerStyle>
-            </materialDesign:Transitioner>
-        </Grid>
-
-        <Rectangle
-            x:Name="recBlackOverlay"
-            Grid.Row="2"
-            IsHitTestVisible="False"
-            Opacity="1">
-            <Rectangle.Fill>
-                <SolidColorBrush
-                    x:Name="overlayBrush"
-                    Opacity="0"
-                    Color="Black" />
-            </Rectangle.Fill>
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="MouseLeftButtonDown">
-                    <i:InvokeCommandAction Command="{Binding BlackOverlayMouseDownCommand}" CommandParameter="{Binding ElementName=recBlackOverlay}" />
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-        </Rectangle>
-
-        <ScrollViewer
-            Grid.Row="1"
-            Width="65"
-            HorizontalAlignment="Left"
-            HorizontalScrollBarVisibility="Disabled"
-            VerticalScrollBarVisibility="Hidden">
-            <Grid>
-                <Rectangle Fill="{DynamicResource MaterialDesignPaper}" />
-                <StackPanel>
-                    <StackPanel.Resources>
-                        <Style TargetType="customControl:SidePanelNavigateButton">
-                            <Setter Property="Height" Value="75" />
-                            <Setter Property="Background" Value="Transparent" />
-                            <Setter Property="HorizontalContentAlignment" Value="Left" />
-                            <Setter Property="EnableAnimation" Value="True" />
-                            <Setter Property="ButtonCommand" Value="{Binding NavigateCommand}" />
-                            <Setter Property="CurrentTabIndex" Value="{Binding TransisionerIndex}" />
-                        </Style>
-                    </StackPanel.Resources>
-                    <customControl:SidePanelNavigateButton
-                        ButtonCommandParameter="Explore"
-                        ControlTabIndex="8"
-                        SidePanelIconKind="Earth"
-                        SidePanelText="Explore" />
-
-                    <customControl:SidePanelNavigateButton
-                        ButtonCommandParameter="FeaturedAnime"
-                        ControlTabIndex="7"
-                        SidePanelIconKind="Star"
-                        SidePanelText="Featured" />
-
-                    <customControl:SidePanelNavigateButton
-                        ButtonCommandParameter="AnimeSuggestion"
-                        ControlTabIndex="2"
-                        SidePanelIconKind="Account"
-                        SidePanelText="You may like" />
-
-                    <customControl:SidePanelNavigateButton
-                        ButtonCommandParameter="AllAnimeTab"
-                        ControlTabIndex="0"
-                        SidePanelIconKind="FormatListBulleted"
-                        SidePanelText="All Anime" />
-
-                    <Separator Margin="10,0,10,0" />
-
-                    <customControl:SidePanelNavigateButton
-                        ButtonCommandParameter="MyAnimeLibrary"
-                        ControlTabIndex="4"
-                        SidePanelIconKind="Book"
-                        SidePanelText="My Anime Library" />
-
-                    <customControl:SidePanelNavigateButton
-                        ButtonCommandParameter="DownloadCenter"
-                        ControlTabIndex="3"
-                        SidePanelIconKind="CloudDownload"
-                        SidePanelText="Download Center" />
-
-                    <customControl:SidePanelNavigateButton
-                        ButtonCommandParameter="UADSettings"
-                        ControlTabIndex="6"
-                        SidePanelIconKind="Settings"
-                        SidePanelText="Settings" />
-
-                    <customControl:SidePanelNavigateButton
-                        ButtonCommandParameter="UADSettings"
-                        ControlTabIndex="6"
-                        SidePanelIconKind="InformationOutline"
-                        SidePanelText="Credits" />
-                </StackPanel>
-            </Grid>
-        </ScrollViewer>
-
-        <Grid
-            x:Name="uadMediaPlayer"
-            Grid.RowSpan="3"
-            Background="Black"
-            Opacity="0"
-            Visibility="{Binding UADMediaPlayerVisibility}">
-            <media:UADMediaPlayer
-                x:Name="uadMediaPlayerInternal"
-                IsPause="{Binding IsMediaPlayerPause, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                IsPlaying="{Binding UADMediaPlayerPlaying, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                PlayIndex="{Binding UADMediaPlayerPlayIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                Playlist="{Binding NowPlayingPlaylist, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="RequestWindowState">
-                        <cmd:EventToCommand Command="{Binding ChangeWindowStateRequestCommand}" PassEventArgsToCommand="True" />
-                    </i:EventTrigger>
-                    <i:EventTrigger EventName="UADMediaPlayerClosed">
-                        <i:InvokeCommandAction Command="{Binding UADMediaPlayerClosedCommand}" />
+                    <i:EventTrigger EventName="MouseLeftButtonDown">
+                        <i:InvokeCommandAction Command="{Binding DragMoveWindowCommand}" CommandParameter="{Binding ElementName=mainWindow}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
-            </media:UADMediaPlayer>
-        </Grid>
 
-        <Canvas x:Name="popup" Grid.Row="2">
-            <Popup
-                x:Name="nowPlayingPopup"
-                VerticalAlignment="Top"
-                AllowsTransparency="True"
-                HorizontalOffset="-20"
-                IsOpen="{Binding IsNowPlayingPopupOpen}"
-                Placement="Left"
-                PlacementTarget="{Binding ElementName=maximizePlayer}"
-                VerticalOffset="50">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Opened">
-                        <i:InvokeCommandAction Command="{Binding OpenNowPlayingPopupCommand}" CommandParameter="{Binding ElementName=nowPlayingPopup}" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-                <Grid
-                    Margin="0"
-                    VerticalAlignment="Top"
-                    RenderTransformOrigin="0.5,0">
-                    <Grid.RenderTransform>
+                <Rectangle Grid.ColumnSpan="10" Fill="{DynamicResource MaterialDesignPaper}" />
+                <ToggleButton
+                    IsChecked="{Binding IsExpandSidePanel}"
+                    RenderTransformOrigin="0.5,0.5"
+                    Style="{StaticResource MaterialDesignHamburgerToggleButton}">
+                    <ToggleButton.RenderTransform>
                         <TransformGroup>
-                            <ScaleTransform ScaleX="0.9" ScaleY="0.9" />
+                            <ScaleTransform ScaleX="0.6" ScaleY="0.6" />
                             <SkewTransform />
                             <RotateTransform />
-                            <TranslateTransform X="0" Y="0" />
+                            <TranslateTransform />
                         </TransformGroup>
-                    </Grid.RenderTransform>
+                    </ToggleButton.RenderTransform>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <i:InvokeCommandAction Command="{Binding ToggleNavSideBarCommand}" CommandParameter="{Binding ElementName=mainWindow}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </ToggleButton>
+                <Button
+                    Grid.Column="1"
+                    Command="{Binding GoBackNavigationCommand}"
+                    Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
+                    ToolTip="Go back to the last page">
+                    <materialDesign:PackIcon Foreground="{DynamicResource MaterialDesignBody}" Kind="ArrowLeftBold" />
+                </Button>
+                <Button
+                    Grid.Column="2"
+                    Command="{Binding GoForwardNavigationCommand}"
+                    Style="{StaticResource MaterialDesignActionFlatButton}"
+                    ToolTip="Go forward">
+                    <materialDesign:PackIcon Foreground="{DynamicResource MaterialDesignBody}" Kind="ArrowRightBold" />
+                </Button>
+                <Button
+                    x:Name="maximizePlayer"
+                    Grid.Column="3"
+                    Command="{Binding OpenUADMediaPlayerCommand}"
+                    Style="{StaticResource MaterialDesignActionFlatButton}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseEnter">
+                            <i:InvokeCommandAction Command="{Binding MouseEnterCommand}" CommandParameter="MediaPlayerBtn" />
+                        </i:EventTrigger>
+                        <i:EventTrigger EventName="MouseLeave">
+                            <i:InvokeCommandAction Command="{Binding MouseLeaveCommand}" CommandParameter="MediaPlayerBtn" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    <materialDesign:PackIcon Foreground="{DynamicResource MaterialDesignBody}" Kind="Play" />
+                </Button>
+                <TextBlock
+                    Grid.Column="4"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Text="Test App Icon" />
+                <Grid Grid.Column="6">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
+                    <Button
+                        Command="{Binding SearchButtonClickCommand}"
+                        CommandParameter="{Binding ElementName=txbSearch}"
+                        Style="{StaticResource MaterialDesignActionFlatButton}">
+                        <materialDesign:PackIcon Foreground="{DynamicResource MaterialDesignBody}" Kind="Magnify" />
+                    </Button>
 
-                    <Grid
-                        Height="197"
+                    <TextBox
+                        x:Name="txbSearch"
+                        Grid.Column="1"
+                        HorizontalAlignment="Stretch"
                         VerticalAlignment="Top"
-                        RenderTransformOrigin="0,0">
-                        <Grid.LayoutTransform>
-                            <TransformGroup>
-                                <!--<ScaleTransform ScaleX="1" ScaleY="1" />-->
-                                <ScaleTransform ScaleX="{Binding NowPlayingPopupScale, FallbackValue=1}" ScaleY="{Binding NowPlayingPopupScale, FallbackValue=1}" />
-                                <SkewTransform />
-                                <RotateTransform />
-                                <TranslateTransform />
-                            </TransformGroup>
-                        </Grid.LayoutTransform>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="auto" />
-                            <RowDefinition Height="15" />
-                            <RowDefinition Height="auto" />
-                        </Grid.RowDefinitions>
+                        materialDesign:HintAssist.Hint="Search Anime"
+                        AcceptsReturn="True"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}">
                         <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="MouseEnter">
-                                <i:InvokeCommandAction Command="{Binding MouseEnterCommand}" CommandParameter="MediaPlayerPopup" />
-                            </i:EventTrigger>
-                            <i:EventTrigger EventName="MouseLeave">
-                                <i:InvokeCommandAction Command="{Binding MouseLeaveCommand}" CommandParameter="MediaPlayerPopup" />
+                            <i:EventTrigger EventName="TextChanged">
+                                <i:InvokeCommandAction Command="{Binding CheckForEnterKeyCommand}" CommandParameter="{Binding ElementName=txbSearch}" />
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
-                        <materialDesign:Card
-                            Width="562"
-                            Height="182"
+                    </TextBox>
+
+                    <Button
+                        Grid.Column="2"
+                        Command="{Binding DeleteSearchBoxCommand}"
+                        CommandParameter="{Binding ElementName=txbSearch}"
+                        Style="{StaticResource MaterialDesignActionFlatButton}">
+                        <materialDesign:PackIcon Foreground="{DynamicResource MaterialDesignBody}" Kind="Close" />
+                    </Button>
+                </Grid>
+                <materialDesign:Badged
+                    Grid.Column="7"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    BadgeBackground="{Binding BadgeBackgroundBrush}"
+                    Foreground="{DynamicResource MaterialDesignBody}">
+                    <materialDesign:Badged.Badge>
+                        <TextBlock
+                            Foreground="{DynamicResource MaterialDesignBody}"
+                            Text="{Binding NotifycationBadgeCount}"
+                            Visibility="{Binding BadgeContentVisibility}" />
+                    </materialDesign:Badged.Badge>
+                    <materialDesign:PopupBox StaysOpen="True">
+                        <materialDesign:PopupBox.ToggleContent>
+                            <materialDesign:PackIcon Foreground="{DynamicResource MaterialDesignBody}" Kind="Bell" />
+                        </materialDesign:PopupBox.ToggleContent>
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Opened">
+                                <i:InvokeCommandAction Command="{Binding ResetNotifyBadgeCommand}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                        <pages:NotifycationPanel Width="400" Height="500" />
+                    </materialDesign:PopupBox>
+                </materialDesign:Badged>
+
+                <Button
+                    Grid.Column="8"
+                    Command="{Binding MinimizeWindowCommand}"
+                    CommandParameter="{Binding ElementName=mainWindow}"
+                    Style="{StaticResource MaterialDesignActionFlatButton}">
+                    <materialDesign:PackIcon Foreground="{DynamicResource MaterialDesignBody}" Kind="WindowMinimize" />
+                </Button>
+
+                <Button
+                    x:Name="btnWinState"
+                    Grid.Column="9"
+                    Command="{Binding ChangeWindowStateCommand}"
+                    CommandParameter="{Binding ElementName=btnWinState}"
+                    Style="{StaticResource MaterialDesignActionFlatButton}">
+                    <materialDesign:PackIcon Foreground="{DynamicResource MaterialDesignBody}" Kind="WindowMaximize" />
+                </Button>
+
+                <Button
+                    Grid.Column="10"
+                    Command="{Binding CloseWindowCommand}"
+                    Style="{StaticResource MaterialDesignActionFlatButton}">
+                    <materialDesign:PackIcon Foreground="{DynamicResource MaterialDesignBody}" Kind="WindowClose" />
+                </Button>
+            </Grid>
+
+            <Grid
+                x:Name="grdContentContainer"
+                Grid.Row="1"
+                Grid.Column="1"
+                Margin="70,5,5,5">
+                <materialDesign:Transitioner
+                    materialDesign:TransitionAssist.DisableTransitions="{Binding DisableAnimation}"
+                    AutoApplyTransitionOrigins="True"
+                    ItemsSource="{Binding Pages}"
+                    SelectedIndex="{Binding TransisionerIndex}">
+                    <materialDesign:Transitioner.ItemContainerStyle>
+                        <Style BasedOn="{StaticResource {x:Type materialDesign:TransitionerSlide}}" TargetType="materialDesign:TransitionerSlide">
+                            <Setter Property="Background" Value="{DynamicResource MaterialDesignPaper}" />
+                            <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}" />
+                            <Setter Property="ClipToBounds" Value="True" />
+                            <Setter Property="OpeningEffect">
+                                <Setter.Value>
+                                    <materialDesign:TransitionEffect Kind="SlideInFromBottom" Duration="0:0:0.5" />
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </materialDesign:Transitioner.ItemContainerStyle>
+                </materialDesign:Transitioner>
+            </Grid>
+
+            <Rectangle
+                x:Name="recBlackOverlay"
+                Grid.Row="2"
+                IsHitTestVisible="False"
+                Opacity="1">
+                <Rectangle.Fill>
+                    <SolidColorBrush
+                        x:Name="overlayBrush"
+                        Opacity="0"
+                        Color="Black" />
+                </Rectangle.Fill>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseLeftButtonDown">
+                        <i:InvokeCommandAction Command="{Binding BlackOverlayMouseDownCommand}" CommandParameter="{Binding ElementName=recBlackOverlay}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Rectangle>
+
+            <ScrollViewer
+                Grid.Row="1"
+                Width="65"
+                HorizontalAlignment="Left"
+                HorizontalScrollBarVisibility="Disabled"
+                VerticalScrollBarVisibility="Hidden">
+                <Grid>
+                    <Rectangle Fill="{DynamicResource MaterialDesignPaper}" />
+                    <StackPanel>
+                        <StackPanel.Resources>
+                            <Style TargetType="customControl:SidePanelNavigateButton">
+                                <Setter Property="Height" Value="75" />
+                                <Setter Property="Background" Value="Transparent" />
+                                <Setter Property="HorizontalContentAlignment" Value="Left" />
+                                <Setter Property="EnableAnimation" Value="True" />
+                                <Setter Property="ButtonCommand" Value="{Binding NavigateCommand}" />
+                                <Setter Property="CurrentTabIndex" Value="{Binding TransisionerIndex}" />
+                            </Style>
+                        </StackPanel.Resources>
+                        <customControl:SidePanelNavigateButton
+                            ButtonCommandParameter="Explore"
+                            ControlTabIndex="8"
+                            SidePanelIconKind="Earth"
+                            SidePanelText="Explore" />
+
+                        <customControl:SidePanelNavigateButton
+                            ButtonCommandParameter="FeaturedAnime"
+                            ControlTabIndex="7"
+                            SidePanelIconKind="Star"
+                            SidePanelText="Featured" />
+
+                        <customControl:SidePanelNavigateButton
+                            ButtonCommandParameter="AnimeSuggestion"
+                            ControlTabIndex="2"
+                            SidePanelIconKind="Account"
+                            SidePanelText="You may like" />
+
+                        <customControl:SidePanelNavigateButton
+                            ButtonCommandParameter="AllAnimeTab"
+                            ControlTabIndex="0"
+                            SidePanelIconKind="FormatListBulleted"
+                            SidePanelText="All Anime" />
+
+                        <Separator Margin="10,0,10,0" />
+
+                        <customControl:SidePanelNavigateButton
+                            ButtonCommandParameter="MyAnimeLibrary"
+                            ControlTabIndex="4"
+                            SidePanelIconKind="Book"
+                            SidePanelText="My Anime Library" />
+
+                        <customControl:SidePanelNavigateButton
+                            ButtonCommandParameter="DownloadCenter"
+                            ControlTabIndex="3"
+                            SidePanelIconKind="CloudDownload"
+                            SidePanelText="Download Center" />
+
+                        <customControl:SidePanelNavigateButton
+                            ButtonCommandParameter="UADSettings"
+                            ControlTabIndex="6"
+                            SidePanelIconKind="Settings"
+                            SidePanelText="Settings" />
+
+                        <customControl:SidePanelNavigateButton
+                            ButtonCommandParameter="UADSettings"
+                            ControlTabIndex="6"
+                            SidePanelIconKind="InformationOutline"
+                            SidePanelText="Credits" />
+                    </StackPanel>
+                </Grid>
+            </ScrollViewer>
+
+            <Grid
+                x:Name="uadMediaPlayer"
+                Grid.RowSpan="3"
+                Background="Black"
+                Opacity="0"
+                Visibility="{Binding UADMediaPlayerVisibility}">
+                <media:UADMediaPlayer
+                    x:Name="uadMediaPlayerInternal"
+                    IsPause="{Binding IsMediaPlayerPause, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    IsPlaying="{Binding UADMediaPlayerPlaying, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    PlayIndex="{Binding UADMediaPlayerPlayIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Playlist="{Binding NowPlayingPlaylist, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="RequestWindowState">
+                            <cmd:EventToCommand Command="{Binding ChangeWindowStateRequestCommand}" PassEventArgsToCommand="True" />
+                        </i:EventTrigger>
+                        <i:EventTrigger EventName="UADMediaPlayerClosed">
+                            <i:InvokeCommandAction Command="{Binding UADMediaPlayerClosedCommand}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </media:UADMediaPlayer>
+            </Grid>
+
+            <Canvas x:Name="popup" Grid.Row="2">
+                <Popup
+                    x:Name="nowPlayingPopup"
+                    VerticalAlignment="Top"
+                    AllowsTransparency="True"
+                    HorizontalOffset="-20"
+                    IsOpen="{Binding IsNowPlayingPopupOpen}"
+                    Placement="Left"
+                    PlacementTarget="{Binding ElementName=maximizePlayer}"
+                    VerticalOffset="50">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Opened">
+                            <i:InvokeCommandAction Command="{Binding OpenNowPlayingPopupCommand}" CommandParameter="{Binding ElementName=nowPlayingPopup}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    <Grid
+                        Margin="0"
+                        VerticalAlignment="Top"
+                        RenderTransformOrigin="0.5,0">
+                        <Grid.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform ScaleX="0.9" ScaleY="0.9" />
+                                <SkewTransform />
+                                <RotateTransform />
+                                <TranslateTransform X="0" Y="0" />
+                            </TransformGroup>
+                        </Grid.RenderTransform>
+
+                        <Grid
+                            Height="197"
                             VerticalAlignment="Top"
-                            materialDesign:ThemeAssist.Theme="Inherit"
-                            UniformCornerRadius="10">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition />
-                                    <RowDefinition Height="0.5*" />
-                                    <RowDefinition Height="15" />
-                                </Grid.RowDefinitions>
-                                <customControl:CustomImage
-                                    Grid.RowSpan="3"
-                                    ImageInfo="{Binding NowPlaying.Thumbnail, IsAsync=True}"
-                                    Stretch="UniformToFill" />
-                                <Rectangle Fill="Black" Opacity="0.25" />
+                            RenderTransformOrigin="0,0">
+                            <Grid.LayoutTransform>
+                                <TransformGroup>
+                                    <!--<ScaleTransform ScaleX="1" ScaleY="1" />-->
+                                    <ScaleTransform ScaleX="{Binding NowPlayingPopupScale, FallbackValue=1}" ScaleY="{Binding NowPlayingPopupScale, FallbackValue=1}" />
+                                    <SkewTransform />
+                                    <RotateTransform />
+                                    <TranslateTransform />
+                                </TransformGroup>
+                            </Grid.LayoutTransform>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="15" />
+                                <RowDefinition Height="auto" />
+                            </Grid.RowDefinitions>
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="MouseEnter">
+                                    <i:InvokeCommandAction Command="{Binding MouseEnterCommand}" CommandParameter="MediaPlayerPopup" />
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="MouseLeave">
+                                    <i:InvokeCommandAction Command="{Binding MouseLeaveCommand}" CommandParameter="MediaPlayerPopup" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            <materialDesign:Card
+                                Width="562"
+                                Height="182"
+                                VerticalAlignment="Top"
+                                materialDesign:ThemeAssist.Theme="Inherit"
+                                UniformCornerRadius="10">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition Height="0.5*" />
+                                        <RowDefinition Height="15" />
+                                    </Grid.RowDefinitions>
+                                    <customControl:CustomImage
+                                        Grid.RowSpan="3"
+                                        ImageInfo="{Binding NowPlaying.Thumbnail, IsAsync=True}"
+                                        Stretch="UniformToFill" />
+                                    <Rectangle Fill="Black" Opacity="0.25" />
 
-                                <StackPanel VerticalAlignment="Center">
-                                    <TextBlock
-                                        FontSize="{DynamicResource Heading1}"
-                                        FontWeight="SemiBold"
-                                        Text="{Binding NowPlaying.Name}"
-                                        TextAlignment="Center"
-                                        TextTrimming="CharacterEllipsis" />
-                                    <TextBlock
-                                        FontSize="{DynamicResource Heading2}"
-                                        FontStyle="Italic"
-                                        Text="{Binding NowPlayingPlaylist.Name}"
-                                        TextAlignment="Center"
-                                        TextTrimming="CharacterEllipsis" />
-                                </StackPanel>
-                                <Grid Grid.Row="1" Grid.RowSpan="2">
-                                    <Rectangle Fill="Black" Opacity="0.7" />
-                                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                                        <Button
-                                            Margin="10,0"
-                                            Command="{Binding PreviousMediaPlayerPopupCommand}"
-                                            Style="{StaticResource MaterialDesignActionFlatButton}">
-                                            <materialDesign:PackIcon Kind="SkipBackward" Style="{StaticResource AutoSizeIconPack}" />
-                                        </Button>
-                                        <Button
-                                            Margin="10,0"
-                                            Command="{Binding PauseMediaPlayerCommand}"
-                                            Style="{StaticResource MaterialDesignActionFlatButton}">
-                                            <materialDesign:PackIcon Kind="{Binding PlayPauseButtonIconKind}" Style="{StaticResource AutoSizeIconPack}" />
-                                        </Button>
-                                        <Button
-                                            Margin="10,0"
-                                            Command="{Binding NextMediaPlayerPopupCommand}"
-                                            Style="{StaticResource MaterialDesignActionFlatButton}">
-                                            <materialDesign:PackIcon Kind="SkipForward" Style="{StaticResource AutoSizeIconPack}" />
-                                        </Button>
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock
+                                            FontSize="{DynamicResource Heading1}"
+                                            FontWeight="SemiBold"
+                                            Text="{Binding NowPlaying.Name}"
+                                            TextAlignment="Center"
+                                            TextTrimming="CharacterEllipsis" />
+                                        <TextBlock
+                                            FontSize="{DynamicResource Heading2}"
+                                            FontStyle="Italic"
+                                            Text="{Binding NowPlayingPlaylist.Name}"
+                                            TextAlignment="Center"
+                                            TextTrimming="CharacterEllipsis" />
                                     </StackPanel>
+                                    <Grid Grid.Row="1" Grid.RowSpan="2">
+                                        <Rectangle Fill="Black" Opacity="0.7" />
+                                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                            <Button
+                                                Margin="10,0"
+                                                Command="{Binding PreviousMediaPlayerPopupCommand}"
+                                                Style="{StaticResource MaterialDesignActionFlatButton}">
+                                                <materialDesign:PackIcon Kind="SkipBackward" Style="{StaticResource AutoSizeIconPack}" />
+                                            </Button>
+                                            <Button
+                                                Margin="10,0"
+                                                Command="{Binding PauseMediaPlayerCommand}"
+                                                Style="{StaticResource MaterialDesignActionFlatButton}">
+                                                <materialDesign:PackIcon Kind="{Binding PlayPauseButtonIconKind}" Style="{StaticResource AutoSizeIconPack}" />
+                                            </Button>
+                                            <Button
+                                                Margin="10,0"
+                                                Command="{Binding NextMediaPlayerPopupCommand}"
+                                                Style="{StaticResource MaterialDesignActionFlatButton}">
+                                                <materialDesign:PackIcon Kind="SkipForward" Style="{StaticResource AutoSizeIconPack}" />
+                                            </Button>
+                                        </StackPanel>
 
-                                    <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-                                        <Button Command="{Binding ShowPlaylistButtonCommand}" Style="{StaticResource MaterialDesignActionFlatButton}">
-                                            <materialDesign:PackIcon
-                                                Foreground="{Binding PlaylistOpenButtonIconBrush}"
-                                                Kind="PlaylistPlay"
-                                                Style="{StaticResource AutoSizeIconPack}" />
-                                        </Button>
-                                    </StackPanel>
-                                </Grid>
-                                <Slider
-                                    x:Name="seekSliderPopup"
-                                    Grid.Row="3"
-                                    VerticalAlignment="Bottom"
-                                    behaviours:SliderDragBehaviors.DragCompletedCommand="{Binding ChangePositionCommand}"
-                                    LargeChange="0"
-                                    Maximum="1"
-                                    Minimum="0"
-                                    Value="{Binding ElementName=uadMediaPlayerInternal, Path=PlayProgress, FallbackValue=0}">
-                                    <i:Interaction.Triggers>
-                                        <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
-                                            <i:InvokeCommandAction Command="{Binding LookSliderCommand}" />
-                                        </i:EventTrigger>
-                                        <i:EventTrigger EventName="PreviewMouseLeftButtonUp">
-                                            <i:InvokeCommandAction Command="{Binding ChangePositionCommand}" CommandParameter="{Binding ElementName=seekSliderPopup, Path=Value}" />
-                                        </i:EventTrigger>
-                                    </i:Interaction.Triggers>
-                                </Slider>
-                            </Grid>
-                        </materialDesign:Card>
-
-                        <materialDesign:Card
-                            Grid.Row="2"
-                            Width="562"
-                            Height="0"
-                            materialDesign:ThemeAssist.Theme="Inherit"
-                            UniformCornerRadius="10">
-                            <Grid Margin="15">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="auto" />
-                                    <RowDefinition Height="15" />
-                                    <RowDefinition />
-                                </Grid.RowDefinitions>
-                                <Rectangle
-                                    Height="60"
-                                    Fill="{DynamicResource MaterialDesignPaper}"
-                                    RadiusX="10"
-                                    RadiusY="10" />
-                                <Grid Margin="0,15">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition />
-                                        <ColumnDefinition Width="75" />
-                                    </Grid.ColumnDefinitions>
-                                    <TextBox
-                                        x:Name="txbPlaylistFilter"
-                                        Margin="15,0"
-                                        VerticalAlignment="Center"
-                                        materialDesign:HintAssist.Hint="type to search"
-                                        materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
-                                        BorderThickness="0"
-                                        FontSize="{DynamicResource Heading3}">
+                                        <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                                            <Button Command="{Binding ShowPlaylistButtonCommand}" Style="{StaticResource MaterialDesignActionFlatButton}">
+                                                <materialDesign:PackIcon
+                                                    Foreground="{Binding PlaylistOpenButtonIconBrush}"
+                                                    Kind="PlaylistPlay"
+                                                    Style="{StaticResource AutoSizeIconPack}" />
+                                            </Button>
+                                        </StackPanel>
+                                    </Grid>
+                                    <Slider
+                                        x:Name="seekSliderPopup"
+                                        Grid.Row="3"
+                                        VerticalAlignment="Bottom"
+                                        behaviours:SliderDragBehaviors.DragCompletedCommand="{Binding ChangePositionCommand}"
+                                        LargeChange="0"
+                                        Maximum="1"
+                                        Minimum="0"
+                                        Value="{Binding ElementName=uadMediaPlayerInternal, Path=PlayProgress, FallbackValue=0}">
                                         <i:Interaction.Triggers>
-                                            <i:EventTrigger EventName="TextChanged">
-                                                <i:InvokeCommandAction Command="{Binding FilterPlaylistPopup}" CommandParameter="{Binding ElementName=txbPlaylistFilter, Path=Text}" />
+                                            <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
+                                                <i:InvokeCommandAction Command="{Binding LookSliderCommand}" />
+                                            </i:EventTrigger>
+                                            <i:EventTrigger EventName="PreviewMouseLeftButtonUp">
+                                                <i:InvokeCommandAction Command="{Binding ChangePositionCommand}" CommandParameter="{Binding ElementName=seekSliderPopup, Path=Value}" />
                                             </i:EventTrigger>
                                         </i:Interaction.Triggers>
-                                    </TextBox>
-                                    <materialDesign:PackIcon
-                                        Grid.Column="1"
-                                        Width="25"
-                                        Height="25"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        Kind="Search" />
+                                    </Slider>
                                 </Grid>
+                            </materialDesign:Card>
 
-                                <ListView
-                                    Grid.Row="2"
-                                    VerticalContentAlignment="Stretch"
-                                    AlternationCount="{Binding FilteredNowPlayingPlaylist.Count}"
-                                    ItemsSource="{Binding FilteredNowPlayingPlaylist}"
-                                    Style="{StaticResource listViewEpisodeBaseTemplate}">
-                                    <ListView.ItemTemplate>
-                                        <DataTemplate>
-                                            <Button Command="{Binding DataContext.SelectPlayIndexCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:MainWindow}}" CommandParameter="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListViewItem}}">
-                                                <Button.Style>
-                                                    <Style TargetType="Button">
-                                                        <Setter Property="Template">
-                                                            <Setter.Value>
-                                                                <ControlTemplate TargetType="Button">
-                                                                    <ContentPresenter Content="{TemplateBinding Content}" />
-                                                                </ControlTemplate>
-                                                            </Setter.Value>
-                                                        </Setter>
-                                                    </Style>
-                                                </Button.Style>
+                            <materialDesign:Card
+                                Grid.Row="2"
+                                Width="562"
+                                Height="0"
+                                materialDesign:ThemeAssist.Theme="Inherit"
+                                UniformCornerRadius="10">
+                                <Grid Margin="15">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto" />
+                                        <RowDefinition Height="15" />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Rectangle
+                                        Height="60"
+                                        Fill="{DynamicResource MaterialDesignPaper}"
+                                        RadiusX="10"
+                                        RadiusY="10" />
+                                    <Grid Margin="0,15">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition />
+                                            <ColumnDefinition Width="75" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBox
+                                            x:Name="txbPlaylistFilter"
+                                            Margin="15,0"
+                                            VerticalAlignment="Center"
+                                            materialDesign:HintAssist.Hint="type to search"
+                                            materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
+                                            BorderThickness="0"
+                                            FontSize="{DynamicResource Heading3}">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="TextChanged">
+                                                    <i:InvokeCommandAction Command="{Binding FilterPlaylistPopup}" CommandParameter="{Binding ElementName=txbPlaylistFilter, Path=Text}" />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </TextBox>
+                                        <materialDesign:PackIcon
+                                            Grid.Column="1"
+                                            Width="25"
+                                            Height="25"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Kind="Search" />
+                                    </Grid>
 
-                                                <Grid>
-                                                    <Rectangle Fill="Black" Opacity="0.0001" />
-                                                    <TextBlock Margin="0,7" TextTrimming="CharacterEllipsis">
-                                                        <Run FontSize="{DynamicResource Heading3}" Text="{Binding Name}">
-                                                            <Run.Foreground>
-                                                                <MultiBinding Converter="{StaticResource MatchIndexToSpecificSolidColorBrushConverter}">
-                                                                    <Binding Source="{StaticResource PrimaryHueMidBrush}" />
-                                                                    <Binding Source="{StaticResource MaterialDesignBody}" />
-                                                                    <Binding Path="DataContext.NowPlaying.EpisodeID" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=local:MainWindow}" />
-                                                                    <Binding Path="EpisodeID" />
-                                                                </MultiBinding>
-                                                            </Run.Foreground>
-                                                        </Run>
-                                                        <Run Text="  " />
-                                                        <Run
-                                                            DataContext="{Binding Path=DataContext.NowPlayingPlaylist, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:MainWindow}}"
-                                                            FontWeight="SemiBold"
-                                                            Foreground="Gray"
-                                                            Text="{Binding Name}" />
-                                                    </TextBlock>
+                                    <ListView
+                                        Grid.Row="2"
+                                        VerticalContentAlignment="Stretch"
+                                        AlternationCount="{Binding FilteredNowPlayingPlaylist.Count}"
+                                        ItemsSource="{Binding FilteredNowPlayingPlaylist}"
+                                        Style="{StaticResource listViewEpisodeBaseTemplate}">
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate>
+                                                <Button Command="{Binding DataContext.SelectPlayIndexCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:MainWindow}}" CommandParameter="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListViewItem}}">
+                                                    <Button.Style>
+                                                        <Style TargetType="Button">
+                                                            <Setter Property="Template">
+                                                                <Setter.Value>
+                                                                    <ControlTemplate TargetType="Button">
+                                                                        <ContentPresenter Content="{TemplateBinding Content}" />
+                                                                    </ControlTemplate>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </Style>
+                                                    </Button.Style>
 
-                                                    <materialDesign:PackIcon
-                                                        Width="25"
-                                                        Height="25"
-                                                        HorizontalAlignment="Right"
-                                                        VerticalAlignment="Center"
-                                                        Foreground="Red"
-                                                        Kind="AlertCircle"
-                                                        ToolTip="This episode is not downloaded yet!"
-                                                        Visibility="{Binding AvailableOffline, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}" />
-                                                </Grid>
-                                            </Button>
-                                        </DataTemplate>
-                                    </ListView.ItemTemplate>
-                                </ListView>
-                            </Grid>
-                        </materialDesign:Card>
-                    </Grid>
-                </Grid>
-            </Popup>
-        </Canvas>
+                                                    <Grid>
+                                                        <Rectangle Fill="Black" Opacity="0.0001" />
+                                                        <TextBlock Margin="0,7" TextTrimming="CharacterEllipsis">
+                                                            <Run FontSize="{DynamicResource Heading3}" Text="{Binding Name}">
+                                                                <Run.Foreground>
+                                                                    <MultiBinding Converter="{StaticResource MatchIndexToSpecificSolidColorBrushConverter}">
+                                                                        <Binding Source="{StaticResource PrimaryHueMidBrush}" />
+                                                                        <Binding Source="{StaticResource MaterialDesignBody}" />
+                                                                        <Binding Path="DataContext.NowPlaying.EpisodeID" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=local:MainWindow}" />
+                                                                        <Binding Path="EpisodeID" />
+                                                                    </MultiBinding>
+                                                                </Run.Foreground>
+                                                            </Run>
+                                                            <Run Text="  " />
+                                                            <Run
+                                                                DataContext="{Binding Path=DataContext.NowPlayingPlaylist, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:MainWindow}}"
+                                                                FontWeight="SemiBold"
+                                                                Foreground="Gray"
+                                                                Text="{Binding Name}" />
+                                                        </TextBlock>
 
-        <Grid x:Name="overlay" Grid.Row="1">
-            <materialDesign:DialogHost
-                CloseOnClickAway="False"
-                DialogTheme="Inherit"
-                IsOpen="{Binding MessageDialogViewModel.IsDialogOpen}">
-                <materialDesign:DialogHost.DialogContent>
-                    <Grid
-                        Width="600"
-                        Height="360"
-                        Margin="15">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="auto" />
-                            <RowDefinition Height="25" />
-                            <RowDefinition />
-                            <RowDefinition Height="75" />
-                        </Grid.RowDefinitions>
-                        <TextBlock
-                            VerticalAlignment="Center"
-                            FontWeight="SemiBold"
-                            Text="{Binding MessageDialogViewModel.MessageTitle}" />
-                        <TextBlock
-                            Grid.Row="2"
-                            Text="{Binding MessageDialogViewModel.MessageText}"
-                            TextWrapping="WrapWithOverflow" />
-
-                        <Grid Grid.Row="3">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="1*" />
-                                <ColumnDefinition Width="75" />
-                                <ColumnDefinition Width="10" />
-                                <ColumnDefinition Width="75" />
-                            </Grid.ColumnDefinitions>
-
-                            <Button
-                                Grid.Column="1"
-                                Command="{Binding MessageDialogViewModel.ActionButtonCommand}"
-                                CommandParameter="OK"
-                                Content="OK"
-                                Visibility="{Binding MessageDialogViewModel.OKButtonVisibility}" />
-                            <Button
-                                Grid.Column="1"
-                                Command="{Binding MessageDialogViewModel.ActionButtonCommand}"
-                                CommandParameter="Yes"
-                                Content="Yes"
-                                Visibility="{Binding MessageDialogViewModel.YesButtonVisibility}" />
-                            <Button
-                                Grid.Column="3"
-                                Command="{Binding MessageDialogViewModel.ActionButtonCommand}"
-                                CommandParameter="Cancel"
-                                Content="Cancel"
-                                Style="{StaticResource MaterialDesignFlatButton}"
-                                Visibility="{Binding MessageDialogViewModel.CancelVisibility}" />
-                            <Button
-                                Grid.Column="3"
-                                Command="{Binding MessageDialogViewModel.ActionButtonCommand}"
-                                CommandParameter="No"
-                                Content="No"
-                                Visibility="{Binding MessageDialogViewModel.NoButtonVisibility}" />
-
+                                                        <materialDesign:PackIcon
+                                                            Width="25"
+                                                            Height="25"
+                                                            HorizontalAlignment="Right"
+                                                            VerticalAlignment="Center"
+                                                            Foreground="Red"
+                                                            Kind="AlertCircle"
+                                                            ToolTip="This episode is not downloaded yet!"
+                                                            Visibility="{Binding AvailableOffline, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}" />
+                                                    </Grid>
+                                                </Button>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+                                    </ListView>
+                                </Grid>
+                            </materialDesign:Card>
                         </Grid>
                     </Grid>
-                </materialDesign:DialogHost.DialogContent>
-            </materialDesign:DialogHost>
+                </Popup>
+            </Canvas>
+
+            <Grid x:Name="overlay" Grid.Row="1">
+                <materialDesign:DialogHost
+                    CloseOnClickAway="False"
+                    DialogTheme="Inherit"
+                    IsOpen="{Binding MessageDialogViewModel.IsDialogOpen}">
+                    <materialDesign:DialogHost.DialogContent>
+                        <Grid
+                            Width="600"
+                            Height="360"
+                            Margin="15">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="25" />
+                                <RowDefinition />
+                                <RowDefinition Height="75" />
+                            </Grid.RowDefinitions>
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                FontWeight="SemiBold"
+                                Text="{Binding MessageDialogViewModel.MessageTitle}" />
+                            <TextBlock
+                                Grid.Row="2"
+                                Text="{Binding MessageDialogViewModel.MessageText}"
+                                TextWrapping="WrapWithOverflow" />
+
+                            <Grid Grid.Row="3">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*" />
+                                    <ColumnDefinition Width="75" />
+                                    <ColumnDefinition Width="10" />
+                                    <ColumnDefinition Width="75" />
+                                </Grid.ColumnDefinitions>
+
+                                <Button
+                                    Grid.Column="1"
+                                    Command="{Binding MessageDialogViewModel.ActionButtonCommand}"
+                                    CommandParameter="OK"
+                                    Content="OK"
+                                    Visibility="{Binding MessageDialogViewModel.OKButtonVisibility}" />
+                                <Button
+                                    Grid.Column="1"
+                                    Command="{Binding MessageDialogViewModel.ActionButtonCommand}"
+                                    CommandParameter="Yes"
+                                    Content="Yes"
+                                    Visibility="{Binding MessageDialogViewModel.YesButtonVisibility}" />
+                                <Button
+                                    Grid.Column="3"
+                                    Command="{Binding MessageDialogViewModel.ActionButtonCommand}"
+                                    CommandParameter="Cancel"
+                                    Content="Cancel"
+                                    Style="{StaticResource MaterialDesignFlatButton}"
+                                    Visibility="{Binding MessageDialogViewModel.CancelVisibility}" />
+                                <Button
+                                    Grid.Column="3"
+                                    Command="{Binding MessageDialogViewModel.ActionButtonCommand}"
+                                    CommandParameter="No"
+                                    Content="No"
+                                    Visibility="{Binding MessageDialogViewModel.NoButtonVisibility}" />
+
+                            </Grid>
+                        </Grid>
+                    </materialDesign:DialogHost.DialogContent>
+                </materialDesign:DialogHost>
+            </Grid>
+        </Grid>
+
+        <Grid
+            x:Name="splashScreen"
+            Width="{Binding ElementName=mainWindow, Path=ActualWidth}"
+            HorizontalAlignment="Left"
+            Background="{StaticResource MaterialDesignPaper}">
+            <StackPanel VerticalAlignment="Center">
+
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    FontSize="60"
+                    Text="Unversal Anime Downloader" />
+                <TextBlock
+                    Margin="15,0"
+                    FontSize="36"
+                    Foreground="LightGray"
+                    TextAlignment="Right">
+                    <Run Text="Version: " />
+                    <Run Text="{x:Static local:MiscClass.GlobalVersion}" />
+                </TextBlock>
+            </StackPanel>
+
+            <TextBlock
+                Margin="5"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Text="{Binding LoadingStatus}" />
         </Grid>
     </Grid>
 </Window>

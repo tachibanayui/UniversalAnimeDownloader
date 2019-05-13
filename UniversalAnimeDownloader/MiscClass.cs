@@ -25,6 +25,7 @@ namespace UniversalAnimeDownloader
 {
     public class MiscClass
     {
+        public static string GlobalVersion = "0.9.0";
         public static NavigationTrack NavigationHelper { get; set; } = new NavigationTrack();
         public static List<string> PresetQuality { get; set; } = new List<string>
         {

@@ -57,6 +57,23 @@ namespace UniversalAnimeDownloader.ViewModels
         #endregion
 
         #region BindableProperties
+        private string _LoadingStatus = "Initizaling...";
+        public string LoadingStatus
+        {
+            get
+            {
+                return _LoadingStatus;
+            }
+            set
+            {
+                if (_LoadingStatus != value)
+                {
+                    _LoadingStatus = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         private GridLength _SideBarWidth = new GridLength(65);
         public GridLength SideBarWidth
         {
@@ -556,19 +573,18 @@ namespace UniversalAnimeDownloader.ViewModels
             WindowStateChangedCommand = new RelayCommand<Window>(null, WindowStateChangedAction);
             PageLoaded = new RelayCommand<Window>(null, async p =>
             {
-                p.Visibility = Visibility.Collapsed;
+                LoadInSplashScreen();
+
                 (Pages[0].DataContext as IPageContent).OnShow();
                 CheckForAnimeSeriesUpdate();
                 if ((Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.IsLoadPageInBackground)
                 {
-                    p.Visibility = Visibility.Visible;
                     await Task.Delay(5000);
                     await LoadPagesToMemory(true);
                 }
                 else
                 {
                     await LoadPagesToMemory(false);
-                    p.Visibility = Visibility.Visible;
                 }
                 NowPlayingPopupScale = p.Width / 1920 * (1 + (1 - (p.Width / 1920)));
 
@@ -669,6 +685,37 @@ namespace UniversalAnimeDownloader.ViewModels
 
                 view.Refresh();
             });
+        }
+
+        private async void LoadInSplashScreen()
+        {
+            await Task.Delay(1000);
+            LoadingStatus = "Checking for updates...";
+            await Task.Delay(1000);
+            LoadingStatus = "Initizaling...";
+            await Task.Delay(1000);
+
+            TimeSpan animDuration = TimeSpan.FromSeconds(1);
+            DoubleAnimation slideAnim = new DoubleAnimation()
+            {
+                To = 0,
+                EasingFunction = new QuadraticEase() { EasingMode = EasingMode.EaseOut },
+                Duration = animDuration
+            };
+            Storyboard.SetTargetProperty(slideAnim, new PropertyPath("Width"));
+
+            DoubleAnimation fadeAnim = new DoubleAnimation()
+            {
+                To = 0,
+                Duration = animDuration
+            };
+            Storyboard.SetTargetProperty(fadeAnim, new PropertyPath("Opacity"));
+
+            Storyboard stb = new Storyboard();
+            stb.Children.Add(slideAnim);
+            stb.Children.Add(fadeAnim);
+
+            (Application.Current.MainWindow.FindName("splashScreen") as Grid).BeginStoryboard(stb);
         }
 
         private Storyboard GetPlaylistPanelAnim(bool isOpen)
