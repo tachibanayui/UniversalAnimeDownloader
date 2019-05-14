@@ -4,7 +4,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
+using UADAPI;
 
 namespace UniversalAnimeDownloader.ViewModels
 {
@@ -22,6 +24,14 @@ namespace UniversalAnimeDownloader.ViewModels
             UserFeedbackCommand = new RelayCommand<object>(null, p => 
             {
                 ReportErrorHelper.FeedBack();
+            });
+            CheckForUpdateCommand = new RelayCommand<object>(null, p => 
+            {
+                if (ApiHelpper.CheckForUpdates())
+                {
+                    (Application.Current.FindResource("MainWindowViewModel") as MainWindowViewModel).IsNewUpdatesDialogOpen = true;
+                    (Application.Current.FindResource("MainWindowViewModel") as MainWindowViewModel).UpdateDescription = ApiHelpper.NewestVersionInfo?.body;
+                }
             });
         }
     }
