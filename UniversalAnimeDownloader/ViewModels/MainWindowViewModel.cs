@@ -52,6 +52,8 @@ namespace UniversalAnimeDownloader.ViewModels
         public ICommand OpenNowPlayingPopupCommand { get; set; }
         public ICommand ShowPlaylistButtonCommand { get; set; }
         public ICommand FilterPlaylistPopup { get; set; }
+        public ICommand OpenUADInstaller { get; set; }
+        public ICommand CloseUniversalAnimeDownloader { get; set; }
 
         public ICommand NavigateCommand { get; set; }
         #endregion
@@ -73,6 +75,42 @@ namespace UniversalAnimeDownloader.ViewModels
                 }
             }
         }
+
+        private string _UpdateDescription;
+        public string UpdateDescription
+        {
+            get
+            {
+                return _UpdateDescription;
+            }
+            set
+            {
+                if (_UpdateDescription != value)
+                {
+                    _UpdateDescription = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private bool _IsNewUpdatesDialogOpen;
+        public bool IsNewUpdatesDialogOpen
+        {
+            get
+            {
+                return _IsNewUpdatesDialogOpen;
+            }
+            set
+            {
+                if (_IsNewUpdatesDialogOpen != value)
+                {
+                    _IsNewUpdatesDialogOpen = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+
 
         private GridLength _SideBarWidth = new GridLength(65);
         public GridLength SideBarWidth
@@ -260,7 +298,10 @@ namespace UniversalAnimeDownloader.ViewModels
         {
             FilteredNowPlayingPlaylist.Clear();
             if (info == null)
+            {
                 return;
+            }
+
             foreach (var item in info.Episodes)
             {
                 FilteredNowPlayingPlaylist.Add(item);
@@ -488,17 +529,22 @@ namespace UniversalAnimeDownloader.ViewModels
         public bool IsPlayButtonEnable { get; set; }
         public bool MediaPlayerBtnMouseOver { get; set; }
         private bool _IsPlaylistToggled;
-        public bool IsPlaylistToggled {
+        public bool IsPlaylistToggled
+        {
             get => _IsPlaylistToggled;
             set
             {
-                if(_IsPlaylistToggled != value)
+                if (_IsPlaylistToggled != value)
                 {
                     _IsPlaylistToggled = value;
                     if (value)
+                    {
                         PlaylistOpenButtonIconBrush = Application.Current.FindResource("PrimaryHueMidBrush") as Brush;
+                    }
                     else
+                    {
                         PlaylistOpenButtonIconBrush = Application.Current.FindResource("MaterialDesignBody") as Brush;
+                    }
                 }
             }
         }
@@ -685,12 +731,20 @@ namespace UniversalAnimeDownloader.ViewModels
 
                 view.Refresh();
             });
+            CloseUniversalAnimeDownloader = new RelayCommand<object>(null, p => Application.Current.Shutdown(0));
         }
 
         private async void LoadInSplashScreen()
         {
             await Task.Delay(1000);
             LoadingStatus = "Checking for updates...";
+
+            if (ApiHelpper.CheckForUpdates())
+            {
+                IsNewUpdatesDialogOpen = true;
+                UpdateDescription = ApiHelpper.NewestVersionInfo?.body;
+            }
+
             await Task.Delay(1000);
             LoadingStatus = "Initizaling...";
             await Task.Delay(1000);
@@ -894,7 +948,7 @@ namespace UniversalAnimeDownloader.ViewModels
             {
                 AnimeSeriesInfo item = offlineList[i];
                 var manager = ApiHelpper.CreateAnimeSeriesManagerObjectByClassName(item.ModInfo.ModTypeString);
-                if(manager != null)
+                if (manager != null)
                 {
                     manager.AttachedAnimeSeriesInfo = item;
                     AnimeSourceControl source = new AnimeSourceControl(manager);
@@ -906,18 +960,25 @@ namespace UniversalAnimeDownloader.ViewModels
                 else
                 {
                     modMissing = true;
-                    if(!modMissingNames.Contains(item.ModInfo.ModName))
+                    if (!modMissingNames.Contains(item.ModInfo.ModName))
+                    {
                         modMissingNames.Add(item.ModInfo.ModName);
+                    }
                 }
             }
-            if(offlineList.Count > 0)
+            if (offlineList.Count > 0)
+            {
                 NotificationManager.Add(new NotificationItem() { Title = "Check for anime updates completed", Detail = $"Found {updatedSeries} anime series need to updated out of {offlineList.Count} in your library. See download center for mode detail." });
+            }
 
-            if(modMissing)
+            if (modMissing)
             {
                 string missingModList = string.Empty;
                 foreach (var item in modMissingNames)
+                {
                     missingModList += item + ", ";
+                }
+
                 missingModList.Substring(0, missingModList.Length - 4);
                 NotificationManager.Add(new NotificationItem() { Title = "Some series are ignored!", Detail = $"There are {modMissingNames.Count} mod(s) is/are missing, series depend on these mod will be ignored. Missing mod list: {missingModList}" });
             }

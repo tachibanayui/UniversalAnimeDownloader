@@ -19,6 +19,7 @@ namespace UniversalAnimeDownloader.ViewModels
         #region Commmands
         public ICommand ReloadAnimeCommand { get; set; }
         public ICommand ShowAnimeDetailCommand { get; set; }
+        public ICommand PageLoadedCommand { get; set; }
         #endregion
 
         #region Fields / Properties
@@ -90,6 +91,11 @@ namespace UniversalAnimeDownloader.ViewModels
                 }
                 manager.AttachedAnimeSeriesInfo = p;
                 (Application.Current.FindResource("OfflineAnimeDetailViewModel") as OfflineAnimeDetailViewModel).CurrentSeries = manager;
+            });
+            PageLoadedCommand = new RelayCommand<object>(null, p =>
+            {
+                if (ApiHelpper.QueryTypes.Count == 0 || ApiHelpper.ManagerTypes.Count == 0)
+                    OverlayNoModVisibility = Visibility.Visible;
             });
 
             //When the setting is loaded, all viewmodels haven't loaded yet, the setting can't get the property to change, so we need to change here

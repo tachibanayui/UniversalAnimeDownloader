@@ -8,6 +8,7 @@
     xmlns:cmd="http://www.galasoft.ch/mvvmlight"
     xmlns:customControl="clr-namespace:UniversalAnimeDownloader.CustomControls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:html="clr-namespace:TheArtOfDev.HtmlRenderer.WPF;assembly=HtmlRenderer.WPF"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:local="clr-namespace:UniversalAnimeDownloader"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
@@ -659,6 +660,56 @@
                                     Content="No"
                                     Visibility="{Binding MessageDialogViewModel.NoButtonVisibility}" />
 
+                            </Grid>
+                        </Grid>
+                    </materialDesign:DialogHost.DialogContent>
+                </materialDesign:DialogHost>
+
+                <materialDesign:DialogHost
+                    CloseOnClickAway="False"
+                    DialogTheme="Inherit"
+                    IsOpen="{Binding IsNewUpdatesDialogOpen}">
+                    <materialDesign:DialogHost.DialogContent>
+                        <Grid
+                            Width="600"
+                            Height="360"
+                            Margin="5">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="10" />
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="10" />
+                                <RowDefinition />
+                                <RowDefinition Height="10" />
+                                <RowDefinition Height="auto" />
+                            </Grid.RowDefinitions>
+
+                            <TextBlock FontSize="{DynamicResource Heading2}" Text="New updates avaible!" />
+                            <TextBlock
+                                Grid.Row="2"
+                                FontSize="{DynamicResource Heading3}"
+                                Text="Update Summary: " />
+                            <html:HtmlPanel
+                                Grid.Row="4"
+                                Background="Transparent"
+                                Text="{Binding UpdateDescription, Converter={StaticResource HtmlTagToColoredTextConverter}}" />
+
+                            <Grid Grid.Row="6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition Width="10" />
+                                    <ColumnDefinition Width="auto" />
+                                </Grid.ColumnDefinitions>
+                                <Button
+                                    Grid.Column="1"
+                                    Command="{Binding OpenUADInstaller, Mode=OneTime}"
+                                    Content="Open UADInstaller" />
+                                <Button
+                                    Grid.Column="3"
+                                    Command="{Binding CloseUniversalAnimeDownloader, Mode=OneTime}"
+                                    Content="Close Universal Anime Downloader"
+                                    Style="{StaticResource MaterialDesignFlatButton}" />
                             </Grid>
                         </Grid>
                     </materialDesign:DialogHost.DialogContent>

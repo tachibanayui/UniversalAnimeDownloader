@@ -202,11 +202,21 @@ namespace UADAPI
             }
         }
 
-        public static void LoadAssembly()
+        /// <summary>
+        /// Load the mod in the mod folder
+        /// </summary>
+        /// <param name="checkForUpdate">How to check for update, null will use the default way (PC, WPF version)</param>
+        public static void LoadAssembly(CheckForUpdateAction checkForUpdate = null)
         {
-            if (CheckForUpdates())
+            if (IsLoadedAssembly)
+                return;
+
+            bool updateAvaible = checkForUpdate == null ? CheckForUpdates() : checkForUpdate.Invoke();
+            if (updateAvaible)
             {
-                throw new InvalidOperationException("This modification is out of date, update in our GitHub release!");
+                //throw new InvalidOperationException("This modification is out of date, update in our GitHub release!");
+                IsLoadedAssembly = true;
+                return;
             }
 
             string modDirectory = AppDomain.CurrentDomain.BaseDirectory + "Mods" + "\\";
@@ -310,12 +320,94 @@ namespace UADAPI
         {
         }
 
+        private static string AccessToken = "5eba8827aa833401a98f06b9e367aede67444d44";
+        public static string SourceVersions { get; set; } = $"https://api.github.com/repos/quangaming2929/UniversalAnimeDownloader/releases/latest";
+        public static GitHubData NewestVersionInfo { get; set; }
+
+
         /// <summary>
         /// Check for updates on GitHubs
         /// </summary>
-        private static bool CheckForUpdates()
+        public static bool CheckForUpdates()
         {
+            try
+            {
+                var version =  GetLatestUpdate(AccessToken);
+                var versionFileContent = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "VersionManager.json"));
+                var versionManager = JsonConvert.DeserializeObject<VersionManager>(versionFileContent);
+                NewestVersionInfo = version;
+                return CompareVersion(version.tag_name, versionManager.GlobalVersion);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Return true if the v1 is greater than v2
+        /// </summary>
+        /// <param name="tag_name"></param>
+        /// <returns></returns>
+        private static bool CompareVersion(string v1, string v2)
+        {
+            var newVer = v1.Substring(1).Split('.');
+            var oldVer = v2.Substring(1).Split('.');
+
+            for (int i = 0; i < Math.Min(newVer.Length, oldVer.Length); i++)
+            {
+                if (int.Parse(newVer[i]) > int.Parse(oldVer[i]))
+                    return true;
+
+                if (int.Parse(newVer[i]) < int.Parse(oldVer[i]))
+                    return false;
+            }
             return false;
+        }
+
+        public static GitHubData GetLatestUpdate(string accessToken = null)
+        {
+            string apiResult = string.Empty;
+            string req = SourceVersions;
+            if (!string.IsNullOrEmpty(accessToken))
+            {
+                req += $"?access_token={accessToken}";
+            }
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(SourceVersions);
+                request.UserAgent = @"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.140 Safari/537.36 Edge/17.17134";
+                using (WebResponse resp = request.GetResponse())
+                {
+                    using (Stream stream = resp.GetResponseStream())
+                    {
+                        StreamReader reader = new StreamReader(stream);
+                        apiResult = reader.ReadToEnd();
+                    }
+                }
+            }
+            catch
+            {
+                try
+                {
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(req);
+                    request.UserAgent = @"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.140 Safari/537.36 Edge/17.17134";
+                    using (WebResponse resp = request.GetResponse())
+                    {
+                        using (Stream stream = resp.GetResponseStream())
+                        {
+                            StreamReader reader = new StreamReader(stream);
+                            apiResult = reader.ReadToEnd();
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    throw new InvalidOperationException("Can't get latest version!", e);
+                }
+            }
+
+            return JsonConvert.DeserializeObject<GitHubData>(apiResult);
         }
 
 
@@ -336,4 +428,34 @@ namespace UADAPI
         private static Task<bool> _CheckForInternetTask;
         private static Thread _CheckInternetThread = null;
     }
+
+    public class GitHubData
+    {
+        public string tag_name { get; set; }
+        public string name { get; set; }
+        public Asset[] assets { get; set; }
+        public string body { get; set; }
+    }
+
+    public class Asset
+    {
+        public string name { get; set; }
+        public int size { get; set; }
+        public DateTime updated_at { get; set; }
+        public string browser_download_url { get; set; }
+    }
+
+    public class VersionManager
+    {
+        public List<FileVersion> FileVersion { get; set; } = new List<FileVersion>();
+        public string GlobalVersion { get; set; }
+    }
+
+    public class FileVersion
+    {
+        public string FileName { get; set; }
+        public int Version { get; set; }
+    }
+
+    public delegate bool CheckForUpdateAction();
 }
