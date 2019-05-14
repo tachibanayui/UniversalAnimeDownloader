@@ -25,7 +25,6 @@ namespace UniversalAnimeDownloader.ViewModels
         public Random Rand { get; set; } = new Random();
         public bool IsLoadOngoing { get; private set; }
         public IQueryAnimeSeries Querier { get; set; }
-        public Exception LastError { get; set; }
         public bool IsLoadedAnime { get; set; }
         #endregion
 
@@ -151,6 +150,23 @@ namespace UniversalAnimeDownloader.ViewModels
                 if (_OverlayNotSupported != value)
                 {
                     _OverlayNotSupported = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private Exception _CurrentException;
+        public Exception CurrentException
+        {
+            get
+            {
+                return _CurrentException;
+            }
+            set
+            {
+                if (_CurrentException != value)
+                {
+                    _CurrentException = value;
                     OnPropertyChanged();
                 }
             }
@@ -321,7 +337,7 @@ namespace UniversalAnimeDownloader.ViewModels
             }
             OverlayActiityIndicatorVisibility = Visibility.Collapsed;
 
-            LastError = e;
+            CurrentException = e;
         }
 
         private void ShowNotSupportedOverlay()

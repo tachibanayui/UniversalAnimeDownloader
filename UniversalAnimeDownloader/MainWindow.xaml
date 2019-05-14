@@ -322,8 +322,8 @@
                             SidePanelText="Settings" />
 
                         <customControl:SidePanelNavigateButton
-                            ButtonCommandParameter="UADSettings"
-                            ControlTabIndex="6"
+                            ButtonCommandParameter="About"
+                            ControlTabIndex="9"
                             SidePanelIconKind="InformationOutline"
                             SidePanelText="Credits" />
                     </StackPanel>

@@ -156,9 +156,13 @@
     <Compile Include="MiscClass.cs" />
     <Compile Include="LifeSpanObservableCollection.cs" />
     <Compile Include="Models\AffectedAnimesModel.cs" />
+    <Compile Include="ReportErrorHelper.cs" />
     <Compile Include="TaskCompletionNotifier.cs" />
     <Compile Include="UADSettingsPortal\UADSettingsData.cs" />
     <Compile Include="UADSettingsPortal\UADSettingsManager.cs" />
+    <Compile Include="UcContentPages\About.xaml.cs">
+      <DependentUpon>About.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UcContentPages\ActivityIndicator.xaml.cs">
       <DependentUpon>ActivityIndicator.xaml</DependentUpon>
     </Compile>
@@ -237,6 +241,7 @@
     <Compile Include="ValueConverters\StringToPlayerTypeConverter.cs" />
     <Compile Include="ValueConverters\TypeToStringConverter.cs" />
     <Compile Include="ValueConverters\UADDownloaderStateToIconKindConverter.cs" />
+    <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\AllAnimeTabViewModel.cs" />
     <Compile Include="ViewModels\AnimeDetailsViewModel.cs" />
     <Compile Include="ViewModels\AnimeSuggestionViewModel.cs" />
@@ -304,6 +309,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Themes\SidePanelNavigateButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UcContentPages\About.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

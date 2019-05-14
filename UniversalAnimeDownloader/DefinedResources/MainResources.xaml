@@ -15,4 +15,5 @@
     <vm:OfflineAnimeDetailViewModel x:Key="OfflineAnimeDetailViewModel" />
     <vm:UADSettingsViewModel x:Key="UADSettingViewModel" />
     <vm:ExploreViewModel x:Key="ExploreViewModel" />
+    <vm:AboutViewModel x:Key="AboutViewModel" />
 </ResourceDictionary>

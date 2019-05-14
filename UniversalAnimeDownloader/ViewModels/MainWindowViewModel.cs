@@ -960,6 +960,9 @@ namespace UniversalAnimeDownloader.ViewModels
                         (Pages[2].DataContext as IPageContent).OnShow();
                         (Pages[7].DataContext as IPageContent).OnShow();
                         break;
+                    case "About":
+                        pageIndex = 9;
+                        break;
                     default:
                         break;
                 }
@@ -1009,7 +1012,8 @@ namespace UniversalAnimeDownloader.ViewModels
             new UcContentPages.OfflineAnimeDetail(){ Visibility = Visibility.Visible},
             new UcContentPages.UADSettings(){ Visibility = Visibility.Collapsed},
             new UcContentPages.FeaturedAnime(){ Visibility = Visibility.Collapsed},
-            new UcContentPages.Explore(){ Visibility = Visibility.Collapsed}
+            new UcContentPages.Explore(){ Visibility = Visibility.Collapsed},
+            new UcContentPages.About(){Visibility = Visibility.Collapsed},
         };
     }
 }

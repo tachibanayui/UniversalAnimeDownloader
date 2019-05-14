@@ -1,19 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using UniversalAnimeDownloader.ViewModels;
 
 namespace UniversalAnimeDownloader
@@ -28,13 +20,30 @@ namespace UniversalAnimeDownloader
         public Exception ExceptionDetail { get; set; }
         public ManualResetEvent Waiter { get; set; }
         public string UserInfo { get; set; }
-        public bool IsReport { get; set; }
+        private bool isReport;
+
+        public bool IsReport
+        {
+            get { return isReport; }
+            set
+            {
+                isReport = value;
+                if (value)
+                {
+                    FeedbackTitle = "Report error";
+                    FeedbackDescription = "I am sorry because you have experience this issue. Leave your information below, and we will try and respone to you as fast as possible. You can skip any field if you want";
+                    ReportInfoVisibility = Visibility.Visible;
+                }
+            }
+        }
+
         #endregion
 
         #region Commands
         public ICommand SendCommand { get; set; }
         public ICommand ViewErrorCommand { get; set; }
         public ICommand CloseCommand { get; set; }
+        public ICommand GithubReportErrorCommand { get; set; }
         #endregion
 
         #region BindableProperties
@@ -73,6 +82,25 @@ namespace UniversalAnimeDownloader
                 }
             }
         }
+
+        private Visibility _ReportInfoVisibility = Visibility.Collapsed;
+        public Visibility ReportInfoVisibility
+        {
+            get
+            {
+                return _ReportInfoVisibility;
+            }
+            set
+            {
+                if (_ReportInfoVisibility != value)
+                {
+                    _ReportInfoVisibility = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+
         #endregion
 
         #region Information
@@ -230,6 +258,7 @@ namespace UniversalAnimeDownloader
                 UserInfo = $"First Name: {FirstName}\r\nLast Name: {LastName}\r\nEmail Address: {EmailAddress}\r\nProblem: {reportMessage}\r\nFeedback: {CustomerFeedBack}";
                 Waiter.Set();
             });
+            GithubReportErrorCommand = new RelayCommand<object>(null, p => Process.Start("https://github.com/quangaming2929/UniversalAnimeDownloader/issues/new"));
             InitializeComponent();
         }
 
