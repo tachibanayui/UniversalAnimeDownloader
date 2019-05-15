@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -732,6 +734,19 @@ namespace UniversalAnimeDownloader.ViewModels
                 view.Refresh();
             });
             CloseUniversalAnimeDownloader = new RelayCommand<object>(null, p => Application.Current.Shutdown(0));
+            OpenUADInstaller = new RelayCommand<object>(null, p => 
+            {
+                var file = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Maintance",  "UADInstallerLoc.txt");
+
+                if (File.Exists(file))
+                {
+                    try
+                    {
+                        Process.Start(File.ReadAllText(file));
+                    }
+                    catch { }
+                }
+            });
         }
 
         private async void LoadInSplashScreen()

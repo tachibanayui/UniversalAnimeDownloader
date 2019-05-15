@@ -769,8 +769,6 @@
                 Text="{Binding LoadingStatus}" />
 
             <Canvas Width="{Binding ElementName=mainWindow, Path=ActualWidth}">
-
-
                 <materialDesign:PackIcon
                     Width="36"
                     Height="36"
