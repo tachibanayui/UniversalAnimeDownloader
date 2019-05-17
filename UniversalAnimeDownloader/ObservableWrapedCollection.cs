@@ -19,6 +19,8 @@ namespace UniversalAnimeDownloader
         private int _CurrentRowNumber;
         private int _LastRowCount;
         private object _LockObject;
+        private int _CalculatiingOperations;
+        private const int _ResetDelay = 200;
         #endregion
 
 
@@ -44,6 +46,9 @@ namespace UniversalAnimeDownloader
         /// </summary>
         public double UsableContainerWidth { get; protected set; }
 
+        public bool IsReCalculatingItem { get => _CalculatiingOperations != 0; }
+
+        public int Count { get => _DefaultItems.Count; }
 
         /// <summary>
         /// The width of the ItemsControl (ListView, ListBox,...) which contains the data items
@@ -55,9 +60,19 @@ namespace UniversalAnimeDownloader
             set
             {
                 _ContainerWidth = value;
-                var widthDelta = UsableContainerWidth - value;
-                if (widthDelta < 0 || widthDelta >= 300)
-                    AddRangeAsync(ResetWrapCollection());
+                ReCalculatingData(value);
+            }
+        }
+
+        private async void ReCalculatingData(double value)
+        {
+            var widthDelta = value - UsableContainerWidth;
+            if (widthDelta < 0 || widthDelta >= _ItemsWidth)
+            {
+                _CalculatiingOperations++;
+                await AddRangeAsyncTask(ResetWrapCollection());
+                await Task.Delay(_ResetDelay);
+                _CalculatiingOperations--;
             }
         }
 
@@ -71,9 +86,19 @@ namespace UniversalAnimeDownloader
             set
             {
                 _ItemsWidth = value;
-                var shouldBeUsedWidth = value * _ItemPerRow;
-                if (shouldBeUsedWidth > ContainerWidth || shouldBeUsedWidth <= ContainerWidth + value)
-                    AddRangeAsync(ResetWrapCollection());
+                ReCalculatingDataFromItemsWidth(value);
+            }
+        }
+
+        private async void ReCalculatingDataFromItemsWidth(double value)
+        {
+            var shouldBeUsedWidth = value * _ItemPerRow;
+            if (shouldBeUsedWidth > ContainerWidth || shouldBeUsedWidth <= ContainerWidth + value)
+            {
+                _CalculatiingOperations++;
+                await AddRangeAsyncTask(ResetWrapCollection());
+                await Task.Delay(_ResetDelay);
+                _CalculatiingOperations--;
             }
         }
         #endregion
@@ -91,6 +116,7 @@ namespace UniversalAnimeDownloader
             BindingOperations.EnableCollectionSynchronization(Data, _LockObject);
             _ContainerWidth = containerWidth;
             _ItemsWidth = itemsWidth;
+            _CalculatiingOperations = 0;
             ResetWrapCollection();
         }
 
@@ -176,7 +202,7 @@ namespace UniversalAnimeDownloader
                 _DefaultItems = new List<T>();
 
             _ItemPerRow = (int)Math.Floor(ContainerWidth / ItemsWidth);
-            UsableContainerWidth = ContainerWidth * ItemsWidth;
+            UsableContainerWidth = _ItemPerRow * ItemsWidth;
             _CurrentRowNumber = 0;
             _LastRowCount = 0;
             var res = new T[_DefaultItems.Count];

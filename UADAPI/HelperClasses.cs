@@ -330,6 +330,8 @@ namespace UADAPI
         /// </summary>
         public static bool CheckForUpdates()
         {
+            return false;
+
             try
             {
                 var version =  GetLatestUpdate(AccessToken);

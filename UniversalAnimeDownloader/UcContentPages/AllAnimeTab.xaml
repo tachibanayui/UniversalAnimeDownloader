@@ -91,17 +91,24 @@
             Grid.Row="1"
             ex:ListBoxExtensions.ScrollChangedCommand="{Binding AnimeListScrollingCommand, Mode=OneTime}"
             ex:ListBoxExtensions.ScrollChangedCommandParameter="{Binding ElementName=animeList}"
-            materialDesign:RippleAssist.IsDisabled="True"
-            ItemContainerStyle="{StaticResource DisableSelectionListbox}"
-            ItemsPanel="{Binding AnimeCardPanel, Mode=OneWay}"
-            ItemsSource="{Binding AnimeInfos, IsAsync=True, Mode=OneWay}"
-            VirtualizingStackPanel.IsVirtualizing="True"
-            VirtualizingStackPanel.VirtualizationMode="Recycling">
+            ItemsSource="{Binding AnimeInfos.Data, IsAsync=True, Mode=OneWay}"
+            Style="{StaticResource AnimeCardPanel}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <page:AnimeItemCard AnimeCardCommand="{Binding DataContext.ShowAnimeDetailCommand, Mode=OneTime, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:AllAnimeTab}}}" SecondAnimeCardCommand="{x:Static materialDesign:Transitioner.MoveNextCommand}" />
+                    <ItemsControl Style="{StaticResource AnimeCardInternalPanel}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <page:AnimeItemCard AnimeCardCommand="{Binding DataContext.ShowAnimeDetailCommand, Mode=OneTime, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:AllAnimeTab}}}" SecondAnimeCardCommand="{x:Static materialDesign:Transitioner.MoveNextCommand}" />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
                 </DataTemplate>
             </ListBox.ItemTemplate>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SizeChanged">
+                    <i:InvokeCommandAction Command="{Binding AnimeListSizeChangedCommand, Mode=OneTime}" CommandParameter="{Binding ElementName=animeList}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
         </ListBox>
 
         <Grid x:Name="overlayContainer" Grid.Row="1">

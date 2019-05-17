@@ -18,7 +18,7 @@ namespace UniversalAnimeDownloader.ViewModels
         /// </summary>
         public Task TempTask { get; set; }
         public IQueryAnimeSeries Querier { get; set; }
-        public DelayedObservableCollection<AnimeSeriesInfo> AnimeInfos { get; set; }
+        public ObservableWrapedCollection<AnimeSeriesInfo> AnimeInfos { get; set; }
         public ObservableCollection<GenreItem> Genres { get; set; }
         public ObservableCollection<SeasonItem> Seasons { get; set; }
         public CancellationTokenSource LoadAnimeCancelToken { get; set; } = new CancellationTokenSource();
@@ -33,6 +33,7 @@ namespace UniversalAnimeDownloader.ViewModels
         public ICommand AnimeListScrollingCommand { get; set; }
         public ICommand ShowAnimeDetailCommand { get; set; }
         public ICommand PageLoaded { get; set; }
+        public ICommand AnimeListSizeChangedCommand { get; set; }
         #endregion
 
         #region BindableProperties
@@ -223,20 +224,14 @@ namespace UniversalAnimeDownloader.ViewModels
         {
             SearchAnimeCommand = new RelayCommand<object>(null, async (p) => await LoadAnime(0, 50));
             ReloadInternetCommand = new RelayCommand<object>(p => OverlayNoInternetVisibility == Visibility.Visible, async (p) => await LoadAnime(0, 50));
-            AnimeListScrollingCommand = new RelayCommand<object>(p =>
+            AnimeListScrollingCommand = new RelayCommand<object>(null, async (p) =>
             {
-                if (p != null)
+                if (!AnimeInfos.IsReCalculatingItem)
                 {
                     ScrollViewer scr = MiscClass.FindVisualChild<ScrollViewer>(p as ListBox);
-                    return scr.VerticalOffset > scr.ScrollableHeight - 100 && !IsLoadOngoing && scr.ScrollableHeight != 0;
+                    if( scr.VerticalOffset > scr.ScrollableHeight - 100 && !IsLoadOngoing && scr.ScrollableHeight > 100)
+                        await LoadAnime(AnimeInfos.Count, 50, false);
                 }
-                else
-                {
-                    return false;
-                }
-            }, async (p) =>
-            {
-                await LoadAnime(AnimeInfos.Count, 50, false);
             });
             ShowAnimeDetailCommand = new RelayCommand<AnimeSeriesInfo>(null, async (p) =>
             {
@@ -260,8 +255,7 @@ namespace UniversalAnimeDownloader.ViewModels
                 await LoadAnime(0, 50);
             };
 
-            AnimeInfos = new DelayedObservableCollection<AnimeSeriesInfo>();
-            AnimeInfos.DelayInterval = TimeSpan.FromSeconds(0.1);
+            AnimeInfos = new ObservableWrapedCollection<AnimeSeriesInfo>(725, 210);
             Genres = new ObservableCollection<GenreItem>();
             Seasons = new ObservableCollection<SeasonItem>();
 
@@ -278,6 +272,8 @@ namespace UniversalAnimeDownloader.ViewModels
             AnimeCardPanel = appliedPanel;
 
             PageLoaded = new RelayCommand<object>(null, async p => { if (!(Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.IsOnlyLoadWhenHostShow) { await InitAnimeList(); } });
+
+            AnimeListSizeChangedCommand = new RelayCommand<ListBox>(null, p => AnimeInfos.ContainerWidth = p.ActualWidth);
         }
 
         private async Task InitAnimeList()
@@ -316,7 +312,7 @@ namespace UniversalAnimeDownloader.ViewModels
                         LoadAnimeCancelToken?.Cancel();
                         if (clearPreviousCard)
                         {
-                            AnimeInfos.RemoveAll();
+                            AnimeInfos.Clear();
                         }
 
                         LoadAnimeCancelToken = new CancellationTokenSource();
@@ -336,11 +332,11 @@ namespace UniversalAnimeDownloader.ViewModels
                         var animes = await Querier.GetAnime(offset, count, SearchAnime, strGenres, strSeason);
                         if (clearPreviousCard)
                         {
-                            AnimeInfos.RemoveAll();
+                            AnimeInfos.Clear();
                         }
                         try
                         {
-                            await AnimeInfos.AddRange(animes, currentToken);
+                            AnimeInfos.AddRangeAsync(animes);
                         }
                         catch { }
                     }
