@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace UniversalAnimeDownloader
     /// An ultility class support break a whole <see cref="ObservableCollection{T}"/> to the 2 dimensional one that fit to the container
     /// </summary>
     /// <typeparam name="T">The type of elements in the collection</typeparam>
-    public class ObservableWrapedCollection<T>
+    public class ObservableWrapedCollection<T> : IEnumerable<T>
     {
         #region Private Fields
         private List<T> _DefaultItems;
@@ -64,18 +65,6 @@ namespace UniversalAnimeDownloader
             }
         }
 
-        private async void ReCalculatingData(double value)
-        {
-            var widthDelta = value - UsableContainerWidth;
-            if (widthDelta < 0 || widthDelta >= _ItemsWidth)
-            {
-                _CalculatiingOperations++;
-                await AddRangeAsyncTask(ResetWrapCollection());
-                await Task.Delay(_ResetDelay);
-                _CalculatiingOperations--;
-            }
-        }
-
         /// <summary>
         /// The width of the items (usually Datatemplate Width) inside the ItemContainer
         /// </summary>
@@ -90,17 +79,7 @@ namespace UniversalAnimeDownloader
             }
         }
 
-        private async void ReCalculatingDataFromItemsWidth(double value)
-        {
-            var shouldBeUsedWidth = value * _ItemPerRow;
-            if (shouldBeUsedWidth > ContainerWidth || shouldBeUsedWidth <= ContainerWidth + value)
-            {
-                _CalculatiingOperations++;
-                await AddRangeAsyncTask(ResetWrapCollection());
-                await Task.Delay(_ResetDelay);
-                _CalculatiingOperations--;
-            }
-        }
+        
         #endregion
 
 
@@ -227,6 +206,35 @@ namespace UniversalAnimeDownloader
                 Data[(int)Math.Ceiling(index / (double)_ItemPerRow)][index % _ItemPerRow] = value;
             }
         }
+
+        private async void ReCalculatingData(double value)
+        {
+            var widthDelta = value - UsableContainerWidth;
+            if (widthDelta < 0 || widthDelta >= _ItemsWidth)
+            {
+                _CalculatiingOperations++;
+                await AddRangeAsyncTask(ResetWrapCollection());
+                await Task.Delay(_ResetDelay);
+                _CalculatiingOperations--;
+            }
+        }
+        private async void ReCalculatingDataFromItemsWidth(double value)
+        {
+            var shouldBeUsedWidth = value * _ItemPerRow;
+            if (shouldBeUsedWidth > ContainerWidth || shouldBeUsedWidth <= ContainerWidth + value)
+            {
+                _CalculatiingOperations++;
+                await AddRangeAsyncTask(ResetWrapCollection());
+                await Task.Delay(_ResetDelay);
+                _CalculatiingOperations--;
+            }
+        }
+        #endregion
+
+        #region IEnumberable<T> Members
+        public IEnumerator<T> GetEnumerator() => _DefaultItems.GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator() => _DefaultItems.GetEnumerator();
         #endregion
     }
 }

@@ -79,15 +79,24 @@
             ex:ListBoxExtensions.ScrollChangedCommand="{Binding AnimeListScrollingCommand}"
             ex:ListBoxExtensions.ScrollChangedCommandParameter="{Binding ElementName=animeList}"
             materialDesign:RippleAssist.IsDisabled="True"
-            ItemsPanel="{Binding AnimeCardPanel, Mode=OneWay}"
-            ItemsSource="{Binding SuggestedAnimeInfos, IsAsync=True}"
-            VirtualizingStackPanel.IsVirtualizing="True"
-            VirtualizingStackPanel.VirtualizationMode="Recycling">
+            ItemsSource="{Binding FeaturedAnimeInfos.Data, IsAsync=True}"
+            Style="{StaticResource AnimeCardPanel}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <page:AnimeItemCard AnimeCardCommand="{Binding DataContext.ShowAnimeDetailCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:FeaturedAnime}}}" />
+                    <ItemsControl Style="{StaticResource AnimeCardInternalPanel}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <page:AnimeItemCard AnimeCardCommand="{Binding DataContext.ShowAnimeDetailCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:FeaturedAnime}}}" />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
                 </DataTemplate>
             </ListBox.ItemTemplate>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SizeChanged">
+                    <i:InvokeCommandAction Command="{Binding AnimeListSizeChangedCommand, Mode=OneTime}" CommandParameter="{Binding ElementName=animeList}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
         </ListBox>
 
         <Grid x:Name="overlayContainer" Grid.Row="2">

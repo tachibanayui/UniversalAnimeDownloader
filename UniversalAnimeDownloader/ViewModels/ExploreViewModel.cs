@@ -107,11 +107,13 @@ namespace UniversalAnimeDownloader.ViewModels
             InitAnimeList();
         }
 
-        public void InitAnimeList()
+        public async void InitAnimeList()
         {
             //await LoadFeaturedAnime(0, 10);
-            var featureInfo = (Application.Current.FindResource("FeaturedAnimeViewModel") as FeaturedAnimeViewModel).SuggestedAnimeInfos;
-            featureInfo.CollectionReallyChanged += async (s, e) =>
+            var featuredVM = Application.Current.FindResource("FeaturedAnimeViewModel") as FeaturedAnimeViewModel;
+            if(featuredVM.FeaturedAnimeInfos.Count != 0)
+                await FeaturedAnimeList.AddRange(featuredVM.FeaturedAnimeInfos.Where((f, i) => i > 6 && i < 18).ToList(), LoadFeaturedAnimeCancelToken.Token);
+            featuredVM.LoadFeaturedAnimeCompleted += async (s, e) =>
             {
                 LoadFeaturedAnimeCancelToken?.Cancel();
                 LoadFeaturedAnimeCancelToken = new CancellationTokenSource();
@@ -121,21 +123,23 @@ namespace UniversalAnimeDownloader.ViewModels
                 {
                     for (int i = 0; i < 6; i++)
                     {
-                        CarouselAnimeList.Add(featureInfo[i]);
+                        CarouselAnimeList.Add(featuredVM.FeaturedAnimeInfos[i]);
                     }
-                    await FeaturedAnimeList.AddRange(featureInfo.Where((f, i) => i > 6 && i < 18).ToList(), LoadFeaturedAnimeCancelToken.Token);
+                    await FeaturedAnimeList.AddRange(featuredVM.FeaturedAnimeInfos.Where((f, i) => i > 6 && i < 18).ToList(), LoadFeaturedAnimeCancelToken.Token);
                 }
                 catch { }
             };
-            var suggestInfo = (Application.Current.FindResource("AnimeSuggestionViewModel") as AnimeSuggestionViewModel).SuggestedAnimeInfos;
-            suggestInfo.CollectionReallyChanged += async (s, e) =>
+            var suggestedVM = Application.Current.FindResource("AnimeSuggestionViewModel") as AnimeSuggestionViewModel;
+            if(suggestedVM.SuggestedAnimeInfos.Count != 0)
+                await SuggestedAnimeList.AddRange(suggestedVM.SuggestedAnimeInfos.Where((f, i) => i < 10).ToList(), LoadSuggestedAnimeCancelToken.Token);
+            suggestedVM.LoadSuggestedAnimeCompleted += async (s, e) =>
             {
                 LoadSuggestedAnimeCancelToken?.Cancel();
                 LoadSuggestedAnimeCancelToken = new CancellationTokenSource();
                 FeaturedAnimeList.RemoveAll();
                 try
                 {
-                    await SuggestedAnimeList.AddRange(suggestInfo.Where((f, i) => i < 10).ToList(), LoadSuggestedAnimeCancelToken.Token);
+                    await SuggestedAnimeList.AddRange(suggestedVM.SuggestedAnimeInfos.Where((f, i) => i < 10).ToList(), LoadSuggestedAnimeCancelToken.Token);
                 }
                 catch { }
             };

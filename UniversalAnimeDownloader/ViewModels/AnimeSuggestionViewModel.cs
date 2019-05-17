@@ -16,11 +16,12 @@ namespace UniversalAnimeDownloader.ViewModels
         public ICommand ShowAnimeDetailCommand { get; set; }
         public ICommand AnimeListScrollingCommand { get; set; }
         public ICommand PageLoaded { get; set; }
+        public ICommand AnimeListSizeChangedCommand { get; set; }
         // public ICommand OverlayNoInternetVisibility { get; set; }
         #endregion
 
         #region Properties
-        public DelayedObservableCollection<AnimeSeriesInfo> SuggestedAnimeInfos { get; set; } = new DelayedObservableCollection<AnimeSeriesInfo>();
+        public ObservableWrapedCollection<AnimeSeriesInfo> SuggestedAnimeInfos { get; set; } = new ObservableWrapedCollection<AnimeSeriesInfo>(725,210);
         public CancellationTokenSource LoadAnimeCancelToken { get; set; } = new CancellationTokenSource();
         public Random Rand { get; set; } = new Random();
         public bool IsLoadOngoing { get; private set; }
@@ -161,25 +162,23 @@ namespace UniversalAnimeDownloader.ViewModels
         {
             SelectedQueryModIndex = 0;
             RefreshCommand = new RelayCommand<object>(null, async (p) => await LoadSuggestedAnime(Rand.Next(1, 1000000), 50));
-            AnimeListScrollingCommand = new RelayCommand<object>(p =>
+            AnimeListScrollingCommand = new RelayCommand<object>(null, async (p) =>
             {
-                if (p != null)
+                if (!SuggestedAnimeInfos.IsReCalculatingItem)
                 {
                     ScrollViewer scr = MiscClass.FindVisualChild<ScrollViewer>(p as ListBox);
-                    return scr.VerticalOffset > scr.ScrollableHeight - 100 && !IsLoadOngoing && scr.ScrollableHeight != 0;
+                    if (scr.VerticalOffset > scr.ScrollableHeight - 100 && !IsLoadOngoing && scr.ScrollableHeight > 100)
+                        await LoadSuggestedAnime(Rand.Next(1, 1000000), 50, false);
+
                 }
-                else
-                {
-                    return false;
-                }
-            }, async (p) =>
-            {
-                await LoadSuggestedAnime(Rand.Next(1, 1000000), 50, false);
+
             });
+
             ShowAnimeDetailCommand = new RelayCommand<AnimeSeriesInfo>(null, async (p) =>
             {
                 if (p != null)
                 {
+                    var viewModel = Application.Current.FindResource("AnimeDetailsViewModel") as AnimeDetailsViewModel;
                     IAnimeSeriesManager manager = ApiHelpper.CreateAnimeSeriesManagerObjectByClassName(p.ModInfo.ModTypeString);
                     if (manager == null)
                     {
@@ -187,8 +186,11 @@ namespace UniversalAnimeDownloader.ViewModels
                         return;
                     }
                     manager.AttachedAnimeSeriesInfo = p;
-                    await manager.GetPrototypeEpisodes();
-                    (Application.Current.FindResource("AnimeDetailsViewModel") as AnimeDetailsViewModel).CurrentSeries = manager;
+
+                    if(await ApiHelpper.CheckForInternetConnection())
+                        await manager.GetPrototypeEpisodes();
+                        
+                    viewModel.CurrentSeries = manager;
                 }
             });
             PageLoaded = new RelayCommand<object>(null, async p =>
@@ -200,6 +202,8 @@ namespace UniversalAnimeDownloader.ViewModels
                     await InitAnimeList();
                 }
             });
+            AnimeListSizeChangedCommand = new RelayCommand<ListBox>(null, p => SuggestedAnimeInfos.ContainerWidth = p.ActualWidth);
+
 
             //When the setting is loaded, all viewmodels haven't loaded yet, the setting can't get the property to change, so we need to change here
             ItemsPanelTemplate appliedPanel = null;
@@ -221,7 +225,7 @@ namespace UniversalAnimeDownloader.ViewModels
             {
                 HideAllOverlay();
                 OverlayActiityIndicatorVisibility = Visibility.Visible;
-                await SuggestedAnimeInfos.AddRange(UserInterestMananger.Data.LastSuggestion, LoadAnimeCancelToken.Token);
+                await SuggestedAnimeInfos.AddRangeAsyncTask(UserInterestMananger.Data.LastSuggestion);
                 HideAllOverlay();
             }
             else
@@ -262,11 +266,12 @@ namespace UniversalAnimeDownloader.ViewModels
 
                         if (clearPreviousCard)
                         {
-                            SuggestedAnimeInfos.RemoveAll();
+                            SuggestedAnimeInfos.Clear();
                         }
                         try
                         {
-                            await SuggestedAnimeInfos.AddRange(animes, LoadAnimeCancelToken.Token);
+                            await SuggestedAnimeInfos.AddRangeAsyncTask(animes);
+                            OnLoadSuggestedAnimeCompleted();
                         }
                         catch { }
                     }
@@ -345,5 +350,8 @@ namespace UniversalAnimeDownloader.ViewModels
         public void OnHide()
         {
         }
+
+        public event EventHandler LoadSuggestedAnimeCompleted;
+        protected virtual void OnLoadSuggestedAnimeCompleted() => LoadSuggestedAnimeCompleted?.Invoke(this, EventArgs.Empty);
     }
 }

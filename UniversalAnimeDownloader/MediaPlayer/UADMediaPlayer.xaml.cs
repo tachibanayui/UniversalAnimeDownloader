@@ -162,7 +162,7 @@ namespace UniversalAnimeDownloader.MediaPlayer
                 ins.PlayIndex++;
         }
 
-        private static void OfflineUpdateMediaElementSource(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static async void OfflineUpdateMediaElementSource(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var ins = d as UADMediaPlayer;
             if ((int)e.NewValue == -1)
@@ -192,7 +192,13 @@ namespace UniversalAnimeDownloader.MediaPlayer
                 if (!string.IsNullOrEmpty(localThumbnailSrc))
                     ins.AnimeThumbnail = new BitmapImage(new Uri(localThumbnailSrc));
                 else
-                    ins.AnimeThumbnail = new BitmapImage(new Uri(episodeInfo.Thumbnail.Url));
+                {
+                    if (await ApiHelpper.CheckForInternetConnection())
+                        ins.AnimeThumbnail = new BitmapImage(new Uri(episodeInfo.Thumbnail.Url));
+                    else
+                        ins.AnimeThumbnail = new BitmapImage();
+                }
+
                 ins.Title = ins.Playlist.Name;
                 ins.SubbedTitle = episodeInfo.Name;
             }

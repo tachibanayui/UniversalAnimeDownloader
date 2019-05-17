@@ -95,6 +95,7 @@
                     HorizontalContentAlignment="Right"
                     VerticalContentAlignment="Stretch"
                     Command="{Binding OnlineVersionCommand}"
+                    IsEnabled="{Binding IsOnlineVersionBtnEnable}"
                     Style="{StaticResource MaterialDesignFlatButton}">
                     <Grid>
                         <Grid.ColumnDefinitions>

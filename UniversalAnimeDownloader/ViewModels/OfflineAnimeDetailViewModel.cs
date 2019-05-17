@@ -1,13 +1,8 @@
-﻿using System;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using UADAPI;
-using UniversalAnimeDownloader.UcContentPages;
 
 namespace UniversalAnimeDownloader.ViewModels
 {
@@ -39,6 +34,23 @@ namespace UniversalAnimeDownloader.ViewModels
                 }
             }
         }
+
+        private bool _IsOnlineVersionBtnEnable = true;
+        public bool IsOnlineVersionBtnEnable
+        {
+            get
+            {
+                return _IsOnlineVersionBtnEnable;
+            }
+            set
+            {
+                if (_IsOnlineVersionBtnEnable != value)
+                {
+                    _IsOnlineVersionBtnEnable = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
         #endregion
 
         private AnimeSourceControl SourceControl = null;
@@ -49,7 +61,10 @@ namespace UniversalAnimeDownloader.ViewModels
             MiscClass.UserSearched += (s, e) =>
             {
                 if (MiscClass.NavigationHelper.Current != 5)
+                {
                     return;
+                }
+
                 ICollectionView view = CollectionViewSource.GetDefaultView(_CurrentSeries.AttachedAnimeSeriesInfo.Episodes);
                 view.Filter = (p) =>
                 {
@@ -71,17 +86,17 @@ namespace UniversalAnimeDownloader.ViewModels
                 UADMediaPlayerHelper.Play(CurrentSeries.AttachedAnimeSeriesInfo, CurrentSeries.AttachedAnimeSeriesInfo.Episodes.FindIndex(pp => pp == p));
             });
 
-            OnlineVersionCommand = new RelayCommand<object>(null,async p =>
-            {
+            OnlineVersionCommand = new RelayCommand<object>(null, async p =>
+             {
                 //var online = await ApiHelpper.CreateQueryAnimeObjectByClassName(CurrentSeries.RelativeQueryInfo.ModTypeString).GetAnimeByID(CurrentSeries.AttachedAnimeSeriesInfo.AnimeID);
                 //var onlineManager = ApiHelpper.CreateAnimeSeriesManagerObjectByClassName(online.ModInfo.ModTypeString);
                 //onlineManager.AttachedAnimeSeriesInfo = online;
                 //await onlineManager.GetPrototypeEpisodes();
                 (Application.Current.FindResource("AnimeDetailsViewModel") as AnimeDetailsViewModel).CurrentSeries = CurrentSeries;
-                (Application.Current.FindResource("MainWindowViewModel") as MainWindowViewModel).NavigateProcess("AnimeDetails");
-            });
+                 (Application.Current.FindResource("MainWindowViewModel") as MainWindowViewModel).NavigateProcess("AnimeDetails");
+             });
 
-            DeleteEpisodeCommand = new RelayCommand<EpisodeInfo>(null, async p => 
+            DeleteEpisodeCommand = new RelayCommand<EpisodeInfo>(null, async p =>
             {
                 await SourceControl.DeleteEpisodes(p);
                 (Application.Current.FindResource("MyAnimeLibraryViewModel") as MyAnimeLibraryViewModel).ReloadAnimeCommand.Execute(false);

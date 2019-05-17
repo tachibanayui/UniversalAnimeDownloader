@@ -20,6 +20,7 @@ namespace UniversalAnimeDownloader.ViewModels
         public ICommand ReloadAnimeCommand { get; set; }
         public ICommand ShowAnimeDetailCommand { get; set; }
         public ICommand PageLoadedCommand { get; set; }
+        public ICommand AnimeListSizeChangedCommand { get; set; }
         #endregion
 
         #region Fields / Properties
@@ -27,7 +28,7 @@ namespace UniversalAnimeDownloader.ViewModels
         #endregion
 
 
-        public DelayedObservableCollection<AnimeSeriesInfo> AnimeLibrary { get; set; } = new DelayedObservableCollection<AnimeSeriesInfo>();
+        public ObservableWrapedCollection<AnimeSeriesInfo> AnimeLibrary { get; set; } = new ObservableWrapedCollection<AnimeSeriesInfo>(725,210);
         public List<AnimeSeriesInfo> NoDelayAnimeLib { get; } = new List<AnimeSeriesInfo>();
 
         private ItemsPanelTemplate _AnimeCardPanel = Application.Current.FindResource("WrapPanelItemPanel") as ItemsPanelTemplate;
@@ -80,7 +81,7 @@ namespace UniversalAnimeDownloader.ViewModels
             ReloadAnimeLibrary(false);
 
             ReloadAnimeCommand = new RelayCommand<object>(null, async p => await ReloadAnimeLibrary(false));
-            ShowAnimeDetailCommand = new RelayCommand<AnimeSeriesInfo>(null, p =>
+            ShowAnimeDetailCommand = new RelayCommand<AnimeSeriesInfo>(null, async p =>
             {
                 MiscClass.NavigationHelper.AddNavigationHistory(5);
                 IAnimeSeriesManager manager = ApiHelpper.CreateAnimeSeriesManagerObjectByClassName(p.ModInfo.ModTypeString);
@@ -90,13 +91,17 @@ namespace UniversalAnimeDownloader.ViewModels
                     return;
                 }
                 manager.AttachedAnimeSeriesInfo = p;
-                (Application.Current.FindResource("OfflineAnimeDetailViewModel") as OfflineAnimeDetailViewModel).CurrentSeries = manager;
+                var viewModel = Application.Current.FindResource("OfflineAnimeDetailViewModel") as OfflineAnimeDetailViewModel;
+                viewModel.CurrentSeries = manager;
+                viewModel.IsOnlineVersionBtnEnable = await ApiHelpper.CheckForInternetConnection();
             });
             PageLoadedCommand = new RelayCommand<object>(null, p =>
             {
                 if (ApiHelpper.QueryTypes.Count == 0 || ApiHelpper.ManagerTypes.Count == 0)
                     OverlayNoModVisibility = Visibility.Visible;
             });
+            AnimeListSizeChangedCommand = new RelayCommand<ListBox>(null, p => AnimeLibrary.ContainerWidth = p.ActualWidth);
+
 
             //When the setting is loaded, all viewmodels haven't loaded yet, the setting can't get the property to change, so we need to change here
             ItemsPanelTemplate appliedPanel = null;
@@ -144,7 +149,7 @@ namespace UniversalAnimeDownloader.ViewModels
                     }
                     else
                     {
-                        await AnimeLibrary.AddAndWait(info);
+                        await AnimeLibrary.AddAsyncTask(info);
                     }
                 }
             }

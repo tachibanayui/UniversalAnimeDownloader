@@ -84,20 +84,29 @@
             Grid.Row="2"
             ex:ListBoxExtensions.ScrollChangedCommand="{Binding AnimeListScrollingCommand}"
             ex:ListBoxExtensions.ScrollChangedCommandParameter="{Binding ElementName=animeList}"
-            materialDesign:RippleAssist.IsDisabled="True"
             ItemsPanel="{Binding AnimeCardPanel, Mode=OneWay}"
-            ItemsSource="{Binding SuggestedAnimeInfos, IsAsync=True}"
-            VirtualizingStackPanel.IsVirtualizing="True"
-            VirtualizingStackPanel.VirtualizationMode="Recycling">
+            ItemsSource="{Binding SuggestedAnimeInfos.Data, IsAsync=True, Mode=OneWay}"
+            Style="{StaticResource AnimeCardPanel}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <page:AnimeItemCard AnimeCardCommand="{Binding DataContext.ShowAnimeDetailCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:AnimeSuggestion}}}" SecondAnimeCardCommand="{x:Static materialDesign:Transitioner.MovePreviousCommand}" />
+                    <ItemsControl Style="{StaticResource AnimeCardInternalPanel}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <page:AnimeItemCard AnimeCardCommand="{Binding DataContext.ShowAnimeDetailCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:AnimeSuggestion}}}" SecondAnimeCardCommand="{x:Static materialDesign:Transitioner.MovePreviousCommand}" />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
                 </DataTemplate>
             </ListBox.ItemTemplate>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SizeChanged">
+                    <i:InvokeCommandAction Command="{Binding AnimeListSizeChangedCommand, Mode=OneTime}" CommandParameter="{Binding ElementName=animeList}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
         </ListBox>
 
         <Grid x:Name="overlayContainer" Grid.Row="2">
-            <page:NoInternetConnectionOverlay ReloadButtonCommand="{Binding RefreshCommand}" Visibility="{Binding OverlayNoInternetVisibility, IsAsync=True, FallbackValue=Collapsed}" />
+            <page:NoInternetConnectionOverlay ReloadButtonCommand="{Binding RefreshCommand, Mode=OneTime}" Visibility="{Binding OverlayNoInternetVisibility, IsAsync=True, FallbackValue=Collapsed}" />
             <page:ErrorOccuredOverlay ErrorInfo="{Binding CurrentException}" Visibility="{Binding OverlayErrorOccuredVisibility, IsAsync=True, FallbackValue=Collapsed}" />
             <page:ActivityIndicator Visibility="{Binding OverlayActiityIndicatorVisibility, IsAsync=True, FallbackValue=Collapsed}" />
             <page:NoModInstalledOverlay Visibility="{Binding OverlayNoModVisibility, IsAsync=True, FallbackValue=Collapsed}" />

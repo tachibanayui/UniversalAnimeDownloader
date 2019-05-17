@@ -59,12 +59,12 @@ namespace UniversalAnimeDownloader.CustomControls
                                 fs.CopyTo(memStream);
                                 fs.Close();
                             }
-                            else if (!string.IsNullOrEmpty(info.Url))
+                            else if (!string.IsNullOrEmpty(info.Url) && await ApiHelpper.CheckForInternetConnection())
                             {
                                 memStream = (await AnimeInformationRequester.GetStreamAsync(info.Url, info.Headers)) as MemoryStream;
                             }
                         }
-                        else if (!string.IsNullOrEmpty(info.Url))
+                        else if (!string.IsNullOrEmpty(info.Url) && await ApiHelpper.CheckForInternetConnection())
                         {
                             memStream = (await AnimeInformationRequester.GetStreamAsync(info.Url, info.Headers)) as MemoryStream;
                         }
