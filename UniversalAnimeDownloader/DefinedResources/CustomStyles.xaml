@@ -8,7 +8,43 @@
     xmlns:local="clr-namespace:UniversalAnimeDownloader.DefinedResources"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:vwp="clr-namespace:WpfToolkit.Controls;assembly=VirtualizingWrapPanel">
-    
+    <Style x:Key="DisableSelectionListbox" TargetType="{x:Type ListBoxItem}">
+        <Setter Property="Background" Value="{DynamicResource WhiteBrush}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+        <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, FallbackValue=Stretch, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type ItemsControl}}}" />
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="MinHeight" Value="25" />
+        <Setter Property="Padding" Value="5,0,0,0" />
+        <Setter Property="RenderOptions.ClearTypeHint" Value="{Binding (RenderOptions.ClearTypeHint), FallbackValue=Auto, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type ItemsControl}}}" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                    <Grid Background="{TemplateBinding Background}" RenderOptions.ClearTypeHint="{TemplateBinding RenderOptions.ClearTypeHint}">
+                        <Border
+                            x:Name="Border"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        <Grid Margin="{TemplateBinding BorderThickness}">
+                            <ContentPresenter
+                                Margin="{TemplateBinding Padding}"
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                Content="{TemplateBinding Content}"
+                                ContentStringFormat="{TemplateBinding ContentStringFormat}"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        </Grid>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, FallbackValue=Center, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type ItemsControl}}}" />
+    </Style>
+
     <Style
         x:Key="MaterialDesignActionFlatButton"
         BasedOn="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"

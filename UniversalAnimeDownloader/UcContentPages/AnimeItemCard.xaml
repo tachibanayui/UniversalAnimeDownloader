@@ -84,7 +84,7 @@
                 ShadowDepth="2"
                 Color="#626262" />
         </materialDesign:Card.Effect>
-        <materialDesign:Card.ToolTip>
+        <!--<materialDesign:Card.ToolTip>
             <ToolTip
                 Background="Transparent"
                 ToolTipService.BetweenShowDelay="1500"
@@ -137,7 +137,7 @@
                     </Grid>
                 </materialDesign:Card>
             </ToolTip>
-        </materialDesign:Card.ToolTip>
+        </materialDesign:Card.ToolTip>-->
         <Button Command="{Binding ElementName=cardHost, Path=SecondAnimeCardCommand}" CommandParameter="{Binding}">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="Click">

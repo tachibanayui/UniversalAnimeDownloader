@@ -260,6 +260,7 @@
             </Rectangle>
 
             <ScrollViewer
+                x:Name="srvNavBar"
                 Grid.Row="1"
                 Width="65"
                 HorizontalAlignment="Left"

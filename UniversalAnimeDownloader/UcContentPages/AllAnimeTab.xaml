@@ -92,6 +92,7 @@
             ex:ListBoxExtensions.ScrollChangedCommand="{Binding AnimeListScrollingCommand, Mode=OneTime}"
             ex:ListBoxExtensions.ScrollChangedCommandParameter="{Binding ElementName=animeList}"
             materialDesign:RippleAssist.IsDisabled="True"
+            ItemContainerStyle="{StaticResource DisableSelectionListbox}"
             ItemsPanel="{Binding AnimeCardPanel, Mode=OneWay}"
             ItemsSource="{Binding AnimeInfos, IsAsync=True, Mode=OneWay}"
             VirtualizingStackPanel.IsVirtualizing="True"

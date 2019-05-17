@@ -754,7 +754,7 @@ namespace UniversalAnimeDownloader.ViewModels
             await Task.Delay(1000);
             LoadingStatus = "Checking for updates...";
 
-            if (ApiHelpper.CheckForUpdates())
+            if (await ApiHelpper.CheckForUpdateAsyncTask())
             {
                 IsNewUpdatesDialogOpen = true;
                 UpdateDescription = ApiHelpper.NewestVersionInfo?.body;
@@ -934,8 +934,8 @@ namespace UniversalAnimeDownloader.ViewModels
         {
             if (p != null)
             {
-                ScrollViewer scroll = (p.Content as Grid).Children[3] as ScrollViewer;
-                Rectangle fadeOverlay = (p.Content as Grid).Children[2] as Rectangle;
+                ScrollViewer scroll = p.FindName("srvNavBar") as ScrollViewer;
+                Rectangle fadeOverlay = p.FindName("recBlackOverlay") as Rectangle;
 
                 DoubleAnimation transitionAnim = new DoubleAnimation(scroll.Width, 255, TimeSpan.FromSeconds(0.5)) { DecelerationRatio = 0.1, EasingFunction = new BackEase() { EasingMode = EasingMode.EaseOut } };
 

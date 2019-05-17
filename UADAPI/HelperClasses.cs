@@ -345,6 +345,12 @@ namespace UADAPI
         }
 
         /// <summary>
+        /// Check for updates on Github as async operation
+        /// </summary>
+        /// <returns></returns>
+        public static async Task<bool> CheckForUpdateAsyncTask() => await Task.Run(() => CheckForUpdates());
+
+        /// <summary>
         /// Return true if the v1 is greater than v2
         /// </summary>
         /// <param name="tag_name"></param>
