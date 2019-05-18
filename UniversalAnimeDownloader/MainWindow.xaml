@@ -274,7 +274,7 @@
                                 <Setter Property="Height" Value="75" />
                                 <Setter Property="Background" Value="Transparent" />
                                 <Setter Property="HorizontalContentAlignment" Value="Left" />
-                                <Setter Property="EnableAnimation" Value="True" />
+                                <Setter Property="EnableAnimation" Value="{Binding SettingsData.DisableAnimation, Mode=OneWay, Converter={StaticResource InvertedBoolConverter}}" />
                                 <Setter Property="ButtonCommand" Value="{Binding NavigateCommand}" />
                                 <Setter Property="CurrentTabIndex" Value="{Binding TransisionerIndex}" />
                             </Style>

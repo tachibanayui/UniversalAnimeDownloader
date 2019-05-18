@@ -401,6 +401,23 @@ namespace UniversalAnimeDownloader.ViewModels
             }
         }
 
+        private UADSettingsData _SettingsData;
+        public UADSettingsData SettingsData
+        {
+            get
+            {
+                return _SettingsData;
+            }
+            set
+            {
+                if (_SettingsData != value)
+                {
+                    _SettingsData = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         private void AnimateNowPlayingPopupOpen(Popup popup, bool isOpen)
         {
             Storyboard stb = new Storyboard();
@@ -555,19 +572,18 @@ namespace UniversalAnimeDownloader.ViewModels
 
         public MainWindowViewModel()
         {
-            string notificationString = (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.Notification;
+            SettingsData = (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings;
+            string notificationString = SettingsData.Notification;
             NotificationManager.Deserialize(notificationString);
-            string downloadString = (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.Download;
+            string downloadString = SettingsData.Download;
             DownloadManager.Deserialize(downloadString);
-            DownloadManager.Instances.CollectionChanged += (s, e) => (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.Download = DownloadManager.Serialize();
-            NotificationManager.ItemRemoved += (s, e) => (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.Notification = NotificationManager.Serialize();
+            DownloadManager.Instances.CollectionChanged += (s, e) => SettingsData.Download = DownloadManager.Serialize();
+            NotificationManager.ItemRemoved += (s, e) => SettingsData.Notification = NotificationManager.Serialize();
             NotificationManager.ItemAdded += (s, e) =>
             {
                 NotifycationBadgeCount++;
-                try { (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.Notification = NotificationManager.Serialize(); } catch { }
+                try { SettingsData.Notification = NotificationManager.Serialize(); } catch { }
             };
-
-            //NotificationManager.Add(new NotificationItem() { Title = "Test notification", Detail = "This is a test notification!", ShowActionButton = true, ActionButtonContent = "Click here!", ButtonAction = new Action(() => { MessageBox.Show("Test"); }) });
 
             CloseWindowCommand = new RelayCommand<object>(null, p => Application.Current.Shutdown());
             ChangeWindowStateCommand = new RelayCommand<Button>(null, p =>
@@ -624,7 +640,7 @@ namespace UniversalAnimeDownloader.ViewModels
 
                 (Pages[0].DataContext as IPageContent).OnShow();
                 CheckForAnimeSeriesUpdate();
-                if ((Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.IsLoadPageInBackground)
+                if (SettingsData.IsLoadPageInBackground)
                 {
                     await Task.Delay(5000);
                     await LoadPagesToMemory(true);
@@ -733,9 +749,9 @@ namespace UniversalAnimeDownloader.ViewModels
                 view.Refresh();
             });
             CloseUniversalAnimeDownloader = new RelayCommand<object>(null, p => Application.Current.Shutdown(0));
-            OpenUADInstaller = new RelayCommand<object>(null, p => 
+            OpenUADInstaller = new RelayCommand<object>(null, p =>
             {
-                var file = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Maintance",  "UADInstallerLoc.txt");
+                var file = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Maintance", "UADInstallerLoc.txt");
 
                 if (File.Exists(file))
                 {
