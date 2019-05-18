@@ -43,7 +43,7 @@ namespace UADAPI
                 throw new ArgumentNullException("Episodes list is null!");
             }
 
-            DownloadInstance ins = new DownloadInstance() { AttachedManager = manager, EpisodeId = episodeId, PreferedQuality = (VideoQuality)Enum.Parse(typeof(VideoQuality), "Quality" + quality) };
+            DownloadInstance ins = new DownloadInstance() { AttachedManager = manager, EpisodeId = episodeId, PreferedQuality = VideoQualityHelper.GetEnumFromString(quality) };
 
             for (int i = Instances.Count - 1; i >= 0; i--)
             {

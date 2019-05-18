@@ -413,9 +413,10 @@ namespace UADAPI
     {
         Quality144p = 0,
         Quality240p = 1,
-        Quality480p = 2,
-        Quality720p = 3,
-        Quality1080p = 4,
-        Quality2160p = 5
+        Quality360p = 2,
+        Quality480p = 3,
+        Quality720p = 4,
+        Quality1080p = 5,
+        Quality2160p = 6
     }
 }
