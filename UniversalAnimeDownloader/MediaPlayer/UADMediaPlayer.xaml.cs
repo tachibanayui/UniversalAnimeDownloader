@@ -142,7 +142,7 @@ namespace UniversalAnimeDownloader.MediaPlayer
             var currentEpisode = ins.Playlist.Episodes[(int)e.NewValue];
 
             //if the IAnimeSeriesManager.GetEpisode() is not call yet
-            if (currentEpisode.FilmSources == null)
+            if (currentEpisode.FilmSources == null || currentEpisode.FilmSources.Count == 0)
             {
                 var manager = ApiHelpper.CreateAnimeSeriesManagerObjectByClassName(ins.Playlist.ModInfo.ModTypeString);
                 manager.AttachedAnimeSeriesInfo = ins.Playlist;
@@ -150,7 +150,7 @@ namespace UniversalAnimeDownloader.MediaPlayer
             }
             if (currentEpisode.FilmSources.Count != 0)
             {
-                ins.VideoUri = new Uri(currentEpisode.FilmSources.Last().Value.Url.Replace("https", "http"));
+                ins.VideoUri = new Uri(currentEpisode.FilmSources.First().Value.Url.Replace("https", "http"));
                 var episodeInfo = ins.Playlist.Episodes[(int)e.NewValue];
 
                 ins.AnimeThumbnail = new BitmapImage(new Uri(episodeInfo.Thumbnail.Url));
@@ -185,7 +185,7 @@ namespace UniversalAnimeDownloader.MediaPlayer
             var source = ins.Playlist.Episodes[(int)e.NewValue].FilmSources.Where(p => !string.IsNullOrEmpty(p.Value.LocalFile));
             if (source.Count() != 0)
             {
-                ins.VideoUri = new Uri(source.Last().Value.LocalFile);
+                ins.VideoUri = new Uri(source.First().Value.LocalFile);
                 var episodeInfo = ins.Playlist.Episodes[(int)e.NewValue];
 
                 string localThumbnailSrc = episodeInfo.Thumbnail.LocalFile;
@@ -203,7 +203,12 @@ namespace UniversalAnimeDownloader.MediaPlayer
                 ins.SubbedTitle = episodeInfo.Name;
             }
             else
-                ins.Next();
+            {
+                //ins.Next();
+
+                ins.NoPlayableMedia = true;
+                return;
+            }
         }
 
         public AnimeSeriesInfo Playlist

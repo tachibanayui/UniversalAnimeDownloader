@@ -25,7 +25,7 @@ namespace UADAPI
         //For serializer
         public AnimeSeriesInfo Info { get; set; }
         public List<int> EpisodeId { get; set; }
-        public string PreferedQuality { get; set; }
+        public VideoQuality PreferedQuality { get; set; }
         public List<EpisodeInfo> EpisodeToDownload { get; private set; } = new List<EpisodeInfo>();
         private bool IsCompletedDownloading { get; set; } = false;
         [JsonIgnore]
@@ -428,9 +428,9 @@ namespace UADAPI
             }
         }
 
-        private async Task<MediaSourceInfo> GetSource(Dictionary<string, MediaSourceInfo> filmSources, string preferedQuality)
+        private async Task<MediaSourceInfo> GetSource(Dictionary<VideoQuality, MediaSourceInfo> filmSources, VideoQuality preferedQuality)
         {
-            int index = DownloadManager.PresetQuality.IndexOf(preferedQuality);
+            int index = VideoQualityHelper.GetValue(preferedQuality);
             if (index < 0)
             {
                 return null;
@@ -438,7 +438,7 @@ namespace UADAPI
 
             for (int i = index; i >= 0; i--)
             {
-                var result = await AttachedManager.GetCommonQuality(filmSources, DownloadManager.PresetQuality[i]);
+                var result = await AttachedManager.GetCommonQuality(filmSources, VideoQualityHelper.GetQualityStringFromValue(index));
                 if (result != null)
                 {
                     return result;

@@ -181,7 +181,7 @@ namespace UADAPI
         {
             var instance = sender as DownloadInstance;
             string episodeName = instance.AttachedManager.AttachedAnimeSeriesInfo.Name;
-            string quality = instance.PreferedQuality;
+            string quality = VideoQualityHelper.GetQualityStringFromEnum(instance.PreferedQuality);
             int epCount = instance.EpisodeToDownload.Count;
             int epAllCount = instance.AttachedManager.AttachedAnimeSeriesInfo.Episodes.Count;
             var nof = new NotificationItem()

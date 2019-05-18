@@ -18,13 +18,6 @@ namespace UADAPI
         /// </summary>
         public static ObservableCollection<DownloadInstance> Instances { get; private set; } = new ObservableCollection<DownloadInstance>();
 
-        private static List<string> _PresetQuality { get; set; } = new List<string>
-        {
-           "Worse possible", "144p", "288p", "360p", "480p", "720p", "1080p", "1440p", "2160p", "Best possible",
-        };
-
-        public static ReadOnlyCollection<string> PresetQuality { get => _PresetQuality.AsReadOnly(); }
-
         /// <summary>
         /// Number of segment to download
         /// </summary>
@@ -50,7 +43,7 @@ namespace UADAPI
                 throw new ArgumentNullException("Episodes list is null!");
             }
 
-            DownloadInstance ins = new DownloadInstance() { AttachedManager = manager, EpisodeId = episodeId, PreferedQuality = quality };
+            DownloadInstance ins = new DownloadInstance() { AttachedManager = manager, EpisodeId = episodeId, PreferedQuality = (VideoQuality)Enum.Parse(typeof(VideoQuality), "Quality" + quality) };
 
             for (int i = Instances.Count - 1; i >= 0; i--)
             {

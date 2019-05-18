@@ -166,6 +166,8 @@ namespace UniversalAnimeDownloader.ViewModels
                     if (manager == null)
                     {
                         OverlayNoModVisibility = Visibility.Visible;
+                        //Navigate back 
+                        (Application.Current.FindResource("MainWindowViewModel") as MainWindowViewModel).NavigateProcess("AnimeSuggestion");
                         return;
                     }
                     manager.AttachedAnimeSeriesInfo = p;
@@ -178,6 +180,11 @@ namespace UniversalAnimeDownloader.ViewModels
             });
             PageLoaded = new RelayCommand<object>(null, async p =>
             {
+                if(ApiHelpper.QueryTypes.Count == 0)
+                {
+                    OverlayNoModVisibility = Visibility.Visible;
+                    return;
+                }
                 string userInterestString = (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.UserInterest;
                 await UserInterestMananger.Deserialize(userInterestString); // 16 ms
                 if (!(Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.IsOnlyLoadWhenHostShow)

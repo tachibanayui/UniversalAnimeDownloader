@@ -124,13 +124,13 @@ namespace UADAPI
         /// Get all the quality of this anime series
         /// </summary>
         /// <returns></returns>
-        Task<List<string>> GetQualities();
+        Task<List<VideoQuality>> GetQualities();
 
         /// <summary>
         /// Get the stardrandize quaility for example "m480p" => "480p" or "something720xyzp" => "720p".
         /// </summary>
         /// <returns> Object represent the source with the specified quality. Return null if no filmSources is suitable</returns>
-        Task<MediaSourceInfo> GetCommonQuality(Dictionary<string, MediaSourceInfo> filmSources, string requestedQuality);
+        Task<MediaSourceInfo> GetCommonQuality(Dictionary<VideoQuality, MediaSourceInfo> filmSources, string requestedQuality);
     }
 
 

@@ -98,7 +98,7 @@ namespace UADAPI
         /// <summary>
         /// The video source of this episode. string will represent the quality
         /// </summary>
-        public Dictionary<string, MediaSourceInfo> FilmSources { get; set; }
+        public Dictionary<VideoQuality, MediaSourceInfo> FilmSources { get; set; }
 
         /// <summary>
         /// This will tell the state of the download, mostly for downloader to report.
@@ -407,5 +407,15 @@ namespace UADAPI
                 }
             }
         }
+    }
+
+    public enum VideoQuality
+    {
+        Quality144p = 0,
+        Quality240p = 1,
+        Quality480p = 2,
+        Quality720p = 3,
+        Quality1080p = 4,
+        Quality2160p = 5
     }
 }
