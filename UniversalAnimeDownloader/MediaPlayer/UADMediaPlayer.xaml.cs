@@ -148,18 +148,18 @@ namespace UniversalAnimeDownloader.MediaPlayer
                 manager.AttachedAnimeSeriesInfo = ins.Playlist;
                 await manager.GetEpisodes(new List<int> { currentEpisode.EpisodeID });
             }
-            if (currentEpisode.FilmSources.Count != 0)
+            //Add video quality
+            ins.VM.VideoQuality.Clear();
+            foreach (var item in currentEpisode.FilmSources)
             {
-                ins.VideoUri = new Uri(currentEpisode.FilmSources.First().Value.Url.Replace("https", "http"));
-                var episodeInfo = ins.Playlist.Episodes[(int)e.NewValue];
-
-                ins.AnimeThumbnail = new BitmapImage(new Uri(episodeInfo.Thumbnail.Url));
-
-                ins.Title = ins.Playlist.Name;
-                ins.SubbedTitle = episodeInfo.Name;
+                ins.VM.VideoQuality.Add(item);
             }
-            else
-                ins.PlayIndex++;
+            (ins.popupQuality.PopupContent as ListBox).SelectedIndex = 0;
+
+            var episodeInfo = ins.Playlist.Episodes[(int)e.NewValue];
+            ins.AnimeThumbnail = new BitmapImage(new Uri(episodeInfo.Thumbnail.Url));
+            ins.Title = ins.Playlist.Name;
+            ins.SubbedTitle = episodeInfo.Name;
         }
 
         private static async void OfflineUpdateMediaElementSource(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -364,10 +364,14 @@ namespace UniversalAnimeDownloader.MediaPlayer
             set { SetValue(IsPlayOnlineProperty, value); }
         }
         public static readonly DependencyProperty IsPlayOnlineProperty =
-            DependencyProperty.Register("IsPlayOnline", typeof(bool), typeof(UADMediaPlayer), new PropertyMetadata(false));
+            DependencyProperty.Register("IsPlayOnline", typeof(bool), typeof(UADMediaPlayer), new PropertyMetadata(false, PlayOnlinePropertyChanged));
 
+        private static void PlayOnlinePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var ins = d as UADMediaPlayer;
 
-
+            ins.popupQuality.Visibility = (bool)e.NewValue ? Visibility.Visible : Visibility.Hidden;
+        }
 
         public UADMediaPlayer()
         {
@@ -1085,6 +1089,21 @@ namespace UniversalAnimeDownloader.MediaPlayer
             PlayIndex = -1;
             Playlist = null;
             GC.Collect();
+        }
+
+        private void Event_QualityChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var listBox = sender as ListBox;
+            var selectedQuality = ((KeyValuePair<VideoQuality, MediaSourceInfo>)listBox.SelectedItem).Key;
+            var currentEpisode = Playlist.Episodes[PlayIndex];
+
+            if (currentEpisode.FilmSources.Count != 0)
+            {
+                // When the video uri changes the VideoPlayerPostion to 0. So we store the position before changes and set them back later
+                var previousTime = mediaPlayer.Position;
+                VideoUri = new Uri(currentEpisode.FilmSources[selectedQuality].Url.Replace("https", "http"));
+                mediaPlayer.Position = previousTime;
+            }
         }
     }
 }

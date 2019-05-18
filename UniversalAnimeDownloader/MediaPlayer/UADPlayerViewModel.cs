@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Ink;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using UADAPI;
 using UniversalAnimeDownloader.UADSettingsPortal;
 using UniversalAnimeDownloader.ViewModels;
 
@@ -277,5 +280,7 @@ namespace UniversalAnimeDownloader.MediaPlayer
             OnPropertyChanged("BlockerImageSource");
             OnPropertyChanged("BlockerStretchMode");
         }
+
+        public ObservableCollection<KeyValuePair<VideoQuality, MediaSourceInfo>> VideoQuality { get; set; } = new ObservableCollection<KeyValuePair<VideoQuality, MediaSourceInfo>>();
     }
 }

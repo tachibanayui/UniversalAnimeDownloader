@@ -254,6 +254,7 @@
     <Compile Include="ValueConverters\StringToPlayerTypeConverter.cs" />
     <Compile Include="ValueConverters\TypeToStringConverter.cs" />
     <Compile Include="ValueConverters\UADDownloaderStateToIconKindConverter.cs" />
+    <Compile Include="ValueConverters\VideoQualityToStringConverter.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\AllAnimeTabViewModel.cs" />
     <Compile Include="ViewModels\AnimeDetailsViewModel.cs" />

@@ -432,6 +432,26 @@
                             Margin="0,0,25,0"
                             HorizontalAlignment="Right"
                             Orientation="Horizontal">
+                            <materialDesign:PopupBox
+                                x:Name="popupQuality"
+                                Width="50"
+                                PlacementMode="TopAndAlignCentres"
+                                Visibility="Hidden">
+                                <materialDesign:PopupBox.ToggleContent>
+                                    <materialDesign:PackIcon Foreground="{DynamicResource MaterialDesignBody}" Kind="Settings" />
+                                </materialDesign:PopupBox.ToggleContent>
+                                <ListBox
+                                    MinWidth="250"
+                                    ItemsSource="{Binding VideoQuality}"
+                                    SelectionChanged="Event_QualityChanged"
+                                    SelectionMode="Single">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Key, Converter={StaticResource VideoQualityToStringConverter}}" />
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </materialDesign:PopupBox>
                             <Button
                                 x:Name="btnFullScreenToggle"
                                 Click="ChangeWindowState"
