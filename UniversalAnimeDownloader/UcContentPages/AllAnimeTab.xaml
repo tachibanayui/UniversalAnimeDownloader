@@ -61,6 +61,7 @@
                         materialDesign:HintAssist.Hint="Query Mod:"
                         ItemsSource="{x:Static uadapi:ApiHelpper.QueryTypes}"
                         SelectedIndex="{Binding SelectedQueryModIndex}"
+                        DisplayMemberPath="Name"
                         Style="{StaticResource floatingHintCbx}" />
 
                     <ComboBox
