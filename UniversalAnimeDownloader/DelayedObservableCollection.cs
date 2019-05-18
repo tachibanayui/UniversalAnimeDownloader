@@ -23,7 +23,7 @@ namespace UniversalAnimeDownloader
 
         public async Task AddRange(IList<T> items, CancellationToken token)
         {
-            for(int i = 0; i < items.Count; i++)
+            for (int i = 0; i < items.Count; i++)
             {
                 if (token.IsCancellationRequested)
                     return;

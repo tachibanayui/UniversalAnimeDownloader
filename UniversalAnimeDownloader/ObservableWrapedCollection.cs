@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Data;
+using System.Windows.Threading;
 
 namespace UniversalAnimeDownloader
 {
@@ -19,7 +21,6 @@ namespace UniversalAnimeDownloader
         private int _ItemPerRow;
         private int _CurrentRowNumber;
         private int _LastRowCount;
-        private object _LockObject;
         private int _CalculatiingOperations;
         private const int _ResetDelay = 200;
         #endregion
@@ -50,6 +51,8 @@ namespace UniversalAnimeDownloader
         public bool IsReCalculatingItem { get => _CalculatiingOperations != 0; }
 
         public int Count { get => _DefaultItems.Count; }
+
+        public Dispatcher DispatcherThread { get; set; }
 
         /// <summary>
         /// The width of the ItemsControl (ListView, ListBox,...) which contains the data items
@@ -91,12 +94,22 @@ namespace UniversalAnimeDownloader
         /// <param name="itemsWidth">The width of the items (usually Datatemplate Width) inside the ItemContainer</param>
         public ObservableWrapedCollection(double containerWidth, double itemsWidth)
         {
-            _LockObject = new object();
-            BindingOperations.EnableCollectionSynchronization(Data, _LockObject);
+            SharedCtorMethod(containerWidth, itemsWidth);
+            DispatcherThread = Application.Current.Dispatcher;
+        }
+
+        private void SharedCtorMethod(double containerWidth, double itemsWidth)
+        {
             _ContainerWidth = containerWidth;
             _ItemsWidth = itemsWidth;
             _CalculatiingOperations = 0;
             ResetWrapCollection();
+        }
+
+        public ObservableWrapedCollection(double containerWidth, double itemsWidth, Dispatcher dispatcher)
+        {
+            SharedCtorMethod(containerWidth, itemsWidth);
+            DispatcherThread = dispatcher;
         }
 
         /// <summary>
@@ -107,23 +120,20 @@ namespace UniversalAnimeDownloader
         {
             if (_LastRowCount < _ItemPerRow)
             {
-                lock (_LockObject)
-                {
-                    Data[_CurrentRowNumber].Add(item);
-                }
-
+                DispatcherThread.BeginInvoke( DispatcherPriority.ApplicationIdle, (Action)(() => 
+                    Data[_CurrentRowNumber].Add(item)));
                 _LastRowCount++;
             }
             else
             {
                 var newCol = new ObservableCollection<T>();
-                BindingOperations.EnableCollectionSynchronization(newCol, _LockObject);
-                lock (_LockObject)
+                DispatcherThread.BeginInvoke(DispatcherPriority.ApplicationIdle, (Action)(() =>
                 {
                     Data.Add(newCol);
                     _CurrentRowNumber++;
                     Data[_CurrentRowNumber].Add(item);
-                }
+                }));
+
                 _LastRowCount = 1;
             }
 
@@ -189,7 +199,6 @@ namespace UniversalAnimeDownloader
             _DefaultItems.Clear();
             Data.Clear();
             var newCol = new ObservableCollection<T>();
-            BindingOperations.EnableCollectionSynchronization(newCol, _LockObject);
             Data.Add(newCol);
             return res.ToList();
         }
@@ -201,10 +210,8 @@ namespace UniversalAnimeDownloader
         /// <param name="index">The index of the element will be assigned</param>
         private void UpdateWrapView(T value, int index)
         {
-            lock (_LockObject)
-            {
-                Data[(int)Math.Ceiling(index / (double)_ItemPerRow)][index % _ItemPerRow] = value;
-            }
+            DispatcherThread.BeginInvoke(DispatcherPriority.ApplicationIdle, (Action)(() => 
+                Data[(int)Math.Ceiling(index / (double)_ItemPerRow)][index % _ItemPerRow] = value));
         }
 
         private async void ReCalculatingData(double value)

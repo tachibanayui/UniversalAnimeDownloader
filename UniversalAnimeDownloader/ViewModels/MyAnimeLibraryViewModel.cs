@@ -31,23 +31,6 @@ namespace UniversalAnimeDownloader.ViewModels
         public ObservableWrapedCollection<AnimeSeriesInfo> AnimeLibrary { get; set; } = new ObservableWrapedCollection<AnimeSeriesInfo>(725,210);
         public List<AnimeSeriesInfo> NoDelayAnimeLib { get; } = new List<AnimeSeriesInfo>();
 
-        private ItemsPanelTemplate _AnimeCardPanel = Application.Current.FindResource("WrapPanelItemPanel") as ItemsPanelTemplate;
-        public ItemsPanelTemplate AnimeCardPanel
-        {
-            get
-            {
-                return _AnimeCardPanel;
-            }
-            set
-            {
-                if (_AnimeCardPanel != value)
-                {
-                    _AnimeCardPanel = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
         private Visibility _OverlayNoModVisibility = Visibility.Collapsed;
         public Visibility OverlayNoModVisibility
         {
@@ -101,19 +84,6 @@ namespace UniversalAnimeDownloader.ViewModels
                     OverlayNoModVisibility = Visibility.Visible;
             });
             AnimeListSizeChangedCommand = new RelayCommand<ListBox>(null, p => AnimeLibrary.ContainerWidth = p.ActualWidth);
-
-
-            //When the setting is loaded, all viewmodels haven't loaded yet, the setting can't get the property to change, so we need to change here
-            ItemsPanelTemplate appliedPanel = null;
-            if ((Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.UseVirtalizingWrapPanel)
-            {
-                appliedPanel = Application.Current.FindResource("VirtualizingWrapPanelItemPanel") as ItemsPanelTemplate;
-            }
-            else
-            {
-                appliedPanel = Application.Current.FindResource("WrapPanelItemPanel") as ItemsPanelTemplate;
-            }
-            AnimeCardPanel = appliedPanel;
         }
 
         private bool SearchAnimeLibrary(object obj)

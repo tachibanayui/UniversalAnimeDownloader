@@ -298,7 +298,7 @@ namespace UniversalAnimeDownloader.ViewModels
 
             ApplyAccentCommand = new RelayCommand<Swatch>(null, p => (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.AccentColorTheme = p);
             ApplyPrimaryCommand = new RelayCommand<Swatch>(null, p => (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.PrimaryColorTheme = p);
-            ApplyFramerateCommand = new RelayCommand<object>(p => p != null ? true : false, p => SettingData.AnimationFrameRate = (int)p);
+            ApplyFramerateCommand = new RelayCommand<object>(p => p != null ? true : false, p => SettingData.AnimationFrameRate = (int)Math.Floor((double)p));
             HostLoadedCommand = new RelayCommand<UserControl>(null, async p =>
             {
                 //Load the setting

@@ -157,49 +157,6 @@ namespace UniversalAnimeDownloader.UADSettingsPortal
                 }
             }
         }
-
-
-
-        private bool _UseVirtalizingWrapPanel;
-        public bool UseVirtalizingWrapPanel
-        {
-            get
-            {
-                return _UseVirtalizingWrapPanel;
-            }
-            set
-            {
-                if (_UseVirtalizingWrapPanel != value)
-                {
-                    _UseVirtalizingWrapPanel = value;
-                    //Change the ItemsPanel
-                    ItemsPanelTemplate appliedPanel = null;
-                    if (value)
-                    {
-                        appliedPanel = Application.Current.FindResource("VirtualizingWrapPanelItemPanel") as ItemsPanelTemplate;
-                    }
-                    else
-                    {
-                        appliedPanel = Application.Current.FindResource("WrapPanelItemPanel") as ItemsPanelTemplate;
-                    }
-
-                    if(IsViewModelLoaded)
-                    {
-                        try
-                        {
-                            (Application.Current.FindResource("AllAnimeTabViewModel") as AllAnimeTabViewModel).AnimeCardPanel = appliedPanel;
-                            (Application.Current.FindResource("AnimeDetailsViewModel") as AnimeDetailsViewModel).AnimeCardPanel = appliedPanel;
-                            (Application.Current.FindResource("MyAnimeLibraryViewModel") as MyAnimeLibraryViewModel).AnimeCardPanel = appliedPanel;
-                            (Application.Current.FindResource("FeaturedAnimeViewModel") as FeaturedAnimeViewModel).AnimeCardPanel = appliedPanel;
-                            (Application.Current.FindResource("AnimeSuggestionViewModel") as AnimeSuggestionViewModel).AnimeCardPanel = appliedPanel;
-                        }
-                        catch { }
-                    }
-
-                    OnPropertyChanged();
-                }
-            }
-        }
         #endregion
 
         #region PlayblackSetting

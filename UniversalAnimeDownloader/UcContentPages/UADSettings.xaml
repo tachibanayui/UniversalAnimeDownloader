@@ -817,9 +817,6 @@
                                             IsChecked="{Binding SettingData.DisableAnimation}" />
                                     </Grid>
                                     <Grid>
-                                        <CheckBox Content=" Use virtualizing warp panel for anime list (decrease appearance, increase performance)" IsChecked="{Binding SettingData.UseVirtalizingWrapPanel}" />
-                                    </Grid>
-                                    <Grid>
                                         <CheckBox Content=" Only fetch anime series when their host page are show" IsChecked="{Binding SettingData.IsOnlyLoadWhenHostShow}" />
                                     </Grid>
                                     <Grid>

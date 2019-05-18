@@ -84,7 +84,6 @@
             Grid.Row="2"
             ex:ListBoxExtensions.ScrollChangedCommand="{Binding AnimeListScrollingCommand}"
             ex:ListBoxExtensions.ScrollChangedCommandParameter="{Binding ElementName=animeList}"
-            ItemsPanel="{Binding AnimeCardPanel, Mode=OneWay}"
             ItemsSource="{Binding SuggestedAnimeInfos.Data, IsAsync=True, Mode=OneWay}"
             Style="{StaticResource AnimeCardPanel}">
             <ListBox.ItemTemplate>

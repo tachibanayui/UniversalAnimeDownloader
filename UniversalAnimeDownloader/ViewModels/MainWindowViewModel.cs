@@ -56,7 +56,6 @@ namespace UniversalAnimeDownloader.ViewModels
         public ICommand FilterPlaylistPopup { get; set; }
         public ICommand OpenUADInstaller { get; set; }
         public ICommand CloseUniversalAnimeDownloader { get; set; }
-
         public ICommand NavigateCommand { get; set; }
         #endregion
 

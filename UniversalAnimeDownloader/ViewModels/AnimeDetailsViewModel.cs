@@ -159,23 +159,6 @@ namespace UniversalAnimeDownloader.ViewModels
                 }
             }
         }
-
-        private ItemsPanelTemplate _AnimeCardPanel = Application.Current.FindResource("WrapPanelItemPanel") as ItemsPanelTemplate;
-        public ItemsPanelTemplate AnimeCardPanel
-        {
-            get
-            {
-                return _AnimeCardPanel;
-            }
-            set
-            {
-                if (_AnimeCardPanel != value)
-                {
-                    _AnimeCardPanel = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
         #endregion
 
         #region Commands
@@ -287,18 +270,6 @@ namespace UniversalAnimeDownloader.ViewModels
 
                 (Application.Current.FindResource("MainWindowViewModel") as MainWindowViewModel).NavigateProcess("AllAnimeTab");
             });
-
-            //When the setting is loaded, all viewmodels haven't loaded yet, the setting can't get the property to change, so we need to change here
-            ItemsPanelTemplate appliedPanel = null;
-            if ((Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.UseVirtalizingWrapPanel)
-            {
-                appliedPanel = Application.Current.FindResource("VirtualizingWrapPanelItemPanel") as ItemsPanelTemplate;
-            }
-            else
-            {
-                appliedPanel = Application.Current.FindResource("WrapPanelItemPanel") as ItemsPanelTemplate;
-            }
-            AnimeCardPanel = appliedPanel;
         }
 
         private async Task SelectEpisodeIndex(TextBox obj)

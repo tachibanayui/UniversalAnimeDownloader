@@ -213,15 +213,6 @@
         <Setter Property="TextWrapping" Value="Wrap" />
     </Style>
 
-    <ItemsPanelTemplate x:Key="WrapPanelItemPanel">
-        <WrapPanel />
-    </ItemsPanelTemplate>
-
-    <ItemsPanelTemplate x:Key="VirtualizingWrapPanelItemPanel">
-        <vwp:VirtualizingWrapPanel />
-    </ItemsPanelTemplate>
-
-
     <Style x:Key="listViewEpisodeBaseTemplate" TargetType="ListView">
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled" />

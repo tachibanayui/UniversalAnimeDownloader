@@ -179,25 +179,6 @@ namespace UniversalAnimeDownloader.ViewModels
             }
         }
 
-
-
-        private ItemsPanelTemplate _AnimeCardPanel = Application.Current.FindResource("WrapPanelItemPanel") as ItemsPanelTemplate;
-        public ItemsPanelTemplate AnimeCardPanel
-        {
-            get
-            {
-                return _AnimeCardPanel;
-            }
-            set
-            {
-                if (_AnimeCardPanel != value)
-                {
-                    _AnimeCardPanel = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
         private Exception _CurrentException;
         public Exception CurrentException
         {
@@ -258,18 +239,6 @@ namespace UniversalAnimeDownloader.ViewModels
             AnimeInfos = new ObservableWrapedCollection<AnimeSeriesInfo>(725, 210);
             Genres = new ObservableCollection<GenreItem>();
             Seasons = new ObservableCollection<SeasonItem>();
-
-            //When the setting is loaded, all viewmodels haven't loaded yet, the setting can't get the property to change, so we need to change here
-            ItemsPanelTemplate appliedPanel = null;
-            if ((Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.UseVirtalizingWrapPanel)
-            {
-                appliedPanel = Application.Current.FindResource("VirtualizingWrapPanelItemPanel") as ItemsPanelTemplate;
-            }
-            else
-            {
-                appliedPanel = Application.Current.FindResource("WrapPanelItemPanel") as ItemsPanelTemplate;
-            }
-            AnimeCardPanel = appliedPanel;
 
             PageLoaded = new RelayCommand<object>(null, async p => { if (!(Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.IsOnlyLoadWhenHostShow) { await InitAnimeList(); } });
 

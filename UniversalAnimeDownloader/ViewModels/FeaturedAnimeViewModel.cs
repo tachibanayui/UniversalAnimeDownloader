@@ -103,25 +103,6 @@ namespace UniversalAnimeDownloader.ViewModels
             }
         }
 
-
-
-        private ItemsPanelTemplate _AnimeCardPanel = Application.Current.FindResource("WrapPanelItemPanel") as ItemsPanelTemplate;
-        public ItemsPanelTemplate AnimeCardPanel
-        {
-            get
-            {
-                return _AnimeCardPanel;
-            }
-            set
-            {
-                if (_AnimeCardPanel != value)
-                {
-                    _AnimeCardPanel = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
         private Visibility _OverlayActiityIndicatorVisibility = Visibility.Collapsed;
         public Visibility OverlayActiityIndicatorVisibility
         {
@@ -206,18 +187,6 @@ namespace UniversalAnimeDownloader.ViewModels
             PageLoaded = new RelayCommand<object>(null, async p => { if (!(Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.IsOnlyLoadWhenHostShow) { await InitAnimeList(); } });
 
             AnimeListSizeChangedCommand = new RelayCommand<ListBox>(null, p => FeaturedAnimeInfos.ContainerWidth = p.ActualWidth);
-
-            //When the setting is loaded, all viewmodels haven't loaded yet, the setting can't get the property to change, so we need to change here
-            ItemsPanelTemplate appliedPanel = null;
-            if ((Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.UseVirtalizingWrapPanel)
-            {
-                appliedPanel = Application.Current.FindResource("VirtualizingWrapPanelItemPanel") as ItemsPanelTemplate;
-            }
-            else
-            {
-                appliedPanel = Application.Current.FindResource("WrapPanelItemPanel") as ItemsPanelTemplate;
-            }
-            AnimeCardPanel = appliedPanel;
         }
 
         private async Task InitAnimeList()
