@@ -996,7 +996,7 @@ namespace UniversalAnimeDownloader.ViewModels
                     }
                 }
             }
-            if (offlineList.Count > 0)
+            if (updatedSeries > 0)
             {
                 NotificationManager.Add(new NotificationItem() { Title = "Check for anime updates completed", Detail = $"Found {updatedSeries} anime series need to updated out of {offlineList.Count} in your library. See download center for mode detail." });
             }
