@@ -160,6 +160,7 @@ namespace UniversalAnimeDownloader.MediaPlayer
             ins.AnimeThumbnail = new BitmapImage(new Uri(episodeInfo.Thumbnail.Url));
             ins.Title = ins.Playlist.Name;
             ins.SubbedTitle = episodeInfo.Name;
+            ins.mediaPlayer.Position = TimeSpan.FromSeconds(0);
         }
 
         private static async void OfflineUpdateMediaElementSource(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -1045,9 +1046,21 @@ namespace UniversalAnimeDownloader.MediaPlayer
             pkIcon.Kind = PackIconKind.Pause;
         }
 
-        public void Previous() => PlayIndex = GetNearestEpisode(this, true, true);
+        public void Previous()
+        {
+            if (IsPlayOnline)
+                PlayIndex = PlayIndex > 0 ? PlayIndex - 1 : Playlist.Episodes.Count - 1;
+            else
+                PlayIndex = GetNearestEpisode(this, true, true);
+        }
 
-        public void Next() => PlayIndex = GetNearestEpisode(this, true, false);
+        public void Next()
+        {
+            if (IsPlayOnline)
+                PlayIndex = PlayIndex < Playlist.Episodes.Count - 1 ? PlayIndex + 1 : 0;
+            else
+                PlayIndex = GetNearestEpisode(this, true, false);
+        }
 
         private void OpenDetailSidePanel(object sender, RoutedEventArgs e) => IsSidePanelOpen = !IsSidePanelOpen;
 
@@ -1094,15 +1107,19 @@ namespace UniversalAnimeDownloader.MediaPlayer
         private void Event_QualityChanged(object sender, SelectionChangedEventArgs e)
         {
             var listBox = sender as ListBox;
-            var selectedQuality = ((KeyValuePair<VideoQuality, MediaSourceInfo>)listBox.SelectedItem).Key;
-            var currentEpisode = Playlist.Episodes[PlayIndex];
 
-            if (currentEpisode.FilmSources.Count != 0)
+            if(listBox.SelectedItem != null)
             {
-                // When the video uri changes the VideoPlayerPostion to 0. So we store the position before changes and set them back later
-                var previousTime = mediaPlayer.Position;
-                VideoUri = new Uri(currentEpisode.FilmSources[selectedQuality].Url.Replace("https", "http"));
-                mediaPlayer.Position = previousTime;
+                var selectedQuality = ((KeyValuePair<VideoQuality, MediaSourceInfo>)listBox.SelectedItem).Key;
+                var currentEpisode = Playlist.Episodes[PlayIndex];
+
+                if (currentEpisode.FilmSources.Count != 0)
+                {
+                    // When the video uri changes the VideoPlayerPostion to 0. So we store the position before changes and set them back later
+                    var previousTime = mediaPlayer.Position;
+                    VideoUri = new Uri(currentEpisode.FilmSources[selectedQuality].Url.Replace("https", "http"));
+                    mediaPlayer.Position = previousTime;
+                }
             }
         }
     }
