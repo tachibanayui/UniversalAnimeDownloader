@@ -86,7 +86,11 @@
                     <ItemsControl Style="{StaticResource AnimeCardInternalPanel}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <local:AnimeItemCard AnimeCardCommand="{Binding DataContext.ShowAnimeDetailCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MyAnimeLibrary}}}" SecondAnimeCardCommand="{x:Static materialDesign:Transitioner.MoveNextCommand}" />
+                                <local:AnimeItemCard
+                                    AnimeCardCommand="{Binding DataContext.ShowAnimeDetailCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MyAnimeLibrary}}}"
+                                    DeleteButtonCommand="{Binding DataContext.DeleteAnimeCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:MyAnimeLibrary}}"
+                                    DeleteButtonVisibility="Visible"
+                                    SecondAnimeCardCommand="{x:Static materialDesign:Transitioner.MoveNextCommand}" />
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>

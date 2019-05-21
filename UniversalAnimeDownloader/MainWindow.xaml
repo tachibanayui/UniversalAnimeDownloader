@@ -25,7 +25,7 @@
     Background="{DynamicResource MaterialDesignPaper}"
     DataContext="{StaticResource MainWindowViewModel}"
     FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
-    RenderOptions.BitmapScalingMode="LowQuality"
+    RenderOptions.BitmapScalingMode="HighQuality"
     RenderOptions.EdgeMode="Aliased"
     ResizeMode="CanResizeWithGrip"
     TextElement.FontSize="14"

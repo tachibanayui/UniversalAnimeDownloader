@@ -28,6 +28,22 @@ namespace UniversalAnimeDownloader.UcContentPages
         public static readonly DependencyProperty SecondAnimeCardCommandProperty =
             DependencyProperty.Register("SecondAnimeCardCommand", typeof(ICommand), typeof(AnimeItemCard), new PropertyMetadata());
 
+        public Visibility DeleteButtonVisibility
+        {
+            get { return (Visibility)GetValue(DeleteButtonVisibilityProperty); }
+            set { SetValue(DeleteButtonVisibilityProperty, value); }
+        }
+        public static readonly DependencyProperty DeleteButtonVisibilityProperty =
+            DependencyProperty.Register("DeleteButtonVisibility", typeof(Visibility), typeof(AnimeItemCard), new PropertyMetadata(Visibility.Collapsed));
+
+        public ICommand DeleteButtonCommand
+        {
+            get { return (ICommand)GetValue(DeleteButtonCommandProperty); }
+            set { SetValue(DeleteButtonCommandProperty, value); }
+        }
+        public static readonly DependencyProperty DeleteButtonCommandProperty =
+            DependencyProperty.Register("DeleteButtonCommand", typeof(ICommand), typeof(AnimeItemCard), new PropertyMetadata());
+
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged([CallerMemberName]string name = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));

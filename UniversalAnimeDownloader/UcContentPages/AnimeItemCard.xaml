@@ -138,102 +138,116 @@
                 </materialDesign:Card>
             </ToolTip>
         </materialDesign:Card.ToolTip>-->
-        <Button Command="{Binding ElementName=cardHost, Path=SecondAnimeCardCommand}" CommandParameter="{Binding}">
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="Click">
-                    <i:InvokeCommandAction Command="{Binding ElementName=cardHost, Path=AnimeCardCommand}" CommandParameter="{Binding}" />
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-            <Button.Style>
-                <Style TargetType="Button">
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="Button">
-                                <Grid
-                                    TextElement.FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
-                                    TextElement.FontSize="14"
-                                    TextElement.FontWeight="Medium"
-                                    TextElement.Foreground="{DynamicResource MaterialDesignBody}">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition />
-                                        <RowDefinition />
-                                    </Grid.RowDefinitions>
-
-                                    <Border x:Name="bdImage">
-                                        <customcontrols:CustomImage
-                                            x:Name="thumbnail"
-                                            Margin="5"
-                                            materialDesign:ShadowAssist.ShadowDepth="Depth5"
-                                            ImageInfo="{Binding Thumbnail}"
-                                            Stretch="UniformToFill" />
-                                    </Border>
+        <Grid>
+            <Button Command="{Binding ElementName=cardHost, Path=SecondAnimeCardCommand}" CommandParameter="{Binding}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <i:InvokeCommandAction Command="{Binding ElementName=cardHost, Path=AnimeCardCommand}" CommandParameter="{Binding}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
                                     <Grid
-                                        Grid.Row="1"
-                                        Width="25"
-                                        Height="25"
-                                        Margin="10"
-                                        HorizontalAlignment="Right"
-                                        VerticalAlignment="Bottom">
-                                        <materialDesign:PackIcon
-                                            Kind="Book"
-                                            Style="{StaticResource AutoSizeIconPack}"
-                                            ToolTip="This anime can be watch offline"
-                                            Visibility="{Binding ., Converter={StaticResource AnimeSeriesStorageStateToIconVisibilityConverter}, ConverterParameter=Offline, IsAsync=True}" />
-                                    </Grid>
-
-                                    <Grid Grid.Row="1">
+                                        Background="Transparent"
+                                        TextElement.FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
+                                        TextElement.FontSize="14"
+                                        TextElement.FontWeight="Medium"
+                                        TextElement.Foreground="{DynamicResource MaterialDesignBody}">
                                         <Grid.RowDefinitions>
-                                            <RowDefinition Height="35" />
+                                            <RowDefinition />
                                             <RowDefinition />
                                         </Grid.RowDefinitions>
-                                        <TextBlock
-                                            Margin="5"
-                                            VerticalAlignment="Center"
-                                            FontWeight="SemiBold"
-                                            Text="{Binding Name, IsAsync=True, FallbackValue=Loading}"
-                                            TextTrimming="CharacterEllipsis" />
-                                        <TextBlock
-                                            Grid.Row="1"
-                                            Margin="5"
-                                            Text="{Binding Genres, Converter={StaticResource GenreItemListToStringConverter}, IsAsync=True, FallbackValue=Loading}"
-                                            TextTrimming="WordEllipsis"
-                                            TextWrapping="WrapWithOverflow" />
-                                    </Grid>
-                                </Grid>
-                                <ControlTemplate.Triggers>
-                                    <EventTrigger RoutedEvent="MouseEnter">
-                                        <BeginStoryboard>
-                                            <Storyboard>
-                                                <ThicknessAnimation
-                                                    Storyboard.TargetName="thumbnail"
-                                                    Storyboard.TargetProperty="Margin"
-                                                    To="-10"
-                                                    Duration="0:0:0.25">
-                                                    <ThicknessAnimation.EasingFunction>
-                                                        <QuarticEase EasingMode="EaseOut" />
-                                                    </ThicknessAnimation.EasingFunction>
-                                                </ThicknessAnimation>
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </EventTrigger>
-                                    <EventTrigger RoutedEvent="MouseLeave">
-                                        <BeginStoryboard>
-                                            <Storyboard Storyboard.TargetName="thumbnail" Storyboard.TargetProperty="Margin">
-                                                <ThicknessAnimation To="5" Duration="0:0:0.25">
-                                                    <ThicknessAnimation.EasingFunction>
-                                                        <QuarticEase EasingMode="EaseOut" />
-                                                    </ThicknessAnimation.EasingFunction>
-                                                </ThicknessAnimation>
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </EventTrigger>
-                                </ControlTemplate.Triggers>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </Button.Style>
-        </Button>
 
+                                        <Border x:Name="bdImage">
+                                            <customcontrols:CustomImage
+                                                x:Name="thumbnail"
+                                                Margin="5"
+                                                materialDesign:ShadowAssist.ShadowDepth="Depth5"
+                                                ImageInfo="{Binding Thumbnail}"
+                                                Stretch="UniformToFill" />
+                                        </Border>
+                                        <Grid
+                                            Grid.Row="1"
+                                            Width="25"
+                                            Height="25"
+                                            Margin="10"
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Bottom">
+                                            <materialDesign:PackIcon
+                                                Kind="Book"
+                                                Style="{StaticResource AutoSizeIconPack}"
+                                                ToolTip="This anime can be watch offline"
+                                                Visibility="{Binding ., Converter={StaticResource AnimeSeriesStorageStateToIconVisibilityConverter}, ConverterParameter=Offline, IsAsync=True}" />
+                                        </Grid>
+
+                                        <Grid Grid.Row="1">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="35" />
+                                                <RowDefinition />
+                                            </Grid.RowDefinitions>
+                                            <TextBlock
+                                                Margin="5"
+                                                VerticalAlignment="Center"
+                                                FontWeight="SemiBold"
+                                                Text="{Binding Name, IsAsync=True, FallbackValue=Loading}"
+                                                TextTrimming="CharacterEllipsis" />
+                                            <TextBlock
+                                                Grid.Row="1"
+                                                Margin="5"
+                                                Text="{Binding Genres, Converter={StaticResource GenreItemListToStringConverter}, IsAsync=True, FallbackValue=Loading}"
+                                                TextTrimming="WordEllipsis"
+                                                TextWrapping="WrapWithOverflow" />
+
+                                        </Grid>
+                                    </Grid>
+                                    <ControlTemplate.Triggers>
+                                        <EventTrigger RoutedEvent="MouseEnter">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <ThicknessAnimation
+                                                        Storyboard.TargetName="thumbnail"
+                                                        Storyboard.TargetProperty="Margin"
+                                                        To="-10"
+                                                        Duration="0:0:0.25">
+                                                        <ThicknessAnimation.EasingFunction>
+                                                            <QuarticEase EasingMode="EaseOut" />
+                                                        </ThicknessAnimation.EasingFunction>
+                                                    </ThicknessAnimation>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                        <EventTrigger RoutedEvent="MouseLeave">
+                                            <BeginStoryboard>
+                                                <Storyboard Storyboard.TargetName="thumbnail" Storyboard.TargetProperty="Margin">
+                                                    <ThicknessAnimation To="5" Duration="0:0:0.25">
+                                                        <ThicknessAnimation.EasingFunction>
+                                                            <QuarticEase EasingMode="EaseOut" />
+                                                        </ThicknessAnimation.EasingFunction>
+                                                    </ThicknessAnimation>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Button.Style>
+            </Button>
+            <Button
+                Grid.Row="1"
+                Margin="10"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Bottom"
+                Command="{Binding DeleteButtonCommand, ElementName=cardHost}"
+                CommandParameter="{Binding DataContext, ElementName=cardHost}"
+                Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
+                Visibility="{Binding DeleteButtonVisibility, ElementName=cardHost}">
+                <materialDesign:PackIcon Kind="TrashCan" />
+            </Button>
+        </Grid>
     </materialDesign:Card>
 </UserControl>

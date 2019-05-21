@@ -21,6 +21,7 @@ namespace UniversalAnimeDownloader.ViewModels
         public ICommand ShowAnimeDetailCommand { get; set; }
         public ICommand PageLoadedCommand { get; set; }
         public ICommand AnimeListSizeChangedCommand { get; set; }
+        public ICommand DeleteAnimeCommand { get; set; }
         #endregion
 
         #region Fields / Properties
@@ -77,6 +78,11 @@ namespace UniversalAnimeDownloader.ViewModels
                 var viewModel = Application.Current.FindResource("OfflineAnimeDetailViewModel") as OfflineAnimeDetailViewModel;
                 viewModel.CurrentSeries = manager;
                 viewModel.IsOnlineVersionBtnEnable = await ApiHelpper.CheckForInternetConnection();
+            });
+            DeleteAnimeCommand = new RelayCommand<AnimeSeriesInfo>(null, async p => 
+            {
+                Directory.Delete(p.AnimeSeriesSavedDirectory, true);
+                await ReloadAnimeLibrary(false);
             });
             PageLoadedCommand = new RelayCommand<object>(null, p =>
             {
