@@ -16,6 +16,7 @@ using UniversalAnimeDownloader.Behaviour;
 using UniversalAnimeDownloader.Models;
 using UniversalAnimeDownloader.UADSettingsPortal;
 using Xceed.Wpf.Toolkit;
+using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace UniversalAnimeDownloader.ViewModels
 {
@@ -395,25 +396,28 @@ namespace UniversalAnimeDownloader.ViewModels
             });
             BrowseFolderDialogCommand = new RelayCommand<string>(null, p =>
             {
-                System.Windows.Forms.FolderBrowserDialog dialog = new System.Windows.Forms.FolderBrowserDialog();
-                dialog.ShowNewFolderButton = true;
+                CommonFileDialog dialog = new CommonOpenFileDialog()
+                {
+                    IsFolderPicker = true
+                };
+
                 var result = dialog.ShowDialog();
-                if (result == System.Windows.Forms.DialogResult.OK)
+                if (result == CommonFileDialogResult.Ok)
                 {
                     switch (p)
                     {
                         case "AnimeLibrary":
-                            SettingData.AnimeLibraryLocation = dialog.SelectedPath;
+                            SettingData.AnimeLibraryLocation = dialog.FileName;
                             break;
                         case "Screenshots":
-                            SettingData.ScreenShotLocation = dialog.SelectedPath;
+                            SettingData.ScreenShotLocation = dialog.FileName;
                             break;
                         case "DirWizardCurrentDir":
-                            DirectoryWizardCurrentDir = dialog.SelectedPath;
+                            DirectoryWizardCurrentDir = dialog.FileName;
                             UpdateAffectedAnimes();
                             break;
                         case "DirWizardDesDir":
-                            DirectoryWizardDesDir = dialog.SelectedPath;
+                            DirectoryWizardDesDir = dialog.FileName;
                             break;
                         default:
                             break;
