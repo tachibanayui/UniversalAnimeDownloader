@@ -382,6 +382,8 @@ namespace UniversalAnimeDownloader.MediaPlayer
             //Online media player
             _Timer = new DispatcherTimer() { Interval = TimeSpan.FromSeconds(1) };
             _Timer.Tick += UpdateBufferingStatus;
+
+            mediaPlayer.MediaEnded += (s, e) => Next();
         }
 
         private void UpdateBufferingStatus(object sender, EventArgs e)
