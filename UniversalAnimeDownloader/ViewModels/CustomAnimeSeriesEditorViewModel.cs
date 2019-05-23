@@ -18,7 +18,7 @@ namespace UniversalAnimeDownloader.ViewModels
         public ICommand ChooseVideoLocatonCommand { get; set; }
         public ICommand AddEpisodeCommand { get; set; }
         public ICommand RemoveEpisodeCommand { get; set; }
-        public ICommand TestUpdateCommand { get; set; }
+        //public ICommand TestUpdateCommand { get; set; }
 
         public CustomAnimeSeriesEditorViewModel()
         {
@@ -88,11 +88,11 @@ namespace UniversalAnimeDownloader.ViewModels
                 RefreshEpisodeCollection();
             });
 
-            TestUpdateCommand = new RelayCommand<object>(null, p => 
-            {
-                Console.WriteLine(CurrentSeries);
-                MessageBox.Show("As");
-            });
+            //TestUpdateCommand = new RelayCommand<object>(null, p => 
+            //{
+            //    Console.WriteLine(CurrentSeries);
+            //    MessageBox.Show("As");
+            //});
         }
 
         private AnimeSeriesInfo _CurrentSeries;

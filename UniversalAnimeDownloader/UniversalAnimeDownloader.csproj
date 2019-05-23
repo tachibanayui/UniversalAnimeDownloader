@@ -184,7 +184,6 @@
     <Compile Include="MiscClass.cs" />
     <Compile Include="LifeSpanObservableCollection.cs" />
     <Compile Include="Models\AffectedAnimesModel.cs" />
-    <Compile Include="Models\EpisodesEditorItem.cs" />
     <Compile Include="ObservableWrapedCollection.cs" />
     <Compile Include="ReportErrorHelper.cs" />
     <Compile Include="TaskCompletionNotifier.cs" />
