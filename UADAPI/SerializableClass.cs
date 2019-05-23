@@ -114,11 +114,6 @@ namespace UADAPI
         /// The request information to get this episode
         /// </summary>
         public MediaSourceInfo EpisodeSource { get; set; }
-
-        /// <summary>
-        /// Indicate that this series is created by a anime series editor
-        /// </summary>
-        public bool IsCustomSeries { get; set; }
     }
 
     /// <summary>
@@ -206,6 +201,11 @@ namespace UADAPI
         /// The directory of this anime series
         /// </summary>
         public string AnimeSeriesSavedDirectory { get; set; }
+
+        /// <summary>
+        /// Indicate that this series is created by a anime series editor
+        /// </summary>
+        public bool IsCustomSeries { get; set; }
 
         //public override bool Equals(object obj) => AnimeID == (obj as AnimeSeriesInfo).AnimeID;
 

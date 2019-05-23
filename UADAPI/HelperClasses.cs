@@ -131,6 +131,9 @@ namespace UADAPI
                 LoadAssembly();
             }
 
+            if (className == "Fake")
+                return new PlaceholderManager();
+
             var queryRes = ManagerTypes.Where(query => className.Contains(className)).ToList();
             if (queryRes.Count != 0)
             {

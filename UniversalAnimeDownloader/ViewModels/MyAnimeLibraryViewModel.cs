@@ -142,7 +142,9 @@ namespace UniversalAnimeDownloader.ViewModels
             ShowAnimeDetailCommand = new RelayCommand<AnimeSeriesInfo>(null, async p =>
             {
                 MiscClass.NavigationHelper.AddNavigationHistory(5);
-                IAnimeSeriesManager manager = ApiHelpper.CreateAnimeSeriesManagerObjectByClassName(p.ModInfo.ModTypeString);
+                IAnimeSeriesManager manager = p.ModInfo != null
+                    ? ApiHelpper.CreateAnimeSeriesManagerObjectByClassName(p.ModInfo.ModTypeString)
+                    : ApiHelpper.CreateAnimeSeriesManagerObjectByClassName("Fake");
                 if (manager == null)
                 {
                     OverlayNoModVisibility = Visibility.Visible;
@@ -151,7 +153,8 @@ namespace UniversalAnimeDownloader.ViewModels
                 manager.AttachedAnimeSeriesInfo = p;
                 var viewModel = Application.Current.FindResource("OfflineAnimeDetailViewModel") as OfflineAnimeDetailViewModel;
                 viewModel.CurrentSeries = manager;
-                viewModel.IsOnlineVersionBtnEnable = await ApiHelpper.CheckForInternetConnection();
+
+                viewModel.IsOnlineVersionBtnEnable = await ApiHelpper.CheckForInternetConnection() && !p.IsCustomSeries;
             });
             DeleteAnimeCommand = new RelayCommand<AnimeSeriesInfo>(null, async p =>
             {
@@ -183,8 +186,9 @@ namespace UniversalAnimeDownloader.ViewModels
                 if (!Directory.Exists(p.AnimeSeriesSavedDirectory))
                     Directory.CreateDirectory(p.AnimeSeriesSavedDirectory);
                 p.ManagerFileLocation = Path.Combine(p.AnimeSeriesSavedDirectory, "Manager.json");
-
-                var newSeriesThumbnailLocation = Path.Combine(p.AnimeSeriesSavedDirectory, "SeriesThumbnail.png");
+                p.IsCustomSeries = true;
+                var seriesThumbnailInfo = new FileInfo(p.Thumbnail.LocalFile);
+                var newSeriesThumbnailLocation = Path.Combine(p.AnimeSeriesSavedDirectory, $"SeriesThumbnail{seriesThumbnailInfo.Extension}");
                 if (File.Exists(p.Thumbnail.LocalFile) && p.Thumbnail.LocalFile != newSeriesThumbnailLocation)
                     File.Copy(p.Thumbnail.LocalFile, newSeriesThumbnailLocation);
                 else
@@ -195,13 +199,14 @@ namespace UniversalAnimeDownloader.ViewModels
                 for (int i = 0; i < p.Episodes.Count; i++)
                 {
                     EpisodeInfo item = p.Episodes[i];
+                    item.AvailableOffline = true;
                     if(item.EpisodeID == 0)
                         item.EpisodeID = rand.Next();
                     if(item.Index == 0)
                         item.Index = i + 1;
 
                     var episodeThumbnailInfo = new FileInfo(item.Thumbnail.LocalFile);
-                    var newEpisodeThumbnailLocation = Path.Combine(p.AnimeSeriesSavedDirectory, $"{item.EpisodeID}-{item.Index}-Thumbnail.{episodeThumbnailInfo.Extension}");
+                    var newEpisodeThumbnailLocation = Path.Combine(p.AnimeSeriesSavedDirectory, $"{item.EpisodeID}-{item.Index}-Thumbnail{episodeThumbnailInfo.Extension}");
                     if (File.Exists(item.Thumbnail.LocalFile) && item.Thumbnail.LocalFile != newEpisodeThumbnailLocation)
                         File.Copy(item.Thumbnail.LocalFile, newEpisodeThumbnailLocation);
                     else
@@ -212,7 +217,7 @@ namespace UniversalAnimeDownloader.ViewModels
                     {
                         var currentFilmSource = item.FilmSources[VideoQuality.Quality144p];
                         var filmSourceInfo = new FileInfo(currentFilmSource.LocalFile);
-                        var newFilmSourceLocation = Path.Combine(p.AnimeSeriesSavedDirectory, $"{item.EpisodeID}-{item.Index} {item.Name}.{filmSourceInfo.Extension}");
+                        var newFilmSourceLocation = Path.Combine(p.AnimeSeriesSavedDirectory, $"{item.EpisodeID}-{item.Index} {item.Name}{filmSourceInfo.Extension}");
                         if (File.Exists(currentFilmSource.LocalFile) && currentFilmSource.LocalFile != newFilmSourceLocation)
                             File.Copy(currentFilmSource.LocalFile, newFilmSourceLocation);
                         else

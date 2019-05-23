@@ -977,22 +977,25 @@ namespace UniversalAnimeDownloader.ViewModels
             for (int i = 0; i < offlineList.Count; i++)
             {
                 AnimeSeriesInfo item = offlineList[i];
-                var manager = ApiHelpper.CreateAnimeSeriesManagerObjectByClassName(item.ModInfo.ModTypeString);
-                if (manager != null)
+                if(!item.IsCustomSeries)
                 {
-                    manager.AttachedAnimeSeriesInfo = item;
-                    AnimeSourceControl source = new AnimeSourceControl(manager);
-                    if (await source.Update())
+                    var manager = ApiHelpper.CreateAnimeSeriesManagerObjectByClassName(item.ModInfo.ModTypeString);
+                    if (manager != null)
                     {
-                        updatedSeries++;
+                        manager.AttachedAnimeSeriesInfo = item;
+                        AnimeSourceControl source = new AnimeSourceControl(manager);
+                        if (await source.Update())
+                        {
+                            updatedSeries++;
+                        }
                     }
-                }
-                else
-                {
-                    modMissing = true;
-                    if (!modMissingNames.Contains(item.ModInfo.ModName))
+                    else
                     {
-                        modMissingNames.Add(item.ModInfo.ModName);
+                        modMissing = true;
+                        if (!modMissingNames.Contains(item.ModInfo.ModName))
+                        {
+                            modMissingNames.Add(item.ModInfo.ModName);
+                        }
                     }
                 }
             }
