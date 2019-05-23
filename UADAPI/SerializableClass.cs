@@ -114,6 +114,11 @@ namespace UADAPI
         /// The request information to get this episode
         /// </summary>
         public MediaSourceInfo EpisodeSource { get; set; }
+
+        /// <summary>
+        /// Indicate that this series is created by a anime series editor
+        /// </summary>
+        public bool IsCustomSeries { get; set; }
     }
 
     /// <summary>

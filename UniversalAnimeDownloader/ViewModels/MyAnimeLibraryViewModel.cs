@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using UADAPI;
+using UniversalAnimeDownloader.UADSettingsPortal;
 using ErrorEventArgs = Newtonsoft.Json.Serialization.ErrorEventArgs;
 
 namespace UniversalAnimeDownloader.ViewModels
@@ -23,6 +24,7 @@ namespace UniversalAnimeDownloader.ViewModels
         public ICommand DeleteAnimeCommand { get; set; }
         public ICommand OpenCustomSeriesEditorCommand { get; set; }
         public ICommand CustomSeriesEditorCancelCommand { get; set; }
+        public ICommand CustomSeriesEditorSaveCommand { get; set; }
         #endregion
 
         #region Fields / Properties
@@ -101,6 +103,23 @@ namespace UniversalAnimeDownloader.ViewModels
             }
         }
 
+        private UADSettingsData _SettingsData;
+        public UADSettingsData SettingsData
+        {
+            get
+            {
+                return _SettingsData;
+            }
+            set
+            {
+                if (_SettingsData != value)
+                {
+                    _SettingsData = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
 
 
 
@@ -115,6 +134,7 @@ namespace UniversalAnimeDownloader.ViewModels
                 view.Refresh();
             };
 
+            SettingsData = (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings;
             ReloadAnimeLibrary(true);
             ReloadAnimeLibrary(false);
 
@@ -152,6 +172,64 @@ namespace UniversalAnimeDownloader.ViewModels
                 IsCustomSeriesEditorOpen = true;
             });
             CustomSeriesEditorCancelCommand = new RelayCommand<object>(null, p => IsCustomSeriesEditorOpen = false);
+            CustomSeriesEditorSaveCommand = new RelayCommand<AnimeSeriesInfo>(null, async p =>
+            {
+                //Create a random object to randomize Anime and Episode ids
+                Random rand = new Random();
+                bool isAnyUnrecogizedPart = false;
+                if(p.AnimeID == 0)
+                    p.AnimeID = rand.Next();
+                p.AnimeSeriesSavedDirectory = Path.Combine(SettingsData.AnimeLibraryLocation, $"{p.AnimeID}-{p.Name.RemoveInvalidChar()}");
+                if (!Directory.Exists(p.AnimeSeriesSavedDirectory))
+                    Directory.CreateDirectory(p.AnimeSeriesSavedDirectory);
+                p.ManagerFileLocation = Path.Combine(p.AnimeSeriesSavedDirectory, "Manager.json");
+
+                var newSeriesThumbnailLocation = Path.Combine(p.AnimeSeriesSavedDirectory, "SeriesThumbnail.png");
+                if (File.Exists(p.Thumbnail.LocalFile) && p.Thumbnail.LocalFile != newSeriesThumbnailLocation)
+                    File.Copy(p.Thumbnail.LocalFile, newSeriesThumbnailLocation);
+                else
+                    isAnyUnrecogizedPart = true;
+                p.Thumbnail.LocalFile = newSeriesThumbnailLocation;
+
+                p.IsSelectiveDownload = true;
+                for (int i = 0; i < p.Episodes.Count; i++)
+                {
+                    EpisodeInfo item = p.Episodes[i];
+                    if(item.EpisodeID == 0)
+                        item.EpisodeID = rand.Next();
+                    if(item.Index == 0)
+                        item.Index = i + 1;
+
+                    var episodeThumbnailInfo = new FileInfo(item.Thumbnail.LocalFile);
+                    var newEpisodeThumbnailLocation = Path.Combine(p.AnimeSeriesSavedDirectory, $"{item.EpisodeID}-{item.Index}-Thumbnail.{episodeThumbnailInfo.Extension}");
+                    if (File.Exists(item.Thumbnail.LocalFile) && item.Thumbnail.LocalFile != newEpisodeThumbnailLocation)
+                        File.Copy(item.Thumbnail.LocalFile, newEpisodeThumbnailLocation);
+                    else
+                        isAnyUnrecogizedPart = true;
+                    item.Thumbnail.LocalFile = newEpisodeThumbnailLocation;
+
+                    if(item.FilmSources.ContainsKey(VideoQuality.Quality144p))
+                    {
+                        var currentFilmSource = item.FilmSources[VideoQuality.Quality144p];
+                        var filmSourceInfo = new FileInfo(currentFilmSource.LocalFile);
+                        var newFilmSourceLocation = Path.Combine(p.AnimeSeriesSavedDirectory, $"{item.EpisodeID}-{item.Index} {item.Name}.{filmSourceInfo.Extension}");
+                        if (File.Exists(currentFilmSource.LocalFile) && currentFilmSource.LocalFile != newFilmSourceLocation)
+                            File.Copy(currentFilmSource.LocalFile, newFilmSourceLocation);
+                        else
+                            isAnyUnrecogizedPart = true;
+                        currentFilmSource.LocalFile = newFilmSourceLocation;
+                    }
+                }
+
+                var managerFileContent = JsonConvert.SerializeObject(p);
+                File.WriteAllText(p.ManagerFileLocation, managerFileContent);
+
+                await ReloadAnimeLibrary(false);
+                IsCustomSeriesEditorOpen = false;
+
+                if (isAnyUnrecogizedPart)
+                    await MessageDialog.ShowAsync("Some file are exist!", "When we create and consolidate all file into one folder, we can't move the file. But don't worry, you can edit this playlist anytime", MessageDialogButton.OKOnlyButton);
+            });
         }
 
         private bool SearchAnimeLibrary(object obj)
@@ -169,10 +247,10 @@ namespace UniversalAnimeDownloader.ViewModels
         public async Task ReloadAnimeLibrary(bool isRealtimeList)
         {
             AnimeLibrary.Clear();
-            string lib = AppDomain.CurrentDomain.BaseDirectory + "Anime Library\\";
+            string lib = SettingsData.AnimeLibraryLocation;
             foreach (var item in Directory.EnumerateDirectories(lib))
             {
-                if (File.Exists(item + "\\Manager.json"))
+                if (File.Exists(Path.Combine(item , "Manager.json")))
                 {
                     string content = File.ReadAllText(item + "\\Manager.json");
                     var jsonSetting = new JsonSerializerSettings()

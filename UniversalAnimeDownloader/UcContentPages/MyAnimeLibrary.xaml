@@ -161,7 +161,10 @@
                                 <Binding Source="{StaticResource ScaleFactor}" />
                             </MultiBinding>
                         </ScrollViewer.Height>
-                        <local:CustomAnimeSeriesEditor Margin="5" CancelButtonCommand="{Binding CustomSeriesEditorCancelCommand, Source={StaticResource MyAnimeLibraryViewModel}}" />
+                        <local:CustomAnimeSeriesEditor
+                            Margin="5"
+                            CancelButtonCommand="{Binding CustomSeriesEditorCancelCommand, Mode=OneTime, Source={StaticResource MyAnimeLibraryViewModel}}"
+                            SaveButtonCommand="{Binding CustomSeriesEditorSaveCommand, Mode=OneTime, Source={StaticResource MyAnimeLibraryViewModel}}" />
                     </ScrollViewer>
                 </materialDesign:DialogHost.DialogContent>
             </materialDesign:DialogHost>
