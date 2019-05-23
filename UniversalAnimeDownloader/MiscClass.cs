@@ -36,6 +36,7 @@ namespace UniversalAnimeDownloader
             "External Media Player", "UAD Media Player"
         };
         public static string[] StretchString { get => Enum.GetNames(typeof(Stretch)); }
+        public static string[] BitmapScalingModeString { get => Enum.GetNames(typeof(BitmapScalingMode)); }
 
         public static JsonSerializerSettings IgnoreConverterErrorJson = new JsonSerializerSettings()
         {

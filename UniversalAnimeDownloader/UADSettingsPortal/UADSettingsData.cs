@@ -7,11 +7,9 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using UADAPI;
-using UniversalAnimeDownloader.ViewModels;
 
 namespace UniversalAnimeDownloader.UADSettingsPortal
 {
@@ -627,6 +625,23 @@ namespace UniversalAnimeDownloader.UADSettingsPortal
                 if (_IsLoadPageInBackground != value)
                 {
                     _IsLoadPageInBackground = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private BitmapScalingMode _BitmapScalingMode = BitmapScalingMode.HighQuality;
+        public BitmapScalingMode BitmapScalingMode
+        {
+            get
+            {
+                return _BitmapScalingMode;
+            }
+            set
+            {
+                if (_BitmapScalingMode != value)
+                {
+                    _BitmapScalingMode = value;
                     OnPropertyChanged();
                 }
             }

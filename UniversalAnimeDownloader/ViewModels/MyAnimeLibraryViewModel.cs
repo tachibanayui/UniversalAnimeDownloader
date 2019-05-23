@@ -9,7 +9,6 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using UADAPI;
-using UniversalAnimeDownloader.UADSettingsPortal;
 using ErrorEventArgs = Newtonsoft.Json.Serialization.ErrorEventArgs;
 
 namespace UniversalAnimeDownloader.ViewModels
@@ -22,6 +21,8 @@ namespace UniversalAnimeDownloader.ViewModels
         public ICommand PageLoadedCommand { get; set; }
         public ICommand AnimeListSizeChangedCommand { get; set; }
         public ICommand DeleteAnimeCommand { get; set; }
+        public ICommand OpenCustomSeriesEditorCommand { get; set; }
+        public ICommand CustomSeriesEditorCancelCommand { get; set; }
         #endregion
 
         #region Fields / Properties
@@ -29,7 +30,7 @@ namespace UniversalAnimeDownloader.ViewModels
         #endregion
 
 
-        public ObservableWrapedCollection<AnimeSeriesInfo> AnimeLibrary { get; set; } = new ObservableWrapedCollection<AnimeSeriesInfo>(725,210);
+        public ObservableWrapedCollection<AnimeSeriesInfo> AnimeLibrary { get; set; } = new ObservableWrapedCollection<AnimeSeriesInfo>(725, 210);
         public List<AnimeSeriesInfo> NoDelayAnimeLib { get; } = new List<AnimeSeriesInfo>();
 
         private Visibility _OverlayNoModVisibility = Visibility.Collapsed;
@@ -48,6 +49,59 @@ namespace UniversalAnimeDownloader.ViewModels
                 }
             }
         }
+
+        private bool _IsCustomSeriesEditorOpen;
+        public bool IsCustomSeriesEditorOpen
+        {
+            get
+            {
+                return _IsCustomSeriesEditorOpen;
+            }
+            set
+            {
+                if (_IsCustomSeriesEditorOpen != value)
+                {
+                    _IsCustomSeriesEditorOpen = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private double _HostWidth;
+        public double HostWidth
+        {
+            get
+            {
+                return _HostWidth;
+            }
+            set
+            {
+                if (_HostWidth != value)
+                {
+                    _HostWidth = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private double _HostHeight;
+        public double HostHeight
+        {
+            get
+            {
+                return _HostHeight;
+            }
+            set
+            {
+                if (_HostHeight != value)
+                {
+                    _HostHeight = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+
 
 
 
@@ -79,7 +133,7 @@ namespace UniversalAnimeDownloader.ViewModels
                 viewModel.CurrentSeries = manager;
                 viewModel.IsOnlineVersionBtnEnable = await ApiHelpper.CheckForInternetConnection();
             });
-            DeleteAnimeCommand = new RelayCommand<AnimeSeriesInfo>(null, async p => 
+            DeleteAnimeCommand = new RelayCommand<AnimeSeriesInfo>(null, async p =>
             {
                 Directory.Delete(p.AnimeSeriesSavedDirectory, true);
                 await ReloadAnimeLibrary(false);
@@ -87,9 +141,17 @@ namespace UniversalAnimeDownloader.ViewModels
             PageLoadedCommand = new RelayCommand<object>(null, p =>
             {
                 if (ApiHelpper.QueryTypes.Count == 0 || ApiHelpper.ManagerTypes.Count == 0)
+                {
                     OverlayNoModVisibility = Visibility.Visible;
+                }
             });
             AnimeListSizeChangedCommand = new RelayCommand<ListBox>(null, p => AnimeLibrary.ContainerWidth = p.ActualWidth);
+            OpenCustomSeriesEditorCommand = new RelayCommand<object>(null, p =>
+            {
+                (Application.Current.FindResource("CustomAnimeSeriesEditorViewModel") as CustomAnimeSeriesEditorViewModel).CurrentSeries = new AnimeSeriesInfo();
+                IsCustomSeriesEditorOpen = true;
+            });
+            CustomSeriesEditorCancelCommand = new RelayCommand<object>(null, p => IsCustomSeriesEditorOpen = false);
         }
 
         private bool SearchAnimeLibrary(object obj)

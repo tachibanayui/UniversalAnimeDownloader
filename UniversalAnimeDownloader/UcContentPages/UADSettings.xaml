@@ -822,6 +822,20 @@
                                     <Grid>
                                         <CheckBox Content=" Load others pages in the background" IsChecked="{Binding SettingData.IsLoadPageInBackground}" />
                                     </Grid>
+                                    <Grid>
+                                        <ComboBox
+                                            x:Name="cbxBitmapScaingMode"
+                                            materialDesign:HintAssist.Hint="Bitmap Scaling Mode:"
+                                            ItemsSource="{x:Static uad:MiscClass.BitmapScalingModeString}"
+                                            SelectedItem="{Binding SettingData.BitmapScalingMode, Mode=OneWay}"
+                                            Style="{StaticResource MaterialDesignFloatingHintComboBox}">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="SelectionChanged">
+                                                    <i:InvokeCommandAction Command="{Binding BitmapScalingModeChangedCommand}" CommandParameter="{Binding ElementName=cbxBitmapScaingMode}" />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </ComboBox>
+                                    </Grid>
                                 </StackPanel>
                             </Grid>
                         </materialDesign:Card>

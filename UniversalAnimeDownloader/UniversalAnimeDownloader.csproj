@@ -151,6 +151,7 @@
     <Compile Include="AsyncHelpers.cs" />
     <Compile Include="Behaviour\AnimatedScrollViewer.cs" />
     <Compile Include="Behaviour\BubbleScrollEvent.cs" />
+    <Compile Include="Behaviour\SizeObserver.cs" />
     <Compile Include="Behaviour\SliderDragBehaviors.cs" />
     <Compile Include="CustomCommands.cs" />
     <Compile Include="CustomControls\CarouselPanel.cs" />
@@ -183,6 +184,7 @@
     <Compile Include="MiscClass.cs" />
     <Compile Include="LifeSpanObservableCollection.cs" />
     <Compile Include="Models\AffectedAnimesModel.cs" />
+    <Compile Include="Models\EpisodesEditorItem.cs" />
     <Compile Include="ObservableWrapedCollection.cs" />
     <Compile Include="ReportErrorHelper.cs" />
     <Compile Include="TaskCompletionNotifier.cs" />
@@ -205,6 +207,9 @@
     </Compile>
     <Compile Include="UcContentPages\AnimeSuggestion.xaml.cs">
       <DependentUpon>AnimeSuggestion.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UcContentPages\CustomAnimeSeriesEditor.xaml.cs">
+      <DependentUpon>CustomAnimeSeriesEditor.xaml</DependentUpon>
     </Compile>
     <Compile Include="UcContentPages\DownloadCenter.xaml.cs">
       <DependentUpon>DownloadCenter.xaml</DependentUpon>
@@ -251,6 +256,8 @@
     <Compile Include="ValueConverters\AnimeSeriesStorageStateToIconVisibilityConverter.cs" />
     <Compile Include="ValueConverters\AutomatedUnitConversionFromByteConverter.cs" />
     <Compile Include="ValueConverters\ColorToSolidColorBrushConverter.cs" />
+    <Compile Include="ValueConverters\CustomSeriesFilmSourceToStringConverter.cs" />
+    <Compile Include="ValueConverters\CustomSeriesMediaSourceToThumbnalLocationConverter.cs" />
     <Compile Include="ValueConverters\GreaterThanParameterToVisibilityConverter.cs" />
     <Compile Include="ValueConverters\InvertableBoolToVisibilityConverter.cs" />
     <Compile Include="ValueConverters\DateTimeToStringConverter.cs" />
@@ -276,6 +283,7 @@
     <Compile Include="ViewModels\AnimeSuggestionViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ButtonActionEventArgs.cs" />
+    <Compile Include="ViewModels\CustomAnimeSeriesEditorViewModel.cs" />
     <Compile Include="ViewModels\DownloadCenterViewModel.cs" />
     <Compile Include="ViewModels\ExploreViewModel.cs" />
     <Compile Include="ViewModels\FeaturedAnimeViewModel.cs" />
@@ -362,6 +370,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UcContentPages\AnimeSuggestion.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UcContentPages\CustomAnimeSeriesEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

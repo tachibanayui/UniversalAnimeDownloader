@@ -11,6 +11,7 @@
     <vm:AnimeDetailsViewModel x:Key="AnimeDetailsViewModel" />
     <vm:DownloadCenterViewModel x:Key="DownloadCenterViewModel" />
     <vm:NotifycationPanelViewModel x:Key="NotifycationPanelViewModel" />
+    <vm:CustomAnimeSeriesEditorViewModel x:Key="CustomAnimeSeriesEditorViewModel" />
     <vm:MyAnimeLibraryViewModel x:Key="MyAnimeLibraryViewModel" />
     <vm:OfflineAnimeDetailViewModel x:Key="OfflineAnimeDetailViewModel" />
     <vm:UADSettingsViewModel x:Key="UADSettingViewModel" />

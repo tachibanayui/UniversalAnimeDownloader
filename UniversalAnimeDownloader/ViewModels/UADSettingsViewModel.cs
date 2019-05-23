@@ -29,6 +29,7 @@ namespace UniversalAnimeDownloader.ViewModels
         public ICommand OpenFileDialogCommand { get; set; }
         public ICommand HostLoadedCommand { get; set; }
         public ICommand StretchModeChangedCommand { get; set; }
+        public ICommand BitmapScalingModeChangedCommand { get; set; }
         public ICommand ColorPickerDialogClosingCommand { get; set; }
         public ICommand ChooseColorCommand { get; set; }
         public ICommand ChooseKeyCommand { get; set; }
@@ -313,6 +314,8 @@ namespace UniversalAnimeDownloader.ViewModels
                 IsHostLoaded = true;
                 var cbxStret = p.FindName("stretchMode") as ComboBox;
                 cbxStret.SelectedItem = SettingData.BlockerStretchMode.ToString("G");
+                var cbxScalingMode = p.FindName("cbxBitmapScaingMode") as ComboBox;
+                cbxScalingMode.SelectedItem = SettingData.BitmapScalingMode.ToString("G");
 
                 Ins = p;
 
@@ -341,6 +344,7 @@ namespace UniversalAnimeDownloader.ViewModels
                 }
             });
             StretchModeChangedCommand = new RelayCommand<ComboBox>(p => IsHostLoaded, p => SettingData.BlockerStretchMode = (Stretch)Enum.Parse(typeof(Stretch), p.SelectedItem.ToString()));
+            BitmapScalingModeChangedCommand = new RelayCommand<ComboBox>(p => IsHostLoaded, p => SettingData.BitmapScalingMode = (BitmapScalingMode)Enum.Parse(typeof(BitmapScalingMode), p.SelectedItem.ToString()));
             ColorPickerDialogClosingCommand = new RelayCommand<object>(null, p => { });
             ChooseKeyCommand = new RelayCommand<string>(null, p => { CurrentObjectRequestKeyName = p; IsKeyInputOpen = true; });
             ValidateKeyCommand = new RelayCommand<object>(null, p =>
