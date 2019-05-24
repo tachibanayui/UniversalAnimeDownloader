@@ -1069,7 +1069,7 @@ namespace UniversalAnimeDownloader.MediaPlayer
         private void Event_EpisodeSelected(object sender, RoutedEventArgs e)
         {
             var info = sender as Button;
-            PlayIndex = Playlist.Episodes.FindIndex(p => p == info.DataContext);
+            PlayIndex = MiscClass.FindObservableCollectionIndex(Playlist.Episodes, p => p == info.DataContext);
         }
 
         private void Event_OpenPlayListTab(object sender, RoutedEventArgs e) => VM.SidePanelTabIndex = 0;

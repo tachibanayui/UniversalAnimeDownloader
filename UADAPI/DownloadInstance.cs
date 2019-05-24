@@ -476,7 +476,7 @@ namespace UADAPI
                 //Change the episode downloaded before
                 foreach (var item in EpisodeToDownload)
                 {
-                    int index = oldManager.Episodes.FindIndex(p => p.EpisodeID == item.EpisodeID);
+                    int index = UltilityClass.FindObservableCollectionIndex(oldManager.Episodes, p => p.EpisodeID == item.EpisodeID);
                     if (index != -1)
                     {
                         oldManager.Episodes[index] = item;

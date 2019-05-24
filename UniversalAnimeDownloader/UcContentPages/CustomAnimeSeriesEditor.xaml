@@ -179,13 +179,7 @@
                                         <TextBox
                                             materialDesign:HintAssist.Hint="Episode thumbnail location:"
                                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                                            Text="{Binding Thumbnail, Converter={StaticResource CustomSeriesMediaSourceToThumbnalLocationConverter}, UpdateSourceTrigger=PropertyChanged}">
-                                            <i:Interaction.Triggers>
-                                                <i:EventTrigger EventName="LostFocus">
-                                                    <i:InvokeCommandAction Command="{Binding DataContext.UpdateCollectionViewCommand, Mode=OneTime, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:CustomAnimeSeriesEditor}}" />
-                                                </i:EventTrigger>
-                                            </i:Interaction.Triggers>
-                                        </TextBox>
+                                            Text="{Binding Thumbnail, Converter={StaticResource CustomSeriesMediaSourceToThumbnalLocationConverter}, UpdateSourceTrigger=PropertyChanged}" />
                                         <Button
                                             Grid.Column="1"
                                             Command="{Binding DataContext.ChooseEpisodeThumbnailCommand, Mode=OneTime, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:CustomAnimeSeriesEditor}}"

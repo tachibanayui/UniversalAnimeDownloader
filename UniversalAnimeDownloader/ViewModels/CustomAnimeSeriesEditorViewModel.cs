@@ -14,7 +14,6 @@ namespace UniversalAnimeDownloader.ViewModels
     {
         public ICommand ChooseAnimeSeriesThumbnailCommand { get; set; }
         public ICommand ChooseEpisodeThumbnailCommand { get; set; }
-        public ICommand UpdateCollectionViewCommand { get; set; }
         public ICommand ChooseVideoLocatonCommand { get; set; }
         public ICommand AddEpisodeCommand { get; set; }
         public ICommand RemoveEpisodeCommand { get; set; }
@@ -36,7 +35,7 @@ namespace UniversalAnimeDownloader.ViewModels
                     {
                         LocalFile = dialog.FileName
                     };
-                    OnPropertyChanged("CurrentSeries");
+                    //OnPropertyChanged("CurrentSeries");
                 }
             });
 
@@ -50,14 +49,9 @@ namespace UniversalAnimeDownloader.ViewModels
                 if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
                 {
                     p.Thumbnail = new MediaSourceInfo() { LocalFile = dialog.FileName };
-                    RefreshEpisodeCollection();
                 }
             });
 
-            UpdateCollectionViewCommand = new RelayCommand<object>(null, p =>
-            {
-                RefreshEpisodeCollection();
-            });
 
             ChooseVideoLocatonCommand = new RelayCommand<EpisodeInfo>(null, p => 
             {
@@ -72,20 +66,17 @@ namespace UniversalAnimeDownloader.ViewModels
                     sources.Add(VideoQuality.Quality144p, new MediaSourceInfo() { LocalFile = dialog.FileName });
                     p.FilmSources = sources;
 
-                    RefreshEpisodeCollection();
                 }
             });
 
             AddEpisodeCommand = new RelayCommand<object>(null, p =>
             {
                 CurrentSeries.Episodes.Add(new EpisodeInfo());
-                RefreshEpisodeCollection();
             });
 
             RemoveEpisodeCommand = new RelayCommand<EpisodeInfo>(null, p =>
             {
                 CurrentSeries.Episodes.Remove(p);
-                RefreshEpisodeCollection();
             });
 
             //TestUpdateCommand = new RelayCommand<object>(null, p => 
@@ -117,35 +108,9 @@ namespace UniversalAnimeDownloader.ViewModels
         {
             if (CurrentSeries == null)
                 CurrentSeries = new AnimeSeriesInfo();
-            if (CurrentSeries.Episodes == null)
-            {
-                CurrentSeries.Episodes = new List<EpisodeInfo>();
+
+            if(CurrentSeries.Episodes.Count == 0)
                 CurrentSeries.Episodes.Add(new EpisodeInfo());
-            }
-        }
-
-        private string _CurrentSeriesThumbnail;
-        public string CurrentSeriesThumbnail
-        {
-            get
-            {
-                return _CurrentSeriesThumbnail;
-            }
-            set
-            {
-                if (_CurrentSeriesThumbnail != value)
-                {
-                    _CurrentSeriesThumbnail = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-
-        private void RefreshEpisodeCollection()
-        {
-            ICollectionView view = CollectionViewSource.GetDefaultView(CurrentSeries.Episodes);
-            view.Refresh();
         }
     }
 }

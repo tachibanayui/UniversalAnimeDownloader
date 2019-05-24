@@ -140,7 +140,7 @@ namespace UniversalAnimeDownloader.ViewModels
 
             WatchEpisodeCommand = new RelayCommand<EpisodeInfo>(p => p.AvailableOffline, p =>
             {
-                UADMediaPlayerHelper.Play(CurrentSeries.AttachedAnimeSeriesInfo, CurrentSeries.AttachedAnimeSeriesInfo.Episodes.FindIndex(pp => pp == p));
+                UADMediaPlayerHelper.Play(CurrentSeries.AttachedAnimeSeriesInfo, MiscClass.FindObservableCollectionIndex(CurrentSeries.AttachedAnimeSeriesInfo.Episodes, pp => pp == p));
             });
 
             OnlineVersionCommand = new RelayCommand<object>(null, async p =>
