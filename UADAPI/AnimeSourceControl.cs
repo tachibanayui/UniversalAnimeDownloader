@@ -77,7 +77,7 @@ namespace UADAPI
         /// </summary>
         public async Task<bool> Update()
         {
-            if (CurrentAnimeSeries.AttachedAnimeSeriesInfo.IsSelectiveDownload)
+            if (CurrentAnimeSeries.AttachedAnimeSeriesInfo.IsSelectiveDownload || CurrentAnimeSeries.AttachedAnimeSeriesInfo.HasEnded)
             {
                 return false;
             }

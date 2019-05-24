@@ -68,144 +68,505 @@ namespace UADAPI
     /// <summary>
     /// This class will store information about the episode
     /// </summary>
-    public class EpisodeInfo
+    public class EpisodeInfo : BaseViewModel
     {
         /// <summary>
         /// Epsisode ID define in anime remote host
         /// </summary>
-        public int EpisodeID { get; set; }
+        private int _EpisodeID;
+        public int EpisodeID
+        {
+            get
+            {
+                return _EpisodeID;
+            }
+            set
+            {
+                if (_EpisodeID != value)
+                {
+                    _EpisodeID = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+
 
         /// <summary>
         /// The name of this episode
         /// </summary>
-        public string Name { get; set; }
+        private string _Name;
+        public string Name
+        {
+            get
+            {
+                return _Name;
+            }
+            set
+            {
+                if (_Name != value)
+                {
+                    _Name = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
 
         /// <summary>
         /// The slug of this episode
         /// </summary>
-        public string Slug { get; set; }
+        private string _Slug;
+        public string Slug
+        {
+            get
+            {
+                return _Slug;
+            }
+            set
+            {
+                if (_Slug != value)
+                {
+                    _Slug = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         /// <summary>
         /// This will define how to sort the episde list
         /// </summary>
-        public int Index { get; set; }
+        private int _Index;
+        public int Index
+        {
+            get
+            {
+                return _Index;
+            }
+            set
+            {
+                if (_Index != value)
+                {
+                    _Index = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         /// <summary>
         /// The request to get the thumbnail
         /// </summary>
-        public MediaSourceInfo Thumbnail { get; set; }
+        private MediaSourceInfo _Thumbnail;
+        public MediaSourceInfo Thumbnail
+        {
+            get
+            {
+                return _Thumbnail;
+            }
+            set
+            {
+                if (_Thumbnail != value)
+                {
+                    _Thumbnail = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         /// <summary>
         /// The video source of this episode. string will represent the quality
         /// </summary>
-        public Dictionary<VideoQuality, MediaSourceInfo> FilmSources { get; set; }
+        private Dictionary<VideoQuality, MediaSourceInfo> _FilmSources;
+        public Dictionary<VideoQuality, MediaSourceInfo> FilmSources
+        {
+            get
+            {
+                return _FilmSources;
+            }
+            set
+            {
+                if (_FilmSources != value)
+                {
+                    _FilmSources = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+
 
         /// <summary>
         /// This will tell the state of the download, mostly for downloader to report.
         /// </summary>
-        public DownloaderProgress EpisodeDownloadState { get; set; } = new DownloaderProgress();
+        private DownloaderProgress _EpisodeDownloadState;
+        public DownloaderProgress EpisodeDownloadState
+        {
+            get
+            {
+                return _EpisodeDownloadState;
+            }
+            set
+            {
+                if (_EpisodeDownloadState != value)
+                {
+                    _EpisodeDownloadState = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+
 
         /// <summary>
         /// If the episode is downloaded, can be able to play without internet connection
         /// </summary>
-        public bool AvailableOffline { get; set; }
+        private bool _AvailableOffline;
+        public bool AvailableOffline
+        {
+            get
+            {
+                return _AvailableOffline;
+            }
+            set
+            {
+                if (_AvailableOffline != value)
+                {
+                    _AvailableOffline = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         /// <summary>
         /// The request information to get this episode
         /// </summary>
-        public MediaSourceInfo EpisodeSource { get; set; }
+        private MediaSourceInfo _EpisodeSource;
+        public MediaSourceInfo EpisodeSource
+        {
+            get
+            {
+                return _EpisodeSource;
+            }
+            set
+            {
+                if (_EpisodeSource != value)
+                {
+                    _EpisodeSource = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
     }
 
     /// <summary>
     /// This class contain information about the anime
     /// </summary>
-    public class AnimeSeriesInfo
+    public class AnimeSeriesInfo : BaseViewModel
     {
         /// <summary>
         /// The name of this anime series
         /// </summary>
-        public string Name { get; set; }
+        private string _Name;
+        public string Name
+        {
+            get
+            {
+                return _Name;
+            }
+            set
+            {
+                if (_Name != value)
+                {
+                    _Name = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         /// <summary>
         /// The slug of this anime
         /// </summary>
-        public string Slug { get; set; }
+        private string _Slug;
+        public string Slug
+        {
+            get
+            {
+                return _Slug;
+            }
+            set
+            {
+                if (_Slug != value)
+                {
+                    _Slug = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+
 
         /// <summary>
         /// Views
         /// </summary>
-        public int Views { get; set; }
+        private int _Views;
+        public int Views
+        {
+            get
+            {
+                return _Views;
+            }
+            set
+            {
+                if (_Views != value)
+                {
+                    _Views = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         /// <summary>
         /// The ID of this anime series in the remote host
         /// </summary>
-        public int AnimeID { get; set; }
+        private int _AnimeID;
+        public int AnimeID
+        {
+            get
+            {
+                return _AnimeID;
+            }
+            set
+            {
+                if (_AnimeID != value)
+                {
+                    _AnimeID = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         /// <summary>
         /// Current quality of the video after getting information. 
         /// API Dev: Change this inside GetQualities();
+        /// Status: Not implemented
         /// </summary>
-        public string CurrentQuality { get; set; }
+        private string _CurrentQuality;
+        public string CurrentQuality
+        {
+            get
+            {
+                return _CurrentQuality;
+            }
+            set
+            {
+                if (_CurrentQuality != value)
+                {
+                    _CurrentQuality = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         /// <summary>
         /// If this anime series/season is ended. If true, it wil ignore update check
         /// </summary>
-        public bool HasEnded { get; set; }
+        private bool _HasEnded;
+        public bool HasEnded
+        {
+            get
+            {
+                return _HasEnded;
+            }
+            set
+            {
+                if (_HasEnded != value)
+                {
+                    _HasEnded = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         /// <summary>
         /// The thumbnail of this anime series
         /// </summary>
-        public MediaSourceInfo Thumbnail { get; set; }
+        private MediaSourceInfo _Thumbnail;
+        public MediaSourceInfo Thumbnail
+        {
+            get
+            {
+                return _Thumbnail;
+            }
+            set
+            {
+                if (_Thumbnail != value)
+                {
+                    _Thumbnail = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         /// <summary>
         /// The genres of this anime
+        /// <para>Note: Please don't create a new instance of this, use <see cref="ObservableCollection{T}"/>.Clear() instead</para>
         /// </summary>
-        public List<GenreItem> Genres { get; set; }
+        public ObservableCollection<GenreItem> Genres { get; set; }
 
         /// <summary>
         /// Indicate if the user not download all the episdes of this anime series/season, true : will ignore update check
+        /// 
         /// </summary>
-        public bool IsSelectiveDownload { get; set; }
+        private bool _IsSelectiveDownload;
+        public bool IsSelectiveDownload
+        {
+            get
+            {
+                return _IsSelectiveDownload;
+            }
+            set
+            {
+                if (_IsSelectiveDownload != value)
+                {
+                    _IsSelectiveDownload = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         /// <summary>
         /// The description of this anime series
         /// </summary>
-        public string Description { get; set; }
+        private string _Description;
+        public string Description
+        {
+            get
+            {
+                return _Description;
+            }
+            set
+            {
+                if (_Description != value)
+                {
+                    _Description = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         /// <summary>
         /// The epsides of this anime series. Only save the source
+        /// <para>Note: Please don't create a new instance of this, use <see cref="ObservableCollection{T}"/>.Clear() instead</para>
         /// </summary>
-        public List<EpisodeInfo> Episodes { get; set; }
+        public ObservableCollection<EpisodeInfo> Episodes { get; set; } = new ObservableCollection<EpisodeInfo>();
 
         /// <summary>
         /// Indicate wether the episodes got don't have enough detail
         /// </summary>
-        public bool IsPrototypeEpisdodes { get; set; }
+        private bool _IsPrototypeEpisdodes;
+        public bool IsPrototypeEpisdodes
+        {
+            get
+            {
+                return _IsPrototypeEpisdodes;
+            }
+            set
+            {
+                if (_IsPrototypeEpisdodes != value)
+                {
+                    _IsPrototypeEpisdodes = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
 
         /// <summary>
         /// The request information to get this anime
         /// </summary>
-        public MediaSourceInfo AnimeSource { get; set; }
+        private MediaSourceInfo _AnimeSource;
+        public MediaSourceInfo AnimeSource
+        {
+            get
+            {
+                return _AnimeSource;
+            }
+            set
+            {
+                if (_AnimeSource != value)
+                {
+                    _AnimeSource = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+
 
         /// <summary>
-        /// The extractor used to get this anime. Use to invoke the extractor in manager file
+        /// The extractor used to get this anime. Use to invoke the extractor in manager file. Not notifying when changed
         /// </summary>
         public ModificatorInformation ModInfo { get; set; }
 
         /// <summary>
         /// Where is the Manager file saved location
         /// </summary>
-        public string ManagerFileLocation { get; set; }
+        private string _ManagerFileLocation;
+        public string ManagerFileLocation
+        {
+            get
+            {
+                return _ManagerFileLocation;
+            }
+            set
+            {
+                if (_ManagerFileLocation != value)
+                {
+                    _ManagerFileLocation = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         /// <summary>
         /// The directory of this anime series
         /// </summary>
-        public string AnimeSeriesSavedDirectory { get; set; }
+        private string _AnimeSeriesSavedDirectory;
+        public string AnimeSeriesSavedDirectory
+        {
+            get
+            {
+                return _AnimeSeriesSavedDirectory;
+            }
+            set
+            {
+                if (_AnimeSeriesSavedDirectory != value)
+                {
+                    _AnimeSeriesSavedDirectory = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         /// <summary>
         /// Indicate that this series is created by a anime series editor
         /// </summary>
-        public bool IsCustomSeries { get; set; }
+        private bool _IsCustomSeries;
+        public bool IsCustomSeries
+        {
+            get
+            {
+                return _IsCustomSeries;
+            }
+            set
+            {
+                if (_IsCustomSeries != value)
+                {
+                    _IsCustomSeries = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         //public override bool Equals(object obj) => AnimeID == (obj as AnimeSeriesInfo).AnimeID;
 
