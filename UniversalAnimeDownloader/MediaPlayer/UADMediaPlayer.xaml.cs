@@ -67,21 +67,21 @@ namespace UniversalAnimeDownloader.MediaPlayer
             get => isSidePanelOpen;
             set
             {
-                if(isSidePanelOpen != value)
+                if (isSidePanelOpen != value)
                 {
                     DoubleAnimation transitionAnim = new DoubleAnimation(sideBar.Width, 350, TimeSpan.FromSeconds(0.5)) { DecelerationRatio = 0.1, EasingFunction = new QuarticEase() { EasingMode = EasingMode.EaseOut } };
                     if (!value)
                         transitionAnim.To = 0;
 
-                    sideBar.BeginAnimation(WidthProperty ,transitionAnim);
+                    sideBar.BeginAnimation(WidthProperty, transitionAnim);
 
                     isSidePanelOpen = value;
                 }
-                
+
             }
         }
 
-       
+
         public FakeNotRespondingDialog FakeHost { get; set; }
         private DispatcherTimer _Timer;
         #endregion
@@ -226,7 +226,7 @@ namespace UniversalAnimeDownloader.MediaPlayer
             get => _VideoUri;
             set
             {
-                if(_VideoUri != value)
+                if (_VideoUri != value)
                 {
                     _VideoUri = value;
                     mediaPlayer.Source = value;
@@ -382,9 +382,11 @@ namespace UniversalAnimeDownloader.MediaPlayer
             //Online media player
             _Timer = new DispatcherTimer() { Interval = TimeSpan.FromSeconds(1) };
             _Timer.Tick += UpdateBufferingStatus;
-
+            
             mediaPlayer.MediaEnded += (s, e) => Next();
         }
+
+       
 
         private void UpdateBufferingStatus(object sender, EventArgs e)
         {
@@ -393,7 +395,7 @@ namespace UniversalAnimeDownloader.MediaPlayer
 
         private void Event_MediaPlayerHostLoaded(object sender, RoutedEventArgs e)
         {
-           // (Content as FrameworkElement).DataContext = VM;
+            // (Content as FrameworkElement).DataContext = VM;
             mediaPlayer.Source = VideoUri;
             isControllerVisible = true;
             string tt = AppDomain.CurrentDomain.BaseDirectory + "unnamed.ico";
@@ -431,7 +433,7 @@ namespace UniversalAnimeDownloader.MediaPlayer
                 Width = (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.HighlighterBurshThickness,
                 Height = (Application.Current.FindResource("Settings") as UADSettingsManager).CurrentSettings.HighlighterBurshThickness
             };
-        
+
             //Change the fullsrceen icon when the host window state changed
             AssignProperty();
             var hostWindow = Window.GetWindow(this);
@@ -471,7 +473,7 @@ namespace UniversalAnimeDownloader.MediaPlayer
                         break;
                 }
             };
-             
+
         }
 
         private async void HideControllerTimeout(int timeoutID)
@@ -599,7 +601,24 @@ namespace UniversalAnimeDownloader.MediaPlayer
             Focus();
         }
 
-        private void LockSeekSlider(object sender, MouseButtonEventArgs e) => IsSeekSliderLocked = true;
+        private void UpdateThumbPosition(object sender, MouseEventArgs e)
+        {
+            if (IsSeekSliderLocked)
+                CalculateThumbPosition();
+        }
+
+        private void LockSeekSlider(object sender, MouseButtonEventArgs e)
+        {
+            CalculateThumbPosition();
+            IsSeekSliderLocked = true;
+        }
+
+        private void CalculateThumbPosition()
+        {
+            Point mousePoint = Mouse.GetPosition(seekSlider);
+            double percentage = mousePoint.X / seekSlider.ActualWidth;
+            seekSlider.Value = seekSlider.Maximum * percentage;
+        }
 
         private void VolumnChange(object sender, RoutedEventArgs e)
         {

@@ -373,6 +373,7 @@
                             LargeChange="0"
                             Maximum="1"
                             PreviewMouseLeftButtonDown="LockSeekSlider"
+                            PreviewMouseMove="UpdateThumbPosition"
                             PreviewMouseLeftButtonUp="ChangePosition"
                             Value="{Binding SeekLocation}" />
                         <TextBlock
