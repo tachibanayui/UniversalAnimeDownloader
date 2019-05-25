@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:customControls="clr-namespace:UniversalAnimeDownloader.CustomControls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing"
     xmlns:extk="http://schemas.xceed.com/wpf/xaml/toolkit"
     xmlns:html="clr-namespace:TheArtOfDev.HtmlRenderer.WPF;assembly=HtmlRenderer.WPF"
     xmlns:local="clr-namespace:UniversalAnimeDownloader.MediaPlayer"
@@ -306,6 +307,7 @@
                     </Grid>
                 </Grid>
 
+
                 <Grid x:Name="controller" Grid.Row="2">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="2*" />
@@ -363,6 +365,7 @@
                                 TextWrapping="WrapWithOverflow" />
                         </StackPanel>
                     </Grid>
+
                     <Grid Grid.Row="1">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="2*" />
@@ -373,8 +376,8 @@
                             LargeChange="0"
                             Maximum="1"
                             PreviewMouseLeftButtonDown="LockSeekSlider"
-                            PreviewMouseMove="UpdateThumbPosition"
                             PreviewMouseLeftButtonUp="ChangePosition"
+                            PreviewMouseMove="UpdateThumbPosition"
                             Value="{Binding SeekLocation}" />
                         <TextBlock
                             x:Name="txblMediaPos"
@@ -605,6 +608,119 @@
                             </Grid>
                         </Border>
                     </Popup>
+                </Grid>
+
+                <Grid Grid.Row="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="2*" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+
+                    <Button
+                        x:Name="btnUpNext"
+                        Width="275"
+                        Height="75"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Bottom"
+                        RenderTransformOrigin="0.5,0.5"
+                        Style="{StaticResource NoDecorationButton}">
+                        <Button.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform />
+                                <SkewTransform />
+                                <RotateTransform />
+                                <TranslateTransform X="0" />
+                            </TransformGroup>
+                        </Button.RenderTransform>
+                        <Grid
+                            TextElement.FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
+                            TextElement.FontSize="14"
+                            TextElement.FontWeight="Medium"
+                            TextElement.Foreground="White">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto" />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+
+                            <Rectangle
+                                Grid.RowSpan="2"
+                                Grid.ColumnSpan="2"
+                                Fill="#99000000" />
+
+                            <Grid
+                                Grid.RowSpan="2"
+                                Width="65"
+                                Margin="5">
+                                <Border
+                                    x:Name="ellipseMaskVisual"
+                                    Background="#99000000"
+                                    CornerRadius="90" />
+
+                                <Image
+                                    Width="63"
+                                    Height="63"
+                                    Source="E:\Pictures\Anime\a.png"
+                                    Stretch="Fill">
+                                    <Image.OpacityMask>
+                                        <VisualBrush Visual="{Binding ElementName=ellipseMaskVisual}" />
+                                    </Image.OpacityMask>
+                                </Image>
+                            </Grid>
+
+                            <ed:Arc
+                                x:Name="arcCountDown"
+                                Grid.RowSpan="2"
+                                Width="65"
+                                Margin="5"
+                                EndAngle="360"
+                                Fill="White"
+                                StartAngle="0"
+                                Stretch="None"
+                                Stroke="White"
+                                StrokeThickness="3" />
+
+                            <TextBlock
+                                x:Name="txblCountDown"
+                                Grid.RowSpan="2"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Text="5" />
+
+                            <TextBlock
+                                Grid.Column="1"
+                                Margin="0,5,0,0"
+                                Text="Click here to watch" />
+
+                            <TextBlock
+                                x:Name="txblNextEpName"
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Margin="0,5,0,0"
+                                Text="Oof, this is a test episde for testing appearance! :) hehehe"
+                                TextTrimming="CharacterEllipsis"
+                                TextWrapping="WrapWithOverflow" />
+                        </Grid>
+                        <Button.Triggers>
+                            <EventTrigger RoutedEvent="Button.Click">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation
+                                            Storyboard.TargetProperty="RenderTransform.Children[3].X"
+                                            To="276"
+                                            Duration="0:0:0.5">
+                                            <DoubleAnimation.EasingFunction>
+                                                <QuarticEase EasingMode="EaseOut" />
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </Button.Triggers>
+                    </Button>
                 </Grid>
 
                 <Canvas
