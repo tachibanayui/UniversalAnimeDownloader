@@ -161,6 +161,9 @@ namespace UniversalAnimeDownloader.MediaPlayer
             ins.Title = ins.Playlist.Name;
             ins.SubbedTitle = episodeInfo.Name;
             ins.mediaPlayer.Position = TimeSpan.FromSeconds(0);
+
+            //btnUpNext
+            ins.txblNextEpName.Text = ins.Playlist.Episodes[ins.PlayIndex < ins.Playlist.Episodes.Count - 1 ? ins.PlayIndex + 1 : 0].Name;
         }
 
         private static async void OfflineUpdateMediaElementSource(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -202,6 +205,9 @@ namespace UniversalAnimeDownloader.MediaPlayer
 
                 ins.Title = ins.Playlist.Name;
                 ins.SubbedTitle = episodeInfo.Name;
+
+                //btnUpNext
+                ins.txblNextEpName.Text = ins.Playlist.Episodes[GetNearestEpisode(ins, true, false)].Name;
             }
             else
             {
@@ -583,10 +589,103 @@ namespace UniversalAnimeDownloader.MediaPlayer
                     seekSlider.Value = progressVal;
                     PlayProgress = progressVal;
                     MediaPosition = mediaPlayer.Position;
+
+                    //If we should show the btnUpNextHere
+                    if(mediaPlayer.NaturalDuration.HasTimeSpan)
+                    {
+                        var deltaTimeSpan = mediaPlayer.NaturalDuration.TimeSpan - mediaPlayer.Position;
+                        if(deltaTimeSpan < TimeSpan.FromSeconds(5))
+                        {
+                            ShowBtnUpNext(TimeSpan.FromSeconds(5) - deltaTimeSpan);
+                        }
+                        else
+                        {
+                            SlideInBtnUpNext();
+                            IsShowUpNextAllowed = true;
+                        }
+                    }
+                    else
+                    {
+                        SlideInBtnUpNext();
+                    }
                 }
 
                 await Task.Delay(500);
             }
+        }
+
+        public bool IsShowUpNextAllowed { get; set; } = true;
+
+        private void SlideInBtnUpNext()
+        {
+            Storyboard stb = new Storyboard();
+
+            DoubleAnimation slideInAnim = new DoubleAnimation
+            {
+                To = 276,
+                Duration = TimeSpan.FromSeconds(0.5),
+                EasingFunction = new QuarticEase() { EasingMode = EasingMode.EaseOut }
+            };
+            Storyboard.SetTargetProperty(slideInAnim, new PropertyPath("RenderTransform.Children[3].X"));
+            stb.Children.Add(slideInAnim);
+
+            btnUpNext.BeginStoryboard(stb);
+        }
+
+        Storyboard stb = new Storyboard();
+        private void ShowBtnUpNext(TimeSpan offset)
+        {
+            if (IsShowUpNextAllowed)
+            {
+                IsShowUpNextAllowed = false;
+            }
+            else
+            {
+                stb.Seek(btnUpNext, offset, TimeSeekOrigin.BeginTime);
+                return;
+            }
+
+            stb = new Storyboard();
+
+            stb.Completed += (s, e) =>
+            {
+                stb.Stop(btnUpNext);
+                SlideInBtnUpNext();
+            };
+
+            DoubleAnimation slideInAnim = new DoubleAnimation
+            {
+                To = 0,
+                Duration = TimeSpan.FromSeconds(0.5),
+                EasingFunction = new QuarticEase() { EasingMode = EasingMode.EaseOut }
+            };
+            Storyboard.SetTargetProperty(slideInAnim, new PropertyPath("RenderTransform.Children[3].X"));
+            stb.Children.Add(slideInAnim);
+
+            DoubleAnimation circleCountDownAnim = new DoubleAnimation()
+            {
+                From = 360,
+                To = 0,
+                Duration = TimeSpan.FromSeconds(6),
+            };
+            Storyboard.SetTargetName(circleCountDownAnim, "arcCountDown");
+            Storyboard.SetTargetProperty(circleCountDownAnim, new PropertyPath("EndAngle"));
+            stb.Children.Add(circleCountDownAnim);
+
+            StringAnimationUsingKeyFrames countDownTextAnim = new StringAnimationUsingKeyFrames();
+            countDownTextAnim.Duration = TimeSpan.FromSeconds(5);
+            countDownTextAnim.KeyFrames.Add(new DiscreteStringKeyFrame() { Value = "5", KeyTime = TimeSpan.FromSeconds(0) });
+            countDownTextAnim.KeyFrames.Add(new DiscreteStringKeyFrame() { Value = "4", KeyTime = TimeSpan.FromSeconds(1) });
+            countDownTextAnim.KeyFrames.Add(new DiscreteStringKeyFrame() { Value = "3", KeyTime = TimeSpan.FromSeconds(2) });
+            countDownTextAnim.KeyFrames.Add(new DiscreteStringKeyFrame() { Value = "2", KeyTime = TimeSpan.FromSeconds(3) });
+            countDownTextAnim.KeyFrames.Add(new DiscreteStringKeyFrame() { Value = "1", KeyTime = TimeSpan.FromSeconds(4) });
+            countDownTextAnim.KeyFrames.Add(new DiscreteStringKeyFrame() { Value = "0", KeyTime = TimeSpan.FromSeconds(5) });
+            Storyboard.SetTargetName(countDownTextAnim, "txblCountDown");
+            Storyboard.SetTargetProperty(countDownTextAnim, new PropertyPath("Text"));
+            stb.Children.Add(countDownTextAnim);
+
+            stb.Begin(btnUpNext, true);
+            stb.Seek(btnUpNext, offset, TimeSeekOrigin.BeginTime);
         }
 
         private void ChangePosition(object sender, MouseButtonEventArgs e) => ChangePositionProgress(seekSlider.Value);

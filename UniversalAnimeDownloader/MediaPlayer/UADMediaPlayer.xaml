@@ -622,6 +622,7 @@
                         Height="75"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Bottom"
+                        Click="Event_Next"
                         RenderTransformOrigin="0.5,0.5"
                         Style="{StaticResource NoDecorationButton}">
                         <Button.RenderTransform>
@@ -629,7 +630,7 @@
                                 <ScaleTransform />
                                 <SkewTransform />
                                 <RotateTransform />
-                                <TranslateTransform X="0" />
+                                <TranslateTransform X="276" />
                             </TransformGroup>
                         </Button.RenderTransform>
                         <Grid
