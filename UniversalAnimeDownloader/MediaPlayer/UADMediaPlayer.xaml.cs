@@ -163,7 +163,9 @@ namespace UniversalAnimeDownloader.MediaPlayer
             ins.mediaPlayer.Position = TimeSpan.FromSeconds(0);
 
             //btnUpNext
-            ins.txblNextEpName.Text = ins.Playlist.Episodes[ins.PlayIndex < ins.Playlist.Episodes.Count - 1 ? ins.PlayIndex + 1 : 0].Name;
+            var episode = ins.Playlist.Episodes[ins.PlayIndex < ins.Playlist.Episodes.Count - 1 ? ins.PlayIndex + 1 : 0];
+            ins.txblNextEpName.Text = episode.Name;
+            ins.imgUpNext.ImageInfo = episode.Thumbnail;
         }
 
         private static async void OfflineUpdateMediaElementSource(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -207,7 +209,9 @@ namespace UniversalAnimeDownloader.MediaPlayer
                 ins.SubbedTitle = episodeInfo.Name;
 
                 //btnUpNext
-                ins.txblNextEpName.Text = ins.Playlist.Episodes[GetNearestEpisode(ins, true, false)].Name;
+                var episode = ins.Playlist.Episodes[GetNearestEpisode(ins, true, false)];
+                ins.txblNextEpName.Text = episode.Name;
+                ins.imgUpNext.ImageInfo = episode.Thumbnail;
             }
             else
             {
@@ -551,6 +555,7 @@ namespace UniversalAnimeDownloader.MediaPlayer
                 controllerMask.BeginAnimation(LinearGradientBrush.EndPointProperty, animation);
 
                 mediaPlayer.Pause();
+                UpNextCountDownAnim.Pause(btnUpNext);
             }
             else
             {
@@ -562,6 +567,7 @@ namespace UniversalAnimeDownloader.MediaPlayer
 
                 await Task.Delay(260);
                 Play();
+                UpNextCountDownAnim.Resume(btnUpNext);
             }
 
             IsPause = !IsPause;
@@ -632,7 +638,8 @@ namespace UniversalAnimeDownloader.MediaPlayer
             btnUpNext.BeginStoryboard(stb);
         }
 
-        Storyboard stb = new Storyboard();
+        Storyboard UpNextCountDownAnim = new Storyboard();
+
         private void ShowBtnUpNext(TimeSpan offset)
         {
             if (IsShowUpNextAllowed)
@@ -641,15 +648,15 @@ namespace UniversalAnimeDownloader.MediaPlayer
             }
             else
             {
-                stb.Seek(btnUpNext, offset, TimeSeekOrigin.BeginTime);
+                UpNextCountDownAnim.Seek(btnUpNext, offset, TimeSeekOrigin.BeginTime);
                 return;
             }
 
-            stb = new Storyboard();
+            UpNextCountDownAnim = new Storyboard();
 
-            stb.Completed += (s, e) =>
+            UpNextCountDownAnim.Completed += (s, e) =>
             {
-                stb.Stop(btnUpNext);
+                UpNextCountDownAnim.Stop(btnUpNext);
                 SlideInBtnUpNext();
             };
 
@@ -660,7 +667,7 @@ namespace UniversalAnimeDownloader.MediaPlayer
                 EasingFunction = new QuarticEase() { EasingMode = EasingMode.EaseOut }
             };
             Storyboard.SetTargetProperty(slideInAnim, new PropertyPath("RenderTransform.Children[3].X"));
-            stb.Children.Add(slideInAnim);
+            UpNextCountDownAnim.Children.Add(slideInAnim);
 
             DoubleAnimation circleCountDownAnim = new DoubleAnimation()
             {
@@ -670,7 +677,7 @@ namespace UniversalAnimeDownloader.MediaPlayer
             };
             Storyboard.SetTargetName(circleCountDownAnim, "arcCountDown");
             Storyboard.SetTargetProperty(circleCountDownAnim, new PropertyPath("EndAngle"));
-            stb.Children.Add(circleCountDownAnim);
+            UpNextCountDownAnim.Children.Add(circleCountDownAnim);
 
             StringAnimationUsingKeyFrames countDownTextAnim = new StringAnimationUsingKeyFrames();
             countDownTextAnim.Duration = TimeSpan.FromSeconds(5);
@@ -682,10 +689,10 @@ namespace UniversalAnimeDownloader.MediaPlayer
             countDownTextAnim.KeyFrames.Add(new DiscreteStringKeyFrame() { Value = "0", KeyTime = TimeSpan.FromSeconds(5) });
             Storyboard.SetTargetName(countDownTextAnim, "txblCountDown");
             Storyboard.SetTargetProperty(countDownTextAnim, new PropertyPath("Text"));
-            stb.Children.Add(countDownTextAnim);
+            UpNextCountDownAnim.Children.Add(countDownTextAnim);
 
-            stb.Begin(btnUpNext, true);
-            stb.Seek(btnUpNext, offset, TimeSeekOrigin.BeginTime);
+            UpNextCountDownAnim.Begin(btnUpNext, true);
+            UpNextCountDownAnim.Seek(btnUpNext, offset, TimeSeekOrigin.BeginTime);
         }
 
         private void ChangePosition(object sender, MouseButtonEventArgs e) => ChangePositionProgress(seekSlider.Value);

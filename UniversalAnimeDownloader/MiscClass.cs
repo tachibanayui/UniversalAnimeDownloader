@@ -235,7 +235,7 @@ namespace UniversalAnimeDownloader
                     {
                         if (p.Thumbnail.LocalFile != newSeriesThumbnailLocation)
                         {
-                            File.Copy(p.Thumbnail.LocalFile, newSeriesThumbnailLocation);
+                            File.Copy(p.Thumbnail.LocalFile, newSeriesThumbnailLocation, true);
                         }
                     }
                         else
@@ -261,7 +261,7 @@ namespace UniversalAnimeDownloader
                         {
                             if (item.Thumbnail.LocalFile != newEpisodeThumbnailLocation)
                             {
-                                File.Copy(item.Thumbnail.LocalFile, newEpisodeThumbnailLocation);
+                                File.Copy(item.Thumbnail.LocalFile, newEpisodeThumbnailLocation, true);
                             }
                         }
                         else
@@ -280,7 +280,7 @@ namespace UniversalAnimeDownloader
                             {
                                 if (currentFilmSource.LocalFile != newFilmSourceLocation)
                                 {
-                                    File.Copy(currentFilmSource.LocalFile, newFilmSourceLocation);
+                                    File.Copy(currentFilmSource.LocalFile, newFilmSourceLocation, true);
                                 }
                             }
                             else

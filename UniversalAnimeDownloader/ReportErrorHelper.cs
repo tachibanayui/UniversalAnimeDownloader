@@ -23,10 +23,10 @@ namespace UniversalAnimeDownloader
         }
 
         //Report error
-        public static async void ReportError(Exception e, bool shutdownApp = false)
+        public static async void ReportError(Exception e, bool shutdownApp = false, string reportErrorTitle = null)
         {
             string title = "Error received from user: " + e.ToString().Substring(0, e.ToString().IndexOf("\r\n"));
-            var userInfo = await UserFeedback.GetReportInfo(e);
+            var userInfo = await UserFeedback.GetReportInfo(e, reportErrorTitle);
             string content = "Exception Message: \r\n" + e.ToString() + "\r\n\r\n";
             content += userInfo + "\r\n\r\n";
 

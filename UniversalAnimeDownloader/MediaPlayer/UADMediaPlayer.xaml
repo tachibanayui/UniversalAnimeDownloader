@@ -661,15 +661,15 @@
                                     Background="#99000000"
                                     CornerRadius="90" />
 
-                                <Image
+                                <customControls:CustomImage
+                                    x:Name="imgUpNext"
                                     Width="63"
                                     Height="63"
-                                    Source="E:\Pictures\Anime\a.png"
                                     Stretch="Fill">
                                     <Image.OpacityMask>
                                         <VisualBrush Visual="{Binding ElementName=ellipseMaskVisual}" />
                                     </Image.OpacityMask>
-                                </Image>
+                                </customControls:CustomImage>
                             </Grid>
 
                             <ed:Arc

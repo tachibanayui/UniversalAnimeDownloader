@@ -7,7 +7,7 @@
     xmlns:local="clr-namespace:UniversalAnimeDownloader"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Title="User Feedback"
+    Title="Feedback"
     Width="450"
     Height="700"
     Background="{DynamicResource MaterialDesignPaper}"
@@ -50,7 +50,7 @@
                 </i:Interaction.Triggers>
                 here.
             </Hyperlink>
-            <Run Text="But we recommend you to report both way" />
+            <Run Text="But we recommend you to report both way. " />
         </TextBlock>
 
         <ScrollViewer Grid.Row="5" VerticalScrollBarVisibility="Auto">

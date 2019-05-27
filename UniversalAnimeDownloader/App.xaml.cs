@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
+using System.Windows.Threading;
 using UADAPI;
 using UniversalAnimeDownloader.UADSettingsPortal;
 
@@ -24,5 +25,11 @@ namespace UniversalAnimeDownloader
             ToolTipService.ShowDurationProperty.OverrideMetadata(typeof(DependencyObject), new FrameworkPropertyMetadata(60000));
         }
 
+        private void Application_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        {
+            ReportErrorHelper.ReportError(e.Exception, false, "Unhandled error!");
+
+            e.Handled = true;
+        }
     }
 }

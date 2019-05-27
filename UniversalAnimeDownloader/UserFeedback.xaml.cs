@@ -273,9 +273,10 @@ namespace UniversalAnimeDownloader
         /// </summary>
         /// <param name="e"></param>
         /// <returns>information user provided, empty string if user canceled</returns>
-        public static async Task<string> GetReportInfo(Exception e)
+        public static async Task<string> GetReportInfo(Exception e, string title = null)
         {
             UserFeedback feedBack = new UserFeedback();
+            feedBack.Title = title ?? "Feedback";
             feedBack.ExceptionDetail = e;
             feedBack.IsReport = true;
             feedBack.Show();

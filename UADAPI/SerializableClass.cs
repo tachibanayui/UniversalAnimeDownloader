@@ -156,7 +156,7 @@ namespace UADAPI
         /// <summary>
         /// The request to get the thumbnail
         /// </summary>
-        private MediaSourceInfo _Thumbnail;
+        private MediaSourceInfo _Thumbnail = new MediaSourceInfo();
         public MediaSourceInfo Thumbnail
         {
             get
@@ -176,7 +176,7 @@ namespace UADAPI
         /// <summary>
         /// The video source of this episode. string will represent the quality
         /// </summary>
-        private Dictionary<VideoQuality, MediaSourceInfo> _FilmSources;
+        private Dictionary<VideoQuality, MediaSourceInfo> _FilmSources = new Dictionary<VideoQuality, MediaSourceInfo>();
         public Dictionary<VideoQuality, MediaSourceInfo> FilmSources
         {
             get
@@ -198,7 +198,7 @@ namespace UADAPI
         /// <summary>
         /// This will tell the state of the download, mostly for downloader to report.
         /// </summary>
-        private DownloaderProgress _EpisodeDownloadState;
+        private DownloaderProgress _EpisodeDownloadState = new DownloaderProgress();
         public DownloaderProgress EpisodeDownloadState
         {
             get
