@@ -17,13 +17,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SegmentDownloader.Protocol"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SegmentDownloader.Core", "..\.Net Standrand Convert\SegmentDownloader.Core\SegmentDownloader.Core.csproj", "{1E9122C5-0A6C-44F3-99E2-9B74CC00CDFA}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Assets", "Assets", "{CB1FD019-1DFA-41DC-875A-069819E1A61B}"
-	ProjectSection(SolutionItems) = preProject
-		E:\Desktop\UADReadMeAsset\Screenshot1.png = E:\Desktop\UADReadMeAsset\Screenshot1.png
-		E:\Desktop\UADReadMeAsset\Screenshot2.png = E:\Desktop\UADReadMeAsset\Screenshot2.png
-		E:\Desktop\UADReadMeAsset\Screenshot3.png = E:\Desktop\UADReadMeAsset\Screenshot3.png
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		All|Any CPU = All|Any CPU
@@ -58,9 +51,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{CB1FD019-1DFA-41DC-875A-069819E1A61B} = {97495833-5BE6-4214-B0B1-35B49A2542F7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {56DEB885-C19F-4D38-9A0C-C3001B64DDDE}
