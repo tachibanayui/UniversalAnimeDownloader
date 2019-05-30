@@ -1,39 +1,47 @@
+<!--
+
+    Modified by Nguyen Hoang Duong (@NOVAglow).
+    Footprints (1): ???
+
+-->
+
 <h1 align="center">Universal Anime Downloader</h1>
 
-<!--
-    TODO: Insert program's logo, prominent program screenshot, or prominent
-    showcase screenshots here.
--->
-<img src="https://github.com/quangaming2929/UADInstaller/raw/master/Src/UADInstaller/UADInstaller/Resources/MediumIconUniversalAnimeDownloader.png" width="256" height="256">
+<p align="center">
+    <img src="https://github.com/quangaming2929/UADInstaller/raw/master/Src/UADInstaller/UADInstaller/Resources/MediumIconUniversalAnimeDownloader.png">
+</p>
+
+Table of Content
+----------------
+
+1. [What is Universal Anime Downloader?](#what-is-universal-anime-downloader)
+2. [Features](#features)
+3. [Install](#install)
+4. [Build from source](#build-from-source)
+5. [How to use UAD](#how-to-use-uad)
+    - [Quick guide](#quick-guide)
+    - [Detailed guide & videos](#detailed-guide-&-videos)
+6. [Contributing](#contributing)
+7. [Coming up in the next release](#coming-up-in-the-next-release)
 
 What is Universal Anime Downloader?
 -----------------------------------
 
-Universal Anime Downloader (UAD) is an anime downloader & extractor tool. It
-fetches any anime film of interest and displays it to the user. UAD is meant to
-make searching and downloading anime films easier. In addition, the program's
+Universal Anime Downloader (UAD) is an anime downloader & extractor. It fetches
+any anime series of interest and displays it to the user. UAD is meant to make
+searching and downloading anime series easier. In addition, the program's
 built-in video player has a lot of unique features to enhance the user's
 experience.
 
-<!--
-    TODO: Insert 1 or 2 program screenshots here.
-
-    "A picture worth a thousand words. READMEs that don't have screenshots are
-    the most boring READMEs ever."
-        ~ N. H. Duong, https://github.com/dungwinux/helectron/issues/5
--->
-
-<img src="https://github.com/quangaming2929/UniversalAnimeDownloader/raw/master/Assets/Screenshot1.png" >
-
-<img src="https://github.com/quangaming2929/UniversalAnimeDownloader/raw/master/Assets/Screenshot2.png" >
-
-<img src="https://github.com/quangaming2929/UniversalAnimeDownloader/raw/master/Assets/Screenshot3.png" >
+![Screenshot 1](Assets/Screenshot1.png)  
+![Screenshot 2](Assets/Screenshot2.png)  
+![Screenshot 3](Assets/Screenshot3.png)
 
 Features
 --------
 
 - Download a complete series of anime with a few clicks
-- Search anime films by name or genre
+- Search anime series by name or genre
 - Anime's information (description, thumbnails, ...) is saved after download
 - Download and watch anime films without a web browser (saves computer memory :+1:)
 - No advertisement
@@ -44,78 +52,100 @@ Features
 - Sneaky watch :eyes: <!-- Write about this in e.g. a wiki page and drop a link here -->
 - Selective download for anime episodes
 - Watch online
-- Notify and auto-download new episode in the Anime Library when one is available
+- Notify and auto-download new episodes in the Anime Library
 - Official API for the custom extractor to be based on
-- Suggest anime films based on previous downloads
-- Show featured anime films
-- Custom playlist
+- Suggest anime series based on previous downloads
+- Show featured anime series
+- Custom playlists
 
-Gettting Started
---------
+Install
+-------
 
-<h3>Prerequisites</h3>
-<h4>For installing UAD </h4>
-<ul>
-    <li>Window 7, 8, 8.1, 10</li>
-    <li>.NET Framework <b>4.7.2</b> or newer</li>
-</ul>
-<h4>For build UAD on your own </h4>
-<ul>
-    <li>Window 7, 8, 8.1, 10</li>
-    <li>A code editor, IDE support .NET Framework, Visual Studio 2017, 2019 is recommended</li>
-    <li>.NET desktop development workload </li>
-</ul>
-<h3> Installation Guide: </h3>
-<ol>
-    <li>Download the latest version <a href="https://github.com/quangaming2929/UniversalAnimeDownloader/releases/latest
-"> here</a> and choose the first file</li>
-    <li>Open the file, sometimes window smartscreen will warn you that we can't verify this file but that ok because we don't have enough reputation to verify our app. Click "Learn more" and Click "Run anyway"</li>
-    <li>Click install to install Universal Anime Downloader</li>
-</ol>
+[latest]: https://github.com/quangaming2929/UniversalAnimeDownloader/releases/latest
 
-<h3>Build guide: </h3>
-<h4> Note: this section only for Visual Studio users, for Rider or other code editors, IDEs please read look up on the internet how to these step in your code editors, IDEs</h4>
-<h4> If you pay attention, you may wonder why you need to remove the project and readd the prebuilt one for <b>SegmentedDownloader</b>. This is due to the fact that I moded these libraries to allow me to add custom header when downloading, so I place this project outside of Git repos folder. When you clone this repos, these projects will failed to load</h4>
-<ol>
-    <li>Clone this repos using our web browser, GitBash or GitHub desktop app</li>
-    <li>Open the solution using Visual Studio </li>
-    <li>There might some projects which not reference correctly with the UI projects, to solve this, delete the reference and readding them or redownload them using Nuget Package Manager </li>
-    <li>Remove the reference to <b>SegmentedDownloader.Core</b> and <b>SegmentedDownloader.Protocol</b> from project <b>UniversalAnimeDownloader</b> and Readd the prebuild .dll of them when you download UAD</li>
-    <li>Remove project <b>SegmentedDownloader.Core</b> and <b>SegmentedDownloader.Protocol</b> from the solution</li>
-    <li>Press "F5" or click "Start" to build Universal Anime Downloader</li>
-</ol>
-    
+**Prerequisites**:
 
+- Operating system: Windows 7 or later
+- .NET framework version 4.7.2 or later
 
-How to use it
--------------
+**Instructions**:
+
+1. Download the latest version [here][latest] (choose the `UADInstaller1.0.exe`
+file).
+2. Run the EXE file. If Windows Smartscreen displays a warning, proceed by
+clicking "Learn more" and then "Run anyway".
+3. Click "Install" to install Universal Anime Downloader.
+
+Build from source
+-----------------
+
+> **Note**: This section is only for Visual Studio users. If you use another
+code editor or IDE, please consult the Internet on how to reproduce these steps
+in your favorite program.
+
+<!-- Commenting this out because it's ja ja ja ja blah blah blah blah
+
+If you pay attention, you may wonder why you need to remove the project and
+readd the prebuilt one for SegmentedDownloader. This is due to the fact that I
+moded these libraries to allow me to add custom header when downloading, so I
+place this project outside of Git repos folder. When you clone this repos, these
+projects will failed to load
+
+-->
+
+**Prerequisites**:
+
+- Operating system: Windows 7 or later
+- A text editor or an IDE with support for .NET framework (Visual Studio 2017
+and Visual Studio 2019 are recommended)
+- .NET desktop development workload
+
+**Instructions**:
+
+1. Clone this repository.
+2. Open the solution using Visual Studio. <!-- ??? Be specific, WHAT solution? -->
+3. There might be several projects that do not reference correctly to the UI
+project. <!-- ??? These projects reference to or being referenced?!?! --> To
+solve this, delete the references and re-add them or re-download them using the
+Nuget Package Manager.
+4. Remove the references to `SegmentedDownloader.Core` and
+`SegmentedDownloader.Protocol` from the project UniversalAnimeDownloader and
+re-add their pre-built DLLs when you download UAD. <!-- ??? Need clarification -->
+5. Remove `SegmentedDownloader.Core` and `SegmentedDownloader.Protocol` from the
+solution.
+6. Press `F5` or click _Start_ to build Universal Anime Downloader.
+
+How to use UAD
+--------------
 
 ### Quick Guide
 
-1. Search for anime films in the _All Anime_ page. Then download the interested 
-anime film by clicking the click on the anime card, select the episodes you want
-to download using the checkbox or textbox then click "_Download all_".  
+1. Search for anime series in the _All Anime_ page. Then download the interested
+anime series by clicking on the anime "card", and select the episodes you
+want to download by clicking on the corresponding check boxes, and then click
+_Download all_.
 
-<img src="https://github.com/quangaming2929/UniversalAnimeDownloader/raw/master/Assets/QuickGuide1.png"/>
-<img src="https://github.com/quangaming2929/UniversalAnimeDownloader/raw/master/Assets/QuickGuide2.png"/>
+![](Assets/QuickGuide1.png)  
+![](Assets/QuickGuide2.png)
 
-2. All downloaded anime films/series are located inside the _My Anime Library_
-section, displayed using rectangular cards. To watch one:  
-    1. Click the orange play button located on its card  
-    2. Click the orange play button of the interested episode    
-    
-<img src="https://github.com/quangaming2929/UniversalAnimeDownloader/raw/master/Assets/QuickGuide3.png"/>
-<img src="https://github.com/quangaming2929/UniversalAnimeDownloader/raw/master/Assets/QuickGuide4.png"/>
+2. All downloaded anime series are located in the _My Anime Library_ section,
+displayed using rectangular cards. To watch one, just click the play button.
 
-### Detailed guide / Video Tutorials  
+![](Assets/QuickGuide3.png)  
+![](Assets/QuickGuide4.png)
 
->This is meant for v0.8.0  
->I've created a video instruction for UAD, so [check it out][en-guide]. A similar
->video but is intended for Vietnamese users can be found [here][vi-guide].
->
->Assets used to make the videos are available publicly [here][materials].  
+### Detailed guide & videos
 
+> **Note**: This is meant for UAD 0.8.0
+
+I've created a video instruction for UAD, so [check it out][en-guide]. A similar
+video but is intended for Vietnamese users can be found [here][vi-guide].
+
+Assets used to make the videos are available publicly [here][materials].
+
+<!-- ??? Please re-state this statement
 <h4>All functionality are simillar for v0.9.0 but difference UIs, new feature will be covered in Video Tutorials</h4>
+-->
 
 [en-guide]: https://drive.google.com/open?id=1-8O5G7YrnI_KLZiXz6BZ0F5LoKYYVSsG
 [vi-guide]: https://drive.google.com/open?id=1cwXjiAtqJMBDYsLpmXqHf-o8mZchk2K0
@@ -124,15 +154,26 @@ section, displayed using rectangular cards. To watch one:
 Contributing
 ------------
 
-Currently, I'm still working alone on this project. I'm working on major updates
-for UAD and the amount of work to get it done is immense, so I'd appreciate your
-contributions a lot.
+Currently, I'm working alone on this project. I'm working on major updates for
+UAD and the amount of work to get it done is immense, so I'd appreciate your
+contributions a lot. Pull requests are welcome.
+
+<!-- ??? Provide your e-mail address or be specific on how to contribute
+e.g by opening a pull request -->
 
 Coming up in the next release
 -----------------------------
 - Built-in interactive manual
-- Implementing a wat to play HLS inside the app window and download them without change the code base too much
-- Add **Mod gallery** do download and install automatically (If we have people want to make mods for UAD to contribute this project)
+- Play HLS inside the application window and download them  <!-- ??? HLS? -->
+- _Mod Gallery_ section, where you can download mods for UAD
 
+You can request a new feature by [opening an issue][issues].
 
-You can request a new feature [here](https://github.com/quangaming2929/UniversalAnimeDownloader/issues).
+[issues]: (https://github.com/quangaming2929/UniversalAnimeDownloader/issues)
+
+<!-- ???
+
+License
+-------
+
+-->
