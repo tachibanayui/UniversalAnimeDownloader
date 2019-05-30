@@ -20,7 +20,7 @@ Table of Content
 4. [Build from source](#build-from-source)
 5. [How to use UAD](#how-to-use-uad)
     - [Quick guide](#quick-guide)
-    - [Detailed guide & videos](#detailed-guide-&-videos)
+    - [Detailed guide & videos](#detailed-guide--videos)
 6. [Contributing](#contributing)
 7. [Coming up in the next release](#coming-up-in-the-next-release)
 
