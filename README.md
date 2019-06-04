@@ -103,14 +103,13 @@ and Visual Studio 2019 are recommended)
 **Instructions**:
 
 1. Clone this repository.
-2. Open the solution using Visual Studio. <!-- ??? Be specific, WHAT solution? -->
+2. Open the repository as a solution using Visual Studio.
 3. There might be several projects that do not reference correctly to the UI
-project. <!-- ??? These projects reference to or being referenced?!?! --> To
-solve this, delete the references and re-add them or re-download them using the
-Nuget Package Manager.
+project. To solve this, delete the references and re-add them or re-download
+them using the Nuget Package Manager.
 4. Remove the references to `SegmentedDownloader.Core` and
 `SegmentedDownloader.Protocol` from the project UniversalAnimeDownloader and
-re-add their pre-built DLLs when you download UAD. <!-- ??? Need clarification -->
+re-add their pre-compiled DLLs.
 5. Remove `SegmentedDownloader.Core` and `SegmentedDownloader.Protocol` from the
 solution.
 6. Press `F5` or click _Start_ to build Universal Anime Downloader.
@@ -136,16 +135,14 @@ displayed using rectangular cards. To watch one, just click the play button.
 
 ### Detailed guide & videos
 
-> **Note**: This is meant for UAD 0.8.0
+> **Note**: This is meant for UAD 0.8.0. I will release an updated video
+tutorial for UAD 0.9.0 soon. Their functionalities are similar, but the
+user interface in UAD 0.9.0 differs from that of UAD 0.8.0.
 
 I've created a video instruction for UAD, so [check it out][en-guide]. A similar
 video but is intended for Vietnamese users can be found [here][vi-guide].
 
 Assets used to make the videos are available publicly [here][materials].
-
-<!-- ??? Please re-state this statement
-<h4>All functionality are simillar for v0.9.0 but difference UIs, new feature will be covered in Video Tutorials</h4>
--->
 
 [en-guide]: https://drive.google.com/open?id=1-8O5G7YrnI_KLZiXz6BZ0F5LoKYYVSsG
 [vi-guide]: https://drive.google.com/open?id=1cwXjiAtqJMBDYsLpmXqHf-o8mZchk2K0
@@ -154,18 +151,19 @@ Assets used to make the videos are available publicly [here][materials].
 Contributing
 ------------
 
+[mail]: uad.apiservices@gmail.com
+
 Currently, I'm working alone on this project. I'm working on major updates for
 UAD and the amount of work to get it done is immense, so I'd appreciate your
-contributions a lot. Pull requests are welcome.
-
-<!-- ??? Provide your e-mail address or be specific on how to contribute
-e.g by opening a pull request -->
+contributions a lot. Pull requests are welcome. If you'd like to contact me
+personally to discuss about the project, [send an e-mail][mail].
 
 Coming up in the next release
 -----------------------------
 - Built-in interactive manual
 - Play HLS inside the application window and download them  <!-- ??? HLS? -->
 - _Mod Gallery_ section, where you can download mods for UAD
+- Support for websites that implement CloudFlare
 
 You can request a new feature by [opening an issue][issues].
 
