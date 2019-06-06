@@ -83,16 +83,6 @@ Build from source
 code editor or IDE, please consult the Internet on how to reproduce these steps
 in your favorite program.
 
-<!-- Commenting this out because it's ja ja ja ja blah blah blah blah
-
-If you pay attention, you may wonder why you need to remove the project and
-readd the prebuilt one for SegmentedDownloader. This is due to the fact that I
-moded these libraries to allow me to add custom header when downloading, so I
-place this project outside of Git repos folder. When you clone this repos, these
-projects will failed to load
-
--->
-
 **Prerequisites**:
 
 - Operating system: Windows 7 or later
@@ -104,15 +94,7 @@ and Visual Studio 2019 are recommended)
 
 1. Clone this repository.
 2. Open the repository as a solution using Visual Studio.
-3. There might be several projects that do not reference correctly to the UI
-project. To solve this, delete the references and re-add them or re-download
-them using the Nuget Package Manager.
-4. Remove the references to `SegmentedDownloader.Core` and
-`SegmentedDownloader.Protocol` from the project UniversalAnimeDownloader and
-re-add their pre-compiled DLLs.
-5. Remove `SegmentedDownloader.Core` and `SegmentedDownloader.Protocol` from the
-solution.
-6. Press `F5` or click _Start_ to build Universal Anime Downloader.
+3. Press F5 or click Start to build Universal Anime Downloader.
 
 How to use UAD
 --------------
@@ -158,10 +140,18 @@ UAD and the amount of work to get it done is immense, so I'd appreciate your
 contributions a lot. Pull requests are welcome. If you'd like to contact me
 personally to discuss about the project, [send an e-mail][mail].
 
+If you want to contribute to the source, there are a few things to note:
+- **UI development**: The model–view–viewmodel (MVVM) is implemented in UAD
+and you must follow and keep this pattern. If you don't want to use the MVVM
+pattern, please specifically state why in your pull request.
+- **API development**: Make sure that the interfaces (currently
+`UADAPI.IQueryAnimeSeries` and `UADAPI.IAnimeSeriesManager`) aren't
+significantly modified.
+
 Coming up in the next release
 -----------------------------
 - Built-in interactive manual
-- Play HLS inside the application window and download them  <!-- ??? HLS? -->
+- "HTTP Live Streaming implementation
 - _Mod Gallery_ section, where you can download mods for UAD
 - Support for websites that implement CloudFlare
 
