@@ -134,8 +134,8 @@ contributions a lot. Pull requests are welcome. If you'd like to contact me
 personally to discuss about the project, [send an e-mail][mail].
 
 If you want to contribute to the source, there are a few things to note:
-- **UI development**: The model–view–viewmodel (MVVM) is implemented in UAD
-and you must follow and keep this pattern. If you don't want to use the MVVM
+- **UI development**: The MVVM pattern is implemented in UAD and you must
+follow and keep this pattern. If you don't want to use the MVVM
 pattern, please specifically state why in your pull request.
 - **API development**: Make sure that the interfaces (currently
 `UADAPI.IQueryAnimeSeries` and `UADAPI.IAnimeSeriesManager`) aren't
