@@ -732,7 +732,7 @@
                 <TextBlock
                     HorizontalAlignment="Center"
                     FontSize="50"
-                    Text="Unversal Anime Downloader" />
+                    Text="Universal Anime Downloader" />
                 <TextBlock
                     Margin="75,0"
                     FontSize="26"
