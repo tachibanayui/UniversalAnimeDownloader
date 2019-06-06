@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28010.2046
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28922.388
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{97495833-5BE6-4214-B0B1-35B49A2542F7}"
 	ProjectSection(SolutionItems) = preProject
@@ -13,9 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UADAPI", "UADAPI\UADAPI.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniversalAnimeDownloader", "UniversalAnimeDownloader\UniversalAnimeDownloader.csproj", "{F87F6867-8512-475A-9883-922CD7FAA208}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SegmentDownloader.Protocol", "..\.Net Standrand Convert\SegmentDownloader.Protocol\SegmentDownloader.Protocol.csproj", "{CA486418-C89F-4CAB-942C-14BABC3DACA0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SegmentDownloader.Core", "SegmentDownloader.Core\SegmentDownloader.Core.csproj", "{9F54A07D-5C92-42FE-A886-4B13B2E91B96}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SegmentDownloader.Core", "..\.Net Standrand Convert\SegmentDownloader.Core\SegmentDownloader.Core.csproj", "{1E9122C5-0A6C-44F3-99E2-9B74CC00CDFA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SegmentDownloader.Protocol", "SegmentDownloader.Protocol\SegmentDownloader.Protocol.csproj", "{93086A3D-CAC8-46F2-9128-818FE158CA49}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,18 +36,18 @@ Global
 		{F87F6867-8512-475A-9883-922CD7FAA208}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F87F6867-8512-475A-9883-922CD7FAA208}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F87F6867-8512-475A-9883-922CD7FAA208}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CA486418-C89F-4CAB-942C-14BABC3DACA0}.All|Any CPU.ActiveCfg = Debug|Any CPU
-		{CA486418-C89F-4CAB-942C-14BABC3DACA0}.All|Any CPU.Build.0 = Debug|Any CPU
-		{CA486418-C89F-4CAB-942C-14BABC3DACA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CA486418-C89F-4CAB-942C-14BABC3DACA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CA486418-C89F-4CAB-942C-14BABC3DACA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CA486418-C89F-4CAB-942C-14BABC3DACA0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1E9122C5-0A6C-44F3-99E2-9B74CC00CDFA}.All|Any CPU.ActiveCfg = Debug|Any CPU
-		{1E9122C5-0A6C-44F3-99E2-9B74CC00CDFA}.All|Any CPU.Build.0 = Debug|Any CPU
-		{1E9122C5-0A6C-44F3-99E2-9B74CC00CDFA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1E9122C5-0A6C-44F3-99E2-9B74CC00CDFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1E9122C5-0A6C-44F3-99E2-9B74CC00CDFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1E9122C5-0A6C-44F3-99E2-9B74CC00CDFA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F54A07D-5C92-42FE-A886-4B13B2E91B96}.All|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F54A07D-5C92-42FE-A886-4B13B2E91B96}.All|Any CPU.Build.0 = Debug|Any CPU
+		{9F54A07D-5C92-42FE-A886-4B13B2E91B96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F54A07D-5C92-42FE-A886-4B13B2E91B96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F54A07D-5C92-42FE-A886-4B13B2E91B96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F54A07D-5C92-42FE-A886-4B13B2E91B96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93086A3D-CAC8-46F2-9128-818FE158CA49}.All|Any CPU.ActiveCfg = Debug|Any CPU
+		{93086A3D-CAC8-46F2-9128-818FE158CA49}.All|Any CPU.Build.0 = Debug|Any CPU
+		{93086A3D-CAC8-46F2-9128-818FE158CA49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93086A3D-CAC8-46F2-9128-818FE158CA49}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93086A3D-CAC8-46F2-9128-818FE158CA49}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93086A3D-CAC8-46F2-9128-818FE158CA49}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

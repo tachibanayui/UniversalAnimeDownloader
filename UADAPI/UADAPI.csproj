@@ -19,8 +19,8 @@
     <FileVersion>1.0.0.0</FileVersion>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\.Net Standrand Convert\SegmentDownloader.Core\SegmentDownloader.Core.csproj" />
-    <ProjectReference Include="..\..\.Net Standrand Convert\SegmentDownloader.Protocol\SegmentDownloader.Protocol.csproj" />
+    <ProjectReference Include="..\SegmentDownloader.Core\SegmentDownloader.Core.csproj" />
+    <ProjectReference Include="..\SegmentDownloader.Protocol\SegmentDownloader.Protocol.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
