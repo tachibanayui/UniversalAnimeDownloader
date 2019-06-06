@@ -48,6 +48,7 @@ Features
 - Official API for the custom extractor to be based on
 - Suggest anime films based on previous downloads
 - Show featured anime films
+- Custom playlist
 
 Gettting Started
 --------
