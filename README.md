@@ -1,10 +1,3 @@
-<!--
-
-    Modified by Nguyen Hoang Duong (@NOVAglow).
-    Footprints (1): ???
-
--->
-
 <h1 align="center">Universal Anime Downloader</h1>
 
 <p align="center">
@@ -30,7 +23,7 @@ What is Universal Anime Downloader?
 Universal Anime Downloader (UAD) is an anime downloader & extractor. It fetches
 any anime series of interest and displays it to the user. UAD is meant to make
 searching and downloading anime series easier. In addition, the program's
-built-in video player has a lot of unique features to enhance the user's
+built-in video player has a lot of unique features that can enhance the user's
 experience.
 
 ![Screenshot 1](Assets/Screenshot1.png)  
@@ -43,13 +36,13 @@ Features
 - Download a complete series of anime with a few clicks
 - Search anime series by name or genre
 - Anime's information (description, thumbnails, ...) is saved after download
-- Download and watch anime films without a web browser (saves computer memory :+1:)
+- Download and watch anime series without a web browser (saves computer memory :+1:)
 - No advertisement
 - Draw on the playback screen of the video player
 - Segmented download (which results in better download speed)
 - Material Design UI
 - Highly customizable
-- Sneaky watch :eyes: <!-- Write about this in e.g. a wiki page and drop a link here -->
+- Sneaky watch :eyes: <!-- TODO: Write more about this -->
 - Selective download for anime episodes
 - Watch online
 - Notify and auto-download new episodes in the Anime Library
@@ -150,8 +143,9 @@ significantly modified.
 
 Coming up in the next release
 -----------------------------
+
 - Built-in interactive manual
-- "HTTP Live Streaming implementation
+- HTTP Live Streaming (HLS) implementation
 - _Mod Gallery_ section, where you can download mods for UAD
 - Support for websites that implement CloudFlare
 
